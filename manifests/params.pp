@@ -11,7 +11,5 @@ class ceilometer::params {
   $agent_compute_service_name = 'ceilometer-agent-compute'
   $api_service_name           = 'ceilometer-api'
   $collector_service_name     = 'ceilometer-collector'
-  $common_service_name        = 'ceilometer-common'
-  $client_service_name        = 'python-ceilometer'
 
 }
