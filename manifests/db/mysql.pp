@@ -11,8 +11,6 @@ class ceilometer::db::mysql(
   Class['ceilometer::db::mysql'] -> Exec<| title == 'ceilometer-dbsync' |>
   Database[$dbname]          ~> Exec<| title == 'ceilometer-dbsync' |>
 
-  require 'mysql::python'
-
   mysql::db { $dbname:
     user         => $user,
     password     => $password,
