@@ -17,6 +17,7 @@ class ceilometer::agent-compute(
     enable	=> $enabled,
     hasstatus	=> true,
     hasrestart	=> true,
+    require => Package['ceilometer-agent-compute']
   }
 
 }
