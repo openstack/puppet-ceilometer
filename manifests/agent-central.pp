@@ -43,7 +43,7 @@ class ceilometer::agent-central(
   }
 
   service { 'ceilometer-agent-central':
-    name	=> $::ceilometer::params::agent_central_central_name
+    name	=> $::ceilometer::params::agent_central_name
     enable      => $enabled,
     hasstatus  => true,
     hasrestart => true,
