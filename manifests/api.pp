@@ -19,6 +19,15 @@ class ceilometer::api(
     ensure => installed
   }
 
+  file { ['/etc/ceilometer/ceilometer.conf']:
+  }
+
+  if $enabled {
+    $service_ensure = 'running'
+  } else {
+    $service_ensure = 'stopped'
+  }
+
   ceilometer_setting {
     'DEFAULT/rabbit_host': value => $rabbit_host;
     'DEFAULT/rabbit_port': value => $rabbit_port;
@@ -33,14 +42,6 @@ class ceilometer::api(
     'keystone_authtoken/protocol': value => $keystone_protocol;
   }
 
-  file { ['/etc/ceilometer/ceilometer.conf']:
-  }
-
-  if $enabled {
-    $service_ensure = 'running'
-  } else {
-    $service_ensure = 'stopped'
-  }
 
   service { 'ceilometer-api':
     name	=> $::ceilometer::params::api_service_name
