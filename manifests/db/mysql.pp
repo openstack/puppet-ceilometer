@@ -1,7 +1,3 @@
-#
-# I should change this to mysql
-# for consistency
-#
 class ceilometer::db::mysql(
   $password,
   $dbname        = 'ceilometer',
@@ -9,7 +5,6 @@ class ceilometer::db::mysql(
   $host          = '127.0.0.1',
   $allowed_hosts = undef,
   $charset       = 'latin1',
-  $cluster_id    = 'localzone'
 ) {
 
   Class['mysql::server']     -> Class['ceilometer::db::mysql']
@@ -23,12 +18,10 @@ class ceilometer::db::mysql(
     password     => $password,
     host         => $host,
     charset      => $charset,
-    # I may want to inject some sql
     require      => Class['mysql::config'],
   }
 
   if $allowed_hosts {
-     # TODO this class should be in the mysql namespace
      ceilometer::db::mysql::host_access { $allowed_hosts:
       user      => $user,
       password  => $password,
