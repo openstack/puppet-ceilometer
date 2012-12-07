@@ -23,6 +23,9 @@ class ceilometer(
 
   require 'mysql::python'
 
+  file { ['/etc/ceilometer/ceilometer.conf']:
+  }
+
   file { '/etc/ceilometer/':
     ensure  => directory,
     owner   => 'ceilometer',

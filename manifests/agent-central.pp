@@ -6,9 +6,6 @@ class ceilometer::agent-central(
     ensure => installed
   }
 
-  file { ['/etc/ceilometer/ceilometer.conf']:
-  }
-
   if $enabled {
     $service_ensure = 'running'
   } else {
