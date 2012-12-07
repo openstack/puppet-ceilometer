@@ -23,16 +23,21 @@ class ceilometer(
 
   require 'mysql::python'
 
-  file { '/etc/ceilometer/ceilometer.conf':
-  }
-
   file { '/etc/ceilometer/':
     ensure  => directory,
     owner   => 'ceilometer',
     group   => 'root',
     mode    => '0770',
-    require => Package['ceilometer']
+    require => Package['ceilometer-common'],
   }
+
+  file { '/etc/ceilometer/ceilometer.conf':
+    ensure  => file,
+    owner   => 'ceilometer',
+    group   => 'root',
+    mode    => '0770',
+  }
+
   package { 'ceilometer-common':
     name   => $::ceilometer::params::common_package_name,
     ensure => $package_ensure,
