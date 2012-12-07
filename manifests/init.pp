@@ -15,8 +15,8 @@ class ceilometer(
     mode    => '0770',
     require => Package['ceilometer']
   }
-  package { 'ceilometer':
-    name   => $::ceilometer::params::package_name,
+  package { 'ceilometer-common':
+    name   => $::ceilometer::params::common_package_name,
     ensure => $package_ensure,
   }
 }
