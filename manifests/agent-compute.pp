@@ -12,6 +12,7 @@ class ceilometer::agent-compute(
   $keystone_port = '35357',
   $keystone_protocol = 'http',
   $keystone_user = 'ceilometer',
+  $enabled = true,
 ) {
 
   package { 'ceilometer-agent-compute':
@@ -42,7 +43,7 @@ class ceilometer::agent-compute(
   }
 
   service { 'ceilometer-agent-compute':
-    name	=> $::ceilometer::params::agent-compute_package_name
+    name	=> $::ceilometer::params::agent_compute_package_name
     enable      => $enabled,
     hasstatus  => true,
     hasrestart => true,

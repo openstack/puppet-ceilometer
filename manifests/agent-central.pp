@@ -1,4 +1,4 @@
-class ceilometer::collector(
+class ceilometer::agent-central(
   $keystone_password,
   $verbose = 'False',
   $debug = 'False',
@@ -12,9 +12,10 @@ class ceilometer::collector(
   $keystone_port = '35357',
   $keystone_protocol = 'http',
   $keystone_user = 'ceilometer',
+  $enabled = true,
 ) {
 
-  package { 'ceilometer-collector':
+  package { 'ceilometer-agent-central':
     ensure => installed
   }
 
@@ -41,8 +42,8 @@ class ceilometer::collector(
     $service_ensure = 'stopped'
   }
 
-  service { 'ceilometer-collector':
-    name	=> $::ceilometer::params::collector_package_name
+  service { 'ceilometer-agent-central':
+    name	=> $::ceilometer::params::agent_central_package_name
     enable      => $enabled,
     hasstatus  => true,
     hasrestart => true,

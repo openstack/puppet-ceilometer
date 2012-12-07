@@ -12,6 +12,7 @@ class ceilometer::collector(
   $keystone_port = '35357',
   $keystone_protocol = 'http',
   $keystone_user = 'ceilometer',
+  $enabled = true,
 ) {
 
   package { 'ceilometer-collector':

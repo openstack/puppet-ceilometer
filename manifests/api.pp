@@ -12,6 +12,7 @@ class ceilometer::api(
   $keystone_port = '35357',
   $keystone_protocol = 'http',
   $keystone_user = 'ceilometer',
+  $enabled = true,
 ) {
 
   package { 'ceilometer-api':
