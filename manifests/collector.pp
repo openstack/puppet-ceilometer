@@ -17,6 +17,7 @@ class ceilometer::collector(
     enable      => $enabled,
     hasstatus  => true,
     hasrestart => true,
+    require => Package['ceilometer-collector']
   }
 
 }

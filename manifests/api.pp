@@ -17,6 +17,7 @@ class ceilometer::api(
     enable      => $enabled,
     hasstatus  => true,
     hasrestart => true,
+    require => Package['ceilometer-api']
   }
 
 }
