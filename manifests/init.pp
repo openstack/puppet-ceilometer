@@ -36,6 +36,7 @@ class ceilometer(
     owner   => 'ceilometer',
     group   => 'root',
     mode    => '0770',
+    require => File['/etc/ceilometer'],
   }
 
   package { 'ceilometer-common':
