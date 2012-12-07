@@ -8,6 +8,8 @@ class ceilometer(
 
   include ceilometer::params
 
+  require 'mysql::python'
+
   file { '/etc/ceilometer/':
     ensure  => directory,
     owner   => 'ceilometer',
