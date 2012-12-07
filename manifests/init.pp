@@ -3,7 +3,7 @@
 #   * package_ensure - ensure state for package.
 #
 class ceilometer(
-  $package_ensure = 'present'
+  $package_ensure = 'present',
   $keystone_password,
   $verbose = 'False',
   $debug = 'False',
