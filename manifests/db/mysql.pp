@@ -13,7 +13,7 @@ class ceilometer::db::mysql(
 ) {
 
   Class['mysql::server']     -> Class['ceilometer::db::mysql']
-  Class['glance::db::mysql'] -> Exec<| title == 'ceilometer-dbsync' |>
+  Class['ceilometer::db::mysql'] -> Exec<| title == 'ceilometer-dbsync' |>
   Database[$dbname]          ~> Exec<| title == 'ceilometer-dbsync' |>
 
   require 'mysql::python'
@@ -29,7 +29,7 @@ class ceilometer::db::mysql(
 
   if $allowed_hosts {
      # TODO this class should be in the mysql namespace
-     glance::db::mysql::host_access { $allowed_hosts:
+     ceilometer::db::mysql::host_access { $allowed_hosts:
       user      => $user,
       password  => $password,
       database  => $dbname,
