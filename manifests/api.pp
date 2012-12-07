@@ -43,7 +43,7 @@ class ceilometer::api(
   }
 
   service { 'ceilometer-api':
-    name	=> $::ceilometer::params::api_package_name
+    name	=> $::ceilometer::params::api_service_name
     enable      => $enabled,
     hasstatus  => true,
     hasrestart => true,

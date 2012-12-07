@@ -43,7 +43,7 @@ class ceilometer::collector(
   }
 
   service { 'ceilometer-collector':
-    name	=> $::ceilometer::params::collector_package_name
+    name	=> $::ceilometer::params::collector_service_name
     enable      => $enabled,
     hasstatus  => true,
     hasrestart => true,
