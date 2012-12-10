@@ -13,4 +13,6 @@ class ceilometer::params {
   $agent_compute_service_name = 'ceilometer-agent-compute'
   $api_service_name           = 'ceilometer-api'
   $collector_service_name     = 'ceilometer-collector'
+
+  $dbsync_command             = 'ceilometer-dbsync'
 }

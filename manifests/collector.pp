@@ -5,6 +5,8 @@ class ceilometer::collector(
   $enabled = true,
 ) {
 
+  include 'ceilometer::params'
+
   package { 'ceilometer-collector':
     ensure => installed
   }
@@ -20,8 +22,8 @@ class ceilometer::collector(
     enable     => $enabled,
     hasstatus  => true,
     hasrestart => true,
-    require    => Package['ceilometer-collector']
+    require    => [Package['ceilometer-collector'], Class['ceilometer::db']],
+    subscribe  => Exec['ceilometer-dbsync']
   }
 
-  Service['ceilometer-collector'] -> Class['ceilometer::db']
 }

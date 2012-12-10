@@ -1,9 +1,11 @@
 # Ceilometer::Db::Settings class
 #
 #
-class ceilometer::db::settings (
+class ceilometer::db (
   $database_connection = 'mysql://ceilometer:ceilometer@127.0.0.1/ceilometer'
 ) {
+
+  include 'ceilometer::params'
 
   validate_re($database_connection,
     '(sqlite|mysql|posgres|mongodb):\/\/(\S+:\S+@\S+\/\S+)?')
@@ -37,4 +39,16 @@ class ceilometer::db::settings (
   ceilometer_setting {
     'DEFAULT/database_connection': value => $database_connection;
   }
+
+  Ceilometer_setting['DEFAULT/database_connection'] ~> Exec['ceilometer-dbsync']
+
+  exec{ 'ceilometer-dbsync':
+    command     => $::ceilometer::params::dbsync_command,
+    require     => Package['ceilometer-collector'],
+    user        => $::ceilometer::params::username,
+    refreshonly => true,
+    logoutput   => on_failure,
+    subscribe   => Ceilometer
+  }
+
 }

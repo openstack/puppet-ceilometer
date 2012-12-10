@@ -10,6 +10,8 @@ class ceilometer::api(
   $keystone_password = undef,
 ) {
 
+  include 'ceilometer::params'
+
   validate_string($keystone_password)
 
   package { 'ceilometer-api':
@@ -27,10 +29,9 @@ class ceilometer::api(
     enable     => $enabled,
     hasstatus  => true,
     hasrestart => true,
-    require    => Package['ceilometer-api']
+    require    => [Package['ceilometer-api'], Class['ceilometer::db']],
+    subscribe  => Exec['ceilometer-dbsync']
   }
-
-  Service['ceilometer-api'] -> Class['ceilometer::db']
 
   ceilometer_setting {
     'keystone_authtoken/auth_host' : value => $keystone_host;
