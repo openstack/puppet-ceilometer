@@ -15,4 +15,7 @@ class ceilometer::params {
   $collector_service_name     = 'ceilometer-collector'
 
   $dbsync_command             = 'ceilometer-dbsync'
+
+  $username                   = 'ceilometer'
+  $groupname                  = 'ceilometer'
 }
