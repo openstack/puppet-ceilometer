@@ -48,7 +48,7 @@ class ceilometer::db (
     user        => $::ceilometer::params::username,
     refreshonly => true,
     logoutput   => on_failure,
-    subscribe   => Ceilometer
+    subscribe   => Ceilometer_config['DEFAULT/database_connection']
   }
 
 }
