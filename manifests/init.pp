@@ -4,7 +4,6 @@
 #
 class ceilometer(
   $package_ensure = 'present',
-  $keystone_password,
   $verbose = 'False',
   $debug = 'False',
   $rabbit_host = '127.0.0.1',
@@ -13,10 +12,6 @@ class ceilometer(
   $rabbit_password = '',
   $rabbit_virtualhost = '/',
   $database_connection = 'mysql://ceilometer:ceilometer@127.0.0.1/ceilometer',
-  $keystone_host = '127.0.0.1',
-  $keystone_port = '35357',
-  $keystone_protocol = 'http',
-  $keystone_user = 'ceilometer',
 ) {
 
   include ceilometer::params
