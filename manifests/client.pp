@@ -9,8 +9,8 @@ class ceilometer::client (
 ) {
 
   package { 'python-ceilometer':
-    name   => $::ceilometer::params::client_package_name,
     ensure => $ensure,
+    name   => $::ceilometer::params::client_package_name,
   }
 
 }

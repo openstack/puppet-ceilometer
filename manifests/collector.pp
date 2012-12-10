@@ -1,3 +1,6 @@
+# Ceilometer::Collector class
+#
+#
 class ceilometer::collector(
   $enabled = true,
 ) {
@@ -13,11 +16,11 @@ class ceilometer::collector(
   }
 
   service { 'ceilometer-collector':
-    name	=> $::ceilometer::params::collector_service_name
-    enable      => $enabled,
+    name       => $::ceilometer::params::collector_service_name,
+    enable     => $enabled,
     hasstatus  => true,
     hasrestart => true,
-    require => Package['ceilometer-collector']
+    require    => Package['ceilometer-collector']
   }
 
   Service['ceilometer-collector'] -> Class['ceilometer::db']

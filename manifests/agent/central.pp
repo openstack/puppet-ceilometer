@@ -1,4 +1,7 @@
-class ceilometer::agent-central(
+# Ceilometer::Agent::Central
+#
+#
+class ceilometer::agent::central(
   $enabled = true,
 ) {
 
@@ -13,11 +16,11 @@ class ceilometer::agent-central(
   }
 
   service { 'ceilometer-agent-central':
-    name	=> $::ceilometer::params::agent_central_name
-    enable      => $enabled,
+    name       => $::ceilometer::params::agent_central_name,
+    enable     => $enabled,
     hasstatus  => true,
     hasrestart => true,
-    require => Package['ceilometer-agent-central']
+    require    => Package['ceilometer-agent-central']
   }
 
 }

@@ -1,12 +1,14 @@
+# Ceilometer::Api class
+#
+#
 class ceilometer::api(
-  $enabled = true,
-  $keystone_host = '127.0.0.1',
-  $keystone_port = '35357',
+  $enabled           = true,
+  $keystone_host     = '127.0.0.1',
+  $keystone_port     = '35357',
   $keystone_protocol = 'http',
-  $keystone_user = 'ceilometer',
+  $keystone_user     = 'ceilometer',
   $keystone_password = undef,
 ) {
-
 
   validate_string($keystone_password)
 
@@ -31,9 +33,8 @@ class ceilometer::api(
   Service['ceilometer-api'] -> Class['ceilometer::db']
 
   ceilometer_setting {
-    'keystone_authtoken/auth_host': value => $keystone_host;
-    'keystone_authtoken/auth_port': value => $keystone_port;
-    'keystone_authtoken/protocol': value => $keystone_protocol;
+    'keystone_authtoken/auth_host' : value => $keystone_host;
+    'keystone_authtoken/auth_port' : value => $keystone_port;
+    'keystone_authtoken/protocol'  : value => $keystone_protocol;
   }
-
 }

@@ -3,20 +3,17 @@
 #   * package_ensure - ensure state for package.
 #
 class ceilometer(
-  $package_ensure = 'present',
-  $verbose = 'False',
-  $debug = 'False',
-  $rabbit_host = '127.0.0.1',
-  $rabbit_port = 5672,
-  $rabbit_userid = 'guest',
-  $rabbit_password = '',
+  $package_ensure     = 'present',
+  $verbose            = 'False',
+  $debug              = 'False',
+  $rabbit_host        = '127.0.0.1',
+  $rabbit_port        = 5672,
+  $rabbit_userid      = 'guest',
+  $rabbit_password    = '',
   $rabbit_virtualhost = '/',
-  $database_connection = 'mysql://ceilometer:ceilometer@127.0.0.1/ceilometer',
 ) {
 
   include ceilometer::params
-
-  require 'mysql::python'
 
   file { '/etc/ceilometer/':
     ensure  => directory,
@@ -47,9 +44,6 @@ class ceilometer(
     'DEFAULT/rabbit_virtualhost': value => $rabbit_virtualhost;
     'DEFAULT/debug': value => $debug;
     'DEFAULT/verbose': value => $verbose;
-    'DEFAULT/database_connection': value => $database_connection;
   }
 
-
 }
-

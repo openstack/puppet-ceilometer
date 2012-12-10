@@ -1,5 +1,7 @@
+# Ceilometer::Params class
+#
+#
 class ceilometer::params {
-  
   $agent_central_package_name = 'ceilometer-agent-central'
   $agent_compute_package_name = 'ceilometer-agent-compute'
   $api_package_name           = 'ceilometer-api'
@@ -11,5 +13,4 @@ class ceilometer::params {
   $agent_compute_service_name = 'ceilometer-agent-compute'
   $api_service_name           = 'ceilometer-api'
   $collector_service_name     = 'ceilometer-collector'
-
 }
