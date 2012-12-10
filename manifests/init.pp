@@ -22,7 +22,7 @@ class ceilometer(
 
   user { 'ceilometer':
     name    => $::ceilometer::params::username,
-    group   => $::ceilometer::params::groupname,
+    gid     => $::ceilometer::params::groupname,
     system  => true,
     require => $::ceilometer::common_package_name,
   }
