@@ -34,8 +34,11 @@ class ceilometer::api(
   }
 
   ceilometer_config {
-    'keystone_authtoken/auth_host' : value => $keystone_host;
-    'keystone_authtoken/auth_port' : value => $keystone_port;
-    'keystone_authtoken/protocol'  : value => $keystone_protocol;
+    'keystone_authtoken/auth_host'         : value => $keystone_host;
+    'keystone_authtoken/auth_port'         : value => $keystone_port;
+    'keystone_authtoken/protocol'          : value => $keystone_protocol;
+    'keystone_authtoken/admin_tenant_name' : value => 'services';
+    'keystone_authtoken/admin_user'        : value => $keystone_user;
+    'keystone_authtoken/admin_password'    : value => $keystone_password;
   }
 }
