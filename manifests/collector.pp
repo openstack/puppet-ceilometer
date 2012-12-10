@@ -20,4 +20,5 @@ class ceilometer::collector(
     require => Package['ceilometer-collector']
   }
 
+  Service['ceilometer-collector'] -> Class['ceilometer::db']
 }

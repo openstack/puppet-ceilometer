@@ -28,6 +28,8 @@ class ceilometer::api(
     require    => Package['ceilometer-api']
   }
 
+  Service['ceilometer-api'] -> Class['ceilometer::db']
+
   ceilometer_setting {
     'keystone_authtoken/auth_host': value => $keystone_host;
     'keystone_authtoken/auth_port': value => $keystone_port;
