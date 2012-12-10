@@ -33,7 +33,7 @@ class ceilometer::api(
     subscribe  => Exec['ceilometer-dbsync']
   }
 
-  ceilometer_setting {
+  ceilometer_config {
     'keystone_authtoken/auth_host' : value => $keystone_host;
     'keystone_authtoken/auth_port' : value => $keystone_port;
     'keystone_authtoken/protocol'  : value => $keystone_protocol;

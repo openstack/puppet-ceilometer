@@ -36,11 +36,11 @@ class ceilometer::db (
     }
   }
 
-  ceilometer_setting {
+  ceilometer_config {
     'DEFAULT/database_connection': value => $database_connection;
   }
 
-  Ceilometer_setting['DEFAULT/database_connection'] ~> Exec['ceilometer-dbsync']
+  Ceilometer_config['DEFAULT/database_connection'] ~> Exec['ceilometer-dbsync']
 
   exec{ 'ceilometer-dbsync':
     command     => $::ceilometer::params::dbsync_command,

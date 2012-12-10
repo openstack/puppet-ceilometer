@@ -48,7 +48,7 @@ class ceilometer(
     name   => $::ceilometer::params::common_package_name,
   }
 
-  ceilometer_setting {
+  ceilometer_config {
     'DEFAULT/rabbit_host': value => $rabbit_host;
     'DEFAULT/rabbit_port': value => $rabbit_port;
     'DEFAULT/rabbit_userid': value => $rabbit_userid;
