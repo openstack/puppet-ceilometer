@@ -35,8 +35,8 @@ class ceilometer(
   }
 
   package { 'ceilometer-common':
-    name   => $::ceilometer::params::common_package_name,
     ensure => $package_ensure,
+    name   => $::ceilometer::params::common_package_name,
   }
 
   ceilometer_setting {
@@ -48,9 +48,6 @@ class ceilometer(
     'DEFAULT/debug': value => $debug;
     'DEFAULT/verbose': value => $verbose;
     'DEFAULT/database_connection': value => $database_connection;
-    'keystone_authtoken/auth_host': value => $keystone_host;
-    'keystone_authtoken/auth_port': value => $keystone_port;
-    'keystone_authtoken/protocol': value => $keystone_protocol;
   }
 
 

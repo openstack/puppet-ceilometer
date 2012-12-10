@@ -4,8 +4,11 @@ class ceilometer::api(
   $keystone_port = '35357',
   $keystone_protocol = 'http',
   $keystone_user = 'ceilometer',
-  $keystone_password,
+  $keystone_password = undef,
 ) {
+
+
+  validate_string($keystone_password)
 
   package { 'ceilometer-api':
     ensure => installed
@@ -18,11 +21,17 @@ class ceilometer::api(
   }
 
   service { 'ceilometer-api':
-    name	=> $::ceilometer::params::api_service_name
-    enable      => $enabled,
+    name       => $::ceilometer::params::api_service_name,
+    enable     => $enabled,
     hasstatus  => true,
     hasrestart => true,
-    require => Package['ceilometer-api']
+    require    => Package['ceilometer-api']
+  }
+
+  ceilometer_setting {
+    'keystone_authtoken/auth_host': value => $keystone_host;
+    'keystone_authtoken/auth_port': value => $keystone_port;
+    'keystone_authtoken/protocol': value => $keystone_protocol;
   }
 
 }
