@@ -7,7 +7,7 @@ class ceilometer::api(
   $keystone_port     = '35357',
   $keystone_protocol = 'http',
   $keystone_user     = 'ceilometer',
-  $keystone_password = undef,
+  $keystone_password = false,
 ) {
 
   include 'ceilometer::params'
