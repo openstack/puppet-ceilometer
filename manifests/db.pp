@@ -44,7 +44,6 @@ class ceilometer::db (
 
   exec{ 'ceilometer-dbsync':
     command     => $::ceilometer::params::dbsync_command,
-    require     => Package['ceilometer-collector'],
     user        => $::ceilometer::params::username,
     refreshonly => true,
     logoutput   => on_failure,
