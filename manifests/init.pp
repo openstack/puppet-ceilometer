@@ -3,6 +3,7 @@
 #   * package_ensure - ensure state for package.
 #
 class ceilometer(
+  $metering_secret,
   $package_ensure     = 'present',
   $verbose            = 'False',
   $debug              = 'False',
@@ -49,13 +50,14 @@ class ceilometer(
   }
 
   ceilometer_config {
-    'DEFAULT/rabbit_host': value => $rabbit_host;
-    'DEFAULT/rabbit_port': value => $rabbit_port;
-    'DEFAULT/rabbit_userid': value => $rabbit_userid;
-    'DEFAULT/rabbit_password': value => $rabbit_password;
-    'DEFAULT/rabbit_virtualhost': value => $rabbit_virtualhost;
-    'DEFAULT/debug': value => $debug;
-    'DEFAULT/verbose': value => $verbose;
+    'DEFAULT/metering_secret'    : value => $metering_secret;
+    'DEFAULT/rabbit_host'        : value => $rabbit_host;
+    'DEFAULT/rabbit_port'        : value => $rabbit_port;
+    'DEFAULT/rabbit_userid'      : value => $rabbit_userid;
+    'DEFAULT/rabbit_password'    : value => $rabbit_password;
+    'DEFAULT/rabbit_virtualhost' : value => $rabbit_virtualhost;
+    'DEFAULT/debug'              : value => $debug;
+    'DEFAULT/verbose'            : value => $verbose;
   }
 
 }
