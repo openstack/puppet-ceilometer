@@ -14,7 +14,8 @@ class ceilometer::params {
   $api_service_name           = 'ceilometer-api'
   $collector_service_name     = 'ceilometer-collector'
 
-  $dbsync_command             = 'ceilometer-dbsync'
+  $dbsync_command             =
+    'ceilometer-dbsync --config-file=/etc/ceilometer/ceilometer.conf'
 
   $username                   = 'ceilometer'
   $groupname                  = 'ceilometer'
