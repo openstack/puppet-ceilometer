@@ -42,7 +42,16 @@ class ceilometer::db (
 
   Ceilometer_config['DEFAULT/database_connection'] ~> Exec['ceilometer-dbsync']
 
-  exec{ 'ceilometer-dbsync':
+  file { '/usr/bin/ceilometer-dbsync':
+    ensure => present,
+    source => 'puppet:///modules/ceilometer/dbsync',
+    owner  => 'root',
+    group  => 'root',
+    mode   => '0755',
+    before => Exec['ceilometer-dbsync']
+  }
+
+  exec { 'ceilometer-dbsync':
     command     => $::ceilometer::params::dbsync_command,
     user        => $::ceilometer::params::username,
     refreshonly => true,
