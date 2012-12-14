@@ -50,10 +50,10 @@ class ceilometer::keystone::auth(
   keystone_service { $auth_name:
     ensure      => present,
     type        => $service_type,
-    description => "Openstack Metering Service",
+    description => 'Openstack Metering Service',
   }
   if $configure_endpoint {
-    keystone_endpoint { "${region}/$auth_name":
+    keystone_endpoint { "${region}/${auth_name}":
       ensure       => present,
       public_url   => "${public_protocol}://${public_address}:${port}/v1",
       admin_url    => "http://${admin_address}:${port}/v1",
