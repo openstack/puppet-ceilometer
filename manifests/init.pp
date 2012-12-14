@@ -31,16 +31,16 @@ class ceilometer(
   file { '/etc/ceilometer/':
     ensure  => directory,
     owner   => 'ceilometer',
-    group   => 'root',
-    mode    => '0770',
+    group   => 'ceilometer',
+    mode    => '0750',
     require => [Package['ceilometer-common'], User['ceilometer']],
   }
 
   file { '/etc/ceilometer/ceilometer.conf':
     ensure  => file,
     owner   => 'ceilometer',
-    group   => 'root',
-    mode    => '0770',
+    group   => 'ceilometer',
+    mode    => '0640',
     require => [File['/etc/ceilometer'], User['ceilometer']],
   }
 
