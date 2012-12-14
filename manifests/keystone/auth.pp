@@ -37,9 +37,15 @@ class ceilometer::keystone::auth(
     email    => $email,
     tenant   => $tenant,
   }
+  if !defined(Keystone_role['ResellerAdmin']) {
+    keystone_role { 'ResellerAdmin':
+      ensure => present,
+    }
+  }
   keystone_user_role { "${auth_name}@${tenant}":
     ensure  => present,
-    roles   => 'admin',
+    roles   => ['admin', 'ResellerAdmin'],
+    require => Keystone_role['ResellerAdmin'],
   }
   keystone_service { $auth_name:
     ensure      => present,
