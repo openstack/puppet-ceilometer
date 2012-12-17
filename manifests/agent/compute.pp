@@ -7,7 +7,7 @@ class ceilometer::agent::compute(
   $auth_user        = 'ceilometer',
   $auth_password    = 'password',
   $auth_tenant_name = 'service',
-  $auth_tenant_id   = null,
+  $auth_tenant_id   = '',
   $enabled          = true,
 ) {
 
@@ -36,7 +36,7 @@ class ceilometer::agent::compute(
     'DEFAULT/os_tenant_name'      : value => $auth_tenant_name;
   }
 
-  if ($auth_tenant_id) {
+  if ($auth_tenant_id != '') {
     ceilometer_config {
       'DEFAULT/os_tenant_id'        : value => $auth_tenant_id;
     }
