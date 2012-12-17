@@ -32,7 +32,7 @@ class ceilometer::agent::compute(
   ceilometer_config {
     'DEFAULT/os_auth_url'         : value => $auth_url;
     'DEFAULT/os_auth_region'      : value => $auth_region;
-    'DEFAULT/os_username'         : value => $auth_username;
+    'DEFAULT/os_username'         : value => $auth_user;
     'DEFAULT/os_password'         : value => $auth_password;
     'DEFAULT/os_tenant_name'      : value => $auth_tenant_name;
   }
