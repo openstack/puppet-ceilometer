@@ -34,7 +34,6 @@ class ceilometer::agent::compute(
     'DEFAULT/os_auth_region'      : value => $auth_region;
     'DEFAULT/os_username'         : value => $auth_username;
     'DEFAULT/os_tenant_name'      : value => $auth_tenant_name;
-    'DEFAULT/os_tenant_id'        : value => $auth_tenant_id;
   }
 
   if ($auth_tenant_id) {
