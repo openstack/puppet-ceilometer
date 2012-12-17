@@ -29,6 +29,8 @@ class ceilometer::agent::central(
     require    => Package['ceilometer-agent-central']
   }
 
+  Ceilometer_config<||> ~> Service['ceilometer-agent-central']
+
   ceilometer_config {
     'DEFAULT/os_auth_url'         : value => $auth_url;
     'DEFAULT/os_auth_region'      : value => $auth_region;

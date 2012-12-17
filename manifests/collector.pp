@@ -26,4 +26,6 @@ class ceilometer::collector(
     subscribe  => Exec['ceilometer-dbsync']
   }
 
+  Ceilometer_config<||> ~> Service['ceilometer-collector']
+
 }
