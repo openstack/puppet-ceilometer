@@ -2,7 +2,7 @@
 #
 #
 class ceilometer::db (
-  $database_connection = 'mysql://ceilometer:ceilometer@127.0.0.1/ceilometer'
+  $database_connection = 'mysql://ceilometer:ceilometer@localhost/ceilometer'
 ) {
 
   include 'ceilometer::params'

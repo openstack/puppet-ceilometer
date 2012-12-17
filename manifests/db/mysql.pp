@@ -2,7 +2,7 @@ class ceilometer::db::mysql(
   $password,
   $dbname        = 'ceilometer',
   $user          = 'ceilometer',
-  $host          = '127.0.0.1',
+  $host          = 'localhost',
   $allowed_hosts = undef,
   $charset       = 'latin1',
 ) {
