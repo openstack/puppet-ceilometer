@@ -6,7 +6,7 @@ class ceilometer::agent::compute(
   $auth_region      = 'RegionOne',
   $auth_user        = 'ceilometer',
   $auth_password    = 'password',
-  $auth_tenant_name = 'service',
+  $auth_tenant_name = 'services',
   $auth_tenant_id   = '',
   $enabled          = true,
 ) {
