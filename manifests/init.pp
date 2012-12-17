@@ -49,6 +49,8 @@ class ceilometer(
     name   => $::ceilometer::params::common_package_name,
   }
 
+  Package['ceilometer-common'] -> Ceilometer_config<||>
+
   ceilometer_config {
     'DEFAULT/metering_secret'    : value => $metering_secret;
     'DEFAULT/rabbit_host'        : value => $rabbit_host;
