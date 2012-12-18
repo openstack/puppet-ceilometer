@@ -25,7 +25,10 @@ class ceilometer(
     name    => $::ceilometer::params::username,
     gid     => $::ceilometer::params::groupname,
     system  => true,
-    require => $::ceilometer::common_package_name,
+    require => [
+      Group['ceilometer'],
+      Package[$::ceilometer::params::common_package_name]
+    ],
   }
 
   file { '/etc/ceilometer/':
