@@ -24,6 +24,7 @@ class ceilometer(
   user { 'ceilometer':
     name    => $::ceilometer::params::username,
     gid     => $::ceilometer::params::groupname,
+    groups  => ['nova', 'libvirt'],
     system  => true,
     require => [
       Group['ceilometer'],
