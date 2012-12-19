@@ -64,6 +64,7 @@ class ceilometer(
     'DEFAULT/rabbit_virtualhost' : value => $rabbit_virtualhost;
     'DEFAULT/debug'              : value => $debug;
     'DEFAULT/verbose'            : value => $verbose;
+    'DEFAULT/log_dir'            : value => $::ceilometer::params::log_dir;
   }
 
 }
