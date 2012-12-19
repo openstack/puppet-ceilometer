@@ -25,6 +25,7 @@ class ceilometer::api(
   }
 
   service { 'ceilometer-api':
+    ensure     => $service_ensure,
     name       => $::ceilometer::params::api_service_name,
     enable     => $enabled,
     hasstatus  => true,

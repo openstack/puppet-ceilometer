@@ -22,6 +22,7 @@ class ceilometer::agent::central(
   }
 
   service { 'ceilometer-agent-central':
+    ensure     => $service_ensure,
     name       => $::ceilometer::params::agent_central_name,
     enable     => $enabled,
     hasstatus  => true,

@@ -18,6 +18,7 @@ class ceilometer::collector(
   }
 
   service { 'ceilometer-collector':
+    ensure     => $service_ensure,
     name       => $::ceilometer::params::collector_service_name,
     enable     => $enabled,
     hasstatus  => true,

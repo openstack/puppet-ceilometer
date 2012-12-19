@@ -22,6 +22,7 @@ class ceilometer::agent::compute(
   }
 
   service { 'ceilometer-agent-compute':
+    ensure     => $service_ensure,
     name       => $::ceilometer::params::agent_compute_service_name,
     enable     => $enabled,
     hasstatus  => true,
