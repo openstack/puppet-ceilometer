@@ -15,6 +15,10 @@ class ceilometer::agent::compute(
     ensure => installed
   }
 
+  User['ceilometer'] {
+    groups +> ['libvirt']
+  }
+
   if $enabled {
     $service_ensure = 'running'
   } else {
