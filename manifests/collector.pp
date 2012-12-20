@@ -3,7 +3,7 @@
 #
 class ceilometer::collector(
   $enabled = true,
-) {
+) inherits ceilometer {
 
   include 'ceilometer::params'
 

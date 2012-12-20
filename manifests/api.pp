@@ -8,7 +8,7 @@ class ceilometer::api(
   $keystone_protocol = 'http',
   $keystone_user     = 'ceilometer',
   $keystone_password = false,
-) {
+) inherits ceilometer {
 
   include 'ceilometer::params'
 

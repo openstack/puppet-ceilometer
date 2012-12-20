@@ -3,7 +3,7 @@
 #
 class ceilometer::db (
   $database_connection = 'mysql://ceilometer:ceilometer@localhost/ceilometer'
-) {
+) inherits ceilometer {
 
   include 'ceilometer::params'
 

@@ -9,7 +9,7 @@ class ceilometer::agent::central(
   $auth_tenant_name = 'services',
   $auth_tenant_id   = '',
   $enabled          = true,
-) {
+) inherits ceilometer {
 
   package { 'ceilometer-agent-central':
     ensure => installed
