@@ -7,9 +7,9 @@ class ceilometer::db::mysql(
   $charset       = 'latin1',
 ) {
 
-  Class['mysql::server']     -> Class['ceilometer::db::mysql']
+  Class['mysql::server'] -> Class['ceilometer::db::mysql']
   Class['ceilometer::db::mysql'] -> Exec<| title == 'ceilometer-dbsync' |>
-  Database[$dbname]          ~> Exec<| title == 'ceilometer-dbsync' |>
+  Mysql::Db[$dbname] ~> Exec<| title == 'ceilometer-dbsync' |>
 
   mysql::db { $dbname:
     user         => $user,
