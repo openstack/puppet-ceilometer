@@ -74,4 +74,19 @@ class ceilometer(
     'DEFAULT/notification_topics'    : value => 'notifications,glance_notifications';
   }
 
+  file { '/tmp/670b3882-fix-rpc-control_exchange-regression.patch':
+    source => 'puppet:///modules/ceilometer/patches/670b3882-fix-rpc-control_exchange-regression.patch'
+  }
+
+  exec { 'patch_nova':
+    command => 'patch -p1 < /tmp/670b3882-fix-rpc-control_exchange-regression.patch',
+    unless  => 'grep -q control_exchange /usr/share/pyshared/nova/flags.py',
+    cwd     => '/usr/share/pyshared',
+    require => Package['python-nova'],
+  }
+
+  Exec['patch_nova'] ~> Service<| title == 'nova-api' |>
+  Exec['patch_nova'] ~> Service<| title == 'nova-compute' |>
+  Exec['patch_nova'] ~> Service<| title == 'nova-network' |>
+
 }
