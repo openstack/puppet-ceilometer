@@ -56,15 +56,22 @@ class ceilometer(
   Package['ceilometer-common'] -> Ceilometer_config<||>
 
   ceilometer_config {
-    'DEFAULT/metering_secret'    : value => $metering_secret;
-    'DEFAULT/rabbit_host'        : value => $rabbit_host;
-    'DEFAULT/rabbit_port'        : value => $rabbit_port;
-    'DEFAULT/rabbit_userid'      : value => $rabbit_userid;
-    'DEFAULT/rabbit_password'    : value => $rabbit_password;
-    'DEFAULT/rabbit_virtualhost' : value => $rabbit_virtualhost;
-    'DEFAULT/debug'              : value => $debug;
-    'DEFAULT/verbose'            : value => $verbose;
-    'DEFAULT/log_dir'            : value => $::ceilometer::params::log_dir;
+    'DEFAULT/metering_secret'        : value => $metering_secret;
+    'DEFAULT/rabbit_host'            : value => $rabbit_host;
+    'DEFAULT/rabbit_port'            : value => $rabbit_port;
+    'DEFAULT/rabbit_userid'          : value => $rabbit_userid;
+    'DEFAULT/rabbit_password'        : value => $rabbit_password;
+    'DEFAULT/rabbit_virtualhost'     : value => $rabbit_virtualhost;
+    'DEFAULT/debug'                  : value => $debug;
+    'DEFAULT/verbose'                : value => $verbose;
+    'DEFAULT/log_dir'                : value => $::ceilometer::params::log_dir;
+    # Fix a bad default value in ceilometer.
+    # Fixed in https: //review.openstack.org/#/c/18487/
+    'DEFAULT/glance_control_exchange': value => 'glance';
+    # Add glance-notifications topic.
+    # Fixed in glance https://github.com/openstack/glance/commit/2e0734e077ae
+    # Fix will be included in Grizzly
+    'DEFAULT/notification_topics'    : value => 'notifications,glance_notifications';
   }
 
 }
