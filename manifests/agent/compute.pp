@@ -49,4 +49,27 @@ class ceilometer::agent::compute(
       'DEFAULT/os_tenant_id'        : value => $auth_tenant_id;
     }
   }
+
+  nova_config {
+    'instance_usage_audit'        : value => 'True';
+    'instance_usage_audit_period' : value => 'hour';
+  }
+
+  Nova_config<| |> {
+    before +> Exec[
+      'nova-notification-driver-common',
+      'nova-notification-driver-ceilometer'
+    ],
+  }
+
+  exec { 'nova-notification-driver-common':
+    command => 'git config --file nova.conf --add notification_driver nova.openstack.common.notifier.rabbit_notifier',
+    onlyif  => 'git config --file nova.conf --get notification_driver nova.openstack.common.notifier.rabbit_notifier',
+  }
+
+  exec { 'nova-notification-driver-ceilometer':
+    command => 'git config --file nova.conf --add notification_driver ceilometer.compute.nova_notifier',
+    onlyif  => 'git config --file nova.conf --get notification_driver ceilometer.compute.nova_notifier',
+  }
+
 }
