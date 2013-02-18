@@ -56,20 +56,21 @@ class ceilometer::agent::compute(
   }
 
   Nova_config<| |> {
-    before +> Exec[
+    before +> File_line[
       'nova-notification-driver-common',
       'nova-notification-driver-ceilometer'
     ],
   }
 
-  exec { 'nova-notification-driver-common':
-    command => 'git config --file nova.conf --add notification_driver nova.openstack.common.notifier.rabbit_notifier',
-    onlyif  => 'git config --file nova.conf --get notification_driver nova.openstack.common.notifier.rabbit_notifier',
-  }
+  File_line['nova-notification-driver-common', 'nova-notification-driver-ceilometer'] ~> Service['nova-compute']
 
-  exec { 'nova-notification-driver-ceilometer':
-    command => 'git config --file nova.conf --add notification_driver ceilometer.compute.nova_notifier',
-    onlyif  => 'git config --file nova.conf --get notification_driver ceilometer.compute.nova_notifier',
+  file_line {
+    'nova-notification-driver-common':
+      line => 'notification_driver=nova.openstack.common.notifier.rabbit_notifier',
+      path => '/etc/nova/nova.conf';
+    'nova-notification-driver-ceilometer':
+      line => 'notification_driver=ceilometer.compute.nova_notifier',
+      path => '/etc/nova/nova.conf';
   }
 
 }
