@@ -8,6 +8,6 @@ description 'Install/configure Openstack Ceilometer'
 project_page 'https://launchpad.net/ceilometer'
 
 # Dependencies
-'puppetlabs/stdlib', '>= 3.2.0'
-'cprice404/inifile', '>= 0.9.0'
-'puppetlabs/mysql', '>= 0.5.0'
+dependency 'puppetlabs/stdlib', '>= 3.2.0'
+dependency 'cprice404/inifile', '>= 0.9.0'
+dependency 'puppetlabs/mysql', '>= 0.5.0'
