@@ -1,8 +1,5 @@
 #
-# == parameters
-#   * package_ensure - ensure state for package.
-#
-class ceilometer(
+class ceilometer (
   $metering_secret,
   $package_ensure     = 'present',
   $verbose            = 'False',
@@ -18,7 +15,7 @@ class ceilometer(
 
   group { 'ceilometer':
     name    => $::ceilometer::params::groupname,
-    require => $::ceilometer::common_package_name,
+    require => Package['ceilometer-common'],
   }
 
   user { 'ceilometer':
