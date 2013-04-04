@@ -7,6 +7,7 @@ class ceilometer::api(
   $keystone_port     = '35357',
   $keystone_protocol = 'http',
   $keystone_user     = 'ceilometer',
+  $keystone_tenant   = 'services',
   $keystone_password = false,
 ) inherits ceilometer {
 
@@ -40,7 +41,7 @@ class ceilometer::api(
     'keystone_authtoken/auth_host'         : value => $keystone_host;
     'keystone_authtoken/auth_port'         : value => $keystone_port;
     'keystone_authtoken/auth_protocol'     : value => $keystone_protocol;
-    'keystone_authtoken/admin_tenant_name' : value => 'services';
+    'keystone_authtoken/admin_tenant_name' : value => $keystone_tenant;
     'keystone_authtoken/admin_user'        : value => $keystone_user;
     'keystone_authtoken/admin_password'    : value => $keystone_password;
   }

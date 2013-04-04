@@ -12,7 +12,8 @@ describe 'ceilometer::api' do
       :keystone_port     => '35357',
       :keystone_protocol => 'http',
       :keystone_user     => 'ceilometer',
-      :keystone_password => 'ceilometer-passw0rd'
+      :keystone_password => 'ceilometer-passw0rd',
+      :keystone_tenant   => 'services'
     }
   end
 
@@ -42,7 +43,7 @@ describe 'ceilometer::api' do
       should contain_ceilometer_config('keystone_authtoken/auth_host').with_value( params[:keystone_host] )
       should contain_ceilometer_config('keystone_authtoken/auth_port').with_value( params[:keystone_port] )
       should contain_ceilometer_config('keystone_authtoken/auth_protocol').with_value( params[:keystone_protocol] )
-      should contain_ceilometer_config('keystone_authtoken/admin_tenant_name').with_value('services')
+      should contain_ceilometer_config('keystone_authtoken/admin_tenant_name').with_value( params[:keystone_tenant] )
       should contain_ceilometer_config('keystone_authtoken/admin_user').with_value( params[:keystone_user] )
       should contain_ceilometer_config('keystone_authtoken/admin_password').with_value( params[:keystone_password] )
     end
