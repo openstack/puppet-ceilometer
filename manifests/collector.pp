@@ -1,11 +1,11 @@
-# Ceilometer::Collector class
 #
-#
-class ceilometer::collector(
+class ceilometer::collector (
   $enabled = true,
-) inherits ceilometer {
+) {
 
-  include 'ceilometer::params'
+  include ceilometer::params
+
+  Package<| title == 'ceilometer-common' |> -> Class['ceilometer::collector']
 
   package { 'ceilometer-collector':
     ensure => installed
@@ -28,5 +28,4 @@ class ceilometer::collector(
   }
 
   Ceilometer_config<||> ~> Service['ceilometer-collector']
-
 }

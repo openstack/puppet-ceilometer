@@ -1,7 +1,5 @@
-# Ceilometer::Agent::Compute
 #
-#
-class ceilometer::agent::compute(
+class ceilometer::agent::compute (
   $auth_url         = 'http://localhost:5000/v2.0',
   $auth_region      = 'RegionOne',
   $auth_user        = 'ceilometer',
@@ -9,7 +7,11 @@ class ceilometer::agent::compute(
   $auth_tenant_name = 'services',
   $auth_tenant_id   = '',
   $enabled          = true,
-) inherits ceilometer {
+) {
+
+  include ceilometer::params
+
+  Package<| title == 'ceilometer-common' |> -> Class['ceilometer::agent::compute']
 
   package { 'ceilometer-agent-compute':
     ensure => installed

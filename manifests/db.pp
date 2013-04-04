@@ -1,11 +1,11 @@
-# Ceilometer::Db::Settings class
-#
 #
 class ceilometer::db (
   $database_connection = 'mysql://ceilometer:ceilometer@localhost/ceilometer'
-) inherits ceilometer {
+) {
 
-  include 'ceilometer::params'
+  include ceilometer::params
+
+  Package<| title == 'ceilometer-common' |> -> Class['ceilometer::db']
 
   validate_re($database_connection,
     '(sqlite|mysql|posgres|mongodb):\/\/(\S+:\S+@\S+\/\S+)?')

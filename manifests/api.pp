@@ -1,7 +1,5 @@
-# Ceilometer::Api class
 #
-#
-class ceilometer::api(
+class ceilometer::api (
   $enabled           = true,
   $keystone_host     = '127.0.0.1',
   $keystone_port     = '35357',
@@ -9,9 +7,11 @@ class ceilometer::api(
   $keystone_user     = 'ceilometer',
   $keystone_tenant   = 'services',
   $keystone_password = false,
-) inherits ceilometer {
+) {
 
-  include 'ceilometer::params'
+  include ceilometer::params
+
+  Package<| title == 'ceilometer-common' |> -> Class['ceilometer::api']
 
   validate_string($keystone_password)
 
