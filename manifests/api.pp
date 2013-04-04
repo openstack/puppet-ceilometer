@@ -16,7 +16,8 @@ class ceilometer::api(
   validate_string($keystone_password)
 
   package { 'ceilometer-api':
-    ensure => installed
+    ensure => installed,
+    name   => $::ceilometer::params::api_package_name,
   }
 
   if $enabled {

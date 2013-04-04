@@ -15,7 +15,7 @@ describe 'ceilometer' do
     }
   end
 
-  context 'with all parameters' do
+  shared_examples_for 'ceilometer' do
 
     it { should include_class('ceilometer::params') }
 
@@ -42,7 +42,7 @@ describe 'ceilometer' do
         :owner   => 'ceilometer',
         :group   => 'ceilometer',
         :mode    => '0750',
-        :require => ['Package[ceilometer-common]', 'User[ceilometer]']
+        :require => ['Package[ceilometer-common]','User[ceilometer]']
       )
     end
 
@@ -59,7 +59,7 @@ describe 'ceilometer' do
     it 'installs ceilometer common package' do
       should contain_package('ceilometer-common').with(
         :ensure => 'present',
-        :name   => 'ceilometer-common'
+        :name   => platform_params[:common_package_name]
       )
     end
 
@@ -87,5 +87,30 @@ describe 'ceilometer' do
     it 'adds glance-notifications topic' do
       should contain_ceilometer_config('DEFAULT/notification_topics').with_value('notifications,glance_notifications')
     end
+  end
+
+
+  context 'on Debian platforms' do
+    let :facts do
+      {:osfamily => 'Debian'}
+    end
+
+    let :platform_params do
+      { :common_package_name => 'ceilometer-common' }
+    end
+
+    it_configures 'ceilometer'
+  end
+
+  context 'on RedHat platforms' do
+    let :facts do
+      {:osfamily => 'RedHat'}
+    end
+
+    let :platform_params do
+      { :common_package_name => 'openstack-ceilometer-common' }
+    end
+
+    it_configures 'ceilometer'
   end
 end

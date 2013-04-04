@@ -17,20 +17,21 @@ describe 'ceilometer::api' do
     }
   end
 
-  context 'with all parameters' do
+  shared_examples_for 'ceilometer-api' do
 
     it { should include_class('ceilometer::params') }
 
     it 'installs ceilometer-api package' do
       should contain_package('ceilometer-api').with(
-        :ensure => 'installed'
+        :ensure => 'installed',
+        :name   => platform_params[:api_package_name]
       )
     end
 
     it 'configures ceilometer-api service' do
       should contain_service('ceilometer-api').with(
         :ensure     => 'running',
-        :name       => 'ceilometer-api',
+        :name       => platform_params[:api_service_name],
         :enable     => true,
         :hasstatus  => true,
         :hasrestart => true,
@@ -39,7 +40,7 @@ describe 'ceilometer::api' do
       )
     end
 
-    it 'configures ceilometer with keystone' do
+    it 'configures keystone authentication middleware' do
       should contain_ceilometer_config('keystone_authtoken/auth_host').with_value( params[:keystone_host] )
       should contain_ceilometer_config('keystone_authtoken/auth_port').with_value( params[:keystone_port] )
       should contain_ceilometer_config('keystone_authtoken/auth_protocol').with_value( params[:keystone_protocol] )
@@ -47,5 +48,31 @@ describe 'ceilometer::api' do
       should contain_ceilometer_config('keystone_authtoken/admin_user').with_value( params[:keystone_user] )
       should contain_ceilometer_config('keystone_authtoken/admin_password').with_value( params[:keystone_password] )
     end
+  end
+
+  context 'on Debian platforms' do
+    let :facts do
+      { :osfamily => 'Debian' }
+    end
+
+    let :platform_params do
+      { :api_package_name => 'ceilometer-api',
+        :api_service_name => 'ceilometer-api' }
+    end
+
+    it_configures 'ceilometer-api'
+  end
+
+  context 'on RedHat platforms' do
+    let :facts do
+      { :osfamily => 'RedHat' }
+    end
+
+    let :platform_params do
+      { :api_package_name => 'openstack-ceilometer-api',
+        :api_service_name => 'openstack-ceilometer-api' }
+    end
+
+    it_configures 'ceilometer-api'
   end
 end

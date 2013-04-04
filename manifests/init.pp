@@ -25,7 +25,7 @@ class ceilometer (
     system  => true,
     require => [
       Group['ceilometer'],
-      Package[$::ceilometer::params::common_package_name]
+      Package['ceilometer-common']
     ],
   }
 
