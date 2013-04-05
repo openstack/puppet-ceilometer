@@ -8,7 +8,8 @@ class ceilometer::collector (
   Package<| title == 'ceilometer-common' |> -> Class['ceilometer::collector']
 
   package { 'ceilometer-collector':
-    ensure => installed
+    ensure => installed,
+    name   => $::ceilometer::params::collector_package_name,
   }
 
   if $enabled {
