@@ -35,7 +35,7 @@ describe 'ceilometer::api' do
         :enable     => true,
         :hasstatus  => true,
         :hasrestart => true,
-        :require    => ['Package[ceilometer-api]', 'Class[Ceilometer::Db]'],
+        :require    => 'Class[Ceilometer::Db]',
         :subscribe  => 'Exec[ceilometer-dbsync]'
       )
     end

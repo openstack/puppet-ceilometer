@@ -11,10 +11,12 @@ class ceilometer::api (
 
   include ceilometer::params
 
-  Package<| title == 'ceilometer-common' |> -> Class['ceilometer::api']
-
   validate_string($keystone_password)
 
+  Ceilometer_config<||> ~> Service['ceilometer-api']
+
+  Package['ceilometer-api'] -> Ceilometer_config<||>
+  Package['ceilometer-api'] -> Service['ceilometer-api']
   package { 'ceilometer-api':
     ensure => installed,
     name   => $::ceilometer::params::api_package_name,
@@ -26,17 +28,16 @@ class ceilometer::api (
     $service_ensure = 'stopped'
   }
 
+  Package['ceilometer-common'] -> Service['ceilometer-api']
   service { 'ceilometer-api':
     ensure     => $service_ensure,
     name       => $::ceilometer::params::api_service_name,
     enable     => $enabled,
     hasstatus  => true,
     hasrestart => true,
-    require    => [Package['ceilometer-api'], Class['ceilometer::db']],
+    require    => Class['ceilometer::db'],
     subscribe  => Exec['ceilometer-dbsync']
   }
-
-  Ceilometer_config<||> ~> Service['ceilometer-api']
 
   ceilometer_config {
     'keystone_authtoken/auth_host'         : value => $keystone_host;

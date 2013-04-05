@@ -2,6 +2,10 @@ require 'spec_helper'
 
 describe 'ceilometer::collector' do
 
+  let :pre_condition do
+    "class { 'ceilometer': metering_secret => 's3cr3t' }"
+  end
+
   shared_examples_for 'ceilometer-collector' do
 
     it { should include_class('ceilometer::params') }
@@ -20,7 +24,7 @@ describe 'ceilometer::collector' do
         :enable     => true,
         :hasstatus  => true,
         :hasrestart => true,
-        :require    => ['Package[ceilometer-collector]', 'Class[Ceilometer::Db]'],
+        :require    => 'Class[Ceilometer::Db]',
         :subscribe  => 'Exec[ceilometer-dbsync]'
       )
     end

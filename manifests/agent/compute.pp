@@ -11,10 +11,12 @@ class ceilometer::agent::compute (
 
   include ceilometer::params
 
-  Package<| title == 'ceilometer-common' |> -> Class['ceilometer::agent::compute']
+  Ceilometer_config<||> ~> Service['ceilometer-agent-compute']
 
+  Package['ceilometer-agent-compute'] -> Service['ceilometer-agent-compute']
   package { 'ceilometer-agent-compute':
-    ensure => installed
+    ensure => installed,
+    name   => $::ceilometer::params::agent_compute_package_name,
   }
 
   User['ceilometer'] {
@@ -27,16 +29,14 @@ class ceilometer::agent::compute (
     $service_ensure = 'stopped'
   }
 
+  Package['ceilometer-common'] -> Service['ceilometer-agent-central']
   service { 'ceilometer-agent-compute':
     ensure     => $service_ensure,
     name       => $::ceilometer::params::agent_compute_service_name,
     enable     => $enabled,
     hasstatus  => true,
     hasrestart => true,
-    require    => Package['ceilometer-agent-compute']
   }
-
-  Ceilometer_config<||> ~> Service['ceilometer-agent-compute']
 
   ceilometer_config {
     'DEFAULT/os_auth_url'         : value => $auth_url;
