@@ -7,7 +7,7 @@ class ceilometer::agent::compute (
   $auth_tenant_name = 'services',
   $auth_tenant_id   = '',
   $enabled          = true,
-) {
+) inherits ceilometer {
 
   include ceilometer::params
 
@@ -29,7 +29,7 @@ class ceilometer::agent::compute (
     $service_ensure = 'stopped'
   }
 
-  Package['ceilometer-common'] -> Service['ceilometer-agent-central']
+  Package['ceilometer-common'] -> Service['ceilometer-agent-compute']
   service { 'ceilometer-agent-compute':
     ensure     => $service_ensure,
     name       => $::ceilometer::params::agent_compute_service_name,
