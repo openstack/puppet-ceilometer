@@ -13,14 +13,18 @@ class ceilometer (
 
   include ceilometer::params
 
+  File {
+    require => Package['ceilometer-common'],
+  }
+
   group { 'ceilometer':
-    name    => $::ceilometer::params::groupname,
+    name    => 'ceilometer',
     require => Package['ceilometer-common'],
   }
 
   user { 'ceilometer':
-    name    => $::ceilometer::params::username,
-    gid     => $::ceilometer::params::groupname,
+    name    => 'ceilometer',
+    gid     => 'ceilometer',
     groups  => ['nova'],
     system  => true,
     require => Package['ceilometer-common'],
@@ -31,11 +35,9 @@ class ceilometer (
     owner   => 'ceilometer',
     group   => 'ceilometer',
     mode    => '0750',
-    require => Package['ceilometer-common'],
   }
 
   file { '/etc/ceilometer/ceilometer.conf':
-    ensure  => file,
     owner   => 'ceilometer',
     group   => 'ceilometer',
     mode    => '0640',

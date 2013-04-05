@@ -1,10 +1,7 @@
 #
 class ceilometer::params {
 
-  $username       = 'ceilometer'
-  $groupname      = 'ceilometer'
-  $cinder_conf    = '/etc/ceilometer/ceilometer.conf'
-  $dbsync_command = "ceilometer-dbsync --config-file=${cinder_conf}"
+  $dbsync_command = "ceilometer-dbsync --config-file=/etc/ceilometer/ceilometer.conf"
   $log_dir        = '/var/log/ceilometer'
 
   case $::osfamily {

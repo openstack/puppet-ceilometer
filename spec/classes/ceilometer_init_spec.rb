@@ -48,10 +48,10 @@ describe 'ceilometer' do
 
     it 'configures ceilometer configuration file' do
       should contain_file('/etc/ceilometer/ceilometer.conf').with(
-        :ensure  => 'file',
         :owner   => 'ceilometer',
         :group   => 'ceilometer',
-        :mode    => '0640'
+        :mode    => '0640',
+        :require => 'Package[ceilometer-common]'
       )
     end
 
