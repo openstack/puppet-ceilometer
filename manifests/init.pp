@@ -23,10 +23,7 @@ class ceilometer (
     gid     => $::ceilometer::params::groupname,
     groups  => ['nova'],
     system  => true,
-    require => [
-      Group['ceilometer'],
-      Package['ceilometer-common']
-    ],
+    require => Package['ceilometer-common'],
   }
 
   file { '/etc/ceilometer/':
@@ -34,7 +31,7 @@ class ceilometer (
     owner   => 'ceilometer',
     group   => 'ceilometer',
     mode    => '0750',
-    require => [Package['ceilometer-common'], User['ceilometer']],
+    require => Package['ceilometer-common'],
   }
 
   file { '/etc/ceilometer/ceilometer.conf':
@@ -42,7 +39,6 @@ class ceilometer (
     owner   => 'ceilometer',
     group   => 'ceilometer',
     mode    => '0640',
-    require => [File['/etc/ceilometer'], User['ceilometer']],
   }
 
   package { 'ceilometer-common':

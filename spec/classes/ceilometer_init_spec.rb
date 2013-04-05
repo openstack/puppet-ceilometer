@@ -32,7 +32,7 @@ describe 'ceilometer' do
         :gid     => 'ceilometer',
         :groups  => ['nova'],
         :system  => true,
-        :require => ['Group[ceilometer]', 'Package[ceilometer-common]']
+        :require => 'Package[ceilometer-common]'
       )
     end
 
@@ -42,7 +42,7 @@ describe 'ceilometer' do
         :owner   => 'ceilometer',
         :group   => 'ceilometer',
         :mode    => '0750',
-        :require => ['Package[ceilometer-common]','User[ceilometer]']
+        :require => 'Package[ceilometer-common]'
       )
     end
 
@@ -51,8 +51,7 @@ describe 'ceilometer' do
         :ensure  => 'file',
         :owner   => 'ceilometer',
         :group   => 'ceilometer',
-        :mode    => '0640',
-        :require => ['File[/etc/ceilometer]', 'User[ceilometer]']
+        :mode    => '0640'
       )
     end
 
