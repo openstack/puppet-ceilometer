@@ -1,7 +1,7 @@
 #
 class ceilometer::params {
 
-  $dbsync_command = "ceilometer-dbsync --config-file=/etc/ceilometer/ceilometer.conf"
+  $dbsync_command = 'ceilometer-dbsync --config-file=/etc/ceilometer/ceilometer.conf'
   $log_dir        = '/var/log/ceilometer'
 
   case $::osfamily {
@@ -18,7 +18,6 @@ class ceilometer::params {
       $agent_compute_service_name = 'openstack-ceilometer-compute'
       $api_service_name           = 'openstack-ceilometer-api'
       $collector_service_name     = 'openstack-ceilometer-collector'
-
     }
     'Debian': {
       # package names
@@ -33,6 +32,15 @@ class ceilometer::params {
       $agent_compute_service_name = 'ceilometer-agent-compute'
       $api_service_name           = 'ceilometer-api'
       $collector_service_name     = 'ceilometer-collector'
+      # Operating system specific
+      case $::operatingsystem {
+        'Ubuntu': {
+          $libvirt_group = 'libvirtd'
+        }
+        default: {
+          $libvirt_group = 'libvirt'
+        }
+      }
     }
     default: {
       fail("Unsupported osfamily: ${::osfamily} operatingsystem: ${::operatingsystem}, module ${module_name} only support osfamily RedHat and Debian")

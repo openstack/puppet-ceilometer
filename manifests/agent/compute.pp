@@ -19,9 +19,12 @@ class ceilometer::agent::compute (
     name   => $::ceilometer::params::agent_compute_package_name,
   }
 
-  User['ceilometer'] {
-    groups +> ['libvirt']
+  if $::ceilometer::params::libvirt_group {
+    User['ceilometer'] {
+      groups +> [$::ceilometer::params::libvirt_group]
+    }
   }
+
 
   if $enabled {
     $service_ensure = 'running'
