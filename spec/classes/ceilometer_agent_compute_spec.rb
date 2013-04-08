@@ -67,12 +67,14 @@ describe 'ceilometer::agent::compute' do
 
     it 'configures nova notification driver' do
       should contain_file_line('nova-notification-driver-common').with(
-        :line => 'notification_driver=nova.openstack.common.notifier.rabbit_notifier',
-        :path => '/etc/nova/nova.conf'
+        :line   => 'notification_driver=nova.openstack.common.notifier.rabbit_notifier',
+        :path   => '/etc/nova/nova.conf',
+        :notify => 'Service[nova-compute]'
       )
       should contain_file_line('nova-notification-driver-ceilometer').with(
-        :line => 'notification_driver=ceilometer.compute.nova_notifier',
-        :path => '/etc/nova/nova.conf'
+        :line   => 'notification_driver=ceilometer.compute.nova_notifier',
+        :path   => '/etc/nova/nova.conf',
+        :notify => 'Service[nova-compute]'
       )
     end
   end
