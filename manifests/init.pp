@@ -52,6 +52,8 @@ class ceilometer (
   Package['ceilometer-common'] -> Ceilometer_config<||>
 
   if $rabbit_hosts {
+    ceilometer_config { 'DEFAULT/rabbit_host': ensure => absent }
+    ceilometer_config { 'DEFAULT/rabbit_port': ensure => absent }
     ceilometer_config { 'DEFAULT/rabbit_hosts': value => join($rabbit_hosts, ',') }
   } else {
     ceilometer_config { 'DEFAULT/rabbit_host': value => $rabbit_host }

@@ -121,15 +121,15 @@ describe 'ceilometer' do
   end
 
   shared_examples_for 'rabbit without HA support (without backward compatibility)' do
-    it { should_not contain_ceilometer_config('DEFAULT/rabbit_host') }
-    it { should_not contain_ceilometer_config('DEFAULT/rabbit_port') }
+    it { should contain_ceilometer_config('DEFAULT/rabbit_host').with_ensure('absent') }
+    it { should contain_ceilometer_config('DEFAULT/rabbit_port').with_ensure('absent') }
     it { should contain_ceilometer_config('DEFAULT/rabbit_hosts').with_value( params[:rabbit_hosts].join(',') ) }
     it { should contain_ceilometer_config('DEFAULT/rabbit_ha_queues').with_value('false') }
   end
 
   shared_examples_for 'rabbit with HA support' do
-    it { should_not contain_ceilometer_config('DEFAULT/rabbit_host') }
-    it { should_not contain_ceilometer_config('DEFAULT/rabbit_port') }
+    it { should contain_ceilometer_config('DEFAULT/rabbit_host').with_ensure('absent') }
+    it { should contain_ceilometer_config('DEFAULT/rabbit_port').with_ensure('absent') }
     it { should contain_ceilometer_config('DEFAULT/rabbit_hosts').with_value( params[:rabbit_hosts].join(',') ) }
     it { should contain_ceilometer_config('DEFAULT/rabbit_ha_queues').with_value('true') }
   end
