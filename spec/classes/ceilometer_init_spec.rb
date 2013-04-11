@@ -17,6 +17,33 @@ describe 'ceilometer' do
 
   shared_examples_for 'ceilometer' do
 
+    context 'with rabbit_host parameter' do
+      it_configures 'a ceilometer base installation'
+      it_configures 'rabbit without HA support (with backward compatibility)'
+    end
+
+    context 'with rabbit_hosts parameter' do
+      before do
+        params.delete(:rabbit_host)
+        params.delete(:rabbit_port)
+      end
+
+      context 'with one server' do
+        before { params.merge!( :rabbit_hosts => ['127.0.0.1:5672'] ) }
+        it_configures 'a ceilometer base installation'
+        it_configures 'rabbit without HA support (without backward compatibility)'
+      end
+
+      context 'with multiple servers' do
+        before { params.merge!( :rabbit_hosts => ['rabbit1:5672', 'rabbit2:5672'] ) }
+        it_configures 'a ceilometer base installation'
+        it_configures 'rabbit with HA support'
+      end
+    end
+  end
+
+  shared_examples_for 'a ceilometer base installation' do
+
     it { should include_class('ceilometer::params') }
 
     it 'configures ceilometer group' do
@@ -67,8 +94,6 @@ describe 'ceilometer' do
     end
 
     it 'configures rabbit' do
-      should contain_ceilometer_config('DEFAULT/rabbit_host').with_value( params[:rabbit_host] )
-      should contain_ceilometer_config('DEFAULT/rabbit_port').with_value( params[:rabbit_port] )
       should contain_ceilometer_config('DEFAULT/rabbit_userid').with_value( params[:rabbit_userid] )
       should contain_ceilometer_config('DEFAULT/rabbit_password').with_value( params[:rabbit_password] )
       should contain_ceilometer_config('DEFAULT/rabbit_virtualhost').with_value( params[:rabbit_virtualhost] )
@@ -88,10 +113,30 @@ describe 'ceilometer' do
     end
   end
 
+  shared_examples_for 'rabbit without HA support (with backward compatibility)' do
+    it { should contain_ceilometer_config('DEFAULT/rabbit_host').with_value( params[:rabbit_host] ) }
+    it { should contain_ceilometer_config('DEFAULT/rabbit_port').with_value( params[:rabbit_port] ) }
+    it { should contain_ceilometer_config('DEFAULT/rabbit_hosts').with_value( "#{params[:rabbit_host]}:#{params[:rabbit_port]}" ) }
+    it { should contain_ceilometer_config('DEFAULT/rabbit_ha_queues').with_value('false') }
+  end
+
+  shared_examples_for 'rabbit without HA support (without backward compatibility)' do
+    it { should_not contain_ceilometer_config('DEFAULT/rabbit_host') }
+    it { should_not contain_ceilometer_config('DEFAULT/rabbit_port') }
+    it { should contain_ceilometer_config('DEFAULT/rabbit_hosts').with_value( params[:rabbit_hosts].join(',') ) }
+    it { should contain_ceilometer_config('DEFAULT/rabbit_ha_queues').with_value('false') }
+  end
+
+  shared_examples_for 'rabbit with HA support' do
+    it { should_not contain_ceilometer_config('DEFAULT/rabbit_host') }
+    it { should_not contain_ceilometer_config('DEFAULT/rabbit_port') }
+    it { should contain_ceilometer_config('DEFAULT/rabbit_hosts').with_value( params[:rabbit_hosts].join(',') ) }
+    it { should contain_ceilometer_config('DEFAULT/rabbit_ha_queues').with_value('true') }
+  end
 
   context 'on Debian platforms' do
     let :facts do
-      {:osfamily => 'Debian'}
+      { :osfamily => 'Debian' }
     end
 
     let :platform_params do
@@ -103,7 +148,7 @@ describe 'ceilometer' do
 
   context 'on RedHat platforms' do
     let :facts do
-      {:osfamily => 'RedHat'}
+      { :osfamily => 'RedHat' }
     end
 
     let :platform_params do
