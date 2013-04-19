@@ -61,8 +61,8 @@ describe 'ceilometer::agent::compute' do
     end
 
     it 'configures instance usage audit in nova' do
-      should contain_nova_config('instance_usage_audit').with_value('True')
-      should contain_nova_config('instance_usage_audit_period').with_value('hour')
+      should contain_nova_config('DEFAULT/instance_usage_audit').with_value('True')
+      should contain_nova_config('DEFAULT/instance_usage_audit_period').with_value('hour')
     end
 
     it 'configures nova notification driver' do
