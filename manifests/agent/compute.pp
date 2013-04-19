@@ -51,8 +51,8 @@ class ceilometer::agent::compute(
   }
 
   nova_config {
-    'instance_usage_audit'        : value => 'True';
-    'instance_usage_audit_period' : value => 'hour';
+    'DEFAULT/instance_usage_audit'        : value => 'True';
+    'DEFAULT/instance_usage_audit_period' : value => 'hour';
   }
 
   Nova_config<| |> {
