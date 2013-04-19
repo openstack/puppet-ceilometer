@@ -20,7 +20,7 @@ describe 'ceilometer::client' do
     end
 
     let :platform_params do
-      { :client_package_name => 'python-ceilometer' }
+      { :client_package_name => 'python-ceilometerclient' }
     end
 
     it_configures 'ceilometer client'
