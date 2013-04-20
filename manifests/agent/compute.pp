@@ -1,3 +1,14 @@
+# The ceilometer::agent::compute class installs the ceilometer compute agent
+# Include this class on all nova compute nodes
+#
+# == Parameters
+#  * auth_url: the keystone public endpoint
+#  *auth_region: the keystone region of this compute node
+#  *auth_user: the keystone user for ceilometer services
+#  *auth_password: the keystone password for ceilometer services
+#  *auth_tenant_name: the keystone tenant name for ceilometer services
+#  *auth_tenant_id (optional): the keystone tenant id for ceilometer services
+#  *enabled: should the service be started or not
 #
 class ceilometer::agent::compute (
   $auth_url         = 'http://localhost:5000/v2.0',
@@ -69,7 +80,8 @@ class ceilometer::agent::compute (
 
   file_line {
     'nova-notification-driver-common':
-      line   => 'notification_driver=nova.openstack.common.notifier.rabbit_notifier',
+      line   =>
+        'notification_driver=nova.openstack.common.notifier.rabbit_notifier',
       path   => '/etc/nova/nova.conf',
       notify => Service['nova-compute'];
     'nova-notification-driver-ceilometer':

@@ -1,7 +1,8 @@
-#
+# Parameters for puppet-ceilometer
 class ceilometer::params {
 
-  $dbsync_command = 'ceilometer-dbsync --config-file=/etc/ceilometer/ceilometer.conf'
+  $dbsync_command =
+    'ceilometer-dbsync --config-file=/etc/ceilometer/ceilometer.conf'
   $log_dir        = '/var/log/ceilometer'
 
   case $::osfamily {
@@ -43,7 +44,9 @@ class ceilometer::params {
       }
     }
     default: {
-      fail("Unsupported osfamily: ${::osfamily} operatingsystem: ${::operatingsystem}, module ${module_name} only support osfamily RedHat and Debian")
+      fail("Unsupported osfamily: ${::osfamily} operatingsystem: \
+${::operatingsystem}, module ${module_name} only support osfamily \
+RedHat and Debian")
     }
   }
 }

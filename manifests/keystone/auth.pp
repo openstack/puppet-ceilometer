@@ -3,22 +3,35 @@
 #
 # == Parameters:
 #
-#  $auth_name :: identifier used for all keystone objects related to ceilometer.
-#    Optional. Defaults to ceilometer.
-#  $password :: password for ceilometer user. Optional. Defaults to glance_password.
-#  $service_type :: type of service to create. Optional. Defaults to image.
-#  $public_address :: Public address for endpoint. Optional. Defaults to 127.0.0.1.
-#  $admin_address :: Admin address for endpoint. Optional. Defaults to 127.0.0.1.
-#  $inernal_address :: Internal address for endpoint. Optional. Defaults to 127.0.0.1.
-#  $port :: Port for endpoint. Needs to match ceilometer api service port. Optional.
-#    Defaults to 8777.
-#  $region :: Region where endpoint is set.
+#  $password: ceilometer user's password
+#    Mandatory
+#  $email: ceilometer user's email
+#    Optional.
+#  $auth_name: username
+#    Optional. Defaults to 'ceilometer'.
+#  $service_type: type of service to create.
+#    Optional. Defaults to 'metering'.
+#  $public_address: Public address for endpoint.
+#    Optional. Defaults to 127.0.0.1.
+#  $admin_address: Admin address for endpoint.
+#    Optional. Defaults to 127.0.0.1.
+#  $internal_address: Internal address for endpoint.
+#    Optional. Defaults to 127.0.0.1.
+#  $port: Port for endpoint. Needs to match ceilometer api service port.
+#    Optional. Defaults to 8777.
+#  $region: Region where endpoint is set.
+#    Optional. Defaults to 'RegionOne'.
+#  $tenant: Service tenant name.
+#    Optional. Defaults to 'services'.
+#  $public_protocol: http/https.
+#    Optional. Defaults to 'http'.
+#  $configure_endpoint: should the endpoint be created in keystone ?
+#    Optional. Defaults to true
 #
 class ceilometer::keystone::auth(
-  $password,
+  $password           = undef,
   $email              = 'ceilometer@localhost',
   $auth_name          = 'ceilometer',
-  $configure_endpoint = true,
   $service_type       = 'metering',
   $public_address     = '127.0.0.1',
   $admin_address      = '127.0.0.1',
@@ -26,10 +39,16 @@ class ceilometer::keystone::auth(
   $port               = '8777',
   $region             = 'RegionOne',
   $tenant             = 'services',
-  $public_protocol    = 'http'
+  $public_protocol    = 'http',
+  $admin_protocol     = 'http',
+  $internal_protocol  = 'http',
+  $configure_endpoint = true
 ) {
 
-  Keystone_user_role["${auth_name}@${tenant}"] ~> Service <| name == 'ceilometer' |>
+  #FIXME: ensure $password is not empty
+
+  Keystone_user_role["${auth_name}@${tenant}"] ~>
+    Service <| name == 'ceilometer' |>
 
   keystone_user { $auth_name:
     ensure   => present,
@@ -56,8 +75,8 @@ class ceilometer::keystone::auth(
     keystone_endpoint { "${region}/${auth_name}":
       ensure       => present,
       public_url   => "${public_protocol}://${public_address}:${port}",
-      admin_url    => "http://${admin_address}:${port}",
-      internal_url => "http://${internal_address}:${port}",
+      admin_url    => "${admin_protocol}://${admin_address}:${port}",
+      internal_url => "${internal_protocol}://${internal_address}:${port}",
     }
   }
 }
