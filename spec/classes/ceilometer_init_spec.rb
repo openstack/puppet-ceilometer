@@ -3,7 +3,8 @@ require 'spec_helper'
 describe 'ceilometer' do
 
   let :params do
-    { :metering_secret    => 'metering-s3cr3t',
+    {
+      :metering_secret    => 'metering-s3cr3t',
       :package_ensure     => 'present',
       :verbose            => 'False',
       :debug              => 'False',

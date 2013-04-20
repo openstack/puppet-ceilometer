@@ -3,7 +3,8 @@ require 'spec_helper'
 describe 'ceilometer::keystone::auth' do
 
   let :params do
-    { :password           => 'ceilometer-passw0rd',
+    {
+      :password           => 'ceilometer-passw0rd',
       :email              => 'ceilometer@localhost',
       :auth_name          => 'ceilometer',
       :configure_endpoint => true,
