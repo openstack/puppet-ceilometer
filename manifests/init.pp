@@ -1,13 +1,11 @@
 #
-# == parameters
-#   * package_ensure - ensure state for package.
-#
-class ceilometer(
+class ceilometer (
   $metering_secret,
   $package_ensure     = 'present',
   $verbose            = 'False',
   $debug              = 'False',
   $rabbit_host        = '127.0.0.1',
+  $rabbit_hosts       = undef,
   $rabbit_port        = 5672,
   $rabbit_userid      = 'guest',
   $rabbit_password    = '',
@@ -16,20 +14,21 @@ class ceilometer(
 
   include ceilometer::params
 
+  File {
+    require => Package['ceilometer-common'],
+  }
+
   group { 'ceilometer':
-    name    => $::ceilometer::params::groupname,
-    require => $::ceilometer::common_package_name,
+    name    => 'ceilometer',
+    require => Package['ceilometer-common'],
   }
 
   user { 'ceilometer':
-    name    => $::ceilometer::params::username,
-    gid     => $::ceilometer::params::groupname,
+    name    => 'ceilometer',
+    gid     => 'ceilometer',
     groups  => ['nova'],
     system  => true,
-    require => [
-      Group['ceilometer'],
-      Package[$::ceilometer::params::common_package_name]
-    ],
+    require => Package['ceilometer-common'],
   }
 
   file { '/etc/ceilometer/':
@@ -37,15 +36,12 @@ class ceilometer(
     owner   => 'ceilometer',
     group   => 'ceilometer',
     mode    => '0750',
-    require => [Package['ceilometer-common'], User['ceilometer']],
   }
 
   file { '/etc/ceilometer/ceilometer.conf':
-    ensure  => file,
     owner   => 'ceilometer',
     group   => 'ceilometer',
     mode    => '0640',
-    require => [File['/etc/ceilometer'], User['ceilometer']],
   }
 
   package { 'ceilometer-common':
@@ -55,10 +51,24 @@ class ceilometer(
 
   Package['ceilometer-common'] -> Ceilometer_config<||>
 
+  if $rabbit_hosts {
+    ceilometer_config { 'DEFAULT/rabbit_host': ensure => absent }
+    ceilometer_config { 'DEFAULT/rabbit_port': ensure => absent }
+    ceilometer_config { 'DEFAULT/rabbit_hosts': value => join($rabbit_hosts, ',') }
+  } else {
+    ceilometer_config { 'DEFAULT/rabbit_host': value => $rabbit_host }
+    ceilometer_config { 'DEFAULT/rabbit_port': value => $rabbit_port }
+    ceilometer_config { 'DEFAULT/rabbit_hosts': value => "${rabbit_host}:${rabbit_port}" }
+  }
+
+  if size($rabbit_hosts) > 1 {
+    ceilometer_config { 'DEFAULT/rabbit_ha_queues': value => 'true' }
+  } else {
+    ceilometer_config { 'DEFAULT/rabbit_ha_queues': value => 'false' }
+  }
+
   ceilometer_config {
     'DEFAULT/metering_secret'        : value => $metering_secret;
-    'DEFAULT/rabbit_host'            : value => $rabbit_host;
-    'DEFAULT/rabbit_port'            : value => $rabbit_port;
     'DEFAULT/rabbit_userid'          : value => $rabbit_userid;
     'DEFAULT/rabbit_password'        : value => $rabbit_password;
     'DEFAULT/rabbit_virtualhost'     : value => $rabbit_virtualhost;

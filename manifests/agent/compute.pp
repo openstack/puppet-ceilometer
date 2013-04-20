@@ -1,7 +1,5 @@
-# Ceilometer::Agent::Compute
 #
-#
-class ceilometer::agent::compute(
+class ceilometer::agent::compute (
   $auth_url         = 'http://localhost:5000/v2.0',
   $auth_region      = 'RegionOne',
   $auth_user        = 'ceilometer',
@@ -11,13 +9,22 @@ class ceilometer::agent::compute(
   $enabled          = true,
 ) inherits ceilometer {
 
+  include ceilometer::params
+
+  Ceilometer_config<||> ~> Service['ceilometer-agent-compute']
+
+  Package['ceilometer-agent-compute'] -> Service['ceilometer-agent-compute']
   package { 'ceilometer-agent-compute':
-    ensure => installed
+    ensure => installed,
+    name   => $::ceilometer::params::agent_compute_package_name,
   }
 
-  User['ceilometer'] {
-    groups +> ['libvirt']
+  if $::ceilometer::params::libvirt_group {
+    User['ceilometer'] {
+      groups +> [$::ceilometer::params::libvirt_group]
+    }
   }
+
 
   if $enabled {
     $service_ensure = 'running'
@@ -25,16 +32,14 @@ class ceilometer::agent::compute(
     $service_ensure = 'stopped'
   }
 
+  Package['ceilometer-common'] -> Service['ceilometer-agent-compute']
   service { 'ceilometer-agent-compute':
     ensure     => $service_ensure,
     name       => $::ceilometer::params::agent_compute_service_name,
     enable     => $enabled,
     hasstatus  => true,
     hasrestart => true,
-    require    => Package['ceilometer-agent-compute']
   }
-
-  Ceilometer_config<||> ~> Service['ceilometer-agent-compute']
 
   ceilometer_config {
     'DEFAULT/os_auth_url'         : value => $auth_url;
@@ -62,15 +67,15 @@ class ceilometer::agent::compute(
     ],
   }
 
-  File_line['nova-notification-driver-common', 'nova-notification-driver-ceilometer'] ~> Service['nova-compute']
-
   file_line {
     'nova-notification-driver-common':
-      line => 'notification_driver=nova.openstack.common.notifier.rabbit_notifier',
-      path => '/etc/nova/nova.conf';
+      line   => 'notification_driver=nova.openstack.common.notifier.rabbit_notifier',
+      path   => '/etc/nova/nova.conf',
+      notify => Service['nova-compute'];
     'nova-notification-driver-ceilometer':
-      line => 'notification_driver=ceilometer.compute.nova_notifier',
-      path => '/etc/nova/nova.conf';
+      line   => 'notification_driver=ceilometer.compute.nova_notifier',
+      path   => '/etc/nova/nova.conf',
+      notify => Service['nova-compute'];
   }
 
 }

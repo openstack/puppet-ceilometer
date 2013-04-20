@@ -1,7 +1,5 @@
-# Ceilometer::Agent::Central
 #
-#
-class ceilometer::agent::central(
+class ceilometer::agent::central (
   $auth_url         = 'http://localhost:5000/v2.0',
   $auth_region      = 'RegionOne',
   $auth_user        = 'ceilometer',
@@ -9,10 +7,16 @@ class ceilometer::agent::central(
   $auth_tenant_name = 'services',
   $auth_tenant_id   = '',
   $enabled          = true,
-) inherits ceilometer {
+) {
 
+  include ceilometer::params
+
+  Ceilometer_config<||> ~> Service['ceilometer-agent-central']
+
+  Package['ceilometer-agent-central'] -> Service['ceilometer-agent-central']
   package { 'ceilometer-agent-central':
-    ensure => installed
+    ensure => installed,
+    name   => $::ceilometer::params::agent_central_package_name,
   }
 
   if $enabled {
@@ -21,16 +25,14 @@ class ceilometer::agent::central(
     $service_ensure = 'stopped'
   }
 
+  Package['ceilometer-common'] -> Service['ceilometer-agent-central']
   service { 'ceilometer-agent-central':
     ensure     => $service_ensure,
-    name       => $::ceilometer::params::agent_central_name,
+    name       => $::ceilometer::params::agent_central_service_name,
     enable     => $enabled,
     hasstatus  => true,
     hasrestart => true,
-    require    => Package['ceilometer-agent-central']
   }
-
-  Ceilometer_config<||> ~> Service['ceilometer-agent-central']
 
   ceilometer_config {
     'DEFAULT/os_auth_url'         : value => $auth_url;
