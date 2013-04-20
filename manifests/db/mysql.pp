@@ -17,7 +17,7 @@
 #    Optional. Defaults to 'latin1'
 
 class ceilometer::db::mysql(
-  $password      = undef,
+  $password      = false,
   $dbname        = 'ceilometer',
   $user          = 'ceilometer',
   $host          = 'localhost',
@@ -25,11 +25,11 @@ class ceilometer::db::mysql(
   $charset       = 'latin1',
 ) {
 
+  validate_string($password)
+
   Class['mysql::server'] -> Class['ceilometer::db::mysql']
   Class['ceilometer::db::mysql'] -> Exec<| title == 'ceilometer-dbsync' |>
   Mysql::Db[$dbname] ~> Exec<| title == 'ceilometer-dbsync' |>
-
-  #FIXME: ensure password is not empty
 
   mysql::db { $dbname:
     user         => $user,

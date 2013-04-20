@@ -29,7 +29,7 @@
 #    Optional. Defaults to true
 #
 class ceilometer::keystone::auth(
-  $password           = undef,
+  $password           = false,
   $email              = 'ceilometer@localhost',
   $auth_name          = 'ceilometer',
   $service_type       = 'metering',
@@ -45,7 +45,7 @@ class ceilometer::keystone::auth(
   $configure_endpoint = true
 ) {
 
-  #FIXME: ensure $password is not empty
+  validate_string($password)
 
   Keystone_user_role["${auth_name}@${tenant}"] ~>
     Service <| name == 'ceilometer' |>

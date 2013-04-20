@@ -20,6 +20,11 @@ describe 'ceilometer::keystone::auth' do
 
   shared_examples_for 'ceilometer keystone auth' do
 
+    context 'without the required password parameter' do
+      before { params.delete(:password) }
+      it { expect { should raise_error(Puppet::Error) } }
+    end
+
     it 'configures ceilometer user' do
       should contain_keystone_user( params[:auth_name] ).with(
         :ensure   => 'present',

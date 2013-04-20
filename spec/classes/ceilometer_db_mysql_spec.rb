@@ -17,6 +17,11 @@ describe 'ceilometer::db::mysql' do
 
   shared_examples_for 'ceilometer mysql database' do
 
+    context 'when omiting the required parameter password' do
+      before { params.delete(:password) }
+      it { expect { should raise_error(Puppet::Error) } }
+    end
+
     it 'creates a mysql database' do
       should contain_mysql__db( params[:dbname] ).with(
         :user     => params[:user],

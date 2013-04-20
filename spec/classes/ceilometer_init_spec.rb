@@ -93,6 +93,11 @@ describe 'ceilometer' do
       should contain_ceilometer_config('DEFAULT/metering_secret').with_value('metering-s3cr3t')
     end
 
+    context 'without the required metering_secret' do
+      before { params.delete(:metering_secret) }
+      it { expect { should raise_error(Puppet::Error) } }
+    end
+
     it 'configures rabbit' do
       should contain_ceilometer_config('DEFAULT/rabbit_userid').with_value( params[:rabbit_userid] )
       should contain_ceilometer_config('DEFAULT/rabbit_password').with_value( params[:rabbit_password] )

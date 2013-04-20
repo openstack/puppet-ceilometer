@@ -19,6 +19,11 @@ describe 'ceilometer::api' do
 
   shared_examples_for 'ceilometer-api' do
 
+    context 'without required parameter keystone_password' do
+      before { params.delete(:keystone_password) }
+      it { expect { should raise_error(Puppet::Error) } }
+    end
+
     it { should include_class('ceilometer::params') }
 
     it 'installs ceilometer-api package' do

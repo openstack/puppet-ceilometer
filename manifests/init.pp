@@ -26,7 +26,7 @@
 #     Optional. Defaults to '/'
 #
 class ceilometer(
-  $metering_secret    = undef,
+  $metering_secret    = false,
   $package_ensure     = 'present',
   $verbose            = 'False',
   $debug              = 'False',
@@ -38,7 +38,7 @@ class ceilometer(
   $rabbit_virtualhost = '/',
 ) {
 
-  #FIXME: ensure metering_secret is non-empty
+  validate_string($metering_secret)
 
   include ceilometer::params
 
