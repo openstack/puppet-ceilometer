@@ -7,7 +7,7 @@ describe 'ceilometer::client' do
     it { should include_class('ceilometer::params') }
 
     it 'installs ceilometer client package' do
-      should contain_package('python-ceilometer').with(
+      should contain_package('python-ceilometerclient').with(
         :ensure => 'present',
         :name   => platform_params[:client_package_name]
       )
@@ -20,7 +20,7 @@ describe 'ceilometer::client' do
     end
 
     let :platform_params do
-      { :client_package_name => 'python-ceilometer' }
+      { :client_package_name => 'python-ceilometerclient' }
     end
 
     it_configures 'ceilometer client'
