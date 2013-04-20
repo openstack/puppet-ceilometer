@@ -24,11 +24,6 @@ describe 'ceilometer' do
     end
 
     context 'with rabbit_hosts parameter' do
-      before do
-        params.delete(:rabbit_host)
-        params.delete(:rabbit_port)
-      end
-
       context 'with one server' do
         before { params.merge!( :rabbit_hosts => ['127.0.0.1:5672'] ) }
         it_configures 'a ceilometer base installation'
