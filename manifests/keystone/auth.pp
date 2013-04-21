@@ -55,7 +55,7 @@ class ceilometer::keystone::auth (
   $public_protocol    = 'http'
 ) {
 
-  Keystone_user_role["${auth_name}@${tenant}"] ~> Service <| name == 'ceilometer' |>
+  Keystone_user_role["${auth_name}@${tenant}"] ~> Service <| title == 'ceilometer-api' |>
 
   keystone_user { $auth_name:
     ensure   => present,
