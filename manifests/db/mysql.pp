@@ -1,3 +1,4 @@
+#
 class ceilometer::db::mysql(
   $password,
   $dbname        = 'ceilometer',
@@ -20,7 +21,7 @@ class ceilometer::db::mysql(
   }
 
   if $allowed_hosts {
-     ceilometer::db::mysql::host_access { $allowed_hosts:
+    ceilometer::db::mysql::host_access { $allowed_hosts:
       user      => $user,
       password  => $password,
       database  => $dbname,
