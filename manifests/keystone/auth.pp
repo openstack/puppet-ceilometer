@@ -1,20 +1,46 @@
+# == Class: ceilometer::keystone::auth
 #
-# Sets up ceilometer users, service and endpoint
+# Configures Ceilometer user, service and endpoint in Keystone.
 #
-# == Parameters:
+# === Parameters
 #
-#  $auth_name :: identifier used for all keystone objects related to ceilometer.
-#    Optional. Defaults to ceilometer.
-#  $password :: password for ceilometer user. Optional. Defaults to glance_password.
-#  $service_type :: type of service to create. Optional. Defaults to image.
-#  $public_address :: Public address for endpoint. Optional. Defaults to 127.0.0.1.
-#  $admin_address :: Admin address for endpoint. Optional. Defaults to 127.0.0.1.
-#  $inernal_address :: Internal address for endpoint. Optional. Defaults to 127.0.0.1.
-#  $port :: Port for endpoint. Needs to match ceilometer api service port. Optional.
-#    Defaults to 8777.
-#  $region :: Region where endpoint is set.
+# [*password*]
+#   Password for Ceilometer user. Required.
 #
-class ceilometer::keystone::auth(
+# [*email*]
+#   Email for Ceilometer user. Optional. Defaults to 'ceilometer@localhost'.
+#
+# [*auth_name*]
+#   Username for Ceilometer service. Optional. Defaults to 'ceilometer'.
+#
+# [*configure_endpoint*]
+#   Should Ceilometer endpoint be configured? Optional. Defaults to 'true'.
+#
+# [*service_type*]
+#    Type of service. Optional. Defaults to 'metering'.
+#
+# [*public_address*]
+#    Public address for endpoint. Optional. Defaults to '127.0.0.1'.
+#
+# [*admin_address*]
+#    Admin address for endpoint. Optional. Defaults to '127.0.0.1'.
+#
+# [*internal_address*]
+#    Internal address for endpoint. Optional. Defaults to '127.0.0.1'.
+#
+# [*port*]
+#    Port for endpoint. Optional. Defaults to '8777'.
+#
+# [*region*]
+#    Region for endpoint. Optional. Defaults to 'RegionOne'.
+#
+# [*tenant*]
+#    Tenant for Ceilometer user. Optional. Defaults to 'services'.
+#
+# [*protocol*]
+#    Protocol for public endpoint. Optional. Defaults to 'http'.
+#
+class ceilometer::keystone::auth (
   $password,
   $email              = 'ceilometer@localhost',
   $auth_name          = 'ceilometer',
