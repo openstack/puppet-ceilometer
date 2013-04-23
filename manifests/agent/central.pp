@@ -1,7 +1,28 @@
-# Ceilometer::Agent::Central
+# Installs/configures the ceilometer central agent
 #
+# == Parameters
+#  [*auth_url*]
+#    Keystone URL. Optional. Defaults to 'http://localhost:5000/v2.0'
 #
-class ceilometer::agent::central(
+#  [*auth_region*]
+#    Keystone region. Optional. Defaults to 'RegionOne'
+#
+#  [*auth_user*]
+#    Keystone user for ceilometer. Optional. Defaults to 'ceilometer'
+#
+#  [*auth_password*]
+#    Keystone password for ceilometer. Optional. Defaults to 'password'
+#
+#  [*auth_tenant_name*]
+#    Keystone tenant name for ceilometer. Optional. Defauls to 'services'
+#
+#  [*auth_tenant_id*]
+#    Keystone tenant id for ceilometer. Optional. Defaults to ''
+#
+#  [*enabled*]
+#    Should the service be enabled. Optional. Defauls to true
+#
+class ceilometer::agent::central (
   $auth_url         = 'http://localhost:5000/v2.0',
   $auth_region      = 'RegionOne',
   $auth_user        = 'ceilometer',
@@ -9,10 +30,16 @@ class ceilometer::agent::central(
   $auth_tenant_name = 'services',
   $auth_tenant_id   = '',
   $enabled          = true,
-) inherits ceilometer {
+) {
 
+  include ceilometer::params
+
+  Ceilometer_config<||> ~> Service['ceilometer-agent-central']
+
+  Package['ceilometer-agent-central'] -> Service['ceilometer-agent-central']
   package { 'ceilometer-agent-central':
-    ensure => installed
+    ensure => installed,
+    name   => $::ceilometer::params::agent_central_package_name,
   }
 
   if $enabled {
@@ -21,16 +48,14 @@ class ceilometer::agent::central(
     $service_ensure = 'stopped'
   }
 
+  Package['ceilometer-common'] -> Service['ceilometer-agent-central']
   service { 'ceilometer-agent-central':
     ensure     => $service_ensure,
-    name       => $::ceilometer::params::agent_central_name,
+    name       => $::ceilometer::params::agent_central_service_name,
     enable     => $enabled,
     hasstatus  => true,
     hasrestart => true,
-    require    => Package['ceilometer-agent-central']
   }
-
-  Ceilometer_config<||> ~> Service['ceilometer-agent-central']
 
   ceilometer_config {
     'DEFAULT/os_auth_url'         : value => $auth_url;

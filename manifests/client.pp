@@ -2,13 +2,16 @@
 # Installs the ceilometer python library.
 #
 # == parameters
-#  * ensure - ensure state for pachage.
+#  [*ensure*]
+#    ensure state for pachage.
 #
 class ceilometer::client (
   $ensure = 'present'
 ) {
 
-  package { 'python-ceilometer':
+  include ceilometer::params
+
+  package { 'python-ceilometerclient':
     ensure => $ensure,
     name   => $::ceilometer::params::client_package_name,
   }
