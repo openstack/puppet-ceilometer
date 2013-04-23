@@ -1,3 +1,8 @@
+# Installs the ceilometer collector service
+#
+# == Params
+#  [*enabled*]
+#    should the service be enabled
 #
 class ceilometer::collector (
   $enabled = true,

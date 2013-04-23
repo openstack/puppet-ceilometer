@@ -2,7 +2,8 @@
 # Installs the ceilometer python library.
 #
 # == parameters
-#  * ensure - ensure state for pachage.
+#  [*ensure*]
+#    ensure state for pachage.
 #
 class ceilometer::client (
   $ensure = 'present'

@@ -1,4 +1,5 @@
 # Parameters for puppet-ceilometer
+#
 class ceilometer::params {
 
   $dbsync_command =

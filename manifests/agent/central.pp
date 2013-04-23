@@ -1,3 +1,26 @@
+# Installs/configures the ceilometer central agent
+#
+# == Parameters
+#  [*auth_url*]
+#    Keystone URL. Optional. Defaults to 'http://localhost:5000/v2.0'
+#
+#  [*auth_region*]
+#    Keystone region. Optional. Defaults to 'RegionOne'
+#
+#  [*auth_user*]
+#    Keystone user for ceilometer. Optional. Defaults to 'ceilometer'
+#
+#  [*auth_password*]
+#    Keystone password for ceilometer. Optional. Defaults to 'password'
+#
+#  [*auth_tenant_name*]
+#    Keystone tenant name for ceilometer. Optional. Defauls to 'services'
+#
+#  [*auth_tenant_id*]
+#    Keystone tenant id for ceilometer. Optional. Defaults to ''
+#
+#  [*enabled*]
+#    Should the service be enabled. Optional. Defauls to true
 #
 class ceilometer::agent::central (
   $auth_url         = 'http://localhost:5000/v2.0',

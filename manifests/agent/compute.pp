@@ -2,13 +2,33 @@
 # Include this class on all nova compute nodes
 #
 # == Parameters
-#  * auth_url: the keystone public endpoint
-#  *auth_region: the keystone region of this compute node
-#  *auth_user: the keystone user for ceilometer services
-#  *auth_password: the keystone password for ceilometer services
-#  *auth_tenant_name: the keystone tenant name for ceilometer services
-#  *auth_tenant_id (optional): the keystone tenant id for ceilometer services
-#  *enabled: should the service be started or not
+#  [*auth_url*]
+#    the keystone public endpoint
+#    Optional. Defaults to 'http://localhost:5000/v2.0'
+#
+#  [*auth_region*]
+#    the keystone region of this compute node
+#    Optional. Defaults to 'RegionOne'
+#
+#  [*auth_user*]
+#    the keystone user for ceilometer services
+#    Optional. Defaults to 'ceilometer'
+#
+#  [*auth_password*]
+#    the keystone password for ceilometer services
+#    Optional. Defaults to 'password'
+#
+#  [*auth_tenant_name*]
+#    the keystone tenant name for ceilometer services
+#    Optional. Defaults to 'services'
+#
+#  [*auth_tenant_id*]
+#    the keystone tenant id for ceilometer services.
+#    Optional. Defaults to empty.
+#
+#  [*enabled*]
+#    should the service be started or not
+#    Optional. Defaults to true
 #
 class ceilometer::agent::compute (
   $auth_url         = 'http://localhost:5000/v2.0',

@@ -1,3 +1,10 @@
+# Configures the ceilometer database
+# This class will install the required libraries depending on the driver
+# specified in the connection_string parameter
+#
+# == Parameters
+#  [*database_connection*]
+#    the connection string. format: [driver]://[user]:[password]@[host]/[database]
 #
 class ceilometer::db (
   $database_connection = 'mysql://ceilometer:ceilometer@localhost/ceilometer'
