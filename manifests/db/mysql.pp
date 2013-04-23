@@ -3,19 +3,26 @@
 #
 # == Parameters
 #
-#  $password: password to connect to the database
-#    Mandatory.
-#  $dbname: name of the database
-#    Optional. Defaults to ceilometer.
-#  $user: user to connect to the database
-#    Optional. Defaults to ceilometer.
-#  $host: the default source host user is allowed to connect from
+#  [*password*]
+#    password to connect to the database. Mandatory.
+#
+#  [*dbname*]
+#    name of the database. Optional. Defaults to ceilometer.
+#
+#  [*user*]
+#    user to connect to the database. Optional. Defaults to ceilometer.
+#
+#  [*host*]
+#    the default source host user is allowed to connect from.
 #    Optional. Defaults to 'localhost'
-#  $allowed_hosts: other hosts the user is allowd to connect from
+#
+#  [*allowed_hosts*]
+#    other hosts the user is allowd to connect from.
 #    Optional. Defaults to undef.
-#  $charset: the database charset
-#    Optional. Defaults to 'latin1'
-
+#
+#  [*charset*]
+#    the database charset. Optional. Defaults to 'latin1'
+#
 class ceilometer::db::mysql(
   $password      = false,
   $dbname        = 'ceilometer',
