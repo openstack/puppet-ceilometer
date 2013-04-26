@@ -2,16 +2,6 @@ puppet-ceilometer
 
 This is the ceilometer module.
 
-About
------
-
-This is currently work in progress. Once finished, this will be uploaded to the puppet forge.
-
-Contact
--------
-
-techs@enovance.com
-
 License
 -------
 
@@ -31,4 +21,7 @@ Apache License 2.0
    See the License for the specific language governing permissions and
    limitations under the License.
 
+Contact
+-------
 
+techs@enovance.com
