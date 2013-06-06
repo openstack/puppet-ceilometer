@@ -101,7 +101,7 @@ class ceilometer::agent::compute (
   file_line {
     'nova-notification-driver-common':
       line   =>
-        'notification_driver=nova.openstack.common.notifier.rabbit_notifier',
+        'notification_driver=nova.openstack.common.notifier.rpc_notifier',
       path   => '/etc/nova/nova.conf',
       notify => Service['nova-compute'];
     'nova-notification-driver-ceilometer':
