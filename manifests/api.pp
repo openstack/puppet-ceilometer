@@ -10,6 +10,11 @@
 #  [*keystone_port*]
 #    keystone's admin endpoint port. Optional. Defaults to 35357
 #
+#  [*keystone_auth_admin_prefix*]
+#    'path' to the keystone admin endpoint. Optional. Defaults to false (empty)
+#    Define to a path starting with a '/' and without trailing '/'.
+#    Eg.: '/keystone/admin' to match keystone::wsgi::apache default.
+#
 #  [*keystone_protocol*] http/https
 #    Optional. Defaults to https
 #
@@ -23,13 +28,14 @@
 #    Mandatory.
 #
 class ceilometer::api (
-  $enabled           = true,
-  $keystone_host     = '127.0.0.1',
-  $keystone_port     = '35357',
-  $keystone_protocol = 'http',
-  $keystone_user     = 'ceilometer',
-  $keystone_tenant   = 'services',
-  $keystone_password = false,
+  $enabled                    = true,
+  $keystone_host              = '127.0.0.1',
+  $keystone_port              = '35357',
+  $keystone_auth_admin_prefix = false,
+  $keystone_protocol          = 'http',
+  $keystone_user              = 'ceilometer',
+  $keystone_tenant            = 'services',
+  $keystone_password          = false,
 ) {
 
   include ceilometer::params
@@ -70,4 +76,16 @@ class ceilometer::api (
     'keystone_authtoken/admin_user'        : value => $keystone_user;
     'keystone_authtoken/admin_password'    : value => $keystone_password;
   }
+
+  if $keystone_auth_admin_prefix {
+    validate_re($keystone_auth_admin_prefix, '^(/.+[^/])?$')
+    ceilometer_config {
+      'keystone_authtoken/auth_admin_prefix': value => $keystone_auth_admin_prefix;
+    }
+  } else {
+    ceilometer_config {
+      'keystone_authtoken/auth_admin_prefix': ensure => absent;
+    }
+  }
+
 }
