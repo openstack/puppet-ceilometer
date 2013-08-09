@@ -26,6 +26,9 @@
 #    the keystone tenant id for ceilometer services.
 #    Optional. Defaults to empty.
 #
+#  [*auth_cacert*]
+#    Certificate chain for SSL validation. Optional; Defaults to 'None'
+#
 #  [*enabled*]
 #    should the service be started or not
 #    Optional. Defaults to true
@@ -37,6 +40,7 @@ class ceilometer::agent::compute (
   $auth_password    = 'password',
   $auth_tenant_name = 'services',
   $auth_tenant_id   = '',
+  $auth_cacert      = undef,
   $enabled          = true,
 ) inherits ceilometer {
 
@@ -49,6 +53,13 @@ class ceilometer::agent::compute (
     ensure => installed,
     name   => $::ceilometer::params::agent_compute_package_name,
   }
+
+  if ! $auth_cacert {
+    ceilometer_config { 'DEFAULT/os_cacert': ensure => absent }
+  } else {
+    ceilometer_config { 'DEFAULT/os_cacert': value => $auth_cacert }
+  }
+
 
   if $::ceilometer::params::libvirt_group {
     User['ceilometer'] {

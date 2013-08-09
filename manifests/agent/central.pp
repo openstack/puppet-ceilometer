@@ -14,10 +14,13 @@
 #    Keystone password for ceilometer. Optional. Defaults to 'password'
 #
 #  [*auth_tenant_name*]
-#    Keystone tenant name for ceilometer. Optional. Defauls to 'services'
+#    Keystone tenant name for ceilometer. Optional. Defaults to 'services'
 #
 #  [*auth_tenant_id*]
-#    Keystone tenant id for ceilometer. Optional. Defaults to ''
+#    Keystone tenant id for ceilometer. Optional. Defaults to empty.
+#
+#  [*auth_cacert*]
+#    Certificate chain for SSL validation. Optional; Defaults to 'None'
 #
 #  [*enabled*]
 #    Should the service be enabled. Optional. Defauls to true
@@ -29,6 +32,7 @@ class ceilometer::agent::central (
   $auth_password    = 'password',
   $auth_tenant_name = 'services',
   $auth_tenant_id   = '',
+  $auth_cacert      = undef,
   $enabled          = true,
 ) {
 
@@ -40,6 +44,12 @@ class ceilometer::agent::central (
   package { 'ceilometer-agent-central':
     ensure => installed,
     name   => $::ceilometer::params::agent_central_package_name,
+  }
+
+  if ! $auth_cacert {
+    ceilometer_config { 'DEFAULT/os_cacert': ensure => absent }
+  } else {
+    ceilometer_config { 'DEFAULT/os_cacert': value => $auth_cacert }
   }
 
   if $enabled {

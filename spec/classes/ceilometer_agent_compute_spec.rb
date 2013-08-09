@@ -58,6 +58,14 @@ describe 'ceilometer::agent::compute' do
       should contain_ceilometer_config('DEFAULT/os_username').with_value('ceilometer')
       should contain_ceilometer_config('DEFAULT/os_password').with_value('password')
       should contain_ceilometer_config('DEFAULT/os_tenant_name').with_value('services')
+      should contain_ceilometer_config('DEFAULT/os_cacert').with(:ensure => 'absent')
+    end
+
+    context 'when overriding parameters' do
+      before do
+        params.merge!(:auth_cacert => '/tmp/dummy.pem')
+      end
+      it { should contain_ceilometer_config('DEFAULT/os_cacert').with_value(params[:auth_cacert]) }
     end
 
     it 'configures instance usage audit in nova' do
@@ -77,8 +85,7 @@ describe 'ceilometer::agent::compute' do
         :notify => 'Service[nova-compute]'
       )
     end
-  end
-
+end
 
   context 'on Debian platforms' do
     let :facts do
