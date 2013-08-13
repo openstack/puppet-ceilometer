@@ -146,19 +146,19 @@ class ceilometer(
   if $rpc_backend == 'ceilometer.openstack.common.rpc.impl_qpid' {
 
     ceilometer_config {
-      'DEFAULT/qpid_hostname': value => $qpid_hostname;
-      'DEFAULT/qpid_port': value => $qpid_port;
-      'DEFAULT/qpid_username': value => $qpid_username;
-      'DEFAULT/qpid_password': value => $qpid_password;
-      'DEFAULT/qpid_heartbeat': value => $qpid_heartbeat;
-      'DEFAULT/qpid_protocol': value => $qpid_protocol;
-      'DEFAULT/qpid_tcp_nodelay': value => $qpid_tcp_nodelay;
-      'DEFAULT/qpid_reconnect': value => $qpid_reconnect;
-      'DEFAULT/qpid_reconnect_timeout': value => $qpid_reconnect_timeout;
-      'DEFAULT/qpid_reconnect_limit': value => $qpid_reconnect_limit;
+      'DEFAULT/qpid_hostname'              : value => $qpid_hostname;
+      'DEFAULT/qpid_port'                  : value => $qpid_port;
+      'DEFAULT/qpid_username'              : value => $qpid_username;
+      'DEFAULT/qpid_password'              : value => $qpid_password;
+      'DEFAULT/qpid_heartbeat'             : value => $qpid_heartbeat;
+      'DEFAULT/qpid_protocol'              : value => $qpid_protocol;
+      'DEFAULT/qpid_tcp_nodelay'           : value => $qpid_tcp_nodelay;
+      'DEFAULT/qpid_reconnect'             : value => $qpid_reconnect;
+      'DEFAULT/qpid_reconnect_timeout'     : value => $qpid_reconnect_timeout;
+      'DEFAULT/qpid_reconnect_limit'       : value => $qpid_reconnect_limit;
       'DEFAULT/qpid_reconnect_interval_min': value => $qpid_reconnect_interval_min;
       'DEFAULT/qpid_reconnect_interval_max': value => $qpid_reconnect_interval_max;
-      'DEFAULT/qpid_reconnect_interval': value => $qpid_reconnect_interval;
+      'DEFAULT/qpid_reconnect_interval'    : value => $qpid_reconnect_interval;
     }
 
   }
