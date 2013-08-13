@@ -41,7 +41,7 @@
 #    Protocol for public endpoint. Optional. Defaults to 'http'.
 #
 class ceilometer::keystone::auth (
-  $password = false,
+  $password           = false,
   $email              = 'ceilometer@localhost',
   $auth_name          = 'ceilometer',
   $service_type       = 'metering',
