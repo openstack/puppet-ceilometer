@@ -26,10 +26,10 @@ class ceilometer::db (
       $backend_package = 'python-psycopg2'
     }
     /^mongodb:\/\//: {
-      $backend_package = 'python-pymongo'
+      $backend_package = $::ceilometer::params::pymongo_package_name
     }
     /^sqlite:\/\//: {
-      $backend_package = 'python-pysqlite2'
+      $backend_package = $::ceilometer::params::sqlite_package_name
     }
     default: {
       fail('Unsupported backend configured')
