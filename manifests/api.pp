@@ -36,6 +36,7 @@ class ceilometer::api (
   $keystone_user              = 'ceilometer',
   $keystone_tenant            = 'services',
   $keystone_password          = false,
+  $keystone_auth_uri          = false,
 ) {
 
   include ceilometer::params
@@ -85,6 +86,16 @@ class ceilometer::api (
   } else {
     ceilometer_config {
       'keystone_authtoken/auth_admin_prefix': ensure => absent;
+    }
+  }
+
+  if $keystone_auth_uri {
+    ceilometer_config {
+      'keystone_authtoken/auth_uri': value => $keystone_auth_uri;
+    }
+  } else {
+    ceilometer_config {
+      'keystone_authtoken/auth_uri': value => "${keystone_protocol}://${keystone_host}:5000/";
     }
   }
 
