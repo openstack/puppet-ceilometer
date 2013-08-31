@@ -20,6 +20,17 @@ class ceilometer::params {
       $agent_compute_service_name = 'openstack-ceilometer-compute'
       $api_service_name           = 'openstack-ceilometer-api'
       $collector_service_name     = 'openstack-ceilometer-collector'
+      # db packages
+      if $::operatingsystem == 'Fedora' and $::operatingsystemrelease >= 18 {
+        # name change in f18 : https://bugzilla.redhat.com/show_bug.cgi?id=954155
+        $pymongo_package_name     = 'python-pymongo'
+        # fallback to stdlib version, not provided on fedora
+        $sqlite_package_name      = undef
+      } else {
+        $pymongo_package_name     = 'pymongo'
+        $sqlite_package_name      = 'python-sqlite2'
+      }
+
     }
     'Debian': {
       # package names
@@ -34,6 +45,10 @@ class ceilometer::params {
       $agent_compute_service_name = 'ceilometer-agent-compute'
       $api_service_name           = 'ceilometer-api'
       $collector_service_name     = 'ceilometer-collector'
+      # db packages
+      $pymongo_package_name       = 'python-pymongo'
+      $sqlite_package_name        = 'python-pysqlite2'
+
       # Operating system specific
       case $::operatingsystem {
         'Ubuntu': {
