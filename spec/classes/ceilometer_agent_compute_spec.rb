@@ -9,13 +9,7 @@ describe 'ceilometer::agent::compute' do
   end
 
   let :params do
-    { :auth_url         => 'http://localhost:5000/v2.0',
-      :auth_region      => 'RegionOne',
-      :auth_user        => 'ceilometer',
-      :auth_password    => 'password',
-      :auth_tenant_name => 'services',
-      :enabled          => true,
-    }
+    { :enabled          => true }
   end
 
   shared_examples_for 'ceilometer-agent-compute' do
@@ -52,22 +46,6 @@ describe 'ceilometer::agent::compute' do
       )
     end
 
-    it 'configures authentication' do
-      should contain_ceilometer_config('DEFAULT/os_auth_url').with_value('http://localhost:5000/v2.0')
-      should contain_ceilometer_config('DEFAULT/os_auth_region').with_value('RegionOne')
-      should contain_ceilometer_config('DEFAULT/os_username').with_value('ceilometer')
-      should contain_ceilometer_config('DEFAULT/os_password').with_value('password')
-      should contain_ceilometer_config('DEFAULT/os_tenant_name').with_value('services')
-      should contain_ceilometer_config('DEFAULT/os_cacert').with(:ensure => 'absent')
-    end
-
-    context 'when overriding parameters' do
-      before do
-        params.merge!(:auth_cacert => '/tmp/dummy.pem')
-      end
-      it { should contain_ceilometer_config('DEFAULT/os_cacert').with_value(params[:auth_cacert]) }
-    end
-
     it 'configures instance usage audit in nova' do
       should contain_nova_config('DEFAULT/instance_usage_audit').with_value('True')
       should contain_nova_config('DEFAULT/instance_usage_audit_period').with_value('hour')
@@ -85,7 +63,8 @@ describe 'ceilometer::agent::compute' do
         :notify => 'Service[nova-compute]'
       )
     end
-end
+
+  end
 
   context 'on Debian platforms' do
     let :facts do

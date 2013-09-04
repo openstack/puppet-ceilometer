@@ -28,6 +28,10 @@ node default {
     keystone_password => 'tralalayouyou'
   }
 
+  # Set common auth parameters used by all agents (compute/central)
+  class { 'ceilometer::agent::auth':
+  }
+
   # Install compute agent
   class { 'ceilometer::agent::compute':
   }
