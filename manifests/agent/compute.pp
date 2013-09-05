@@ -102,22 +102,27 @@ class ceilometer::agent::compute (
     'DEFAULT/instance_usage_audit_period' : value => 'hour';
   }
 
+  #NOTE(dprince): This is using a custom (inline) file_line provider
+  # until this lands upstream:
+  # https://github.com/puppetlabs/puppetlabs-stdlib/pull/174
   Nova_config<| |> {
-    before +> File_line[
+    before +> File_line_after[
       'nova-notification-driver-common',
       'nova-notification-driver-ceilometer'
     ],
   }
 
-  file_line {
+  file_line_after {
     'nova-notification-driver-common':
       line   =>
         'notification_driver=nova.openstack.common.notifier.rpc_notifier',
       path   => '/etc/nova/nova.conf',
+      after  => '\[DEFAULT\]',
       notify => Service['nova-compute'];
     'nova-notification-driver-ceilometer':
       line   => 'notification_driver=ceilometer.compute.nova_notifier',
       path   => '/etc/nova/nova.conf',
+      after  => '\[DEFAULT\]',
       notify => Service['nova-compute'];
   }
 
