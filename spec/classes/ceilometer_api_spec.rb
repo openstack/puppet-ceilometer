@@ -53,6 +53,7 @@ describe 'ceilometer::api' do
       should contain_ceilometer_config('keystone_authtoken/admin_user').with_value( params[:keystone_user] )
       should contain_ceilometer_config('keystone_authtoken/admin_password').with_value( params[:keystone_password] )
       should contain_ceilometer_config('keystone_authtoken/auth_admin_prefix').with_ensure('absent')
+      should contain_ceilometer_config('keystone_authtoken/auth_uri').with_value( params[:keystone_protocol] + "://" + params[:keystone_host] + ":5000/" )
     end
 
     context 'when specifying keystone_auth_admin_prefix' do
@@ -104,4 +105,19 @@ describe 'ceilometer::api' do
 
     it_configures 'ceilometer-api'
   end
+
+  describe 'with custom auth_uri' do
+    let :facts do
+      { :osfamily => 'RedHat' }
+    end
+    before do
+      params.merge!({
+        :keystone_auth_uri => 'https://foo.bar:1234/',
+      })
+    end
+    it 'should configure custom auth_uri correctly' do
+      should contain_ceilometer_config('keystone_authtoken/auth_uri').with_value( 'https://foo.bar:1234/' )
+    end
+  end
+
 end
