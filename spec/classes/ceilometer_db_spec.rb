@@ -18,6 +18,7 @@ describe 'ceilometer::db' do
       should contain_package('ceilometer-backend-package').with(
         :ensure => 'present',
         :name => 'python-pymongo')
+      should contain_ceilometer_config('database/connection').with_value('mongodb://localhost:1234/ceilometer')
     end
   end
 
@@ -40,6 +41,7 @@ describe 'ceilometer::db' do
       should contain_package('ceilometer-backend-package').with(
         :ensure => 'present',
         :name => 'python-pymongo')
+      should contain_ceilometer_config('database/connection').with_value('mongodb://localhost:1234/ceilometer')
     end
   end
 
@@ -84,6 +86,7 @@ describe 'ceilometer::db' do
       should contain_package('ceilometer-backend-package').with(
         :ensure => 'present',
         :name => 'python-sqlite2')
+      should contain_ceilometer_config('database/connection').with_value('sqlite:///var/lib/ceilometer.db')
     end
   end
 

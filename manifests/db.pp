@@ -44,10 +44,10 @@ class ceilometer::db (
   }
 
   ceilometer_config {
-    'DEFAULT/database_connection': value => $database_connection;
+    'database/connection': value => $database_connection;
   }
 
-  Ceilometer_config['DEFAULT/database_connection'] ~> Exec['ceilometer-dbsync']
+  Ceilometer_config['database/connection'] ~> Exec['ceilometer-dbsync']
 
   exec { 'ceilometer-dbsync':
     command     => $::ceilometer::params::dbsync_command,
@@ -55,7 +55,7 @@ class ceilometer::db (
     user        => $::ceilometer::params::username,
     refreshonly => true,
     logoutput   => on_failure,
-    subscribe   => Ceilometer_config['DEFAULT/database_connection']
+    subscribe   => Ceilometer_config['database/connection']
   }
 
 }
