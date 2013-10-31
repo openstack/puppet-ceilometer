@@ -45,7 +45,7 @@ describe 'ceilometer::db' do
     end
   end
 
-  # RHEL has pymongo
+  # RHEL has python-pymongo too
   context 'on Redhat platforms' do
     let :facts do
       { :osfamily => 'Redhat',
@@ -63,7 +63,7 @@ describe 'ceilometer::db' do
     it 'installs pymongo package' do
       should contain_package('ceilometer-backend-package').with(
         :ensure => 'present',
-        :name => 'pymongo')
+        :name => 'python-pymongo')
     end
   end
 
