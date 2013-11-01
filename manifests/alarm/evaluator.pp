@@ -9,12 +9,15 @@
 #    define which service use for the evaluator
 #  [*partition_rpc_topic*]
 #    define which topic the alarm evaluator should access
+#  [*record_history*]
+#    Record alarm change events
 #
 class ceilometer::alarm::evaluator (
   $enabled = true,
   $evaluation_interval = 60,
   $evaluation_service  = 'ceilometer.alarm.service.SingletonAlarmService',
   $partition_rpc_topic = 'alarm_partition_coordination',
+  $record_history      = true,
 ) {
 
   include ceilometer::params
@@ -52,5 +55,6 @@ class ceilometer::alarm::evaluator (
     'alarm/evaluation_interval' :  value => $evaluation_interval;
     'alarm/evaluation_service'  :  value => $evaluation_service;
     'alarm/partition_rpc_topic' :  value => $partition_rpc_topic;
+    'alarm/record_history'      :  value => $record_history;
     }
 }

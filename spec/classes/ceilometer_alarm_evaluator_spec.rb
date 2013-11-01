@@ -10,6 +10,7 @@ describe 'ceilometer::alarm::evaluator' do
     { :evaluation_interval   => 60,
       :evaluation_service    => 'ceilometer.alarm.service.SingletonAlarmService',
       :partition_rpc_topic   => 'alarm_partition_coordination',
+      :record_history        => true,
       :enabled               => true,
     }
   end
@@ -46,16 +47,19 @@ describe 'ceilometer::alarm::evaluator' do
       should contain_ceilometer_config('alarm/evaluation_interval').with_value( params[:evaluation_interval] )
       should contain_ceilometer_config('alarm/evaluation_service').with_value( params[:evaluation_service] )
       should contain_ceilometer_config('alarm/partition_rpc_topic').with_value (params[:partition_rpc_topic] )
+      should contain_ceilometer_config('alarm/record_history').with_value (params[:record_history] )
     end
 
     context 'when overriding parameters' do
       before do
         params.merge!(:evaluation_interval => 80,
                       :partition_rpc_topic => 'alarm_partition_coordination',
+                      :record_history      => false,
                       :evaluation_service  => 'ceilometer.alarm.service.SingletonTestAlarmService')
       end
       it { should contain_ceilometer_config('alarm/evaluation_interval').with_value(params[:evaluation_interval]) }
       it { should contain_ceilometer_config('alarm/evaluation_service').with_value(params[:evaluation_service]) }
+      it { should contain_ceilometer_config('alarm/record_history').with_value(params[:record_history]) }
       it { should contain_ceilometer_config('alarm/partition_rpc_topic').with_value(params[:partition_rpc_topic])  }
     end
 
