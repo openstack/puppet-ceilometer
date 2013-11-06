@@ -15,14 +15,14 @@ class ceilometer::db (
   Package<| title == 'ceilometer-common' |> -> Class['ceilometer::db']
 
   validate_re($database_connection,
-    '(sqlite|mysql|posgres|mongodb):\/\/(\S+:\S+@\S+\/\S+)?')
+    '(sqlite|mysql|postgresql|mongodb):\/\/(\S+:\S+@\S+\/\S+)?')
 
   case $database_connection {
     /^mysql:\/\//: {
       $backend_package = false
       include mysql::python
     }
-    /^postgres:\/\//: {
+    /^postgresql:\/\//: {
       $backend_package = 'python-psycopg2'
     }
     /^mongodb:\/\//: {
