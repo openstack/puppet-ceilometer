@@ -17,7 +17,7 @@ describe 'ceilometer' do
       :rabbit_port        => 5672,
       :rabbit_userid      => 'guest',
       :rabbit_password    => '',
-      :rabbit_virtualhost => '/',
+      :rabbit_virtual_host => '/',
     }
   end
 
@@ -136,7 +136,7 @@ describe 'ceilometer' do
     it 'configures rabbit' do
       should contain_ceilometer_config('DEFAULT/rabbit_userid').with_value( params[:rabbit_userid] )
       should contain_ceilometer_config('DEFAULT/rabbit_password').with_value( params[:rabbit_password] )
-      should contain_ceilometer_config('DEFAULT/rabbit_virtualhost').with_value( params[:rabbit_virtualhost] )
+      should contain_ceilometer_config('DEFAULT/rabbit_virtual_host').with_value( params[:rabbit_virtual_host] )
     end
 
     it { should contain_ceilometer_config('DEFAULT/rabbit_host').with_value( params[:rabbit_host] ) }
@@ -150,7 +150,7 @@ describe 'ceilometer' do
     it 'configures rabbit' do
       should contain_ceilometer_config('DEFAULT/rabbit_userid').with_value( params[:rabbit_userid] )
       should contain_ceilometer_config('DEFAULT/rabbit_password').with_value( params[:rabbit_password] )
-      should contain_ceilometer_config('DEFAULT/rabbit_virtualhost').with_value( params[:rabbit_virtualhost] )
+      should contain_ceilometer_config('DEFAULT/rabbit_virtual_host').with_value( params[:rabbit_virtual_host] )
     end
 
     it { should contain_ceilometer_config('DEFAULT/rabbit_host').with_ensure('absent') }
@@ -164,7 +164,7 @@ describe 'ceilometer' do
     it 'configures rabbit' do
       should contain_ceilometer_config('DEFAULT/rabbit_userid').with_value( params[:rabbit_userid] )
       should contain_ceilometer_config('DEFAULT/rabbit_password').with_value( params[:rabbit_password] )
-      should contain_ceilometer_config('DEFAULT/rabbit_virtualhost').with_value( params[:rabbit_virtualhost] )
+      should contain_ceilometer_config('DEFAULT/rabbit_virtual_host').with_value( params[:rabbit_virtual_host] )
     end
 
     it { should contain_ceilometer_config('DEFAULT/rabbit_host').with_ensure('absent') }
