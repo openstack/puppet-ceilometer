@@ -26,7 +26,7 @@
 #    user to connect to the rabbit server. Optional. Defaults to 'guest'
 #  [*rabbit_password*]
 #    password to connect to the rabbit_server. Optional. Defaults to empty.
-#  [*rabbit_virtualhost*]
+#  [*rabbit_virtual_host*]
 #    virtualhost to use. Optional. Defaults to '/'
 #
 # [*qpid_hostname*]
@@ -56,7 +56,7 @@ class ceilometer(
   $rabbit_hosts       = undef,
   $rabbit_userid      = 'guest',
   $rabbit_password    = '',
-  $rabbit_virtualhost = '/',
+  $rabbit_virtual_host = '/',
   $qpid_hostname = 'localhost',
   $qpid_port = 5672,
   $qpid_username = 'guest',
@@ -139,7 +139,7 @@ class ceilometer(
       ceilometer_config {
         'DEFAULT/rabbit_userid'          : value => $rabbit_userid;
         'DEFAULT/rabbit_password'        : value => $rabbit_password;
-        'DEFAULT/rabbit_virtualhost'     : value => $rabbit_virtualhost;
+        'DEFAULT/rabbit_virtual_host'    : value => $rabbit_virtual_host;
       }
   }
 
