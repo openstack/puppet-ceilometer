@@ -40,22 +40,22 @@ class ceilometer::agent::auth (
 ) {
 
   if ! $auth_cacert {
-    ceilometer_config { 'DEFAULT/os_cacert': ensure => absent }
+    ceilometer_config { 'service_credentials/os_cacert': ensure => absent }
   } else {
-    ceilometer_config { 'DEFAULT/os_cacert': value => $auth_cacert }
+    ceilometer_config { 'service_credentials/os_cacert': value => $auth_cacert }
   }
 
   ceilometer_config {
-    'DEFAULT/os_auth_url'         : value => $auth_url;
-    'DEFAULT/os_auth_region'      : value => $auth_region;
-    'DEFAULT/os_username'         : value => $auth_user;
-    'DEFAULT/os_password'         : value => $auth_password;
-    'DEFAULT/os_tenant_name'      : value => $auth_tenant_name;
+    'service_credentials/os_auth_url'         : value => $auth_url;
+    'service_credentials/os_auth_region'      : value => $auth_region;
+    'service_credentials/os_username'         : value => $auth_user;
+    'service_credentials/os_password'         : value => $auth_password;
+    'service_credentials/os_tenant_name'      : value => $auth_tenant_name;
   }
 
   if ($auth_tenant_id != '') {
     ceilometer_config {
-      'DEFAULT/os_tenant_id'        : value => $auth_tenant_id;
+      'service_credentials/os_tenant_id'        : value => $auth_tenant_id;
     }
   }
 

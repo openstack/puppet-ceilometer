@@ -44,6 +44,9 @@
 # [*qpid_reconnect_interval_max*]
 # (optional) various QPID options
 #
+#  [*notification_topics*]
+#    list of notification topics. Defaults to ['notifications'].
+#
 
 class ceilometer(
   $metering_secret    = false,
@@ -69,7 +72,8 @@ class ceilometer(
   $qpid_reconnect_limit = 0,
   $qpid_reconnect_interval_min = 0,
   $qpid_reconnect_interval_max = 0,
-  $qpid_reconnect_interval = 0
+  $qpid_reconnect_interval = 0,
+  $notification_topics = ['notifications'],  
 ) {
 
   validate_string($metering_secret)
@@ -167,18 +171,14 @@ class ceilometer(
 
   ceilometer_config {
     'DEFAULT/rpc_backend'            : value => $rpc_backend;
-    'DEFAULT/metering_secret'        : value => $metering_secret;
     'DEFAULT/debug'                  : value => $debug;
     'DEFAULT/verbose'                : value => $verbose;
     'DEFAULT/log_dir'                : value => $::ceilometer::params::log_dir;
-    # Fix a bad default value in ceilometer.
-    # Fixed in https: //review.openstack.org/#/c/18487/
-    'DEFAULT/glance_control_exchange': value => 'glance';
-    # Add glance-notifications topic.
-    # Fixed in glance https://github.com/openstack/glance/commit/2e0734e077ae
-    # Fix will be included in Grizzly
-    'DEFAULT/notification_topics'    :
-      value => 'notifications,glance_notifications';
+    'DEFAULT/notification_topics'    : value => join($notification_topics,',');
+  }
+
+  ceilometer_config {
+    'publisher_rpc/metering_secret'  : value => $metering_secret;
   }
 
 }
