@@ -58,6 +58,9 @@ node default {
   class { 'ceilometer::alarm::evaluator':
   }
 
-
+  # Purge 1 month old meters
+  class { 'ceilometer::expirer':
+    time_to_live => '2592000'
+  }
 
 }
