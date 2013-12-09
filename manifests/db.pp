@@ -22,8 +22,8 @@ class ceilometer::db (
       $backend_package = false
       include mysql::python
     }
-    /^postgresql:\/\//: {
-      $backend_package = 'python-psycopg2'
+    /^postgres:\/\//: {
+      $backend_package = $::ceilometer::params::psycopg_package_name
     }
     /^mongodb:\/\//: {
       $backend_package = $::ceilometer::params::pymongo_package_name
