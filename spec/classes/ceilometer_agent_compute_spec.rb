@@ -14,7 +14,7 @@ describe 'ceilometer::agent::compute' do
 
   shared_examples_for 'ceilometer-agent-compute' do
 
-    it { should include_class('ceilometer::params') }
+    it { should contain_class('ceilometer::params') }
 
     it 'installs ceilometer-agent-compute package' do
       should contain_package('ceilometer-agent-compute').with(
