@@ -24,7 +24,7 @@ describe 'ceilometer::api' do
       it { expect { should raise_error(Puppet::Error) } }
     end
 
-    it { should include_class('ceilometer::params') }
+    it { should contain_class('ceilometer::params') }
 
     it 'installs ceilometer-api package' do
       should contain_package('ceilometer-api').with(

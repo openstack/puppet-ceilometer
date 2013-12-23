@@ -12,7 +12,7 @@ describe 'ceilometer::agent::central' do
 
   shared_examples_for 'ceilometer-agent-central' do
 
-    it { should include_class('ceilometer::params') }
+    it { should contain_class('ceilometer::params') }
 
     it 'installs ceilometer-agent-central package' do
       should contain_package('ceilometer-agent-central').with(

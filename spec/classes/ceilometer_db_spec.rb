@@ -12,7 +12,7 @@ describe 'ceilometer::db' do
       { :database_connection => 'mongodb://localhost:1234/ceilometer' }
     end
 
-    it { should include_class('ceilometer::params') }
+    it { should contain_class('ceilometer::params') }
 
     it 'installs python-mongodb package' do
       should contain_package('ceilometer-backend-package').with(
@@ -35,7 +35,7 @@ describe 'ceilometer::db' do
       { :database_connection => 'mongodb://localhost:1234/ceilometer' }
     end
 
-    it { should include_class('ceilometer::params') }
+    it { should contain_class('ceilometer::params') }
 
     it 'installs pymongo package' do
       should contain_package('ceilometer-backend-package').with(
@@ -58,7 +58,7 @@ describe 'ceilometer::db' do
       { :database_connection => 'mongodb://localhost:1234/ceilometer' }
     end
 
-    it { should include_class('ceilometer::params') }
+    it { should contain_class('ceilometer::params') }
 
     it 'installs pymongo package' do
       should contain_package('ceilometer-backend-package').with(
@@ -80,7 +80,7 @@ describe 'ceilometer::db' do
       { :database_connection => 'sqlite:///var/lib/ceilometer.db' }
     end
 
-    it { should include_class('ceilometer::params') }
+    it { should contain_class('ceilometer::params') }
 
     it 'installs pymongo package' do
       should contain_package('ceilometer-backend-package').with(
@@ -100,7 +100,7 @@ describe 'ceilometer::db' do
       { :database_connection => 'sqlite:///var/lib/ceilometer.db' }
     end
 
-    it { should include_class('ceilometer::params') }
+    it { should contain_class('ceilometer::params') }
 
     it 'installs python-mongodb package' do
       should contain_package('ceilometer-backend-package').with(

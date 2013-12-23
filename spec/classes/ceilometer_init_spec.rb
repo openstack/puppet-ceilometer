@@ -63,7 +63,7 @@ describe 'ceilometer' do
 
   shared_examples_for 'a ceilometer base installation' do
 
-    it { should include_class('ceilometer::params') }
+    it { should contain_class('ceilometer::params') }
 
     it 'configures ceilometer group' do
       should contain_group('ceilometer').with(
