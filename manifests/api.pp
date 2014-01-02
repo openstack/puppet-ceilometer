@@ -27,6 +27,15 @@
 #  [*keystone_password*] password to authenticate with
 #    Mandatory.
 #
+# [*host*]
+#   (optional) The ceilometer api bind address
+#   Defaults to 0.0.0.0
+#
+# [*port*]
+#   (optional) The ceilometer api port
+#   Defaults to 8777
+#
+
 class ceilometer::api (
   $enabled                    = true,
   $keystone_host              = '127.0.0.1',
@@ -37,6 +46,8 @@ class ceilometer::api (
   $keystone_tenant            = 'services',
   $keystone_password          = false,
   $keystone_auth_uri          = false,
+  $host                       = '0.0.0.0',
+  $port                       = '8777'
 ) {
 
   include ceilometer::params
@@ -76,6 +87,8 @@ class ceilometer::api (
     'keystone_authtoken/admin_tenant_name' : value => $keystone_tenant;
     'keystone_authtoken/admin_user'        : value => $keystone_user;
     'keystone_authtoken/admin_password'    : value => $keystone_password;
+    'api/host'                             : value => $host;
+    'api/port'                             : value => $port;
   }
 
   if $keystone_auth_admin_prefix {
