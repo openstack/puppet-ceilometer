@@ -20,10 +20,10 @@ describe 'ceilometer::alarm::notifier' do
     it { should contain_class('ceilometer::params') }
 
     it 'installs ceilometer-alarm package' do
-      should contain_package('ceilometer-alarm').with(
-        :ensure => 'installed',
-        :name   => platform_params[:alarm_package_name],
-        :before => 'Service[ceilometer-alarm-notifier]'
+      should contain_package(platform_params[:alarm_notifier_package_name]).with_before('Service[ceilometer-alarm-notifier]')
+      should contain_package(platform_params[:alarm_notifier_package_name]).with(
+        :ensure => 'present',
+        :name   => platform_params[:alarm_notifier_package_name]
       )
     end
 
@@ -72,8 +72,7 @@ describe 'ceilometer::alarm::notifier' do
     end
 
     let :platform_params do
-      { :alarm_package_name => ['ceilometer-alarm-evaluator',
-                                'ceilometer-alarm-notifier' ],
+      { :alarm_notifier_package_name => 'ceilometer-alarm-notifier',
         :alarm_notifier_service_name => 'ceilometer-alarm-notifier' }
     end
 
@@ -86,7 +85,7 @@ describe 'ceilometer::alarm::notifier' do
     end
 
     let :platform_params do
-      { :alarm_package_name => 'openstack-ceilometer-alarm',
+      { :alarm_notifier_package_name => 'openstack-ceilometer-alarm',
         :alarm_notifier_service_name => 'openstack-ceilometer-alarm-notifier' }
     end
 
