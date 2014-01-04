@@ -13,7 +13,7 @@ class ceilometer::params {
       $agent_compute_package_name   = 'openstack-ceilometer-compute'
       $api_package_name             = 'openstack-ceilometer-api'
       $collector_package_name       = 'openstack-ceilometer-collector'
-      $alarm_package_name           = 'openstack-ceilometer-alarm'
+      $alarm_package_name           = ['openstack-ceilometer-alarm']
       $common_package_name          = 'openstack-ceilometer-common'
       $client_package_name          = 'python-ceilometerclient'
       # service names
@@ -36,13 +36,13 @@ class ceilometer::params {
     }
     'Debian': {
       # package names
-      $agent_central_package_name           = 'ceilometer-agent-central'
-      $agent_compute_package_name           = 'ceilometer-agent-compute'
-      $api_package_name                     = 'ceilometer-api'
-      $collector_package_name               = 'ceilometer-collector'
-      $common_package_name                  = 'ceilometer-common'
-      $client_package_name                  = 'python-ceilometerclient'
-      $alarm_package_name                   = ['ceilometer-alarm-evaluator', 'ceilometer-alarm-notifier' ]
+      $agent_central_package_name   = 'ceilometer-agent-central'
+      $agent_compute_package_name   = 'ceilometer-agent-compute'
+      $api_package_name             = 'ceilometer-api'
+      $collector_package_name       = 'ceilometer-collector'
+      $common_package_name          = 'ceilometer-common'
+      $client_package_name          = 'python-ceilometerclient'
+      $alarm_package_name           = ['ceilometer-alarm-notifier','ceilometer-alarm-evaluator']
       # service names
       $agent_central_service_name   = 'ceilometer-agent-central'
       $agent_compute_service_name   = 'ceilometer-agent-compute'
@@ -51,9 +51,9 @@ class ceilometer::params {
       $alarm_notifier_service_name  = 'ceilometer-alarm-notifier'
       $alarm_evaluator_service_name = 'ceilometer-alarm-evaluator'
       # db packages
-      $psycopg_package_name       = 'python-psycopg2'
-      $pymongo_package_name       = 'python-pymongo'
-      $sqlite_package_name        = 'python-pysqlite2'
+      $psycopg_package_name         = 'python-psycopg2'
+      $pymongo_package_name         = 'python-pymongo'
+      $sqlite_package_name          = 'python-pysqlite2'
 
       # Operating system specific
       case $::operatingsystem {
