@@ -76,7 +76,6 @@ describe 'ceilometer' do
       should contain_user('ceilometer').with(
         :name    => 'ceilometer',
         :gid     => 'ceilometer',
-        :groups  => ['nova'],
         :system  => true,
         :require => 'Package[ceilometer-common]'
       )
