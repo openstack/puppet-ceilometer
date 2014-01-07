@@ -52,7 +52,11 @@ class ceilometer::agent::compute (
 
   if $::ceilometer::params::libvirt_group {
     User['ceilometer'] {
-      groups +> [$::ceilometer::params::libvirt_group]
+      groups => ['nova', $::ceilometer::params::libvirt_group]
+    }
+  } else {
+    User['ceilometer'] {
+      groups => ['nova']
     }
   }
 

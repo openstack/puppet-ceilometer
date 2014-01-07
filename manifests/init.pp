@@ -89,7 +89,6 @@ class ceilometer(
   user { 'ceilometer':
     name    => 'ceilometer',
     gid     => 'ceilometer',
-    groups  => ['nova'],
     system  => true,
     require => Package['ceilometer-common'],
   }
