@@ -24,9 +24,11 @@ describe 'ceilometer::agent::compute' do
       )
     end
 
-    it 'adds ceilometer user to libvirt group if required' do
+    it 'adds ceilometer user to nova group and, if required, to libvirt group' do
       if platform_params[:libvirt_group]
-        should contain_user('ceilometer').with_groups(/#{platform_params[:libvirt_group]}/)
+        should contain_user('ceilometer').with_groups(['nova', "#{platform_params[:libvirt_group]}"])
+      else
+        should contain_user('ceilometer').with_groups('nova')
       end
     end
 
