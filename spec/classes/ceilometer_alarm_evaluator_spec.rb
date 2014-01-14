@@ -19,10 +19,10 @@ describe 'ceilometer::alarm::evaluator' do
     it { should contain_class('ceilometer::params') }
 
     it 'installs ceilometer-alarm package' do
-      should contain_package('ceilometer-alarm').with(
-        :ensure => 'installed',
-        :name   => platform_params[:alarm_package_name],
-        :before => 'Service[ceilometer-alarm-evaluator]'
+      should contain_package(platform_params[:alarm_evaluator_package_name]).with_before('Service[ceilometer-alarm-evaluator]')
+      should contain_package(platform_params[:alarm_evaluator_package_name]).with(
+        :ensure => 'present',
+        :name   => platform_params[:alarm_evaluator_package_name]
       )
     end
 
@@ -46,8 +46,8 @@ describe 'ceilometer::alarm::evaluator' do
     it 'configures alarm evaluator' do
       should contain_ceilometer_config('alarm/evaluation_interval').with_value( params[:evaluation_interval] )
       should contain_ceilometer_config('alarm/evaluation_service').with_value( params[:evaluation_service] )
-      should contain_ceilometer_config('alarm/partition_rpc_topic').with_value (params[:partition_rpc_topic] )
-      should contain_ceilometer_config('alarm/record_history').with_value (params[:record_history] )
+      should contain_ceilometer_config('alarm/partition_rpc_topic').with_value( params[:partition_rpc_topic] )
+      should contain_ceilometer_config('alarm/record_history').with_value( params[:record_history] )
     end
 
     context 'when overriding parameters' do
@@ -79,8 +79,7 @@ describe 'ceilometer::alarm::evaluator' do
     end
 
     let :platform_params do
-      { :alarm_package_name => ['ceilometer-alarm-evaluator',
-                                'ceilometer-alarm-notifier' ],
+      { :alarm_evaluator_package_name => 'ceilometer-alarm-evaluator',
         :alarm_evaluator_service_name => 'ceilometer-alarm-evaluator' }
     end
 
@@ -93,7 +92,7 @@ describe 'ceilometer::alarm::evaluator' do
     end
 
     let :platform_params do
-      { :alarm_package_name => 'openstack-ceilometer-alarm',
+      { :alarm_evaluator_package_name => 'openstack-ceilometer-alarm',
         :alarm_evaluator_service_name => 'openstack-ceilometer-alarm-evaluator' }
     end
 
