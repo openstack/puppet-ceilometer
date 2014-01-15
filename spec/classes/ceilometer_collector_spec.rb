@@ -8,7 +8,7 @@ describe 'ceilometer::collector' do
 
   shared_examples_for 'ceilometer-collector' do
 
-    it { should include_class('ceilometer::params') }
+    it { should contain_class('ceilometer::params') }
 
     it 'installs ceilometer-collector package' do
       should contain_package('ceilometer-collector').with(

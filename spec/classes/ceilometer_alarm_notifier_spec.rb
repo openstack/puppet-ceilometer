@@ -17,7 +17,7 @@ describe 'ceilometer::alarm::notifier' do
   end
 
   shared_examples_for 'ceilometer-alarm-notifier' do
-    it { should include_class('ceilometer::params') }
+    it { should contain_class('ceilometer::params') }
 
     it 'installs ceilometer-alarm package' do
       should contain_package('ceilometer-alarm').with(

@@ -32,7 +32,7 @@ describe 'ceilometer::expirer' do
 
   shared_examples_for 'ceilometer-expirer' do
 
-    it { should include_class('ceilometer::params') }
+    it { should contain_class('ceilometer::params') }
 
     it 'installs ceilometer common package' do
       should contain_package('ceilometer-common').with(
