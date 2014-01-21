@@ -7,10 +7,19 @@
 #    secret key for signing messages. Mandatory.
 #  [*package_ensure*]
 #    ensure state for package. Optional. Defaults to 'present'
-#  [*verbose*]
-#    should the daemons log verbose messages. Optional. Defaults to 'False'
 #  [*debug*]
 #    should the daemons log debug messages. Optional. Defaults to 'False'
+#  [*log_dir*]
+#    (optional) directory to which ceilometer logs are sent.
+#    Defaults to '/var/log/ceilometer'
+#  [*verbose*]
+#    should the daemons log verbose messages. Optional. Defaults to 'False'
+#  [*use_syslog*]
+#    (optional) Use syslog for logging
+#    Defaults to false
+#  [*log_facility*]
+#    (optional) Syslog facility to receive log lines.
+#    Defaults to 'LOG_USER'
 # [*rpc_backend*]
 # (optional) what rpc/queuing service to use
 # Defaults to impl_kombu (rabbitmq)
@@ -48,8 +57,11 @@
 class ceilometer(
   $metering_secret    = false,
   $package_ensure     = 'present',
-  $verbose            = 'False',
-  $debug              = 'False',
+  $debug              = false,
+  $log_dir            = '/var/log/ceilometer',
+  $verbose            = false,
+  $use_syslog         = false,
+  $log_facility       = 'LOG_USER',
   $rpc_backend        = 'ceilometer.openstack.common.rpc.impl_kombu',
   $rabbit_host        = '127.0.0.1',
   $rabbit_port        = 5672,
@@ -168,8 +180,8 @@ class ceilometer(
     'DEFAULT/rpc_backend'            : value => $rpc_backend;
     'DEFAULT/metering_secret'        : value => $metering_secret;
     'DEFAULT/debug'                  : value => $debug;
+    'DEFAULT/log_dir'                : value => $log_dir;
     'DEFAULT/verbose'                : value => $verbose;
-    'DEFAULT/log_dir'                : value => $::ceilometer::params::log_dir;
     # Fix a bad default value in ceilometer.
     # Fixed in https: //review.openstack.org/#/c/18487/
     'DEFAULT/glance_control_exchange': value => 'glance';
@@ -178,6 +190,18 @@ class ceilometer(
     # Fix will be included in Grizzly
     'DEFAULT/notification_topics'    :
       value => 'notifications,glance_notifications';
+  }
+
+  # Syslog configuration
+  if $use_syslog {
+    ceilometer_config {
+      'DEFAULT/use_syslog':           value => true;
+      'DEFAULT/syslog_log_facility':  value => $log_facility;
+    }
+  } else {
+    ceilometer_config {
+      'DEFAULT/use_syslog':           value => false;
+    }
   }
 
 }
