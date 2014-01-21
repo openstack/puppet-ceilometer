@@ -3,7 +3,6 @@
 class ceilometer::params {
 
   $dbsync_command  = 'ceilometer-dbsync --config-file=/etc/ceilometer/ceilometer.conf'
-  $log_dir         = '/var/log/ceilometer'
   $expirer_command = 'ceilometer-expirer'
 
   case $::osfamily {
