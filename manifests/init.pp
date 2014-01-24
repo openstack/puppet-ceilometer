@@ -166,7 +166,7 @@ class ceilometer(
 
   ceilometer_config {
     'DEFAULT/rpc_backend'            : value => $rpc_backend;
-    'DEFAULT/metering_secret'        : value => $metering_secret;
+    'publisher/metering_secret'      : value => $metering_secret;
     'DEFAULT/debug'                  : value => $debug;
     'DEFAULT/verbose'                : value => $verbose;
     'DEFAULT/log_dir'                : value => $::ceilometer::params::log_dir;
