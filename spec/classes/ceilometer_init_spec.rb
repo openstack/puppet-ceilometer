@@ -6,8 +6,9 @@ describe 'ceilometer' do
     {
       :metering_secret    => 'metering-s3cr3t',
       :package_ensure     => 'present',
-      :verbose            => 'False',
       :debug              => 'False',
+      :log_dir            => '/var/log/ceilometer',
+      :verbose            => 'False',
     }
   end
 
@@ -116,9 +117,31 @@ describe 'ceilometer' do
       it { expect { should raise_error(Puppet::Error) } }
     end
 
-    it 'configures debug and verbose' do
+    it 'configures logging, debug and verbosity' do
       should contain_ceilometer_config('DEFAULT/debug').with_value( params[:debug] )
+      should contain_ceilometer_config('DEFAULT/log_dir').with_value( params[:log_dir] )
       should contain_ceilometer_config('DEFAULT/verbose').with_value( params[:verbose] )
+    end
+
+    it 'configures syslog to be disabled by default' do
+      should contain_ceilometer_config('DEFAULT/use_syslog').with_value('false')
+    end
+
+    context 'with syslog enabled' do
+      before { params.merge!( :use_syslog => 'true' ) }
+
+      it { should contain_ceilometer_config('DEFAULT/use_syslog').with_value('true') }
+      it { should contain_ceilometer_config('DEFAULT/syslog_log_facility').with_value('LOG_USER') }
+    end
+
+    context 'with syslog enabled and custom settings' do
+      before { params.merge!(
+       :use_syslog   => 'true',
+       :log_facility => 'LOG_LOCAL0'
+      ) }
+
+      it { should contain_ceilometer_config('DEFAULT/use_syslog').with_value('true') }
+      it { should contain_ceilometer_config('DEFAULT/syslog_log_facility').with_value('LOG_LOCAL0') }
     end
 
     it 'fixes a bad value in ceilometer (glance_control_exchange)' do
