@@ -182,9 +182,6 @@ class ceilometer(
     'DEFAULT/debug'                  : value => $debug;
     'DEFAULT/log_dir'                : value => $log_dir;
     'DEFAULT/verbose'                : value => $verbose;
-    # Fix a bad default value in ceilometer.
-    # Fixed in https://review.openstack.org/#/c/18487/
-    'DEFAULT/glance_control_exchange': value => 'glance';
     'DEFAULT/notification_topics'    : value => 'notifications';
   }
 

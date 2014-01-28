@@ -144,10 +144,6 @@ describe 'ceilometer' do
       it { should contain_ceilometer_config('DEFAULT/syslog_log_facility').with_value('LOG_LOCAL0') }
     end
 
-    it 'fixes a bad value in ceilometer (glance_control_exchange)' do
-      should contain_ceilometer_config('DEFAULT/glance_control_exchange').with_value('glance')
-    end
-
     it 'configures notification_topics' do
       should contain_ceilometer_config('DEFAULT/notification_topics').with_value('notifications')
     end
