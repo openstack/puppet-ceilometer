@@ -132,6 +132,10 @@ describe 'ceilometer' do
       it { should contain_ceilometer_config('DEFAULT/log_dir').with_ensure('absent') }
     end
 
+    it 'configures notification_topics' do
+      should contain_ceilometer_config('DEFAULT/notification_topics').with_value('notifications')
+    end
+
     it 'configures syslog to be disabled by default' do
       should contain_ceilometer_config('DEFAULT/use_syslog').with_value('false')
     end
@@ -153,8 +157,12 @@ describe 'ceilometer' do
       it { should contain_ceilometer_config('DEFAULT/syslog_log_facility').with_value('LOG_LOCAL0') }
     end
 
-    it 'configures notification_topics' do
-      should contain_ceilometer_config('DEFAULT/notification_topics').with_value('notifications')
+    context 'with overriden notification_topics parameter' do
+      before { params.merge!( :notification_topics => ['notifications', 'custom']) }
+
+      it 'configures notification_topics' do
+        should contain_ceilometer_config('DEFAULT/notification_topics').with_value('notifications,custom')
+      end
     end
   end
 

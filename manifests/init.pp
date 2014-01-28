@@ -55,19 +55,20 @@
 #
 
 class ceilometer(
-  $metering_secret    = false,
-  $package_ensure     = 'present',
-  $debug              = false,
-  $log_dir            = '/var/log/ceilometer',
-  $verbose            = false,
-  $use_syslog         = false,
-  $log_facility       = 'LOG_USER',
-  $rpc_backend        = 'ceilometer.openstack.common.rpc.impl_kombu',
-  $rabbit_host        = '127.0.0.1',
-  $rabbit_port        = 5672,
-  $rabbit_hosts       = undef,
-  $rabbit_userid      = 'guest',
-  $rabbit_password    = '',
+  $metering_secret     = false,
+  $notification_topics = ['notifications'],
+  $package_ensure      = 'present',
+  $debug               = false,
+  $log_dir             = '/var/log/ceilometer',
+  $verbose             = false,
+  $use_syslog          = false,
+  $log_facility        = 'LOG_USER',
+  $rpc_backend         = 'ceilometer.openstack.common.rpc.impl_kombu',
+  $rabbit_host         = '127.0.0.1',
+  $rabbit_port         = 5672,
+  $rabbit_hosts        = undef,
+  $rabbit_userid       = 'guest',
+  $rabbit_password     = '',
   $rabbit_virtual_host = '/',
   $qpid_hostname = 'localhost',
   $qpid_port = 5672,
@@ -85,7 +86,6 @@ class ceilometer(
 ) {
 
   validate_string($metering_secret)
-
 
   include ceilometer::params
 
@@ -180,7 +180,7 @@ class ceilometer(
     'publisher/metering_secret'      : value => $metering_secret;
     'DEFAULT/debug'                  : value => $debug;
     'DEFAULT/verbose'                : value => $verbose;
-    'DEFAULT/notification_topics'    : value => 'notifications';
+    'DEFAULT/notification_topics'    : value => join($notification_topics, ',');
   }
 
   # Log configuration
