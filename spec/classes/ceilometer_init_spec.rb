@@ -109,7 +109,7 @@ describe 'ceilometer' do
     end
 
     it 'configures required metering_secret' do
-      should contain_ceilometer_config('DEFAULT/metering_secret').with_value('metering-s3cr3t')
+      should contain_ceilometer_config('publisher/metering_secret').with_value('metering-s3cr3t')
     end
 
     context 'without the required metering_secret' do
