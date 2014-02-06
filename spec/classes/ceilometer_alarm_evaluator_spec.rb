@@ -19,7 +19,6 @@ describe 'ceilometer::alarm::evaluator' do
     it { should contain_class('ceilometer::params') }
 
     it 'installs ceilometer-alarm package' do
-      should contain_package(platform_params[:alarm_evaluator_package_name]).with_before('Service[ceilometer-alarm-evaluator]')
       should contain_package(platform_params[:alarm_evaluator_package_name]).with(
         :ensure => 'present',
         :name   => platform_params[:alarm_evaluator_package_name]
@@ -79,7 +78,7 @@ describe 'ceilometer::alarm::evaluator' do
     end
 
     let :platform_params do
-      { :alarm_evaluator_package_name => 'ceilometer-alarm-evaluator',
+      { :alarm_evaluator_package_name => 'ceilometer-common',
         :alarm_evaluator_service_name => 'ceilometer-alarm-evaluator' }
     end
 
