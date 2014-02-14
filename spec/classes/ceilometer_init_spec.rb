@@ -117,10 +117,19 @@ describe 'ceilometer' do
       it { expect { should raise_error(Puppet::Error) } }
     end
 
-    it 'configures logging, debug and verbosity' do
+    it 'configures debug and verbosity' do
       should contain_ceilometer_config('DEFAULT/debug').with_value( params[:debug] )
-      should contain_ceilometer_config('DEFAULT/log_dir').with_value( params[:log_dir] )
       should contain_ceilometer_config('DEFAULT/verbose').with_value( params[:verbose] )
+    end
+
+    it 'configures logging directory by default' do
+      should contain_ceilometer_config('DEFAULT/log_dir').with_value( params[:log_dir] )
+    end
+
+    context 'with logging directory disabled' do
+      before { params.merge!( :log_dir => false) }
+
+      it { should contain_ceilometer_config('DEFAULT/log_dir').with_ensure('absent') }
     end
 
     it 'configures syslog to be disabled by default' do

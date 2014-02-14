@@ -11,6 +11,7 @@
 #    should the daemons log debug messages. Optional. Defaults to 'False'
 #  [*log_dir*]
 #    (optional) directory to which ceilometer logs are sent.
+#    If set to boolean false, it will not log to any directory.
 #    Defaults to '/var/log/ceilometer'
 #  [*verbose*]
 #    should the daemons log verbose messages. Optional. Defaults to 'False'
@@ -21,9 +22,8 @@
 #    (optional) Syslog facility to receive log lines.
 #    Defaults to 'LOG_USER'
 # [*rpc_backend*]
-# (optional) what rpc/queuing service to use
-# Defaults to impl_kombu (rabbitmq)
-#
+#    (optional) what rpc/queuing service to use
+#    Defaults to impl_kombu (rabbitmq)
 #  [*rabbit_host*]
 #    ip or hostname of the rabbit server. Optional. Defaults to '127.0.0.1'
 #  [*rabbit_port*]
@@ -175,17 +175,26 @@ class ceilometer(
   }
 
   # Once we got here, we can act as an honey badger on the rpc used.
-
   ceilometer_config {
     'DEFAULT/rpc_backend'            : value => $rpc_backend;
     'DEFAULT/metering_secret'        : value => $metering_secret;
     'DEFAULT/debug'                  : value => $debug;
-    'DEFAULT/log_dir'                : value => $log_dir;
     'DEFAULT/verbose'                : value => $verbose;
     # Fix a bad default value in ceilometer.
     # Fixed in https://review.openstack.org/#/c/18487/
     'DEFAULT/glance_control_exchange': value => 'glance';
     'DEFAULT/notification_topics'    : value => 'notifications';
+  }
+
+  # Log configuration
+  if $log_dir {
+    ceilometer_config {
+      'DEFAULT/log_dir' : value  => $log_dir;
+    }
+  } else {
+    ceilometer_config {
+      'DEFAULT/log_dir' : ensure => absent;
+    }
   }
 
   # Syslog configuration
