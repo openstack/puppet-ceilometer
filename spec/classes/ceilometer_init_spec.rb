@@ -148,8 +148,8 @@ describe 'ceilometer' do
       should contain_ceilometer_config('DEFAULT/glance_control_exchange').with_value('glance')
     end
 
-    it 'adds glance-notifications topic' do
-      should contain_ceilometer_config('DEFAULT/notification_topics').with_value('notifications,glance_notifications')
+    it 'configures notification_topics' do
+      should contain_ceilometer_config('DEFAULT/notification_topics').with_value('notifications')
     end
   end
 
