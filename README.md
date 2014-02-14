@@ -70,6 +70,13 @@ This is the ceilometer module.
 Release Notes
 -------------
 
+** 3.1.0 **
+
+* Fixed package ceilometer-alarm type error on Debian.
+* Remove log_dir from params and make logs configurable in init.
+* Removed glance_notifications from notification_topic.
+* Don't match commented [DEFAULT] section.
+
 ** 3.0.0 **
 
 * Initial release of the puppet-ceilometer module.
