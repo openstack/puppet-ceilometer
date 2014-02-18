@@ -41,7 +41,7 @@ class ceilometer::params {
       $collector_package_name       = 'ceilometer-collector'
       $common_package_name          = 'ceilometer-common'
       $client_package_name          = 'python-ceilometerclient'
-      $alarm_package_name           = ['ceilometer-alarm-notifier','ceilometer-alarm-evaluator']
+      $alarm_package_name           = ['ceilometer-common']
       # service names
       $agent_central_service_name   = 'ceilometer-agent-central'
       $agent_compute_service_name   = 'ceilometer-agent-compute'
