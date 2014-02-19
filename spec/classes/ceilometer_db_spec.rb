@@ -9,7 +9,8 @@ describe 'ceilometer::db' do
     end
 
     let :params do
-      { :database_connection => 'mongodb://localhost:1234/ceilometer' }
+      { :database_connection => 'mongodb://localhost:1234/ceilometer',
+        :sync_db             => true }
     end
 
     it { should contain_class('ceilometer::params') }
@@ -19,6 +20,15 @@ describe 'ceilometer::db' do
         :ensure => 'present',
         :name => 'python-pymongo')
       should contain_ceilometer_config('database/connection').with_value('mongodb://localhost:1234/ceilometer')
+    end
+
+    it 'runs ceilometer-dbsync' do
+      should contain_exec('ceilometer-dbsync').with(
+        :command     => 'ceilometer-dbsync --config-file=/etc/ceilometer/ceilometer.conf',
+        :path        => '/usr/bin',
+        :refreshonly => 'true',
+        :logoutput   => 'on_failure'
+      )
     end
   end
 
@@ -32,7 +42,8 @@ describe 'ceilometer::db' do
     end
 
     let :params do
-      { :database_connection => 'mongodb://localhost:1234/ceilometer' }
+      { :database_connection => 'mongodb://localhost:1234/ceilometer',
+        :sync_db             => false }
     end
 
     it { should contain_class('ceilometer::params') }
@@ -42,6 +53,15 @@ describe 'ceilometer::db' do
         :ensure => 'present',
         :name => 'python-pymongo')
       should contain_ceilometer_config('database/connection').with_value('mongodb://localhost:1234/ceilometer')
+    end
+
+    it 'runs ceilometer-dbsync' do
+      should contain_exec('ceilometer-dbsync').with(
+        :command     => '/bin/true',
+        :path        => '/usr/bin',
+        :refreshonly => 'true',
+        :logoutput   => 'on_failure'
+      )
     end
   end
 
@@ -55,7 +75,8 @@ describe 'ceilometer::db' do
     end
 
     let :params do
-      { :database_connection => 'mongodb://localhost:1234/ceilometer' }
+      { :database_connection => 'mongodb://localhost:1234/ceilometer',
+        :sync_db             => true }
     end
 
     it { should contain_class('ceilometer::params') }
@@ -64,6 +85,15 @@ describe 'ceilometer::db' do
       should contain_package('ceilometer-backend-package').with(
         :ensure => 'present',
         :name => 'python-pymongo')
+    end
+
+    it 'runs ceilometer-dbsync' do
+      should contain_exec('ceilometer-dbsync').with(
+        :command     => 'ceilometer-dbsync --config-file=/etc/ceilometer/ceilometer.conf',
+        :path        => '/usr/bin',
+        :refreshonly => 'true',
+        :logoutput   => 'on_failure'
+      )
     end
   end
 
@@ -77,7 +107,8 @@ describe 'ceilometer::db' do
     end
 
     let :params do
-      { :database_connection => 'sqlite:///var/lib/ceilometer.db' }
+      { :database_connection => 'sqlite:///var/lib/ceilometer.db',
+        :sync_db             => false }
     end
 
     it { should contain_class('ceilometer::params') }
@@ -88,6 +119,15 @@ describe 'ceilometer::db' do
         :name => 'python-sqlite2')
       should contain_ceilometer_config('database/connection').with_value('sqlite:///var/lib/ceilometer.db')
     end
+
+    it 'runs ceilometer-dbsync' do
+      should contain_exec('ceilometer-dbsync').with(
+        :command     => '/bin/true',
+        :path        => '/usr/bin',
+        :refreshonly => 'true',
+        :logoutput   => 'on_failure'
+      )
+    end
   end
 
   # debian has "python-pysqlite2"
@@ -97,7 +137,8 @@ describe 'ceilometer::db' do
     end
 
     let :params do
-      { :database_connection => 'sqlite:///var/lib/ceilometer.db' }
+      { :database_connection => 'sqlite:///var/lib/ceilometer.db',
+        :sync_db             => true }
     end
 
     it { should contain_class('ceilometer::params') }
@@ -106,6 +147,15 @@ describe 'ceilometer::db' do
       should contain_package('ceilometer-backend-package').with(
         :ensure => 'present',
         :name => 'python-pysqlite2')
+    end
+
+    it 'runs ceilometer-dbsync' do
+      should contain_exec('ceilometer-dbsync').with(
+        :command     => 'ceilometer-dbsync --config-file=/etc/ceilometer/ceilometer.conf',
+        :path        => '/usr/bin',
+        :refreshonly => 'true',
+        :logoutput   => 'on_failure'
+      )
     end
   end
 

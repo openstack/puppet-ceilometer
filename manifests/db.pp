@@ -6,8 +6,12 @@
 #  [*database_connection*]
 #    the connection string. format: [driver]://[user]:[password]@[host]/[database]
 #
+#  [*sync_db*]
+#    enable dbsync.
+#
 class ceilometer::db (
-  $database_connection = 'mysql://ceilometer:ceilometer@localhost/ceilometer'
+  $database_connection = 'mysql://ceilometer:ceilometer@localhost/ceilometer',
+  $sync_db             = true
 ) {
 
   include ceilometer::params
@@ -36,6 +40,12 @@ class ceilometer::db (
     }
   }
 
+  if $sync_db {
+    $command = $::ceilometer::params::dbsync_command
+  } else {
+    $command = '/bin/true'
+  }
+
   if $backend_package and !defined(Package[$backend_package]) {
     package {'ceilometer-backend-package':
       ensure => present,
@@ -50,7 +60,7 @@ class ceilometer::db (
   Ceilometer_config['database/connection'] ~> Exec['ceilometer-dbsync']
 
   exec { 'ceilometer-dbsync':
-    command     => $::ceilometer::params::dbsync_command,
+    command     => $command,
     path        => '/usr/bin',
     user        => $::ceilometer::params::username,
     refreshonly => true,
