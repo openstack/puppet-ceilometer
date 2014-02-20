@@ -4,6 +4,7 @@ class ceilometer::params {
 
   $dbsync_command  = 'ceilometer-dbsync --config-file=/etc/ceilometer/ceilometer.conf'
   $expirer_command = 'ceilometer-expirer'
+  $user            = 'ceilometer'
 
   case $::osfamily {
     'RedHat': {
