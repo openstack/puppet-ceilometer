@@ -62,7 +62,7 @@ class ceilometer::db (
   exec { 'ceilometer-dbsync':
     command     => $command,
     path        => '/usr/bin',
-    user        => $::ceilometer::params::username,
+    user        => $::ceilometer::params::user,
     refreshonly => true,
     logoutput   => on_failure,
     subscribe   => Ceilometer_config['database/connection']

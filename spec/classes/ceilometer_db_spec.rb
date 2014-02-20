@@ -27,6 +27,7 @@ describe 'ceilometer::db' do
         :command     => 'ceilometer-dbsync --config-file=/etc/ceilometer/ceilometer.conf',
         :path        => '/usr/bin',
         :refreshonly => 'true',
+        :user        => 'ceilometer',
         :logoutput   => 'on_failure'
       )
     end
@@ -60,6 +61,7 @@ describe 'ceilometer::db' do
         :command     => '/bin/true',
         :path        => '/usr/bin',
         :refreshonly => 'true',
+        :user        => 'ceilometer',
         :logoutput   => 'on_failure'
       )
     end
@@ -92,6 +94,7 @@ describe 'ceilometer::db' do
         :command     => 'ceilometer-dbsync --config-file=/etc/ceilometer/ceilometer.conf',
         :path        => '/usr/bin',
         :refreshonly => 'true',
+        :user        => 'ceilometer',
         :logoutput   => 'on_failure'
       )
     end
@@ -125,6 +128,7 @@ describe 'ceilometer::db' do
         :command     => '/bin/true',
         :path        => '/usr/bin',
         :refreshonly => 'true',
+        :user        => 'ceilometer',
         :logoutput   => 'on_failure'
       )
     end
@@ -154,6 +158,7 @@ describe 'ceilometer::db' do
         :command     => 'ceilometer-dbsync --config-file=/etc/ceilometer/ceilometer.conf',
         :path        => '/usr/bin',
         :refreshonly => 'true',
+        :user        => 'ceilometer',
         :logoutput   => 'on_failure'
       )
     end
