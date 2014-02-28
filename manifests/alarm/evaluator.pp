@@ -28,7 +28,16 @@ class ceilometer::alarm::evaluator (
 
   Package[$::ceilometer::params::alarm_package_name] -> Service['ceilometer-alarm-evaluator']
   Package[$::ceilometer::params::alarm_package_name] -> Package<| title == 'ceilometer-alarm' |>
-  ensure_packages($::ceilometer::params::alarm_package_name)
+
+  # Workaround for Ubuntu havana, where alarm_package_name = common_package_name
+  if ( $::ceilometer::params::common_package_name in $::ceilometer::params::alarm_package_name)
+  {
+    if ! defined(Package[$::ceilometer::params::common_package_name]) {
+      package{$::ceilometer::params::common_package_name : }
+    }
+  } else {
+    ensure_packages($::ceilometer::params::alarm_package_name)
+  }
 
   if $enabled {
     $service_ensure = 'running'
