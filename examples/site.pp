@@ -63,4 +63,8 @@ node default {
     time_to_live => '2592000'
   }
 
+  # Install notification agent
+  class { 'ceilometer::agent::notification':
+  }
+
 }
