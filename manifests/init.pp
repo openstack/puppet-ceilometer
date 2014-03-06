@@ -118,9 +118,11 @@ class ceilometer(
     mode    => '0640',
   }
 
-  package { 'ceilometer-common':
-    ensure => $package_ensure,
-    name   => $::ceilometer::params::common_package_name,
+  if ! defined(Package['ceilometer-common']) {
+    package { 'ceilometer-common':
+      ensure => $package_ensure,
+      name   => $::ceilometer::params::common_package_name,
+    }
   }
 
   Package['ceilometer-common'] -> Ceilometer_config<||>

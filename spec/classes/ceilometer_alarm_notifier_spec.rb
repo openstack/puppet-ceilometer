@@ -65,9 +65,24 @@ describe 'ceilometer::alarm::notifier' do
 
   end
 
-  context 'on Debian platforms' do
+  context 'on Debian operating system' do
     let :facts do
-      { :osfamily => 'Debian' }
+      { :osfamily        => 'Debian',
+        :operatingsystem => 'Debian' }
+    end
+
+    let :platform_params do
+      { :alarm_notifier_package_name => 'ceilometer-common',
+        :alarm_notifier_service_name => 'ceilometer-alarm-notifier' }
+    end
+
+    it_configures 'ceilometer-alarm-notifier'
+  end
+
+  context 'on Ubuntu operating system' do
+    let :facts do
+      { :osfamily        => 'Debian',
+        :operatingsystem => 'Ubuntu' }
     end
 
     let :platform_params do

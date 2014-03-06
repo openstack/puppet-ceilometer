@@ -42,7 +42,6 @@ class ceilometer::params {
       $collector_package_name       = 'ceilometer-collector'
       $common_package_name          = 'ceilometer-common'
       $client_package_name          = 'python-ceilometerclient'
-      $alarm_package_name           = ['ceilometer-common']
       # service names
       $agent_central_service_name   = 'ceilometer-agent-central'
       $agent_compute_service_name   = 'ceilometer-agent-compute'
@@ -58,10 +57,12 @@ class ceilometer::params {
       # Operating system specific
       case $::operatingsystem {
         'Ubuntu': {
-          $libvirt_group = 'libvirtd'
+          $libvirt_group            = 'libvirtd'
+          $alarm_package_name       = ['ceilometer-common']
         }
         default: {
-          $libvirt_group = 'libvirt'
+          $libvirt_group            = 'libvirt'
+          $alarm_package_name       = ['ceilometer-alarm-notifier','ceilometer-alarm-evaluator']
         }
       }
     }
