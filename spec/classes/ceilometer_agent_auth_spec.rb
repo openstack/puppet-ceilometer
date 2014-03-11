@@ -20,7 +20,7 @@ describe 'ceilometer::agent::auth' do
 
     it 'configures authentication' do
       should contain_ceilometer_config('service_credentials/os_auth_url').with_value('http://localhost:5000/v2.0')
-      should contain_ceilometer_config('service_credentials/os_auth_region').with_value('RegionOne')
+      should contain_ceilometer_config('service_credentials/os_region_name').with_value('RegionOne')
       should contain_ceilometer_config('service_credentials/os_username').with_value('ceilometer')
       should contain_ceilometer_config('service_credentials/os_password').with_value('password')
       should contain_ceilometer_config('service_credentials/os_tenant_name').with_value('services')
