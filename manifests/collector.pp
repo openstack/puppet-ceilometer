@@ -13,7 +13,7 @@ class ceilometer::collector (
   Ceilometer_config<||> ~> Service['ceilometer-collector']
 
   Package[$::ceilometer::params::collector_package_name] -> Service['ceilometer-collector']
-  ensure_packages($::ceilometer::params::collector_package_name)
+  ensure_packages([$::ceilometer::params::collector_package_name])
 
   if $enabled {
     $service_ensure = 'running'
