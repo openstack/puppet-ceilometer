@@ -9,9 +9,15 @@
 #  [*sync_db*]
 #    enable dbsync.
 #
+#  [*mysql_module*]
+#    (optional) Mysql puppet module version to use. Tested versions
+#    are 0.9 and 2.2
+#    Defaults to '0.9
+#
 class ceilometer::db (
   $database_connection = 'mysql://ceilometer:ceilometer@localhost/ceilometer',
-  $sync_db             = true
+  $sync_db             = true,
+  $mysql_module        = '0.9',
 ) {
 
   include ceilometer::params
@@ -24,7 +30,12 @@ class ceilometer::db (
   case $database_connection {
     /^mysql:\/\//: {
       $backend_package = false
-      include mysql::python
+
+      if ($mysql_module >= 2.2) {
+        include mysql::bindings::python
+      } else {
+        include mysql::python
+      }
     }
     /^postgres:\/\//: {
       $backend_package = $::ceilometer::params::psycopg_package_name
