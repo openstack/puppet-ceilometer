@@ -70,6 +70,13 @@ This is the ceilometer module.
 Release Notes
 -------------
 
+** 3.1.1 **
+
+* Removed enforcement of glance_control_exchange.
+* Fixed user reference in db.pp.
+* Allow db fields configuration without need for dbsync for better replicaset support.
+* Fixed alarm package parameters Debian/Ubuntu.
+
 ** 3.1.0 **
 
 * Fixed package ceilometer-alarm type error on Debian.
