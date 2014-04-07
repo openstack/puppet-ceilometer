@@ -45,11 +45,6 @@ class ceilometer::agent::compute (
     hasrestart => true,
   }
 
-  nova_config {
-    'DEFAULT/instance_usage_audit'        : value => 'True';
-    'DEFAULT/instance_usage_audit_period' : value => 'hour';
-  }
-
   #NOTE(dprince): This is using a custom (inline) file_line provider
   # until this lands upstream:
   # https://github.com/puppetlabs/puppetlabs-stdlib/pull/174

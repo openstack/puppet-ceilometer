@@ -48,11 +48,6 @@ describe 'ceilometer::agent::compute' do
       )
     end
 
-    it 'configures instance usage audit in nova' do
-      should contain_nova_config('DEFAULT/instance_usage_audit').with_value('True')
-      should contain_nova_config('DEFAULT/instance_usage_audit_period').with_value('hour')
-    end
-
     it 'configures nova notification driver' do
       should contain_file_line_after('nova-notification-driver-common').with(
         :line   => 'notification_driver=nova.openstack.common.notifier.rpc_notifier',
