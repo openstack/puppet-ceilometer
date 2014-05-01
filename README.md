@@ -1,6 +1,8 @@
 Ceilometer
 ==========
 
+4.0.0 - 2014.1.0 - Icehouse
+
 #### Table of Contents
 
 1. [Overview - What is the ceilometer module?](#overview)
@@ -69,6 +71,17 @@ This is the ceilometer module.
 
 Release Notes
 -------------
+
+** 4.0.0 **
+
+* Stable Icehouse release.
+* Added ability to override notification topics.
+* Implemented notification agent service.
+* Fixed region name configuration.
+* Fixed ensure packages bug.
+* Added support for puppetlabs-mysql 2.2 and greater.
+* Fixed MySQL grant call.
+* Introduced ceilometer::config to handle additional custom options.
 
 ** 3.1.1 **
 
