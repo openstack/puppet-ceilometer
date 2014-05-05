@@ -37,6 +37,23 @@
 #    password to connect to the rabbit_server. Optional. Defaults to empty.
 #  [*rabbit_virtual_host*]
 #    virtualhost to use. Optional. Defaults to '/'
+#  [*rabbit_use_ssl*]
+#    (optional) Connect over SSL for RabbitMQ
+#    Defaults to false
+#  [*kombu_ssl_ca_certs*]
+#    (optional) SSL certification authority file (valid only if SSL enabled).
+#    Defaults to undef
+#  [*kombu_ssl_certfile*]
+#    (optional) SSL cert file (valid only if SSL enabled).
+#    Defaults to undef
+#  [*kombu_ssl_keyfile*]
+#    (optional) SSL key file (valid only if SSL enabled).
+#    Defaults to undef
+#  [*kombu_ssl_version*]
+#    (optional) SSL version to use (valid only if SSL enabled).
+#    Valid values are TLSv1, SSLv23 and SSLv3. SSLv2 may be
+#    available on some distributions.
+#    Defaults to 'SSLv3'
 #
 # [*qpid_hostname*]
 # [*qpid_port*]
@@ -70,6 +87,11 @@ class ceilometer(
   $rabbit_userid       = 'guest',
   $rabbit_password     = '',
   $rabbit_virtual_host = '/',
+  $rabbit_use_ssl      = false,
+  $kombu_ssl_ca_certs  = undef,
+  $kombu_ssl_certfile  = undef,
+  $kombu_ssl_keyfile   = undef,
+  $kombu_ssl_version   = 'SSLv3',
   $qpid_hostname = 'localhost',
   $qpid_port = 5672,
   $qpid_username = 'guest',
@@ -151,6 +173,40 @@ class ceilometer(
         'DEFAULT/rabbit_userid'          : value => $rabbit_userid;
         'DEFAULT/rabbit_password'        : value => $rabbit_password;
         'DEFAULT/rabbit_virtual_host'    : value => $rabbit_virtual_host;
+        'DEFAULT/rabbit_use_ssl'         : value => $rabbit_use_ssl;
+      }
+
+      if $rabbit_use_ssl {
+        if $kombu_ssl_ca_certs {
+          ceilometer_config { 'DEFAULT/kombu_ssl_ca_certs': value => $kombu_ssl_ca_certs }
+        } else {
+          ceilometer_config { 'DEFAULT/kombu_ssl_ca_certs': ensure => absent}
+        }
+
+        if $kombu_ssl_certfile {
+          ceilometer_config { 'DEFAULT/kombu_ssl_certfile': value => $kombu_ssl_certfile }
+        } else {
+          ceilometer_config { 'DEFAULT/kombu_ssl_certfile': ensure => absent}
+        }
+
+        if $kombu_ssl_keyfile {
+          ceilometer_config { 'DEFAULT/kombu_ssl_keyfile': value => $kombu_ssl_keyfile }
+        } else {
+          ceilometer_config { 'DEFAULT/kombu_ssl_keyfile': ensure => absent}
+        }
+
+        if $kombu_ssl_version {
+          ceilometer_config { 'DEFAULT/kombu_ssl_version': value => $kombu_ssl_version }
+        } else {
+          ceilometer_config { 'DEFAULT/kombu_ssl_version': ensure => absent}
+        }
+      } else {
+        ceilometer_config {
+          'DEFAULT/kombu_ssl_ca_certs': ensure => absent;
+          'DEFAULT/kombu_ssl_certfile': ensure => absent;
+          'DEFAULT/kombu_ssl_keyfile':  ensure => absent;
+          'DEFAULT/kombu_ssl_version':  ensure => absent;
+        }
       }
   }
 
