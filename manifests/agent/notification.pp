@@ -49,7 +49,7 @@ class ceilometer::agent::notification (
 
   Package[$::ceilometer::params::agent_notification_package_name] -> Service['ceilometer-agent-notification']
   Package[$::ceilometer::params::agent_notification_package_name] -> Package<| title == 'ceilometer-agent-notification' |>
-  ensure_packages($::ceilometer::params::agent_notification_package_name)
+  ensure_packages([$::ceilometer::params::agent_notification_package_name])
 
   if $enabled {
     $service_ensure = 'running'
