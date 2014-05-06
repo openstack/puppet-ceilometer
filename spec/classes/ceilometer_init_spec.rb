@@ -37,6 +37,7 @@ describe 'ceilometer' do
     context 'with rabbit_host parameter' do
       before { params.merge!( rabbit_params ) }
       it_configures 'a ceilometer base installation'
+      it_configures 'rabbit with SSL support'
       it_configures 'rabbit without HA support (with backward compatibility)'
     end
 
@@ -44,12 +45,14 @@ describe 'ceilometer' do
       context 'with one server' do
         before { params.merge!( rabbit_params ).merge!( :rabbit_hosts => ['127.0.0.1:5672'] ) }
         it_configures 'a ceilometer base installation'
+        it_configures 'rabbit with SSL support'
         it_configures 'rabbit without HA support (without backward compatibility)'
       end
 
       context 'with multiple servers' do
         before { params.merge!( rabbit_params ).merge!( :rabbit_hosts => ['rabbit1:5672', 'rabbit2:5672'] ) }
         it_configures 'a ceilometer base installation'
+        it_configures 'rabbit with SSL support'
         it_configures 'rabbit with HA support'
       end
     end
@@ -206,6 +209,45 @@ describe 'ceilometer' do
     it { should contain_ceilometer_config('DEFAULT/rabbit_port').with_ensure('absent') }
     it { should contain_ceilometer_config('DEFAULT/rabbit_hosts').with_value( params[:rabbit_hosts].join(',') ) }
     it { should contain_ceilometer_config('DEFAULT/rabbit_ha_queues').with_value('true') }
+  end
+
+  shared_examples_for 'rabbit with SSL support' do
+    context "with default parameters" do
+      it { should contain_ceilometer_config('DEFAULT/rabbit_use_ssl').with_value('false') }
+      it { should contain_ceilometer_config('DEFAULT/kombu_ssl_ca_certs').with_ensure('absent') }
+      it { should contain_ceilometer_config('DEFAULT/kombu_ssl_certfile').with_ensure('absent') }
+      it { should contain_ceilometer_config('DEFAULT/kombu_ssl_keyfile').with_ensure('absent') }
+      it { should contain_ceilometer_config('DEFAULT/kombu_ssl_version').with_ensure('absent') }
+    end
+
+    context "with SSL enabled" do
+      before { params.merge!( :rabbit_use_ssl => 'true' ) }
+      it { should contain_ceilometer_config('DEFAULT/rabbit_use_ssl').with_value('true') }
+      it { should contain_ceilometer_config('DEFAULT/kombu_ssl_ca_certs').with_ensure('absent') }
+      it { should contain_ceilometer_config('DEFAULT/kombu_ssl_certfile').with_ensure('absent') }
+      it { should contain_ceilometer_config('DEFAULT/kombu_ssl_keyfile').with_ensure('absent') }
+      it { should contain_ceilometer_config('DEFAULT/kombu_ssl_version').with_value('SSLv3') }
+
+      context "with ca_certs" do
+        before { params.merge!( :kombu_ssl_ca_certs => '/path/to/ca.crt' ) }
+        it { should contain_ceilometer_config('DEFAULT/kombu_ssl_ca_certs').with_value('/path/to/ca.crt') }
+      end
+
+      context "with certfile" do
+        before { params.merge!( :kombu_ssl_certfile => '/path/to/cert.crt' ) }
+        it { should contain_ceilometer_config('DEFAULT/kombu_ssl_certfile').with_value('/path/to/cert.crt') }
+      end
+
+      context "with keyfile" do
+        before { params.merge!( :kombu_ssl_keyfile => '/path/to/cert.key' ) }
+        it { should contain_ceilometer_config('DEFAULT/kombu_ssl_keyfile').with_value('/path/to/cert.key') }
+      end
+
+      context "with version" do
+        before { params.merge!( :kombu_ssl_version => 'TLSv1' ) }
+        it { should contain_ceilometer_config('DEFAULT/kombu_ssl_version').with_value('TLSv1') }
+      end
+    end
   end
 
   shared_examples_for 'qpid support' do
