@@ -111,6 +111,18 @@ class ceilometer(
 
   include ceilometer::params
 
+  if $rabbit_use_ssl {
+    if !$kombu_ssl_ca_certs {
+      fail('The kombu_ssl_ca_certs parameter is required when rabbit_use_ssl is set to true')
+    }
+    if !$kombu_ssl_certfile {
+      fail('The kombu_ssl_certfile parameter is required when rabbit_use_ssl is set to true')
+    }
+    if !$kombu_ssl_keyfile {
+      fail('The kombu_ssl_keyfile parameter is required when rabbit_use_ssl is set to true')
+    }
+  }
+
   File {
     require => Package['ceilometer-common'],
   }
@@ -177,28 +189,11 @@ class ceilometer(
       }
 
       if $rabbit_use_ssl {
-        if $kombu_ssl_ca_certs {
-          ceilometer_config { 'DEFAULT/kombu_ssl_ca_certs': value => $kombu_ssl_ca_certs }
-        } else {
-          ceilometer_config { 'DEFAULT/kombu_ssl_ca_certs': ensure => absent}
-        }
-
-        if $kombu_ssl_certfile {
-          ceilometer_config { 'DEFAULT/kombu_ssl_certfile': value => $kombu_ssl_certfile }
-        } else {
-          ceilometer_config { 'DEFAULT/kombu_ssl_certfile': ensure => absent}
-        }
-
-        if $kombu_ssl_keyfile {
-          ceilometer_config { 'DEFAULT/kombu_ssl_keyfile': value => $kombu_ssl_keyfile }
-        } else {
-          ceilometer_config { 'DEFAULT/kombu_ssl_keyfile': ensure => absent}
-        }
-
-        if $kombu_ssl_version {
-          ceilometer_config { 'DEFAULT/kombu_ssl_version': value => $kombu_ssl_version }
-        } else {
-          ceilometer_config { 'DEFAULT/kombu_ssl_version': ensure => absent}
+        ceilometer_config {
+          'DEFAULT/kombu_ssl_ca_certs': value => $kombu_ssl_ca_certs;
+          'DEFAULT/kombu_ssl_certfile': value => $kombu_ssl_certfile;
+          'DEFAULT/kombu_ssl_keyfile':  value => $kombu_ssl_keyfile;
+          'DEFAULT/kombu_ssl_version':  value => $kombu_ssl_version;
         }
       } else {
         ceilometer_config {
@@ -208,6 +203,7 @@ class ceilometer(
           'DEFAULT/kombu_ssl_version':  ensure => absent;
         }
       }
+
   }
 
   if $rpc_backend == 'ceilometer.openstack.common.rpc.impl_qpid' {

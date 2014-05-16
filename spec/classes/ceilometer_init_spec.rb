@@ -221,33 +221,32 @@ describe 'ceilometer' do
     end
 
     context "with SSL enabled" do
-      before { params.merge!( :rabbit_use_ssl => 'true' ) }
+      before { params.merge!(
+        :rabbit_use_ssl     => 'true',
+        :kombu_ssl_ca_certs => '/path/to/ca.crt',
+        :kombu_ssl_certfile => '/path/to/cert.crt',
+        :kombu_ssl_keyfile  => '/path/to/cert.key',
+        :kombu_ssl_version  => 'TLSv1'
+      ) }
+
       it { should contain_ceilometer_config('DEFAULT/rabbit_use_ssl').with_value('true') }
-      it { should contain_ceilometer_config('DEFAULT/kombu_ssl_ca_certs').with_ensure('absent') }
-      it { should contain_ceilometer_config('DEFAULT/kombu_ssl_certfile').with_ensure('absent') }
-      it { should contain_ceilometer_config('DEFAULT/kombu_ssl_keyfile').with_ensure('absent') }
-      it { should contain_ceilometer_config('DEFAULT/kombu_ssl_version').with_value('SSLv3') }
-
-      context "with ca_certs" do
-        before { params.merge!( :kombu_ssl_ca_certs => '/path/to/ca.crt' ) }
-        it { should contain_ceilometer_config('DEFAULT/kombu_ssl_ca_certs').with_value('/path/to/ca.crt') }
-      end
-
-      context "with certfile" do
-        before { params.merge!( :kombu_ssl_certfile => '/path/to/cert.crt' ) }
-        it { should contain_ceilometer_config('DEFAULT/kombu_ssl_certfile').with_value('/path/to/cert.crt') }
-      end
-
-      context "with keyfile" do
-        before { params.merge!( :kombu_ssl_keyfile => '/path/to/cert.key' ) }
-        it { should contain_ceilometer_config('DEFAULT/kombu_ssl_keyfile').with_value('/path/to/cert.key') }
-      end
-
-      context "with version" do
-        before { params.merge!( :kombu_ssl_version => 'TLSv1' ) }
-        it { should contain_ceilometer_config('DEFAULT/kombu_ssl_version').with_value('TLSv1') }
-      end
+      it { should contain_ceilometer_config('DEFAULT/kombu_ssl_ca_certs').with_value('/path/to/ca.crt') }
+      it { should contain_ceilometer_config('DEFAULT/kombu_ssl_certfile').with_value('/path/to/cert.crt') }
+      it { should contain_ceilometer_config('DEFAULT/kombu_ssl_keyfile').with_value('/path/to/cert.key') }
+      it { should contain_ceilometer_config('DEFAULT/kombu_ssl_version').with_value('TLSv1') }
     end
+
+    context "with SSL wrongly configured" do
+      before { params.merge!(
+        :rabbit_use_ssl     => 'false',
+        :kombu_ssl_certfile => '/path/to/cert.crt',
+        :kombu_ssl_keyfile  => '/path/to/cert.key',
+        :kombu_ssl_version  => 'TLSv1'
+      ) }
+
+      it_raises 'a Puppet::Error', /The kombu_ssl_ca_certs parameter is required when rabbit_use_ssl is set to true/
+    end
+
   end
 
   shared_examples_for 'qpid support' do
