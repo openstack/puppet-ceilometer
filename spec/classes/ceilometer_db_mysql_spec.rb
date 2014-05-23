@@ -11,8 +11,8 @@ describe 'ceilometer::db::mysql' do
       :dbname       => 'ceilometer',
       :user         => 'ceilometer',
       :host         => 'localhost',
-      :charset      => 'latin1',
-      :collate      => 'latin1_swedish_ci',
+      :charset      => 'utf8',
+      :collate      => 'utf8_unicode_ci',
       :mysql_module => '0.9',
     }
   end

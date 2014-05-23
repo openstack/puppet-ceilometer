@@ -21,10 +21,10 @@
 #    Optional. Defaults to undef.
 #
 #  [*charset*]
-#    the database charset. Optional. Defaults to 'latin1'
+#    the database charset. Optional. Defaults to 'utf8'
 #
 #  [*collate*]
-#    the database collation. Optional. Defaults to 'latin1_swedish_ci'
+#    the database collation. Optional. Defaults to 'utf8_unicode_ci'
 #
 #  [*mysql_module*]
 #    (optional) Mysql module version to use. Tested versions
@@ -37,8 +37,8 @@ class ceilometer::db::mysql(
   $user          = 'ceilometer',
   $host          = 'localhost',
   $allowed_hosts = undef,
-  $charset       = 'latin1',
-  $collate       = 'latin1_swedish_ci',
+  $charset       = 'utf8',
+  $collate       = 'utf8_unicode_ci',
   $mysql_module  = '0.9',
 ) {
 
