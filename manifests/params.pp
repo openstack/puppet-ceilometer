@@ -23,11 +23,12 @@ class ceilometer::params {
       $agent_compute_service_name      = 'openstack-ceilometer-compute'
       $api_service_name                = 'openstack-ceilometer-api'
       $collector_service_name          = 'openstack-ceilometer-collector'
-      $agent_notification_service_name = 'openstack-ceilometer-agent-notification'
       $alarm_notifier_service_name     = 'openstack-ceilometer-alarm-notifier'
       $alarm_evaluator_service_name    = 'openstack-ceilometer-alarm-evaluator'
       $pymongo_package_name            = 'python-pymongo'
       $psycopg_package_name            = 'python-psycopg2'
+      $agent_notification_service_name = 'openstack-ceilometer-notification'
+
       # db packages
       if $::operatingsystem == 'Fedora' and $::operatingsystemrelease >= 18 {
         # fallback to stdlib version, not provided on fedora

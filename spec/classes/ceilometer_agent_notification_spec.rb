@@ -76,7 +76,55 @@ describe 'ceilometer::agent::notification' do
 
     let :platform_params do
       { :agent_notification_package_name => 'openstack-ceilometer-collector',
-        :agent_notification_service_name => 'openstack-ceilometer-agent-notification' }
+        :agent_notification_service_name => 'openstack-ceilometer-notification' }
+    end
+
+    it_configures 'ceilometer-agent-notification'
+  end
+
+  context 'on RHEL 7' do
+    let :facts do
+      { :osfamily => 'RedHat',
+        :operatingsystem => 'RedHat',
+        :operatingsystemrelease => 7
+      }
+    end
+
+    let :platform_params do
+      { :agent_notification_package_name => 'openstack-ceilometer-collector',
+        :agent_notification_service_name => 'openstack-ceilometer-notification' }
+    end
+
+    it_configures 'ceilometer-agent-notification'
+  end
+
+  context 'on CentOS 7' do
+    let :facts do
+      { :osfamily => 'RedHat',
+        :operatingsystem => 'CentOS',
+        :operatingsystemrelease => 7
+      }
+    end
+
+    let :platform_params do
+      { :agent_notification_package_name => 'openstack-ceilometer-collector',
+        :agent_notification_service_name => 'openstack-ceilometer-notification' }
+    end
+
+    it_configures 'ceilometer-agent-notification'
+  end
+
+  context 'on Fedora 20' do
+    let :facts do
+      { :osfamily => 'RedHat',
+        :operatingsystem => 'Fedora',
+        :operatingsystemrelease => 20
+      }
+    end
+
+    let :platform_params do
+      { :agent_notification_package_name => 'openstack-ceilometer-collector',
+        :agent_notification_service_name => 'openstack-ceilometer-notification' }
     end
 
     it_configures 'ceilometer-agent-notification'
