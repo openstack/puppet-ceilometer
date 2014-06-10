@@ -23,6 +23,7 @@ describe 'ceilometer::agent::auth' do
       should contain_ceilometer_config('service_credentials/os_region_name').with_value('RegionOne')
       should contain_ceilometer_config('service_credentials/os_username').with_value('ceilometer')
       should contain_ceilometer_config('service_credentials/os_password').with_value('password')
+      should contain_ceilometer_config('service_credentials/os_password').with_value(params[:auth_password]).with_secret(true)
       should contain_ceilometer_config('service_credentials/os_tenant_name').with_value('services')
       should contain_ceilometer_config('service_credentials/os_cacert').with(:ensure => 'absent')
     end

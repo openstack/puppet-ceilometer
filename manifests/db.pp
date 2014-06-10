@@ -65,7 +65,7 @@ class ceilometer::db (
   }
 
   ceilometer_config {
-    'database/connection': value => $database_connection;
+    'database/connection': value => $database_connection, secret => true;
   }
 
   Ceilometer_config['database/connection'] ~> Exec['ceilometer-dbsync']

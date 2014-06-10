@@ -54,6 +54,7 @@ describe 'ceilometer::api' do
       should contain_ceilometer_config('keystone_authtoken/admin_tenant_name').with_value( params[:keystone_tenant] )
       should contain_ceilometer_config('keystone_authtoken/admin_user').with_value( params[:keystone_user] )
       should contain_ceilometer_config('keystone_authtoken/admin_password').with_value( params[:keystone_password] )
+      should contain_ceilometer_config('keystone_authtoken/admin_password').with_value( params[:keystone_password] ).with_secret(true)
       should contain_ceilometer_config('keystone_authtoken/auth_admin_prefix').with_ensure('absent')
       should contain_ceilometer_config('keystone_authtoken/auth_uri').with_value( params[:keystone_protocol] + "://" + params[:keystone_host] + ":5000/" )
       should contain_ceilometer_config('api/host').with_value( params[:host] )

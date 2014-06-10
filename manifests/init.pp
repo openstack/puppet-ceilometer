@@ -183,7 +183,7 @@ class ceilometer(
 
       ceilometer_config {
         'DEFAULT/rabbit_userid'          : value => $rabbit_userid;
-        'DEFAULT/rabbit_password'        : value => $rabbit_password;
+        'DEFAULT/rabbit_password'        : value => $rabbit_password, secret => true;
         'DEFAULT/rabbit_virtual_host'    : value => $rabbit_virtual_host;
         'DEFAULT/rabbit_use_ssl'         : value => $rabbit_use_ssl;
       }
@@ -212,7 +212,7 @@ class ceilometer(
       'DEFAULT/qpid_hostname'              : value => $qpid_hostname;
       'DEFAULT/qpid_port'                  : value => $qpid_port;
       'DEFAULT/qpid_username'              : value => $qpid_username;
-      'DEFAULT/qpid_password'              : value => $qpid_password;
+      'DEFAULT/qpid_password'              : value => $qpid_password, secret => true;
       'DEFAULT/qpid_heartbeat'             : value => $qpid_heartbeat;
       'DEFAULT/qpid_protocol'              : value => $qpid_protocol;
       'DEFAULT/qpid_tcp_nodelay'           : value => $qpid_tcp_nodelay;
@@ -229,7 +229,7 @@ class ceilometer(
   # Once we got here, we can act as an honey badger on the rpc used.
   ceilometer_config {
     'DEFAULT/rpc_backend'            : value => $rpc_backend;
-    'publisher/metering_secret'      : value => $metering_secret;
+    'publisher/metering_secret'      : value => $metering_secret, secret => true;
     'DEFAULT/debug'                  : value => $debug;
     'DEFAULT/verbose'                : value => $verbose;
     'DEFAULT/notification_topics'    : value => join($notification_topics, ',');

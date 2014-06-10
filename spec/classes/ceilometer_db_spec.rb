@@ -20,6 +20,7 @@ describe 'ceilometer::db' do
         :ensure => 'present',
         :name => 'python-pymongo')
       should contain_ceilometer_config('database/connection').with_value('mongodb://localhost:1234/ceilometer')
+      should contain_ceilometer_config('database/connection').with_value( params[:database_connection] ).with_secret(true)
     end
 
     it 'runs ceilometer-dbsync' do
@@ -54,6 +55,7 @@ describe 'ceilometer::db' do
         :ensure => 'present',
         :name => 'python-pymongo')
       should contain_ceilometer_config('database/connection').with_value('mongodb://localhost:1234/ceilometer')
+      should contain_ceilometer_config('database/connection').with_value( params[:database_connection] ).with_secret(true)
     end
 
     it 'runs ceilometer-dbsync' do
@@ -121,6 +123,7 @@ describe 'ceilometer::db' do
         :ensure => 'present',
         :name => 'python-sqlite2')
       should contain_ceilometer_config('database/connection').with_value('sqlite:///var/lib/ceilometer.db')
+      should contain_ceilometer_config('database/connection').with_value( params[:database_connection] ).with_secret(true)
     end
 
     it 'runs ceilometer-dbsync' do

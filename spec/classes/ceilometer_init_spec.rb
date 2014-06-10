@@ -113,6 +113,7 @@ describe 'ceilometer' do
 
     it 'configures required metering_secret' do
       should contain_ceilometer_config('publisher/metering_secret').with_value('metering-s3cr3t')
+      should contain_ceilometer_config('publisher/metering_secret').with_value( params[:metering_secret] ).with_secret(true)
     end
 
     context 'without the required metering_secret' do
@@ -174,6 +175,7 @@ describe 'ceilometer' do
     it 'configures rabbit' do
       should contain_ceilometer_config('DEFAULT/rabbit_userid').with_value( params[:rabbit_userid] )
       should contain_ceilometer_config('DEFAULT/rabbit_password').with_value( params[:rabbit_password] )
+      should contain_ceilometer_config('DEFAULT/rabbit_password').with_value( params[:rabbit_password] ).with_secret(true)
       should contain_ceilometer_config('DEFAULT/rabbit_virtual_host').with_value( params[:rabbit_virtual_host] )
     end
 
@@ -181,6 +183,7 @@ describe 'ceilometer' do
     it { should contain_ceilometer_config('DEFAULT/rabbit_port').with_value( params[:rabbit_port] ) }
     it { should contain_ceilometer_config('DEFAULT/rabbit_hosts').with_value( "#{params[:rabbit_host]}:#{params[:rabbit_port]}" ) }
     it { should contain_ceilometer_config('DEFAULT/rabbit_ha_queues').with_value('false') }
+
   end
 
   shared_examples_for 'rabbit without HA support (without backward compatibility)' do
@@ -188,6 +191,7 @@ describe 'ceilometer' do
     it 'configures rabbit' do
       should contain_ceilometer_config('DEFAULT/rabbit_userid').with_value( params[:rabbit_userid] )
       should contain_ceilometer_config('DEFAULT/rabbit_password').with_value( params[:rabbit_password] )
+      should contain_ceilometer_config('DEFAULT/rabbit_password').with_value( params[:rabbit_password] ).with_secret(true)
       should contain_ceilometer_config('DEFAULT/rabbit_virtual_host').with_value( params[:rabbit_virtual_host] )
     end
 
@@ -195,6 +199,7 @@ describe 'ceilometer' do
     it { should contain_ceilometer_config('DEFAULT/rabbit_port').with_ensure('absent') }
     it { should contain_ceilometer_config('DEFAULT/rabbit_hosts').with_value( params[:rabbit_hosts].join(',') ) }
     it { should contain_ceilometer_config('DEFAULT/rabbit_ha_queues').with_value('false') }
+
   end
 
   shared_examples_for 'rabbit with HA support' do
@@ -202,6 +207,7 @@ describe 'ceilometer' do
     it 'configures rabbit' do
       should contain_ceilometer_config('DEFAULT/rabbit_userid').with_value( params[:rabbit_userid] )
       should contain_ceilometer_config('DEFAULT/rabbit_password').with_value( params[:rabbit_password] )
+      should contain_ceilometer_config('DEFAULT/rabbit_password').with_value( params[:rabbit_password] ).with_secret(true)
       should contain_ceilometer_config('DEFAULT/rabbit_virtual_host').with_value( params[:rabbit_virtual_host] )
     end
 
@@ -209,6 +215,7 @@ describe 'ceilometer' do
     it { should contain_ceilometer_config('DEFAULT/rabbit_port').with_ensure('absent') }
     it { should contain_ceilometer_config('DEFAULT/rabbit_hosts').with_value( params[:rabbit_hosts].join(',') ) }
     it { should contain_ceilometer_config('DEFAULT/rabbit_ha_queues').with_value('true') }
+
   end
 
   shared_examples_for 'rabbit with SSL support' do
@@ -246,7 +253,6 @@ describe 'ceilometer' do
 
       it_raises 'a Puppet::Error', /The kombu_ssl_ca_certs parameter is required when rabbit_use_ssl is set to true/
     end
-
   end
 
   shared_examples_for 'qpid support' do
@@ -260,7 +266,7 @@ describe 'ceilometer' do
       it { should contain_ceilometer_config('DEFAULT/qpid_heartbeat').with_value('60') }
       it { should contain_ceilometer_config('DEFAULT/qpid_protocol').with_value('tcp') }
       it { should contain_ceilometer_config('DEFAULT/qpid_tcp_nodelay').with_value(true) }
-      end
+    end
 
     context("with mandatory parameters set") do
       it { should contain_ceilometer_config('DEFAULT/rpc_backend').with_value('ceilometer.openstack.common.rpc.impl_qpid') }
@@ -268,6 +274,7 @@ describe 'ceilometer' do
       it { should contain_ceilometer_config('DEFAULT/qpid_port').with_value( params[:qpid_port] ) }
       it { should contain_ceilometer_config('DEFAULT/qpid_username').with_value( params[:qpid_username]) }
       it { should contain_ceilometer_config('DEFAULT/qpid_password').with_value(params[:qpid_password]) }
+      it { should contain_ceilometer_config('DEFAULT/qpid_password').with_value( params[:qpid_password] ).with_secret(true) }
     end
 
     context("failing if the rpc_backend is not present") do
