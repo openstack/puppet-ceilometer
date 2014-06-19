@@ -1,5 +1,5 @@
 name    'puppetlabs-ceilometer'
-version '4.0.0'
+version '4.1.0'
 source 'https://github.com/stackforge/puppet-ceilometer'
 author 'enovance'
 license 'Apache License, Version 2.0'

@@ -72,6 +72,14 @@ This is the ceilometer module.
 Release Notes
 -------------
 
+** 4.1.0 **
+
+* Added RabbitMQ SSL Support.
+* Fixed dependency cycle bug.
+* Fixed agent_notification_service_name.
+* Changed default mysql charset to UTF8.
+* Pinned major gems.
+
 ** 4.0.0 **
 
 * Stable Icehouse release.
