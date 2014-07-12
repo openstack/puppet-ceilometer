@@ -4,11 +4,7 @@ Puppet::Type.newtype(:ceilometer_config) do
 
   newparam(:name, :namevar => true) do
     desc 'Section/setting name to manage from ceilometer.conf'
-    validate do |value|
-      unless value =~ /\S+\/\S+/
-        fail("Invalid ceilometer_config #{value}, entries without sections are no longer supported, please add an explicit section (probably DEFAULT) to all ceilometer_config resources")
-      end
-    end
+    newvalues(/\S+\/\S+/)
   end
 
   newproperty(:value) do
@@ -43,14 +39,6 @@ Puppet::Type.newtype(:ceilometer_config) do
     newvalues(:true, :false)
 
     defaultto false
-  end
-
-  validate do
-    if self[:ensure] == :present
-      if self[:value].nil?
-        raise Puppet::Error, "Property value must be set for #{self[:name]} when ensure is present"
-      end
-    end
   end
 
 end
