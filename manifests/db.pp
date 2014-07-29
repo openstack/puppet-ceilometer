@@ -12,12 +12,12 @@
 #  [*mysql_module*]
 #    (optional) Mysql puppet module version to use. Tested versions
 #    are 0.9 and 2.2
-#    Defaults to '0.9
+#    Defaults to '2.2'
 #
 class ceilometer::db (
   $database_connection = 'mysql://ceilometer:ceilometer@localhost/ceilometer',
   $sync_db             = true,
-  $mysql_module        = '0.9',
+  $mysql_module        = '2.2',
 ) {
 
   include ceilometer::params
