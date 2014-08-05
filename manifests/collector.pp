@@ -17,6 +17,8 @@ class ceilometer::collector (
 
   if $enabled {
     $service_ensure = 'running'
+    Class['ceilometer::db'] -> Service['ceilometer-collector']
+    Exec['ceilometer-dbsync'] ~> Service['ceilometer-collector']
   } else {
     $service_ensure = 'stopped'
   }
@@ -27,8 +29,6 @@ class ceilometer::collector (
     name       => $::ceilometer::params::collector_service_name,
     enable     => $enabled,
     hasstatus  => true,
-    hasrestart => true,
-    require    => Class['ceilometer::db'],
-    subscribe  => Exec['ceilometer-dbsync']
+    hasrestart => true
   }
 }
