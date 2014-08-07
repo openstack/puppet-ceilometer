@@ -75,7 +75,7 @@ describe 'ceilometer::agent::notification' do
     end
 
     let :platform_params do
-      { :agent_notification_package_name => 'openstack-ceilometer-collector',
+      { :agent_notification_package_name => 'openstack-ceilometer-notification',
         :agent_notification_service_name => 'openstack-ceilometer-notification' }
     end
 
@@ -91,7 +91,7 @@ describe 'ceilometer::agent::notification' do
     end
 
     let :platform_params do
-      { :agent_notification_package_name => 'openstack-ceilometer-collector',
+      { :agent_notification_package_name => 'openstack-ceilometer-notification',
         :agent_notification_service_name => 'openstack-ceilometer-notification' }
     end
 
@@ -107,7 +107,7 @@ describe 'ceilometer::agent::notification' do
     end
 
     let :platform_params do
-      { :agent_notification_package_name => 'openstack-ceilometer-collector',
+      { :agent_notification_package_name => 'openstack-ceilometer-notification',
         :agent_notification_service_name => 'openstack-ceilometer-notification' }
     end
 
@@ -123,7 +123,7 @@ describe 'ceilometer::agent::notification' do
     end
 
     let :platform_params do
-      { :agent_notification_package_name => 'openstack-ceilometer-collector',
+      { :agent_notification_package_name => 'openstack-ceilometer-notification',
         :agent_notification_service_name => 'openstack-ceilometer-notification' }
     end
 
@@ -139,7 +139,7 @@ describe 'ceilometer::agent::notification' do
     end
 
     let :platform_params do
-      { :agent_notification_package_name => 'openstack-ceilometer-collector',
+      { :agent_notification_package_name => 'openstack-ceilometer-notification',
         :agent_notification_service_name => 'openstack-ceilometer-notification' }
     end
 
