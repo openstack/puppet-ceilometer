@@ -9,7 +9,8 @@ describe 'ceilometer::agent::compute' do
   end
 
   let :params do
-    { :enabled          => true }
+    { :enabled  => true,
+      :manage_service => true }
   end
 
   shared_examples_for 'ceilometer-agent-compute' do
@@ -38,16 +39,6 @@ describe 'ceilometer::agent::compute' do
       )
     end
 
-    it 'configures ceilometer-agent-compute service' do
-      should contain_service('ceilometer-agent-compute').with(
-        :ensure     => 'running',
-        :name       => platform_params[:agent_service_name],
-        :enable     => true,
-        :hasstatus  => true,
-        :hasrestart => true
-      )
-    end
-
     it 'ensures nova-common is installed before the package ceilometer-common' do
         should contain_package('nova-common').with(
             :before => /Package\[ceilometer-common\]/
@@ -65,6 +56,43 @@ describe 'ceilometer::agent::compute' do
         :path   => '/etc/nova/nova.conf',
         :notify => 'Service[nova-compute]'
       )
+    end
+
+    [{:enabled => true}, {:enabled => false}].each do |param_hash|
+      context "when service should be #{param_hash[:enabled] ? 'enabled' : 'disabled'}" do
+        before do
+          params.merge!(param_hash)
+        end
+
+        it 'configures ceilometer-agent-compute service' do
+
+          should contain_service('ceilometer-agent-compute').with(
+            :ensure     => (params[:manage_service] && params[:enabled]) ? 'running' : 'stopped',
+            :name       => platform_params[:agent_service_name],
+            :enable     => params[:enabled],
+            :hasstatus  => true,
+            :hasrestart => true
+          )
+        end
+      end
+    end
+
+    context 'with disabled service managing' do
+      before do
+        params.merge!({
+          :manage_service => false,
+          :enabled        => false })
+      end
+
+      it 'configures ceilometer-agent-compute service' do
+        should contain_service('ceilometer-agent-compute').with(
+          :ensure     => nil,
+          :name       => platform_params[:agent_service_name],
+          :enable     => false,
+          :hasstatus  => true,
+          :hasrestart => true
+        )
+      end
     end
 
   end

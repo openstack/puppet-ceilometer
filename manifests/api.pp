@@ -2,41 +2,54 @@
 #
 # == Parameters
 #  [*enabled*]
-#    should the service be enabled. Optional. Defaults to true
+#    (optional) Should the service be enabled.
+#    Defaults to true
+#
+#  [*manage_service*]
+#    (optional) Whether the service should be managed by Puppet.
+#    Defaults to true.
 #
 #  [*keystone_host*]
-#    keystone's admin endpoint IP/Host. Optional. Defaults to 127.0.0.1
+#    (optional) Keystone's admin endpoint IP/Host.
+#    Defaults to '127.0.0.1'
 #
 #  [*keystone_port*]
-#    keystone's admin endpoint port. Optional. Defaults to 35357
+#    (optional) Keystone's admin endpoint port.
+#    Defaults to 35357
 #
 #  [*keystone_auth_admin_prefix*]
-#    'path' to the keystone admin endpoint. Optional. Defaults to false (empty)
+#    (optional) 'path' to the keystone admin endpoint.
 #    Define to a path starting with a '/' and without trailing '/'.
 #    Eg.: '/keystone/admin' to match keystone::wsgi::apache default.
+#    Defaults to false (empty)
 #
-#  [*keystone_protocol*] http/https
-#    Optional. Defaults to https
+#  [*keystone_protocol*]
+#    (optional) 'http' or 'https'
+#    Defaults to 'https'.
 #
-#  [*keytone_user*] user to authenticate with
-#    Optional. Defaults to ceilometer
+#  [*keytone_user*]
+#    (optional) User to authenticate with.
+#    Defaults to 'ceilometer'.
 #
-#  [*keystone_tenant*] tenant to authenticate with
-#    Optional. Defaults to services
+#  [*keystone_tenant*]
+#    (optional) Tenant to authenticate with.
+#    Defaults to 'services'.
 #
-#  [*keystone_password*] password to authenticate with
+#  [*keystone_password*]
+#    Password to authenticate with.
 #    Mandatory.
 #
-# [*host*]
-#   (optional) The ceilometer api bind address
-#   Defaults to 0.0.0.0
+#  [*host*]
+#    (optional) The ceilometer api bind address.
+#    Defaults to 0.0.0.0
 #
-# [*port*]
-#   (optional) The ceilometer api port
-#   Defaults to 8777
+#  [*port*]
+#    (optional) The ceilometer api port.
+#    Defaults to 8777
 #
 
 class ceilometer::api (
+  $manage_service             = true,
   $enabled                    = true,
   $keystone_host              = '127.0.0.1',
   $keystone_port              = '35357',
@@ -63,10 +76,12 @@ class ceilometer::api (
     name   => $::ceilometer::params::api_package_name,
   }
 
-  if $enabled {
-    $service_ensure = 'running'
-  } else {
-    $service_ensure = 'stopped'
+  if $manage_service {
+    if $enabled {
+      $service_ensure = 'running'
+    } else {
+      $service_ensure = 'stopped'
+    }
   }
 
   Package['ceilometer-common'] -> Service['ceilometer-api']

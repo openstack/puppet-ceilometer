@@ -2,18 +2,31 @@
 #
 # == Params
 #  [*enabled*]
-#    should the service be enabled
+#    (optional) Should the service be enabled.
+#    Defaults to true.
+#
+#  [*manage_service*]
+#    (optional) Whether the service should be managed by Puppet.
+#    Defaults to true.
+#
 #  [*notifier_rpc_topic*]
-#    define on which topic the notifier will have
-#    access
+#    (optional) Define on which topic the notifier will have access.
+#    Defaults to undef.
+#
 #  [*rest_notifier_certificate_key*]
-#    define the certificate key for the rest service
+#    (optional) Define the certificate key for the rest service.
+#    Defaults to undef.
+#
 #  [*rest_notifier_certificate_file*]
-#    define the certificate file for the rest service
+#    (optional) Define the certificate file for the rest service.
+#    Defaults to undef.
+#
 #  [*rest_notifier_ssl_verify*]
-#    should the ssl verify parameter be enabled
+#    (optional) Should the ssl verify parameter be enabled.
+#    Defaults to true.
 #
 class ceilometer::alarm::notifier (
+  $manage_service                 = true,
   $enabled                        = true,
   $notifier_rpc_topic             = undef,
   $rest_notifier_certificate_key  = undef,
@@ -31,10 +44,12 @@ class ceilometer::alarm::notifier (
   Package[$::ceilometer::params::alarm_package_name] -> Package<| title == 'ceilometer-alarm' |>
   ensure_packages($::ceilometer::params::alarm_package_name)
 
-  if $enabled {
-    $service_ensure = 'running'
-  } else {
-    $service_ensure = 'stopped'
+  if $manage_service {
+    if $enabled {
+      $service_ensure = 'running'
+    } else {
+      $service_ensure = 'stopped'
+    }
   }
 
   Package['ceilometer-common'] -> Service['ceilometer-alarm-notifier']
