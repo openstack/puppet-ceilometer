@@ -27,7 +27,9 @@ describe 'ceilometer::agent::notification' do
   end
 
   let :params do
-    { :ack_on_event_error => true,
+    { :manage_service     => true,
+      :enabled            => true,
+      :ack_on_event_error => true,
       :store_events       => false }
   end
 
@@ -39,19 +41,45 @@ describe 'ceilometer::agent::notification' do
       should contain_package(platform_params[:agent_notification_package_name])
     end
 
-    it 'configures ceilometer agent notification service' do
-      should contain_service('ceilometer-agent-notification').with(
-        :ensure     => 'running',
-        :name       => platform_params[:agent_notification_service_name],
-        :enable     => true,
-        :hasstatus  => true,
-        :hasrestart => true
-      )
-    end
-
     it 'configures notifications parameters in ceilometer.conf' do
       should contain_ceilometer_config('notification/ack_on_event_error').with_value( params[:ack_on_event_error] )
       should contain_ceilometer_config('notification/store_events').with_value( params[:store_events] )
+    end
+
+    [{:enabled => true}, {:enabled => false}].each do |param_hash|
+      context "when service should be #{param_hash[:enabled] ? 'enabled' : 'disabled'}" do
+        before do
+          params.merge!(param_hash)
+        end
+
+        it 'configures ceilometer agent notification service' do
+          should contain_service('ceilometer-agent-notification').with(
+            :ensure     => (params[:manage_service] && params[:enabled]) ? 'running' : 'stopped',
+            :name       => platform_params[:agent_notification_service_name],
+            :enable     => params[:enabled],
+            :hasstatus  => true,
+            :hasrestart => true
+          )
+        end
+      end
+    end
+
+    context 'with disabled service managing' do
+      before do
+        params.merge!({
+          :manage_service => false,
+          :enabled        => false })
+      end
+
+      it 'configures ceilometer-agent-notification service' do
+        should contain_service('ceilometer-agent-notification').with(
+          :ensure     => nil,
+          :name       => platform_params[:agent_notification_service_name],
+          :enable     => false,
+          :hasstatus  => true,
+          :hasrestart => true
+        )
+      end
     end
 
   end

@@ -8,6 +8,7 @@ describe 'ceilometer::api' do
 
   let :params do
     { :enabled           => true,
+      :manage_service    => true,
       :keystone_host     => '127.0.0.1',
       :keystone_port     => '35357',
       :keystone_protocol => 'http',
@@ -32,18 +33,6 @@ describe 'ceilometer::api' do
       should contain_package('ceilometer-api').with(
         :ensure => 'installed',
         :name   => platform_params[:api_package_name]
-      )
-    end
-
-    it 'configures ceilometer-api service' do
-      should contain_service('ceilometer-api').with(
-        :ensure     => 'running',
-        :name       => platform_params[:api_service_name],
-        :enable     => true,
-        :hasstatus  => true,
-        :hasrestart => true,
-        :require    => 'Class[Ceilometer::Db]',
-        :subscribe  => 'Exec[ceilometer-dbsync]'
       )
     end
 
@@ -81,6 +70,44 @@ describe 'ceilometer::api' do
           it { expect { should contain_ceilomete_config('keystone_authtoken/auth_admin_prefix') }.to \
             raise_error(Puppet::Error, /validate_re\(\): "#{auth_admin_prefix}" does not match/) }
         end
+      end
+    end
+
+    [{:enabled => true}, {:enabled => false}].each do |param_hash|
+      context "when service should be #{param_hash[:enabled] ? 'enabled' : 'disabled'}" do
+        before do
+          params.merge!(param_hash)
+        end
+
+        it 'configures ceilometer-api service' do
+          should contain_service('ceilometer-api').with(
+            :ensure     => (params[:manage_service] && params[:enabled]) ? 'running' : 'stopped',
+            :name       => platform_params[:api_service_name],
+            :enable     => params[:enabled],
+            :hasstatus  => true,
+            :hasrestart => true,
+            :require    => 'Class[Ceilometer::Db]',
+            :subscribe  => 'Exec[ceilometer-dbsync]'
+          )
+        end
+      end
+    end
+
+    context 'with disabled service managing' do
+      before do
+        params.merge!({
+          :manage_service => false,
+          :enabled        => false })
+      end
+
+      it 'configures ceilometer-api service' do
+        should contain_service('ceilometer-api').with(
+          :ensure     => nil,
+          :name       => platform_params[:api_service_name],
+          :enable     => false,
+          :hasstatus  => true,
+          :hasrestart => true
+        )
       end
     end
   end

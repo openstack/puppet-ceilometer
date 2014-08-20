@@ -3,11 +3,16 @@
 #
 # == Parameters
 #  [*enabled*]
-#    should the service be started or not
-#    Optional. Defaults to true
+#    (optional) Should the service be enabled.
+#    Defaults to true.
+#
+#  [*manage_service*]
+#    (optional)  Whether the service should be managed by Puppet.
+#    Defaults to true.
 #
 class ceilometer::agent::compute (
-  $enabled          = true,
+  $manage_service = true,
+  $enabled        = true,
 ) inherits ceilometer {
 
   include ceilometer::params
@@ -30,10 +35,12 @@ class ceilometer::agent::compute (
     }
   }
 
-  if $enabled {
-    $service_ensure = 'running'
-  } else {
-    $service_ensure = 'stopped'
+  if $manage_service {
+    if $enabled {
+      $service_ensure = 'running'
+    } else {
+      $service_ensure = 'stopped'
+    }
   }
 
   Package['ceilometer-common'] -> Service['ceilometer-agent-compute']
