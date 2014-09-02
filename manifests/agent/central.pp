@@ -9,9 +9,15 @@
 #    (optional)  Whether the service should be managed by Puppet.
 #    Defaults to true.
 #
+#  [*package_ensure*]
+#    (optional) ensure state for package.
+#    Defaults to 'present'
+#
+
 class ceilometer::agent::central (
-  $manage_service = true,
-  $enabled        = true,
+  $manage_service   = true,
+  $enabled          = true,
+  $package_ensure   = 'present',
 ) {
 
   include ceilometer::params
@@ -20,7 +26,7 @@ class ceilometer::agent::central (
 
   Package['ceilometer-agent-central'] -> Service['ceilometer-agent-central']
   package { 'ceilometer-agent-central':
-    ensure => installed,
+    ensure => $package_ensure,
     name   => $::ceilometer::params::agent_central_package_name,
   }
 

@@ -1,4 +1,4 @@
-# The ceilometer::agent::compute class installs the ceilometer compute agent
+#The ceilometer::agent::compute class installs the ceilometer compute agent
 # Include this class on all nova compute nodes
 #
 # == Parameters
@@ -10,9 +10,14 @@
 #    (optional)  Whether the service should be managed by Puppet.
 #    Defaults to true.
 #
+# [*package_ensure*]
+#   (optional) ensure state for package.
+#   Defaults to 'present'
+#
 class ceilometer::agent::compute (
-  $manage_service = true,
-  $enabled        = true,
+  $manage_service   = true,
+  $enabled          = true,
+  $package_ensure   = 'present',
 ) inherits ceilometer {
 
   include ceilometer::params
@@ -21,7 +26,7 @@ class ceilometer::agent::compute (
 
   Package['ceilometer-agent-compute'] -> Service['ceilometer-agent-compute']
   package { 'ceilometer-agent-compute':
-    ensure => installed,
+    ensure => $package_ensure,
     name   => $::ceilometer::params::agent_compute_package_name,
   }
 

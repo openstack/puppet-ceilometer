@@ -16,7 +16,9 @@ describe 'ceilometer::collector' do
       it { should contain_class('ceilometer::params') }
 
       it 'installs ceilometer-collector package' do
-        should contain_package(platform_params[:collector_package_name])
+        should contain_package(platform_params[:collector_package_name]).with(
+          :ensure => 'present'
+        )
       end
 
       it 'configures ceilometer-collector service' do

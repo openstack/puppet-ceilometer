@@ -16,7 +16,8 @@ describe 'ceilometer::api' do
       :keystone_password => 'ceilometer-passw0rd',
       :keystone_tenant   => 'services',
       :host              => '0.0.0.0',
-      :port              => '8777'
+      :port              => '8777',
+      :package_ensure    => 'latest',
     }
   end
 
@@ -31,7 +32,7 @@ describe 'ceilometer::api' do
 
     it 'installs ceilometer-api package' do
       should contain_package('ceilometer-api').with(
-        :ensure => 'installed',
+        :ensure => 'latest',
         :name   => platform_params[:api_package_name]
       )
     end

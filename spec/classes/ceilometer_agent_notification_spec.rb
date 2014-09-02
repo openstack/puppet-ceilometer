@@ -38,7 +38,9 @@ describe 'ceilometer::agent::notification' do
     it { should contain_class('ceilometer::params') }
 
     it 'installs ceilometer agent notification package' do
-      should contain_package(platform_params[:agent_notification_package_name])
+      should contain_package(platform_params[:agent_notification_package_name]).with(
+        :ensure => 'present'
+      )
     end
 
     it 'configures notifications parameters in ceilometer.conf' do

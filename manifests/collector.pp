@@ -9,9 +9,14 @@
 #    (optional)  Whether the service should be managed by Puppet.
 #    Defaults to true.
 #
+#  [*package_ensure*]
+#    (optional) ensure state for package.
+#    Defaults to 'present'
+#
 class ceilometer::collector (
   $manage_service = true,
   $enabled        = true,
+  $package_ensure = 'present',
 ) {
 
   include ceilometer::params
@@ -19,7 +24,9 @@ class ceilometer::collector (
   Ceilometer_config<||> ~> Service['ceilometer-collector']
 
   Package[$::ceilometer::params::collector_package_name] -> Service['ceilometer-collector']
-  ensure_packages([$::ceilometer::params::collector_package_name])
+  ensure_resource( 'package', [$::ceilometer::params::collector_package_name],
+    { ensure => $package_ensure }
+  )
 
   if $manage_service {
     if $enabled {

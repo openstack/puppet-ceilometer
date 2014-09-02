@@ -39,20 +39,29 @@
 #   (optional) Save event details.
 #   Defaults to false
 #
+#  [*package_ensure*]
+#    (optional) ensure state for package.
+#    Defaults to 'present'
+#
 
 class ceilometer::agent::notification (
   $manage_service     = true,
   $enabled            = true,
   $ack_on_event_error = true,
-  $store_events       = false
+  $store_events       = false,
+  $package_ensure     = 'present',
 ) {
 
   include ceilometer::params
 
   Ceilometer_config<||> ~> Service['ceilometer-agent-notification']
 
-  Package[$::ceilometer::params::agent_notification_package_name] -> Service['ceilometer-agent-notification']
-  ensure_packages([$::ceilometer::params::agent_notification_package_name])
+  Package[$::ceilometer::params::agent_notification_package_name] ->
+  Service['ceilometer-agent-notification']
+
+  ensure_resource('package', [$::ceilometer::params::agent_notification_package_name],
+    { ensure => $package_ensure }
+  )
 
   if $manage_service {
     if $enabled {

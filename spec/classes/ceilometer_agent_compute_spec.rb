@@ -9,8 +9,9 @@ describe 'ceilometer::agent::compute' do
   end
 
   let :params do
-    { :enabled  => true,
-      :manage_service => true }
+    { :enabled        => true,
+      :manage_service => true,
+      :package_ensure => 'installed' }
   end
 
   shared_examples_for 'ceilometer-agent-compute' do

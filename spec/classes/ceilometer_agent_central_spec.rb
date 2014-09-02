@@ -8,7 +8,8 @@ describe 'ceilometer::agent::central' do
 
   let :params do
     { :enabled        => true,
-      :manage_service => true }
+      :manage_service => true,
+      :package_ensure => 'latest' }
   end
 
   shared_examples_for 'ceilometer-agent-central' do
@@ -17,7 +18,7 @@ describe 'ceilometer::agent::central' do
 
     it 'installs ceilometer-agent-central package' do
       should contain_package('ceilometer-agent-central').with(
-        :ensure => 'installed',
+        :ensure => 'latest',
         :name   => platform_params[:agent_package_name],
         :before => 'Service[ceilometer-agent-central]'
       )
