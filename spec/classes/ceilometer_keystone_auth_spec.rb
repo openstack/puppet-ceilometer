@@ -144,9 +144,27 @@ describe 'ceilometer::keystone::auth' do
       end
     end
 
+    context 'when overriding service name' do
+      before do
+        params.merge!({
+          :service_name => 'ceilometer_service'
+        })
+      end
+      it 'configures correct user name' do
+        should contain_keystone_user('ceilometer')
+      end
+      it 'configures correct user role' do
+        should contain_keystone_user_role('ceilometer@services')
+      end
+      it 'configures correct service name' do
+        should contain_keystone_service('ceilometer_service')
+      end
+      it 'configures correct endpoint name' do
+        should contain_keystone_endpoint('RegionOne/ceilometer_service')
+      end
+    end
 
   end
-
 
   context 'on Debian platforms' do
     let :facts do
@@ -163,4 +181,5 @@ describe 'ceilometer::keystone::auth' do
 
     it_configures 'ceilometer keystone auth'
   end
+
 end

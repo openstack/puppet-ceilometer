@@ -16,6 +16,9 @@
 # [*configure_endpoint*]
 #   Should Ceilometer endpoint be configured? Optional. Defaults to 'true'.
 #
+# [*service_name*]
+#   Name of the service. Optional. Defaults to value of auth_name.
+#
 # [*service_type*]
 #    Type of service. Optional. Defaults to 'metering'.
 #
@@ -71,6 +74,7 @@ class ceilometer::keystone::auth (
   $password           = false,
   $email              = 'ceilometer@localhost',
   $auth_name          = 'ceilometer',
+  $service_name       = undef,
   $service_type       = 'metering',
   $public_address     = '127.0.0.1',
   $admin_address      = '127.0.0.1',
@@ -107,6 +111,12 @@ class ceilometer::keystone::auth (
     $internal_url_real = "${internal_protocol}://${internal_address}:${port}"
   }
 
+  if $service_name {
+    $real_service_name = $service_name
+  } else {
+    $real_service_name = $auth_name
+  }
+
   Keystone_user_role["${auth_name}@${tenant}"] ~>
     Service <| name == 'ceilometer-api' |>
 
@@ -126,13 +136,13 @@ class ceilometer::keystone::auth (
     roles   => ['admin', 'ResellerAdmin'],
     require => Keystone_role['ResellerAdmin'],
   }
-  keystone_service { $auth_name:
+  keystone_service { $real_service_name:
     ensure      => present,
     type        => $service_type,
     description => 'Openstack Metering Service',
   }
   if $configure_endpoint {
-    keystone_endpoint { "${region}/${auth_name}":
+    keystone_endpoint { "${region}/${real_service_name}":
       ensure       => present,
       public_url   => $public_url_real,
       admin_url    => $admin_url_real,
