@@ -220,7 +220,7 @@ describe 'ceilometer' do
       it { should contain_ceilometer_config('DEFAULT/kombu_ssl_version').with_ensure('absent') }
     end
 
-    context "with SSL enabled" do
+    context "with SSL enabled with kombu" do
       before { params.merge!(
         :rabbit_use_ssl     => 'true',
         :kombu_ssl_ca_certs => '/path/to/ca.crt',
@@ -236,15 +236,33 @@ describe 'ceilometer' do
       it { should contain_ceilometer_config('DEFAULT/kombu_ssl_version').with_value('TLSv1') }
     end
 
-    context "with SSL wrongly configured" do
+    context "with SSL enabled without kombu" do
       before { params.merge!(
-        :rabbit_use_ssl     => 'false',
-        :kombu_ssl_certfile => '/path/to/cert.crt',
-        :kombu_ssl_keyfile  => '/path/to/cert.key',
-        :kombu_ssl_version  => 'TLSv1'
+        :rabbit_use_ssl     => 'true'
       ) }
 
-      it_raises 'a Puppet::Error', /The kombu_ssl_ca_certs parameter is required when rabbit_use_ssl is set to true/
+      it { should contain_ceilometer_config('DEFAULT/rabbit_use_ssl').with_value('true') }
+      it { should contain_ceilometer_config('DEFAULT/kombu_ssl_ca_certs').with_ensure('absent') }
+      it { should contain_ceilometer_config('DEFAULT/kombu_ssl_certfile').with_ensure('absent') }
+      it { should contain_ceilometer_config('DEFAULT/kombu_ssl_keyfile').with_ensure('absent') }
+      it { should contain_ceilometer_config('DEFAULT/kombu_ssl_version').with_value('SSLv3') }
+    end
+
+    context "with SSL wrongly configured" do
+      context 'with kombu_ssl_ca_certs parameter' do
+        before { params.merge!(:kombu_ssl_ca_certs => '/path/to/ca.crt') }
+        it_raises 'a Puppet::Error', /The kombu_ssl_ca_certs parameter requires rabbit_use_ssl to be set to true/
+      end
+
+      context 'with kombu_ssl_certfile parameter' do
+        before { params.merge!(:kombu_ssl_certfile => '/path/to/ssl/cert/file') }
+        it_raises 'a Puppet::Error', /The kombu_ssl_certfile parameter requires rabbit_use_ssl to be set to true/
+      end
+
+      context 'with kombu_ssl_keyfile parameter' do
+        before { params.merge!(:kombu_ssl_keyfile => '/path/to/ssl/keyfile') }
+        it_raises 'a Puppet::Error', /The kombu_ssl_keyfile parameter requires rabbit_use_ssl to be set to true/
+      end
     end
 
   end
