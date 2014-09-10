@@ -16,6 +16,12 @@
 # [*configure_endpoint*]
 #   Should Ceilometer endpoint be configured? Optional. Defaults to 'true'.
 #
+# [*configure_user*]
+#   Should Ceilometer service user be configured? Optional. Defaults to 'true'.
+#
+# [*configure_user_role*]
+#   Should roles be configured on Ceilometer service user? Optional. Defaults to 'true'.
+#
 # [*service_name*]
 #   Name of the service. Optional. Defaults to value of auth_name.
 #
@@ -71,24 +77,26 @@
 #    Setting this variable overrides other $internal_* parameters.
 #
 class ceilometer::keystone::auth (
-  $password           = false,
-  $email              = 'ceilometer@localhost',
-  $auth_name          = 'ceilometer',
-  $service_name       = undef,
-  $service_type       = 'metering',
-  $public_address     = '127.0.0.1',
-  $admin_address      = '127.0.0.1',
-  $internal_address   = '127.0.0.1',
-  $port               = '8777',
-  $region             = 'RegionOne',
-  $tenant             = 'services',
-  $public_protocol    = 'http',
-  $admin_protocol     = 'http',
-  $internal_protocol  = 'http',
-  $configure_endpoint = true,
-  $public_url         = undef,
-  $admin_url          = undef,
-  $internal_url       = undef,
+  $password             = false,
+  $email                = 'ceilometer@localhost',
+  $auth_name            = 'ceilometer',
+  $configure_user       = true,
+  $configure_user_role  = true,
+  $service_name         = undef,
+  $service_type         = 'metering',
+  $public_address       = '127.0.0.1',
+  $admin_address        = '127.0.0.1',
+  $internal_address     = '127.0.0.1',
+  $port                 = '8777',
+  $region               = 'RegionOne',
+  $tenant               = 'services',
+  $public_protocol      = 'http',
+  $admin_protocol       = 'http',
+  $internal_protocol    = 'http',
+  $configure_endpoint   = true,
+  $public_url           = undef,
+  $admin_url            = undef,
+  $internal_url         = undef,
 ) {
 
   validate_string($password)
@@ -117,25 +125,31 @@ class ceilometer::keystone::auth (
     $real_service_name = $auth_name
   }
 
-  Keystone_user_role["${auth_name}@${tenant}"] ~>
-    Service <| name == 'ceilometer-api' |>
-
-  keystone_user { $auth_name:
-    ensure   => present,
-    password => $password,
-    email    => $email,
-    tenant   => $tenant,
-  }
-  if !defined(Keystone_role['ResellerAdmin']) {
-    keystone_role { 'ResellerAdmin':
-      ensure => present,
+  if $configure_user {
+    keystone_user { $auth_name:
+      ensure   => present,
+      password => $password,
+      email    => $email,
+      tenant   => $tenant,
     }
   }
-  keystone_user_role { "${auth_name}@${tenant}":
-    ensure  => present,
-    roles   => ['admin', 'ResellerAdmin'],
-    require => Keystone_role['ResellerAdmin'],
+
+  if $configure_user_role {
+    Keystone_user_role["${auth_name}@${tenant}"] ~>
+      Service <| name == 'ceilometer-api' |>
+
+    if !defined(Keystone_role['ResellerAdmin']) {
+      keystone_role { 'ResellerAdmin':
+        ensure => present,
+      }
+    }
+    keystone_user_role { "${auth_name}@${tenant}":
+      ensure  => present,
+      roles   => ['admin', 'ResellerAdmin'],
+      require => Keystone_role['ResellerAdmin'],
+    }
   }
+
   keystone_service { $real_service_name:
     ensure      => present,
     type        => $service_type,

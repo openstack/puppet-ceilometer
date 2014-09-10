@@ -164,6 +164,39 @@ describe 'ceilometer::keystone::auth' do
       end
     end
 
+    context 'when disabling user configuration' do
+      before do
+        params.merge!( :configure_user => false )
+      end
+
+      it { should_not contain_keystone_user('ceilometer') }
+      it { should contain_keystone_user_role('ceilometer@services') }
+
+      it { should contain_keystone_service('ceilometer').with(
+        :ensure => 'present',
+        :type        => 'metering',
+        :description => 'Openstack Metering Service'
+      )}
+    end
+
+    context 'when disabling user and role configuration' do
+      before do
+        params.merge!(
+          :configure_user       => false,
+          :configure_user_role  => false
+        )
+      end
+
+      it { should_not contain_keystone_user('ceilometer') }
+      it { should_not contain_keystone_user_role('ceilometer@services') }
+
+      it { should contain_keystone_service('ceilometer').with(
+        :ensure => 'present',
+        :type        => 'metering',
+        :description => 'Openstack Metering Service'
+      )}
+    end
+
   end
 
   context 'on Debian platforms' do
