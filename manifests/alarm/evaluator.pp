@@ -22,7 +22,7 @@ class ceilometer::alarm::evaluator (
 
   include ceilometer::params
 
-  validate_re($evaluation_interval,'^(\d+)$')
+  validate_re("${evaluation_interval}",'^(\d+)$')
 
   Ceilometer_config<||> ~> Service['ceilometer-alarm-evaluator']
 
