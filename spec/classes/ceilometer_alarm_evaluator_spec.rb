@@ -12,6 +12,7 @@ describe 'ceilometer::alarm::evaluator' do
       :partition_rpc_topic   => 'alarm_partition_coordination',
       :record_history        => true,
       :enabled               => true,
+      :manage_service        => true,
     }
   end
 
@@ -31,17 +32,6 @@ describe 'ceilometer::alarm::evaluator' do
         :before => /Service\[ceilometer-alarm-evaluator\]/
       )
     end
-
-    it 'configures ceilometer-alarm-evaluator service' do
-      should contain_service('ceilometer-alarm-evaluator').with(
-        :ensure     => 'running',
-        :name       => platform_params[:alarm_evaluator_service_name],
-        :enable     => true,
-        :hasstatus  => true,
-        :hasrestart => true
-      )
-    end
-
 
     it 'configures alarm evaluator' do
       should contain_ceilometer_config('alarm/evaluation_interval').with_value( params[:evaluation_interval] )
@@ -63,14 +53,50 @@ describe 'ceilometer::alarm::evaluator' do
       it { should contain_ceilometer_config('alarm/partition_rpc_topic').with_value(params[:partition_rpc_topic])  }
     end
 
-      context 'when override the evaluation interval with a non numeric value' do
+    context 'when override the evaluation interval with a non numeric value' do
+      before do
+        params.merge!(:evaluation_interval => 'NaN')
+      end
+
+      it { expect { should contain_ceilometer_config('alarm/evaluation_interval') }.to\
+        raise_error(Puppet::Error, /validate_re\(\): .* does not match/) }
+    end
+
+    [{:enabled => true}, {:enabled => false}].each do |param_hash|
+      context "when service should be #{param_hash[:enabled] ? 'enabled' : 'disabled'}" do
         before do
-          params.merge!(:evaluation_interval => 'NaN')
+          params.merge!(param_hash)
         end
 
-        it { expect { should contain_ceilometer_config('alarm/evaluation_interval') }.to\
-          raise_error(Puppet::Error, /validate_re\(\): .* does not match/) }
+        it 'configures ceilometer-alarm-evaluator service' do
+          should contain_service('ceilometer-alarm-evaluator').with(
+            :ensure     => (params[:manage_service] && params[:enabled]) ? 'running' : 'stopped',
+            :name       => platform_params[:alarm_evaluator_service_name],
+            :enable     => params[:enabled],
+            :hasstatus  => true,
+            :hasrestart => true
+          )
+        end
       end
+    end
+
+    context 'with disabled service managing' do
+      before do
+        params.merge!({
+          :manage_service => false,
+          :enabled        => false })
+      end
+
+      it 'configures ceilometer-alarm-evaluator service' do
+        should contain_service('ceilometer-alarm-evaluator').with(
+          :ensure     => nil,
+          :name       => platform_params[:alarm_evaluator_service_name],
+          :enable     => false,
+          :hasstatus  => true,
+          :hasrestart => true
+        )
+      end
+    end
   end
 
   context 'on Debian platforms' do

@@ -2,18 +2,32 @@
 #
 # == Params
 #  [*enabled*]
-#    should the service be enabled
+#    (optional) Should the service be enabled.
+#    Defaults to true.
+#
+#  [*manage_service*]
+#    (optional) Whether the service should be managed by Puppet.
+#    Defaults to true.
+#
 #  [*evaluation_interval*]
-#    define the time interval for the alarm evaluator
+#    (optional) Define the time interval for the alarm evaluator
+#    Defaults to 60.
+#
 #  [*evaluation_service*]
-#    define which service use for the evaluator
+#    (optional) Define which service use for the evaluator
+#    Defaults to 'ceilometer.alarm.service.SingletonAlarmService'.
+#
 #  [*partition_rpc_topic*]
-#    define which topic the alarm evaluator should access
+#    (optional) Define which topic the alarm evaluator should access
+#    Defaults to 'alarm_partition_coordination'.
+#
 #  [*record_history*]
-#    Record alarm change events
+#    (optional) Record alarm change events
+#    Defaults to true.
 #
 class ceilometer::alarm::evaluator (
-  $enabled = true,
+  $manage_service      = true,
+  $enabled             = true,
   $evaluation_interval = 60,
   $evaluation_service  = 'ceilometer.alarm.service.SingletonAlarmService',
   $partition_rpc_topic = 'alarm_partition_coordination',
@@ -30,10 +44,12 @@ class ceilometer::alarm::evaluator (
   Package[$::ceilometer::params::alarm_package_name] -> Package<| title == 'ceilometer-alarm' |>
   ensure_packages($::ceilometer::params::alarm_package_name)
 
-  if $enabled {
-    $service_ensure = 'running'
-  } else {
-    $service_ensure = 'stopped'
+  if $manage_service {
+    if $enabled {
+      $service_ensure = 'running'
+    } else {
+      $service_ensure = 'stopped'
+    }
   }
 
   Package['ceilometer-common'] -> Service['ceilometer-alarm-evaluator']

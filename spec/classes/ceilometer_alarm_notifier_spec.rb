@@ -13,6 +13,7 @@ describe 'ceilometer::alarm::notifier' do
       #:rest_notifier_certificate_file  => 'UNSET',
       #:rest_notifier_ssl_verify        => true,
       :enabled                         => true,
+      :manage_service                  => true,
     }
   end
 
@@ -33,17 +34,6 @@ describe 'ceilometer::alarm::notifier' do
       )
     end
 
-    it 'configures ceilometer-alarm-notifier service' do
-      should contain_service('ceilometer-alarm-notifier').with(
-        :ensure     => 'running',
-        :name       => platform_params[:alarm_notifier_service_name],
-        :enable     => true,
-        :hasstatus  => true,
-        :hasrestart => true
-      )
-    end
-
-
     it 'configures alarm notifier' do
       should_not contain_ceilometer_config('alarm/notifier_rpc_topic')
       should_not contain_ceilometer_config('alarm/rest_notifier_certificate_key')
@@ -62,6 +52,42 @@ describe 'ceilometer::alarm::notifier' do
       it { should contain_ceilometer_config('alarm/rest_notifier_certificate_key').with_value(params[:rest_notifier_certificate_key]) }
       it { should contain_ceilometer_config('alarm/rest_notifier_certificate_file').with_value(params[:rest_notifier_certificate_file]) }
       it { should contain_ceilometer_config('alarm/rest_notifier_ssl_verify').with_value(params[:rest_notifier_ssl_verify])  }
+    end
+
+    [{:enabled => true}, {:enabled => false}].each do |param_hash|
+      context "when service should be #{param_hash[:enabled] ? 'enabled' : 'disabled'}" do
+        before do
+          params.merge!(param_hash)
+        end
+
+        it 'configures ceilometer-alarm-notifier service' do
+          should contain_service('ceilometer-alarm-notifier').with(
+            :ensure     => (params[:manage_service] && params[:enabled]) ? 'running' : 'stopped',
+            :name       => platform_params[:alarm_notifier_service_name],
+            :enable     => params[:enabled],
+            :hasstatus  => true,
+            :hasrestart => true
+          )
+        end
+      end
+    end
+
+    context 'with disabled service managing' do
+      before do
+        params.merge!({
+          :manage_service => false,
+          :enabled        => false })
+      end
+
+      it 'configures ceilometer-alarm-notifier service' do
+        should contain_service('ceilometer-alarm-notifier').with(
+          :ensure     => nil,
+          :name       => platform_params[:alarm_notifier_service_name],
+          :enable     => false,
+          :hasstatus  => true,
+          :hasrestart => true
+        )
+      end
     end
 
   end
