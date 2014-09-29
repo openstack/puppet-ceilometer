@@ -22,7 +22,7 @@ define ceilometer::db::mysql::host_access ($user, $password, $database, $mysql_m
       require       => Mysql_database[$database],
     }
 
-    mysql_grant { "${user}@${name}/${database}":
+    mysql_grant { "${user}@${name}/${database}.*":
       privileges => 'all',
       provider   => 'mysql',
       table      => "${database}.*",
