@@ -39,6 +39,12 @@ describe 'ceilometer::agent::compute' do
       )
     end
 
+    it 'ensures nova-common is installed before the package ceilometer-common' do
+        should contain_package('nova-common').with(
+            :before => /Package\[ceilometer-common\]/
+        )
+    end
+
     it 'configures nova notification driver' do
       should contain_file_line_after('nova-notification-driver-common').with(
         :line   => 'notification_driver=nova.openstack.common.notifier.rpc_notifier',
