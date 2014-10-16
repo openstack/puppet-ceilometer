@@ -1,7 +1,7 @@
 Ceilometer
 ==========
 
-4.0.0 - 2014.1.0 - Icehouse
+4.2.0 - 2014.1.0 - Icehouse
 
 #### Table of Contents
 
@@ -71,6 +71,15 @@ This is the ceilometer module.
 
 Release Notes
 -------------
+
+** 4.2.0 **
+
+* Fixed dependency on nova-common package
+* Added new class for extended logging options
+* Fixed ssl parameter requirements for kombu and rabbit
+* Fixed mysql_grant call
+* Fixed ceilometer-collecter service relationships when service is disabled
+
 
 ** 4.1.0 **
 
