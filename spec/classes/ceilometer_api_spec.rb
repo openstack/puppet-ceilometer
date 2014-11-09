@@ -29,6 +29,7 @@ describe 'ceilometer::api' do
     end
 
     it { should contain_class('ceilometer::params') }
+    it { should contain_class('ceilometer::policy') }
 
     it 'installs ceilometer-api package' do
       should contain_package('ceilometer-api').with(

@@ -69,13 +69,16 @@ class ceilometer::api (
 ) {
 
   include ceilometer::params
+  include ceilometer::policy
 
   validate_string($keystone_password)
 
   Ceilometer_config<||> ~> Service['ceilometer-api']
+  Class['ceilometer::policy'] ~> Service['ceilometer-api']
 
   Package['ceilometer-api'] -> Ceilometer_config<||>
   Package['ceilometer-api'] -> Service['ceilometer-api']
+  Package['ceilometer-api'] -> Class['ceilometer::policy']
   package { 'ceilometer-api':
     ensure => $package_ensure,
     name   => $::ceilometer::params::api_package_name,
