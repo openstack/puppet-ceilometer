@@ -7,9 +7,11 @@ describe 'ceilometer::agent::central' do
   end
 
   let :params do
-    { :enabled        => true,
-      :manage_service => true,
-      :package_ensure => 'latest' }
+    { :enabled          => true,
+      :manage_service   => true,
+      :package_ensure   => 'latest',
+      :coordination_url => 'redis://localhost:6379'
+    }
   end
 
   shared_examples_for 'ceilometer-agent-central' do
@@ -46,6 +48,10 @@ describe 'ceilometer::agent::central' do
           )
         end
       end
+    end
+
+    it 'configures central agent' do
+      should contain_ceilometer_config('coordination/backend_url').with_value( params[:coordination_url] )
     end
 
     context 'with disabled service managing' do

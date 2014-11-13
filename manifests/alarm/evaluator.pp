@@ -25,6 +25,10 @@
 #    (optional) Record alarm change events
 #    Defaults to true.
 #
+#  [*coordination_url*]
+#    (optional) The url to use for distributed group membership coordination.
+#    Defaults to undef.
+#
 class ceilometer::alarm::evaluator (
   $manage_service      = true,
   $enabled             = true,
@@ -32,6 +36,7 @@ class ceilometer::alarm::evaluator (
   $evaluation_service  = 'ceilometer.alarm.service.SingletonAlarmService',
   $partition_rpc_topic = 'alarm_partition_coordination',
   $record_history      = true,
+  $coordination_url    = undef,
 ) {
 
   include ceilometer::params
@@ -67,5 +72,10 @@ class ceilometer::alarm::evaluator (
     'alarm/evaluation_service'  :  value => $evaluation_service;
     'alarm/partition_rpc_topic' :  value => $partition_rpc_topic;
     'alarm/record_history'      :  value => $record_history;
-    }
+  }
+
+  if $coordination_url {
+    ensure_resource('ceilometer_config', 'coordination/backend_url',
+      {'value' => $coordination_url})
+  }
 }
