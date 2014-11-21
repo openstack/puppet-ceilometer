@@ -125,43 +125,32 @@ class ceilometer::keystone::auth (
     $real_service_name = $auth_name
   }
 
-  if $configure_user {
-    keystone_user { $auth_name:
-      ensure   => present,
-      password => $password,
-      email    => $email,
-      tenant   => $tenant,
-    }
+  keystone::resource::service_identity { $auth_name:
+    configure_user      => $configure_user,
+    configure_user_role => $configure_user_role,
+    configure_endpoint  => $configure_endpoint,
+    service_type        => $service_type,
+    service_description => 'Openstack Metering Service',
+    service_name        => $real_service_name,
+    region              => $region,
+    password            => $password,
+    email               => $email,
+    tenant              => $tenant,
+    roles               => ['admin', 'ResellerAdmin'],
+    public_url          => $public_url_real,
+    admin_url           => $admin_url_real,
+    internal_url        => $internal_url_real,
   }
 
   if $configure_user_role {
-    Keystone_user_role["${auth_name}@${tenant}"] ~>
-      Service <| name == 'ceilometer-api' |>
-
     if !defined(Keystone_role['ResellerAdmin']) {
       keystone_role { 'ResellerAdmin':
         ensure => present,
       }
     }
-    keystone_user_role { "${auth_name}@${tenant}":
-      ensure  => present,
-      roles   => ['admin', 'ResellerAdmin'],
-      require => Keystone_role['ResellerAdmin'],
-    }
+    Keystone_role['ResellerAdmin'] -> Keystone_user_role["${auth_name}@${tenant}"] ~>
+      Service <| name == 'ceilometer-api' |>
   }
 
-  keystone_service { $real_service_name:
-    ensure      => present,
-    type        => $service_type,
-    description => 'Openstack Metering Service',
-  }
-  if $configure_endpoint {
-    keystone_endpoint { "${region}/${real_service_name}":
-      ensure       => present,
-      public_url   => $public_url_real,
-      admin_url    => $admin_url_real,
-      internal_url => $internal_url_real,
-    }
-  }
 }
 
