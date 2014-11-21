@@ -1,7 +1,7 @@
 Ceilometer
 ==========
 
-4.0.0 - 2014.1.0 - Icehouse
+5.0.0 - 2014.2.0 - Juno
 
 #### Table of Contents
 
@@ -72,6 +72,37 @@ This is the ceilometer module.
 Release Notes
 -------------
 
+** 5.0.0 **
+* Stable Juno release
+* Added package_ensure parameters to various classes to control package installation
+* Added ceilometer::policy to control policy.json
+* Updated validate_re expressions for Puppet 3.7
+* Bumped stdlib dependency to >=4.0.0
+* Added manage_service parameters to various classes to control whether the service was managed, as well as added enabled parameters where not already present
+* Added parameters to control whether to configure keystone users
+* Added the ability to override the keystone service name in ceilometer::keystone::auth
+* Migrated the ceilometer::db::mysql class to use openstacklib::db::mysql and deprecated the mysql_module parameter
+* Fixed ceilometer-notification package name for RHEL
+* Removed deprecation notices for sectionless ceilometer_config types for Juno release
+* Added ability to hide secrets from puppet logs
+
+** 4.2.0 **
+
+* Fixed dependency on nova-common package
+* Added new class for extended logging options
+* Fixed ssl parameter requirements for kombu and rabbit
+* Fixed mysql_grant call
+* Fixed ceilometer-collecter service relationships when service is disabled
+
+
+** 4.1.0 **
+
+* Added RabbitMQ SSL Support.
+* Fixed dependency cycle bug.
+* Fixed agent_notification_service_name.
+* Changed default mysql charset to UTF8.
+* Pinned major gems.
+
 ** 4.0.0 **
 
 * Stable Icehouse release.
@@ -80,7 +111,6 @@ Release Notes
 * Fixed region name configuration.
 * Fixed ensure packages bug.
 * Added support for puppetlabs-mysql 2.2 and greater.
-* Fixed MySQL grant call.
 * Introduced ceilometer::config to handle additional custom options.
 
 ** 3.1.1 **
@@ -126,3 +156,4 @@ Contact
 -------
 
 techs@enovance.com
+Ceilometer
