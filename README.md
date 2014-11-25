@@ -156,4 +156,3 @@ Contact
 -------
 
 techs@enovance.com
-Ceilometer
