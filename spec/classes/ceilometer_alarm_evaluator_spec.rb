@@ -38,6 +38,7 @@ describe 'ceilometer::alarm::evaluator' do
       should contain_ceilometer_config('alarm/evaluation_service').with_value( params[:evaluation_service] )
       should contain_ceilometer_config('alarm/partition_rpc_topic').with_value( params[:partition_rpc_topic] )
       should contain_ceilometer_config('alarm/record_history').with_value( params[:record_history] )
+      should_not contain_ceilometer_config('coordination/backend_url')
     end
 
     context 'when overriding parameters' do
@@ -45,12 +46,14 @@ describe 'ceilometer::alarm::evaluator' do
         params.merge!(:evaluation_interval => 80,
                       :partition_rpc_topic => 'alarm_partition_coordination',
                       :record_history      => false,
-                      :evaluation_service  => 'ceilometer.alarm.service.SingletonTestAlarmService')
+                      :evaluation_service  => 'ceilometer.alarm.service.SingletonTestAlarmService',
+                      :coordination_url     => 'redis://localhost:6379')
       end
       it { should contain_ceilometer_config('alarm/evaluation_interval').with_value(params[:evaluation_interval]) }
       it { should contain_ceilometer_config('alarm/evaluation_service').with_value(params[:evaluation_service]) }
       it { should contain_ceilometer_config('alarm/record_history').with_value(params[:record_history]) }
       it { should contain_ceilometer_config('alarm/partition_rpc_topic').with_value(params[:partition_rpc_topic])  }
+      it { should contain_ceilometer_config('coordination/backend_url').with_value( params[:coordination_url]) }
     end
 
     context 'when override the evaluation interval with a non numeric value' do

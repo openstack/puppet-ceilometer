@@ -13,11 +13,16 @@
 #    (optional) ensure state for package.
 #    Defaults to 'present'
 #
+#  [*coordination_url*]
+#    (optional) The url to use for distributed group membership coordination.
+#    Defaults to undef.
+#
 
 class ceilometer::agent::central (
   $manage_service   = true,
   $enabled          = true,
   $package_ensure   = 'present',
+  $coordination_url = undef,
 ) {
 
   include ceilometer::params
@@ -47,4 +52,8 @@ class ceilometer::agent::central (
     hasrestart => true,
   }
 
+  if $coordination_url {
+    ensure_resource('ceilometer_config', 'coordination/backend_url',
+      {'value' => $coordination_url})
+  }
 }
