@@ -44,7 +44,7 @@ describe 'ceilometer::expirer' do
     it 'configures a cron' do
       should contain_cron('ceilometer-expirer').with(
         :command     => 'ceilometer-expirer',
-        :environment => 'PATH=/bin:/usr/bin:/usr/sbin',
+        :environment => 'PATH=/bin:/usr/bin:/usr/sbin SHELL=/bin/sh',
         :user        => 'ceilometer',
         :minute      => 1,
         :hour        => 0,

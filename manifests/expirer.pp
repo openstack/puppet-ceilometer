@@ -61,7 +61,7 @@ class ceilometer::expirer (
 
   cron { 'ceilometer-expirer':
     command     => $ceilometer::params::expirer_command,
-    environment => 'PATH=/bin:/usr/bin:/usr/sbin',
+    environment => 'PATH=/bin:/usr/bin:/usr/sbin SHELL=/bin/sh',
     user        => 'ceilometer',
     minute      => $minute,
     hour        => $hour,
