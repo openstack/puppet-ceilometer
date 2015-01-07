@@ -1,5 +1,7 @@
 fixtures:
   repositories:
+    'apache': 'git://github.com/puppetlabs/puppetlabs-apache.git'
+    'concat': 'git://github.com/puppetlabs/puppetlabs-concat.git'
     'inifile': 'git://github.com/puppetlabs/puppetlabs-inifile'
     'keystone': 'git://github.com/stackforge/puppet-keystone.git'
     'mysql':
