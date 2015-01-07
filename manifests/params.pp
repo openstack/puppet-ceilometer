@@ -36,6 +36,9 @@ class ceilometer::params {
         $sqlite_package_name      = 'python-sqlite2'
       }
 
+      $ceilometer_wsgi_script_path    = '/var/www/cgi-bin/ceilometer'
+      $ceilometer_wsgi_script_source  = '/usr/lib/python2.7/site-packages/ceilometer/api/app.wsgi'
+
     }
     'Debian': {
       # package names
@@ -69,6 +72,8 @@ class ceilometer::params {
           $libvirt_group = 'libvirt'
         }
       }
+      $ceilometer_wsgi_script_path    = '/usr/lib/cgi-bin/ceilometer'
+      $ceilometer_wsgi_script_source  = '/usr/share/ceilometer/app.wsgi'
     }
     default: {
       fail("Unsupported osfamily: ${::osfamily} operatingsystem: \
