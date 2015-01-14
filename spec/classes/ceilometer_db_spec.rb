@@ -34,12 +34,11 @@ describe 'ceilometer::db' do
     end
   end
 
-  # Fedora > 18 has python-pymongo too
   context 'on Redhat platforms' do
     let :facts do
       { :osfamily => 'Redhat',
         :operatingsystem => 'Fedora',
-        :operatingsystemrelease => 18
+        :operatingsystemrelease => 21
       }
     end
 
@@ -119,9 +118,6 @@ describe 'ceilometer::db' do
     it { should contain_class('ceilometer::params') }
 
     it 'installs pymongo package' do
-      should contain_package('ceilometer-backend-package').with(
-        :ensure => 'present',
-        :name => 'python-sqlite2')
       should contain_ceilometer_config('database/connection').with_value('sqlite:///var/lib/ceilometer.db')
       should contain_ceilometer_config('database/connection').with_value( params[:database_connection] ).with_secret(true)
     end
