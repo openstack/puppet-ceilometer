@@ -41,14 +41,38 @@ node default {
     auth_password => 'tralalerotralala'
   }
 
-  # Install compute agent
-  # default: enable
-  class { 'ceilometer::agent::compute':
+  # Install polling agent
+  # Can be used instead of central, compute or ipmi agent
+  # class { 'ceilometer::agent::polling':
+  #   central_namespace => true,
+  #   compute_namespace => false,
+  #   ipmi_namespace    => false
+  # }
+  # class { 'ceilometer::agent::polling':
+  #   central_namespace => false,
+  #   compute_namespace => true,
+  #   ipmi_namespace    => false
+  # }
+  # class { 'ceilometer::agent::polling':
+  #   central_namespace => false,
+  #   compute_namespace => false,
+  #   ipmi_namespace    => true
+  # }
+  # As default use central and compute polling namespaces
+  class { 'ceilometer::agent::polling':
+    central_namespace => true,
+    compute_namespace => true,
+    ipmi_namespace    => false,
   }
 
-  # Install central agent
-  class { 'ceilometer::agent::central':
-  }
+  # Install compute agent (deprecated)
+  # default: enable
+  # class { 'ceilometer::agent::compute':
+  # }
+
+  # Install central agent (deprecated)
+  # class { 'ceilometer::agent::central':
+  # }
 
   # Install alarm notifier
   class { 'ceilometer::alarm::notifier':
