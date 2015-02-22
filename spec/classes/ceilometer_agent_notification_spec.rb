@@ -35,17 +35,17 @@ describe 'ceilometer::agent::notification' do
 
   shared_examples_for 'ceilometer-agent-notification' do
 
-    it { should contain_class('ceilometer::params') }
+    it { is_expected.to contain_class('ceilometer::params') }
 
     it 'installs ceilometer agent notification package' do
-      should contain_package(platform_params[:agent_notification_package_name]).with(
+      is_expected.to contain_package(platform_params[:agent_notification_package_name]).with(
         :ensure => 'present'
       )
     end
 
     it 'configures notifications parameters in ceilometer.conf' do
-      should contain_ceilometer_config('notification/ack_on_event_error').with_value( params[:ack_on_event_error] )
-      should contain_ceilometer_config('notification/store_events').with_value( params[:store_events] )
+      is_expected.to contain_ceilometer_config('notification/ack_on_event_error').with_value( params[:ack_on_event_error] )
+      is_expected.to contain_ceilometer_config('notification/store_events').with_value( params[:store_events] )
     end
 
     [{:enabled => true}, {:enabled => false}].each do |param_hash|
@@ -55,7 +55,7 @@ describe 'ceilometer::agent::notification' do
         end
 
         it 'configures ceilometer agent notification service' do
-          should contain_service('ceilometer-agent-notification').with(
+          is_expected.to contain_service('ceilometer-agent-notification').with(
             :ensure     => (params[:manage_service] && params[:enabled]) ? 'running' : 'stopped',
             :name       => platform_params[:agent_notification_service_name],
             :enable     => params[:enabled],
@@ -74,7 +74,7 @@ describe 'ceilometer::agent::notification' do
       end
 
       it 'configures ceilometer-agent-notification service' do
-        should contain_service('ceilometer-agent-notification').with(
+        is_expected.to contain_service('ceilometer-agent-notification').with(
           :ensure     => nil,
           :name       => platform_params[:agent_notification_service_name],
           :enable     => false,
