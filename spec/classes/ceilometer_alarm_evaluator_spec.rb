@@ -17,28 +17,28 @@ describe 'ceilometer::alarm::evaluator' do
   end
 
   shared_examples_for 'ceilometer-alarm-evaluator' do
-    it { should contain_class('ceilometer::params') }
+    it { is_expected.to contain_class('ceilometer::params') }
 
     it 'installs ceilometer-alarm package' do
-      should contain_package(platform_params[:alarm_evaluator_package_name]).with_before('Service[ceilometer-alarm-evaluator]')
-      should contain_package(platform_params[:alarm_evaluator_package_name]).with(
+      is_expected.to contain_package(platform_params[:alarm_evaluator_package_name]).with_before('Service[ceilometer-alarm-evaluator]')
+      is_expected.to contain_package(platform_params[:alarm_evaluator_package_name]).with(
         :ensure => 'present',
         :name   => platform_params[:alarm_evaluator_package_name]
       )
     end
 
     it 'ensures ceilometer-common is installed before the service' do
-      should contain_package('ceilometer-common').with(
+      is_expected.to contain_package('ceilometer-common').with(
         :before => /Service\[ceilometer-alarm-evaluator\]/
       )
     end
 
     it 'configures alarm evaluator' do
-      should contain_ceilometer_config('alarm/evaluation_interval').with_value( params[:evaluation_interval] )
-      should contain_ceilometer_config('alarm/evaluation_service').with_value( params[:evaluation_service] )
-      should contain_ceilometer_config('alarm/partition_rpc_topic').with_value( params[:partition_rpc_topic] )
-      should contain_ceilometer_config('alarm/record_history').with_value( params[:record_history] )
-      should_not contain_ceilometer_config('coordination/backend_url')
+      is_expected.to contain_ceilometer_config('alarm/evaluation_interval').with_value( params[:evaluation_interval] )
+      is_expected.to contain_ceilometer_config('alarm/evaluation_service').with_value( params[:evaluation_service] )
+      is_expected.to contain_ceilometer_config('alarm/partition_rpc_topic').with_value( params[:partition_rpc_topic] )
+      is_expected.to contain_ceilometer_config('alarm/record_history').with_value( params[:record_history] )
+      is_expected.to_not contain_ceilometer_config('coordination/backend_url')
     end
 
     context 'when overriding parameters' do
@@ -49,11 +49,11 @@ describe 'ceilometer::alarm::evaluator' do
                       :evaluation_service  => 'ceilometer.alarm.service.SingletonTestAlarmService',
                       :coordination_url     => 'redis://localhost:6379')
       end
-      it { should contain_ceilometer_config('alarm/evaluation_interval').with_value(params[:evaluation_interval]) }
-      it { should contain_ceilometer_config('alarm/evaluation_service').with_value(params[:evaluation_service]) }
-      it { should contain_ceilometer_config('alarm/record_history').with_value(params[:record_history]) }
-      it { should contain_ceilometer_config('alarm/partition_rpc_topic').with_value(params[:partition_rpc_topic])  }
-      it { should contain_ceilometer_config('coordination/backend_url').with_value( params[:coordination_url]) }
+      it { is_expected.to contain_ceilometer_config('alarm/evaluation_interval').with_value(params[:evaluation_interval]) }
+      it { is_expected.to contain_ceilometer_config('alarm/evaluation_service').with_value(params[:evaluation_service]) }
+      it { is_expected.to contain_ceilometer_config('alarm/record_history').with_value(params[:record_history]) }
+      it { is_expected.to contain_ceilometer_config('alarm/partition_rpc_topic').with_value(params[:partition_rpc_topic])  }
+      it { is_expected.to contain_ceilometer_config('coordination/backend_url').with_value( params[:coordination_url]) }
     end
 
     context 'when override the evaluation interval with a non numeric value' do
@@ -61,7 +61,7 @@ describe 'ceilometer::alarm::evaluator' do
         params.merge!(:evaluation_interval => 'NaN')
       end
 
-      it { expect { should contain_ceilometer_config('alarm/evaluation_interval') }.to\
+      it { expect { is_expected.to contain_ceilometer_config('alarm/evaluation_interval') }.to\
         raise_error(Puppet::Error, /validate_re\(\): .* does not match/) }
     end
 
@@ -72,7 +72,7 @@ describe 'ceilometer::alarm::evaluator' do
         end
 
         it 'configures ceilometer-alarm-evaluator service' do
-          should contain_service('ceilometer-alarm-evaluator').with(
+          is_expected.to contain_service('ceilometer-alarm-evaluator').with(
             :ensure     => (params[:manage_service] && params[:enabled]) ? 'running' : 'stopped',
             :name       => platform_params[:alarm_evaluator_service_name],
             :enable     => params[:enabled],
@@ -91,7 +91,7 @@ describe 'ceilometer::alarm::evaluator' do
       end
 
       it 'configures ceilometer-alarm-evaluator service' do
-        should contain_service('ceilometer-alarm-evaluator').with(
+        is_expected.to contain_service('ceilometer-alarm-evaluator').with(
           :ensure     => nil,
           :name       => platform_params[:alarm_evaluator_service_name],
           :enable     => false,

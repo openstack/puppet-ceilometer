@@ -32,17 +32,17 @@ describe 'ceilometer::expirer' do
 
   shared_examples_for 'ceilometer-expirer' do
 
-    it { should contain_class('ceilometer::params') }
+    it { is_expected.to contain_class('ceilometer::params') }
 
     it 'installs ceilometer common package' do
-      should contain_package('ceilometer-common').with(
+      is_expected.to contain_package('ceilometer-common').with(
         :ensure => 'present',
         :name   => platform_params[:common_package_name]
       )
     end
 
     it 'configures a cron' do
-      should contain_cron('ceilometer-expirer').with(
+      is_expected.to contain_cron('ceilometer-expirer').with(
         :command     => 'ceilometer-expirer',
         :environment => 'PATH=/bin:/usr/bin:/usr/sbin SHELL=/bin/sh',
         :user        => 'ceilometer',
@@ -55,7 +55,7 @@ describe 'ceilometer::expirer' do
     end
 
     it 'configures database section in ceilometer.conf' do
-      should contain_ceilometer_config('database/time_to_live').with_value( params[:time_to_live] )
+      is_expected.to contain_ceilometer_config('database/time_to_live').with_value( params[:time_to_live] )
     end
 
   end

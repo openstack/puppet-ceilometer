@@ -24,7 +24,7 @@ describe 'ceilometer::db::postgresql' do
         req_params
       end
 
-      it { should contain_postgresql__server__db('ceilometer').with(
+      it { is_expected.to contain_postgresql__server__db('ceilometer').with(
         :user     => 'ceilometer',
         :password => 'md52899c518e96bce6633ab342b0ca38292'
       )}
@@ -47,7 +47,7 @@ describe 'ceilometer::db::postgresql' do
         req_params
       end
 
-      it { should contain_postgresql__server__db('ceilometer').with(
+      it { is_expected.to contain_postgresql__server__db('ceilometer').with(
         :user     => 'ceilometer',
         :password => 'md52899c518e96bce6633ab342b0ca38292'
       )}
