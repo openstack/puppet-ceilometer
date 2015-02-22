@@ -3,8 +3,12 @@
 #  ceilometer base package & configuration
 #
 # == parameters
+#
 #  [*metering_secret*]
 #    secret key for signing messages. Mandatory.
+#  [*notification_topics*]
+#    AMQP topic used for OpenStack notifications (list value)
+#    Defaults to 'notifications'
 #  [*package_ensure*]
 #    ensure state for package. Optional. Defaults to 'present'
 #  [*debug*]
@@ -70,7 +74,6 @@
 # [*qpid_reconnect_interval_max*]
 # (optional) various QPID options
 #
-
 class ceilometer(
   $metering_secret     = false,
   $notification_topics = ['notifications'],
@@ -141,16 +144,16 @@ class ceilometer(
   }
 
   file { '/etc/ceilometer/':
-    ensure  => directory,
-    owner   => 'ceilometer',
-    group   => 'ceilometer',
-    mode    => '0750',
+    ensure => directory,
+    owner  => 'ceilometer',
+    group  => 'ceilometer',
+    mode   => '0750',
   }
 
   file { '/etc/ceilometer/ceilometer.conf':
-    owner   => 'ceilometer',
-    group   => 'ceilometer',
-    mode    => '0640',
+    owner => 'ceilometer',
+    group => 'ceilometer',
+    mode  => '0640',
   }
 
   package { 'ceilometer-common':

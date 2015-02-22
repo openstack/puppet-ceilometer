@@ -49,6 +49,14 @@
 #     Number of WSGI workers to spawn.
 #     Optional. Defaults to 1
 #
+#   [*priority*]
+#     (optional) The priority for the vhost.
+#     Defaults to '10'
+#
+#   [*threads*]
+#     (optional) The number of threads for the vhost.
+#     Defaults to $::processorcount
+#
 #   [*ssl_cert*]
 #   [*ssl_key*]
 #   [*ssl_chain*]

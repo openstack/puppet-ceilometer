@@ -1,6 +1,7 @@
 # Installs & configure the ceilometer api service
 #
 # == Parameters
+#
 #  [*enabled*]
 #    (optional) Should the service be enabled.
 #    Defaults to true
@@ -8,6 +9,10 @@
 #  [*manage_service*]
 #    (optional) Whether the service should be managed by Puppet.
 #    Defaults to true.
+#
+# [*keystone_user*]
+#   (optional) The name of the auth user
+#   Defaults to ceilometer
 #
 #  [*keystone_host*]
 #    (optional) Keystone's admin endpoint IP/Host.
@@ -39,6 +44,10 @@
 #    Password to authenticate with.
 #    Mandatory.
 #
+# [*keystone_auth_uri*]
+#   (optional) Public Identity API endpoint.
+#   Defaults to 'false'.
+#
 #  [*host*]
 #    (optional) The ceilometer api bind address.
 #    Defaults to 0.0.0.0
@@ -51,7 +60,6 @@
 #    (optional) ensure state for package.
 #    Defaults to 'present'
 #
-
 class ceilometer::api (
   $manage_service             = true,
   $enabled                    = true,
