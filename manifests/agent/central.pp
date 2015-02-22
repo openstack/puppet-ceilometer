@@ -25,7 +25,7 @@ class ceilometer::agent::central (
   $coordination_url = undef,
 ) {
 
-  include ceilometer::params
+  include ::ceilometer::params
 
   Ceilometer_config<||> ~> Service['ceilometer-agent-central']
 

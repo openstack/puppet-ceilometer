@@ -18,7 +18,7 @@ class ceilometer::db (
   $mysql_module        = undef,
 ) {
 
-  include ceilometer::params
+  include ::ceilometer::params
 
   if $mysql_module {
     warning('The mysql_module parameter is deprecated. The latest 2.x mysql module will be used.')
@@ -33,7 +33,7 @@ class ceilometer::db (
     /^mysql:\/\//: {
       $backend_package = false
 
-      include mysql::bindings::python
+      include ::mysql::bindings::python
     }
     /^postgresql:\/\//: {
       $backend_package = $::ceilometer::params::psycopg_package_name

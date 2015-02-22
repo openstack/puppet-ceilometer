@@ -125,7 +125,7 @@ class ceilometer::keystone::auth (
     $real_service_name = $auth_name
   }
 
-  keystone::resource::service_identity { $auth_name:
+  ::keystone::resource::service_identity { $auth_name:
     configure_user      => $configure_user,
     configure_user_role => $configure_user_role,
     configure_endpoint  => $configure_endpoint,

@@ -40,7 +40,7 @@ class ceilometer::agent::polling (
   $coordination_url  = undef,
 ) inherits ceilometer {
 
-  include ceilometer::params
+  include ::ceilometer::params
 
   if $central_namespace {
     $central_namespace_name = 'central'

@@ -19,7 +19,7 @@ class ceilometer::collector (
   $package_ensure = 'present',
 ) {
 
-  include ceilometer::params
+  include ::ceilometer::params
 
   Ceilometer_config<||> ~> Service['ceilometer-collector']
 

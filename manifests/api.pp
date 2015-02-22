@@ -76,8 +76,8 @@ class ceilometer::api (
   $port                       = '8777'
 ) {
 
-  include ceilometer::params
-  include ceilometer::policy
+  include ::ceilometer::params
+  include ::ceilometer::policy
 
   validate_string($keystone_password)
 
