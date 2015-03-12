@@ -154,4 +154,43 @@ describe 'ceilometer::api' do
     end
   end
 
+  describe "with custom keystone identity_uri" do
+    let :facts do
+      { :osfamily => 'RedHat' }
+    end
+    before do
+      params.merge!({ 
+        :keystone_identity_uri => 'https://foo.bar:1234/',
+      })
+    end
+    it 'configures identity_uri' do
+      should contain_ceilometer_config('keystone_authtoken/identity_uri').with_value("https://foo.bar:1234/");
+      # since only auth_uri is set the deprecated auth parameters should
+      # still get set in case they are still in use
+      should contain_ceilometer_config('keystone_authtoken/auth_host').with_value('127.0.0.1');
+      should contain_ceilometer_config('keystone_authtoken/auth_port').with_value('35357');
+      should contain_ceilometer_config('keystone_authtoken/auth_protocol').with_value('http');
+    end
+  end
+
+  describe "with custom keystone identity_uri and auth_uri" do
+    let :facts do
+      { :osfamily => 'RedHat' }
+    end
+    before do
+      params.merge!({ 
+        :keystone_identity_uri => 'https://foo.bar:35357/',
+        :keystone_auth_uri => 'https://foo.bar:5000/v2.0/',
+      })
+    end
+    it 'configures identity_uri and auth_uri but deprecates old auth settings' do
+      should contain_ceilometer_config('keystone_authtoken/identity_uri').with_value("https://foo.bar:35357/");
+      should contain_ceilometer_config('keystone_authtoken/auth_uri').with_value("https://foo.bar:5000/v2.0/");
+      should contain_ceilometer_config('keystone_authtoken/auth_admin_prefix').with(:ensure => 'absent')
+      should contain_ceilometer_config('keystone_authtoken/auth_port').with(:ensure => 'absent')
+      should contain_ceilometer_config('keystone_authtoken/auth_protocol').with(:ensure => 'absent')
+      should contain_ceilometer_config('keystone_authtoken/auth_host').with(:ensure => 'absent')
+    end
+  end
+
 end
