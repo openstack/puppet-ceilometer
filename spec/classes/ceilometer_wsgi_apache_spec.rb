@@ -15,14 +15,14 @@ describe 'ceilometer::wsgi::apache' do
   end
 
   shared_examples_for 'apache serving ceilometer with mod_wsgi' do
-    it { should contain_service('httpd').with_name(platform_parameters[:httpd_service_name]) }
-    it { should contain_class('ceilometer::params') }
-    it { should contain_class('apache') }
-    it { should contain_class('apache::mod::wsgi') }
+    it { is_expected.to contain_service('httpd').with_name(platform_parameters[:httpd_service_name]) }
+    it { is_expected.to contain_class('ceilometer::params') }
+    it { is_expected.to contain_class('apache') }
+    it { is_expected.to contain_class('apache::mod::wsgi') }
 
     describe 'with default parameters' do
 
-      it { should contain_file("#{platform_parameters[:wsgi_script_path]}").with(
+      it { is_expected.to contain_file("#{platform_parameters[:wsgi_script_path]}").with(
         'ensure'  => 'directory',
         'owner'   => 'ceilometer',
         'group'   => 'ceilometer',
@@ -30,17 +30,17 @@ describe 'ceilometer::wsgi::apache' do
       )}
 
 
-      it { should contain_file('ceilometer_wsgi').with(
+      it { is_expected.to contain_file('ceilometer_wsgi').with(
         'ensure'  => 'file',
         'path'    => "#{platform_parameters[:wsgi_script_path]}/app",
         'source'  => platform_parameters[:wsgi_script_source],
         'owner'   => 'ceilometer',
         'group'   => 'ceilometer',
-        'mode'    => '0644',
-        'require' => ["File[#{platform_parameters[:wsgi_script_path]}]"]
+        'mode'    => '0644'
       )}
+      it { is_expected.to contain_file('ceilometer_wsgi').that_requires("File[#{platform_parameters[:wsgi_script_path]}]") }
 
-      it { should contain_apache__vhost('ceilometer_wsgi').with(
+      it { is_expected.to contain_apache__vhost('ceilometer_wsgi').with(
         'servername'                  => 'some.host.tld',
         'ip'                          => nil,
         'port'                        => '8777',
@@ -53,7 +53,7 @@ describe 'ceilometer::wsgi::apache' do
         'wsgi_script_aliases'         => { '/' => "#{platform_parameters[:wsgi_script_path]}/app" },
         'require'                     => 'File[ceilometer_wsgi]'
       )}
-      it { should contain_file("#{platform_parameters[:httpd_ports_file]}") }
+      it { is_expected.to contain_file("#{platform_parameters[:httpd_ports_file]}") }
     end
 
     describe 'when overriding parameters using different ports' do
@@ -67,7 +67,7 @@ describe 'ceilometer::wsgi::apache' do
         }
       end
 
-      it { should contain_apache__vhost('ceilometer_wsgi').with(
+      it { is_expected.to contain_apache__vhost('ceilometer_wsgi').with(
         'servername'                  => 'dummy.host',
         'ip'                          => '10.42.51.1',
         'port'                        => '12345',
@@ -81,7 +81,7 @@ describe 'ceilometer::wsgi::apache' do
         'require'                     => 'File[ceilometer_wsgi]'
       )}
 
-      it { should contain_file("#{platform_parameters[:httpd_ports_file]}") }
+      it { is_expected.to contain_file("#{platform_parameters[:httpd_ports_file]}") }
     end
   end
 
