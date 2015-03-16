@@ -51,7 +51,7 @@ class ceilometer::expirer (
   $weekday        = '*',
 ) {
 
-  include ceilometer::params
+  include ::ceilometer::params
 
   Package<| title == 'ceilometer-common' |> -> Class['ceilometer::expirer']
 

@@ -34,7 +34,7 @@ class ceilometer::alarm::notifier (
   $rest_notifier_ssl_verify       = true,
 ) {
 
-  include ceilometer::params
+  include ::ceilometer::params
 
   validate_bool($rest_notifier_ssl_verify)
 

@@ -102,7 +102,7 @@ class ceilometer::wsgi::apache (
     include ::apache::mod::ssl
   }
 
-  openstacklib::wsgi::apache { 'ceilometer_wsgi':
+  ::openstacklib::wsgi::apache { 'ceilometer_wsgi':
     bind_host           => $bind_host,
     bind_port           => $port,
     group               => 'ceilometer',

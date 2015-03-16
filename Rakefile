@@ -10,8 +10,3 @@ PuppetLint.configuration.send('disable_only_variable_string')
 exclude_tests_paths = ['pkg/**/*','vendor/**/*']
 PuppetLint.configuration.ignore_paths = exclude_tests_paths
 PuppetSyntax.exclude_paths = exclude_tests_paths
-
-desc "Lint metadata.json file"
-task :metadata do
-  sh "metadata-json-lint metadata.json"
-end

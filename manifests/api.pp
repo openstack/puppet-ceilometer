@@ -82,8 +82,8 @@ class ceilometer::api (
   $keystone_protocol          = 'http',
 ) {
 
-  include ceilometer::params
-  include ceilometer::policy
+  include ::ceilometer::params
+  include ::ceilometer::policy
 
   validate_string($keystone_password)
 

@@ -39,7 +39,7 @@ class ceilometer::alarm::evaluator (
   $coordination_url    = undef,
 ) {
 
-  include ceilometer::params
+  include ::ceilometer::params
 
   validate_re("${evaluation_interval}",'^(\d+)$')
 

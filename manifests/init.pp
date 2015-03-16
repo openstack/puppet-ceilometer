@@ -112,7 +112,7 @@ class ceilometer(
 
   validate_string($metering_secret)
 
-  include ceilometer::params
+  include ::ceilometer::params
 
   if $kombu_ssl_ca_certs and !$rabbit_use_ssl {
     fail('The kombu_ssl_ca_certs parameter requires rabbit_use_ssl to be set to true')
