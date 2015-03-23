@@ -8,12 +8,50 @@ describe 'ceilometer::collector' do
 
   shared_examples_for 'ceilometer-collector' do
 
+    context 'when invalid ip is passed' do
+      let :params do
+        { :udp_address => '300.0.0.0' }
+      end
+      it 'should fail' do
+        is_expected.to raise_error(Puppet::Error, /is not a valid ip and is not empty/)
+      end
+    end
+
+    context 'when a valid ipv6 is passed' do
+      before do
+        pre_condition << "class { 'ceilometer::db': }"
+      end
+      let :params do
+        { :udp_address => '::1' }
+      end
+      it 'shouldn\'t fail' do
+        is_expected.to_not raise_error
+      end
+    end
+
+    context 'when an empty string passed' do
+      before do
+        pre_condition << "class { 'ceilometer::db': }"
+      end
+      let :params do
+        { :udp_address => '' }
+      end
+      it 'should disable the listener' do
+        is_expected.to contain_ceilometer_config('collector/udp_address').with_value( '' )
+      end
+    end
+
     context 'when enabled' do
       before do
         pre_condition << "class { 'ceilometer::db': }"
       end
 
       it { is_expected.to contain_class('ceilometer::params') }
+
+      it 'configures ceilometer-collector server' do
+        is_expected.to contain_ceilometer_config('collector/udp_address').with_value( '0.0.0.0' )
+        is_expected.to contain_ceilometer_config('collector/udp_port').with_value( '4952' )
+      end
 
       it 'installs ceilometer-collector package' do
         is_expected.to contain_package(platform_params[:collector_package_name]).with(
@@ -44,7 +82,6 @@ describe 'ceilometer::collector' do
 
       # Catalog compilation does not crash for lack of ceilometer::db
       it { is_expected.to compile }
-
       it 'configures ceilometer-collector service' do
         is_expected.to contain_service('ceilometer-collector').with(
           :ensure     => 'stopped',
