@@ -107,7 +107,8 @@ describe 'ceilometer' do
     it 'installs ceilometer common package' do
       is_expected.to contain_package('ceilometer-common').with(
         :ensure => 'present',
-        :name   => platform_params[:common_package_name]
+        :name   => platform_params[:common_package_name],
+        :tag    => 'openstack'
       )
     end
 

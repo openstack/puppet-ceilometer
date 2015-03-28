@@ -104,6 +104,7 @@ class ceilometer::agent::polling (
   package { 'ceilometer-polling':
     ensure => $package_ensure,
     name   => $::ceilometer::params::agent_polling_package_name,
+    tag    => 'openstack',
   }
 
   if $namespaces_real {

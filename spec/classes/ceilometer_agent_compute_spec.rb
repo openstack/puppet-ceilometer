@@ -22,7 +22,8 @@ describe 'ceilometer::agent::compute' do
       is_expected.to contain_package('ceilometer-agent-compute').with(
         :ensure => 'installed',
         :name   => platform_params[:agent_package_name],
-        :before => 'Service[ceilometer-agent-compute]'
+        :before => 'Service[ceilometer-agent-compute]',
+        :tag    => 'openstack'
       )
     end
 

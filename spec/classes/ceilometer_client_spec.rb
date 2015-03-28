@@ -9,7 +9,8 @@ describe 'ceilometer::client' do
     it 'installs ceilometer client package' do
       is_expected.to contain_package('python-ceilometerclient').with(
         :ensure => 'present',
-        :name   => platform_params[:client_package_name]
+        :name   => platform_params[:client_package_name],
+        :tag    => 'openstack',
       )
     end
   end

@@ -56,7 +56,8 @@ describe 'ceilometer::agent::polling' do
       should contain_package('ceilometer-polling').with(
         :ensure => 'latest',
         :name   => platform_params[:agent_package_name],
-        :before => /Service\[ceilometer-polling\]/
+        :before => /Service\[ceilometer-polling\]/,
+        :tag    => 'openstack'
       )
     end
 

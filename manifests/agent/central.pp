@@ -33,6 +33,7 @@ class ceilometer::agent::central (
   package { 'ceilometer-agent-central':
     ensure => $package_ensure,
     name   => $::ceilometer::params::agent_central_package_name,
+    tag    => 'openstack',
   }
 
   if $manage_service {

@@ -24,7 +24,8 @@ describe 'ceilometer::alarm::notifier' do
       is_expected.to contain_package(platform_params[:alarm_notifier_package_name]).with_before('Service[ceilometer-alarm-notifier]')
       is_expected.to contain_package(platform_params[:alarm_notifier_package_name]).with(
         :ensure => 'present',
-        :name   => platform_params[:alarm_notifier_package_name]
+        :name   => platform_params[:alarm_notifier_package_name],
+        :tag    => 'openstack'
       )
     end
 

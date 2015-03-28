@@ -34,7 +34,8 @@ describe 'ceilometer::api' do
     it 'installs ceilometer-api package' do
       is_expected.to contain_package('ceilometer-api').with(
         :ensure => 'latest',
-        :name   => platform_params[:api_package_name]
+        :name   => platform_params[:api_package_name],
+        :tag    => 'openstack',
       )
     end
 

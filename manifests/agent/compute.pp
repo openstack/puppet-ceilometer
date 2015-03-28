@@ -30,6 +30,7 @@ class ceilometer::agent::compute (
   package { 'ceilometer-agent-compute':
     ensure => $package_ensure,
     name   => $::ceilometer::params::agent_compute_package_name,
+    tag    => 'openstack',
   }
 
   if $::ceilometer::params::libvirt_group {

@@ -18,7 +18,9 @@ describe 'ceilometer::db' do
     it 'installs python-mongodb package' do
       is_expected.to contain_package('ceilometer-backend-package').with(
         :ensure => 'present',
-        :name => 'python-pymongo')
+        :name   => 'python-pymongo',
+        :tag    => 'openstack'
+      )
       is_expected.to contain_ceilometer_config('database/connection').with_value('mongodb://localhost:1234/ceilometer')
       is_expected.to contain_ceilometer_config('database/connection').with_value( params[:database_connection] ).with_secret(true)
     end

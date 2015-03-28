@@ -60,7 +60,10 @@ class ceilometer::agent::notification (
   Service['ceilometer-agent-notification']
 
   ensure_resource('package', [$::ceilometer::params::agent_notification_package_name],
-    { ensure => $package_ensure }
+    {
+      ensure => $package_ensure,
+      tag    => 'openstack'
+    }
   )
 
   if $manage_service {

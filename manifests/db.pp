@@ -59,6 +59,7 @@ class ceilometer::db (
     package {'ceilometer-backend-package':
       ensure => present,
       name   => $backend_package,
+      tag    => 'openstack',
     }
   }
 

@@ -39,7 +39,8 @@ describe 'ceilometer::agent::notification' do
 
     it 'installs ceilometer agent notification package' do
       is_expected.to contain_package(platform_params[:agent_notification_package_name]).with(
-        :ensure => 'present'
+        :ensure => 'present',
+        :tag    => 'openstack'
       )
     end
 

@@ -14,6 +14,7 @@ class ceilometer::client (
   package { 'python-ceilometerclient':
     ensure => $ensure,
     name   => $::ceilometer::params::client_package_name,
+    tag    => 'openstack',
   }
 
 }

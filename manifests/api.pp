@@ -96,6 +96,7 @@ class ceilometer::api (
   package { 'ceilometer-api':
     ensure => $package_ensure,
     name   => $::ceilometer::params::api_package_name,
+    tag    => 'openstack',
   }
 
   if $manage_service {

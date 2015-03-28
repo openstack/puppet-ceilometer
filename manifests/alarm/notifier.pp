@@ -42,7 +42,9 @@ class ceilometer::alarm::notifier (
 
   Package[$::ceilometer::params::alarm_package_name] -> Service['ceilometer-alarm-notifier']
   Package[$::ceilometer::params::alarm_package_name] -> Package<| title == 'ceilometer-alarm' |>
-  ensure_packages($::ceilometer::params::alarm_package_name)
+  ensure_packages($::ceilometer::params::alarm_package_name,
+    { tag => 'openstack' }
+  )
 
   if $manage_service {
     if $enabled {
