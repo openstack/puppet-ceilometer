@@ -12,7 +12,7 @@ describe 'ceilometer::db::mysql' do
       :user         => 'ceilometer',
       :host         => 'localhost',
       :charset      => 'utf8',
-      :collate      => 'utf8_unicode_ci',
+      :collate      => 'utf8_general_ci',
     }
   end
 
