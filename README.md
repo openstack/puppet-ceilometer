@@ -55,6 +55,18 @@ Limitations
 
 * The ceilometer modules have only been tested on RedHat and Ubuntu family systems.
 
+Beaker-Rspec
+------------
+
+This module has beaker-rspec tests
+
+To run:
+
+``shell
+bundle install
+bundle exec rspec spec/acceptance
+``
+
 Development
 -----------
 
