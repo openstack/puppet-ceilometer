@@ -34,6 +34,7 @@ class ceilometer::db (
       $backend_package = false
 
       include ::mysql::bindings::python
+      Package<| title == 'python-mysqldb' |> -> Class['ceilometer::db']
     }
     /^postgresql:\/\//: {
       $backend_package = $::ceilometer::params::psycopg_package_name
