@@ -21,7 +21,7 @@ describe 'ceilometer::alarm::notifier' do
     it { is_expected.to contain_class('ceilometer::params') }
 
     it 'installs ceilometer-alarm package' do
-      is_expected.to contain_package(platform_params[:alarm_notifier_package_name]).with_before('Service[ceilometer-alarm-notifier]')
+      is_expected.to contain_package(platform_params[:alarm_notifier_package_name]).with_before(['Service[ceilometer-alarm-notifier]'])
       is_expected.to contain_package(platform_params[:alarm_notifier_package_name]).with(
         :ensure => 'present',
         :name   => platform_params[:alarm_notifier_package_name],

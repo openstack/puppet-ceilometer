@@ -22,7 +22,7 @@ describe 'ceilometer::agent::central' do
       is_expected.to contain_package('ceilometer-agent-central').with(
         :ensure => 'latest',
         :name   => platform_params[:agent_package_name],
-        :before => 'Service[ceilometer-agent-central]',
+        :before => ['Service[ceilometer-agent-central]'],
         :tag    => 'openstack'
       )
     end

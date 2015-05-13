@@ -28,7 +28,7 @@ describe 'ceilometer::agent::polling' do
         if platform_params[:libvirt_group]
           is_expected.to contain_user('ceilometer').with_groups(['nova', "#{platform_params[:libvirt_group]}"])
         else
-          is_expected.to contain_user('ceilometer').with_groups('nova')
+          is_expected.to contain_user('ceilometer').with_groups(['nova'])
         end
       end
 
@@ -56,7 +56,7 @@ describe 'ceilometer::agent::polling' do
       is_expected.to contain_package('ceilometer-polling').with(
         :ensure => 'latest',
         :name   => platform_params[:agent_package_name],
-        :before => /Service\[ceilometer-polling\]/,
+        :before => ['Service[ceilometer-polling]'],
         :tag    => 'openstack'
       )
     end
