@@ -31,7 +31,6 @@ RSpec.configure do |c|
       on host, puppet('module','install','puppetlabs-mysql'), { :acceptable_exit_codes => 0 }
       on host, puppet('module','install','dprince/qpid'), { :acceptable_exit_codes => 0 }
       on host, puppet('module','install','stahnma-epel'), { :acceptable_exit_codes => 0 }
-      on host, puppet('module','install','garethr-erlang'), { :acceptable_exit_codes => 0 }
 
       # install puppet modules from git, use master
       shell('git clone https://git.openstack.org/stackforge/puppet-openstacklib /etc/puppet/modules/openstacklib')
