@@ -16,6 +16,7 @@ describe 'ceilometer with mysql' do
             release         => 'kilo',
             package_require => true,
           }
+          $package_provider = 'apt'
         }
         'RedHat': {
           class { '::openstack_extras::repo::redhat::redhat':
@@ -30,8 +31,7 @@ describe 'ceilometer with mysql' do
               },
             },
           }
-          include ::erlang
-          Class['erlang'] -> Class['rabbitmq']
+          $package_provider = 'yum'
         }
         default: {
           fail("Unsupported osfamily (${::osfamily})")
@@ -43,6 +43,7 @@ describe 'ceilometer with mysql' do
       class { '::rabbitmq':
         delete_guest_user => true,
         erlang_cookie     => 'secrete',
+        package_provider  => $package_provider,
       }
 
       rabbitmq_vhost { '/':
