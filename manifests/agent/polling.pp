@@ -83,7 +83,7 @@ class ceilometer::agent::polling (
 
     $compute_namespace_name = 'compute'
 
-    Package['nova-common'] -> Package['ceilometer-common']
+    Package <| title == 'nova-common' |> -> Package['ceilometer-common']
   }
 
   if $ipmi_namespace {

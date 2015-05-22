@@ -51,7 +51,7 @@ class ceilometer::agent::compute (
     }
   }
 
-  Package['nova-common'] -> Package['ceilometer-common'] -> Service['ceilometer-agent-compute']
+  Package <| title == 'nova-common' |> -> Package['ceilometer-common'] -> Service['ceilometer-agent-compute']
   service { 'ceilometer-agent-compute':
     ensure     => $service_ensure,
     name       => $::ceilometer::params::agent_compute_service_name,
