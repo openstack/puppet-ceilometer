@@ -35,7 +35,7 @@ class ceilometer::db (
 
       include mysql::bindings::python
     }
-    /^postgres:\/\//: {
+    /^postgresql:\/\//: {
       $backend_package = $::ceilometer::params::psycopg_package_name
     }
     /^mongodb:\/\//: {
