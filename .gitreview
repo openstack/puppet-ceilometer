@@ -1,5 +1,5 @@
 [gerrit]
 host=review.openstack.org
 port=29418
-project=stackforge/puppet-ceilometer.git
+project=openstack/puppet-ceilometer.git
 defaultbranch=stable/havana
