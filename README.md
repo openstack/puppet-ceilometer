@@ -1,7 +1,7 @@
 Ceilometer
 ==========
 
-5.0.0 - 2014.2.0 - Juno
+5.1.0 - 2014.2 - Juno
 
 #### Table of Contents
 
@@ -83,6 +83,16 @@ This is the ceilometer module.
 
 Release Notes
 -------------
+
+** 5.1.0 **
+* Add support for configuring coordination/backend_url
+* crontab: ensure the script is run with shell
+* Implement Ceilometer-API as a WSGI process support
+* Switch to TLSv1
+* Pin puppetlabs-concat to 1.2.1 in fixtures
+* Change default MySQL collate to utf8_general_ci
+* Update .gitreview file for project rename
+* spec: updates for rspec-puppet 2.x and rspec 3.x
 
 ** 5.0.0 **
 * Stable Juno release
