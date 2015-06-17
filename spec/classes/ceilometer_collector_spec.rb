@@ -13,16 +13,16 @@ describe 'ceilometer::collector' do
         pre_condition << "class { 'ceilometer::db': }"
       end
 
-      it { should contain_class('ceilometer::params') }
+      it { is_expected.to contain_class('ceilometer::params') }
 
       it 'installs ceilometer-collector package' do
-        should contain_package(platform_params[:collector_package_name]).with(
+        is_expected.to contain_package(platform_params[:collector_package_name]).with(
           :ensure => 'present'
         )
       end
 
       it 'configures ceilometer-collector service' do
-        should contain_service('ceilometer-collector').with(
+        is_expected.to contain_service('ceilometer-collector').with(
           :ensure     => 'running',
           :name       => platform_params[:collector_service_name],
           :enable     => true,
@@ -32,8 +32,8 @@ describe 'ceilometer::collector' do
       end
 
       it 'configures relationships on database' do
-        should contain_class('ceilometer::db').with_before('Service[ceilometer-collector]')
-        should contain_exec('ceilometer-dbsync').with_notify('Service[ceilometer-collector]')
+        is_expected.to contain_class('ceilometer::db').with_before('Service[ceilometer-collector]')
+        is_expected.to contain_exec('ceilometer-dbsync').with_notify('Service[ceilometer-collector]')
       end
     end
 
@@ -43,10 +43,10 @@ describe 'ceilometer::collector' do
       end
 
       # Catalog compilation does not crash for lack of ceilometer::db
-      it { should compile }
+      it { is_expected.to compile }
 
       it 'configures ceilometer-collector service' do
-        should contain_service('ceilometer-collector').with(
+        is_expected.to contain_service('ceilometer-collector').with(
           :ensure     => 'stopped',
           :name       => platform_params[:collector_service_name],
           :enable     => false,
@@ -63,7 +63,7 @@ describe 'ceilometer::collector' do
       end
 
       it 'configures ceilometer-collector service' do
-        should contain_service('ceilometer-collector').with(
+        is_expected.to contain_service('ceilometer-collector').with(
           :ensure     => nil,
           :name       => platform_params[:collector_service_name],
           :enable     => false,
