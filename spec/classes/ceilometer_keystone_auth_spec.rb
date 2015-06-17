@@ -8,15 +8,11 @@ describe 'ceilometer::keystone::auth' do
       :auth_name          => 'ceilometer',
       :configure_endpoint => true,
       :service_type       => 'metering',
-      :public_address     => '127.0.0.1',
-      :admin_address      => '127.0.0.1',
-      :internal_address   => '127.0.0.1',
-      :port               => '8777',
       :region             => 'RegionOne',
       :tenant             => 'services',
-      :public_protocol    => 'http',
-      :admin_protocol     => 'http',
-      :internal_protocol  => 'http'
+      :public_url         => 'http://127.0.0.1:8777',
+      :admin_url          => 'http://127.0.0.1:8777',
+      :internal_url       => 'http://127.0.0.1:8777',
     }
   end
 
@@ -58,28 +54,24 @@ describe 'ceilometer::keystone::auth' do
       it 'configure ceilometer endpoints' do
         is_expected.to contain_keystone_endpoint("#{default_params[:region]}/#{default_params[:auth_name]}").with(
           :ensure       => 'present',
-          :public_url   => "#{default_params[:public_protocol]}://#{default_params[:public_address]}:#{default_params[:port]}",
-          :admin_url    => "#{default_params[:admin_protocol]}://#{default_params[:admin_address]}:#{default_params[:port]}",
-          :internal_url => "#{default_params[:internal_protocol]}://#{default_params[:internal_address]}:#{default_params[:port]}"
+          :public_url   => default_params[:public_url],
+          :admin_url    => default_params[:admin_url],
+          :internal_url => default_params[:internal_url]
         )
       end
     end
 
-    context 'with overriden parameters' do
+    context 'with overridden parameters' do
       before do
         params.merge!({
-          :email             => 'mighty-ceilometer@remotehost',
-          :auth_name         => 'mighty-ceilometer',
-          :service_type      => 'cloud-measuring',
-          :public_address    => '10.0.0.1',
-          :admin_address     => '10.0.0.2',
-          :internal_address  => '10.0.0.3',
-          :port              => '65001',
-          :region            => 'RegionFortyTwo',
-          :tenant            => 'mighty-services',
-          :public_protocol   => 'https',
-          :admin_protocol    => 'ftp',
-          :internal_protocol => 'gopher'
+          :email         => 'mighty-ceilometer@remotehost',
+          :auth_name     => 'mighty-ceilometer',
+          :service_type  => 'cloud-measuring',
+          :region        => 'RegionFortyTwo',
+          :tenant        => 'mighty-services',
+          :public_url    => 'https://public.host:443/ceilometer_pub',
+          :admin_url     => 'https://admin.host/ceilometer_adm',
+          :internal_url  => 'http://internal.host:80/ceilometer_int',
         })
       end
 
@@ -110,28 +102,10 @@ describe 'ceilometer::keystone::auth' do
       it 'configure ceilometer endpoints' do
         is_expected.to contain_keystone_endpoint("#{params[:region]}/#{params[:auth_name]}").with(
           :ensure       => 'present',
-          :public_url   => "#{params[:public_protocol]}://#{params[:public_address]}:#{params[:port]}",
-          :admin_url    => "#{params[:admin_protocol]}://#{params[:admin_address]}:#{params[:port]}",
-          :internal_url => "#{params[:internal_protocol]}://#{params[:internal_address]}:#{params[:port]}"
+          :public_url   => params[:public_url],
+          :admin_url    => params[:admin_url],
+          :internal_url => params[:internal_url]
         )
-      end
-
-      context 'with overriden full uri' do
-        before do
-          params.merge!({
-            :public_url => 'https://public.host:443/ceilometer_pub',
-            :admin_url => 'https://admin.host/ceilometer_adm',
-            :internal_url => 'http://internal.host:80/ceilometer_int',
-          })
-        end
-        it 'configure ceilometer endpoints' do
-          is_expected.to contain_keystone_endpoint("#{params[:region]}/#{params[:auth_name]}").with(
-            :ensure       => 'present',
-            :public_url   => params[:public_url],
-            :admin_url    => params[:admin_url],
-            :internal_url => params[:internal_url]
-          )
-        end
       end
 
       context 'with configure_endpoint = false' do
@@ -141,6 +115,31 @@ describe 'ceilometer::keystone::auth' do
             is_expected.to_not contain_keystone_endpoint("#{params[:region]}/#{params[:auth_name]}")
           end
         end
+      end
+    end
+
+    context 'with deprecated parameters' do
+      before do
+        params.merge!({
+          :auth_name         => 'mighty-ceilometer',
+          :region            => 'RegionFortyTwo',
+          :public_address    => '10.0.0.1',
+          :admin_address     => '10.0.0.2',
+          :internal_address  => '10.0.0.3',
+          :port              => '65001',
+          :public_protocol   => 'https',
+          :admin_protocol    => 'ftp',
+          :internal_protocol => 'gopher'
+        })
+      end
+
+      it 'configure ceilometer endpoints' do
+        is_expected.to contain_keystone_endpoint("#{params[:region]}/#{params[:auth_name]}").with(
+          :ensure       => 'present',
+          :public_url   => "#{params[:public_protocol]}://#{params[:public_address]}:#{params[:port]}",
+          :admin_url    => "#{params[:admin_protocol]}://#{params[:admin_address]}:#{params[:port]}",
+          :internal_url => "#{params[:internal_protocol]}://#{params[:internal_address]}:#{params[:port]}"
+        )
       end
     end
 
