@@ -1,10 +1,10 @@
 {
   "name": "stackforge-ceilometer",
-  "version": "5.0.0",
-  "author": "eNovance and StackForge Contributors",
+  "version": "5.1.0",
+  "author": "eNovance and OpenStack Contributors",
   "summary": "Puppet module for OpenStack Ceilometer",
   "license": "Apache-2.0",
-  "source": "git://github.com/stackforge/puppet-ceilometer.git",
+  "source": "git://github.com/openstack/puppet-ceilometer.git",
   "project_page": "https://launchpad.net/puppet-ceilometer",
   "issues_url": "https://bugs.launchpad.net/puppet-ceilometer",
   "requirements": [
