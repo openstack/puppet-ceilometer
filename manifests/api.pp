@@ -131,7 +131,7 @@ class ceilometer::api (
 
     if $keystone_auth_admin_prefix {
       validate_re($keystone_auth_admin_prefix, '^(/.+[^/])?$')
-      warning('The keystone_auth_admin_prefix parameter is deprecated. Please use auth_uri and identity_uri instead.')
+      warning('The keystone_auth_admin_prefix parameter is deprecated. Please use keystone_auth_uri and keystone_identity_uri instead.')
       ceilometer_config {
         'keystone_authtoken/auth_admin_prefix': value => $keystone_auth_admin_prefix;
       }
@@ -142,7 +142,7 @@ class ceilometer::api (
     }
 
     if $keystone_host {
-      warning('The keystone_host parameter is deprecated. Please use auth_uri and identity_uri instead.')
+      warning('The keystone_host parameter is deprecated. Please use keystone_auth_uri and keystone_identity_uri instead.')
       ceilometer_config {
         'keystone_authtoken/auth_host': value => $keystone_host;
       }
@@ -153,7 +153,7 @@ class ceilometer::api (
     }
 
     if $keystone_port {
-      warning('The keystone_port parameter is deprecated. Please use auth_uri and identity_uri instead.')
+      warning('The keystone_port parameter is deprecated. Please use keystone_auth_uri and keystone_identity_uri instead.')
       ceilometer_config {
         'keystone_authtoken/auth_port': value => $keystone_port;
       }
@@ -164,7 +164,7 @@ class ceilometer::api (
     }
 
     if $keystone_protocol {
-      warning('The keystone_protocol parameter is deprecated. Please use auth_uri and identity_uri instead.')
+      warning('The keystone_protocol parameter is deprecated. Please use keystone_auth_uri and keystone_identity_uri instead.')
       ceilometer_config {
         'keystone_authtoken/auth_protocol': value => $keystone_protocol;
       }
