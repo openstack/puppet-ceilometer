@@ -27,7 +27,7 @@
 #    Defaults to 'LOG_USER'
 # [*rpc_backend*]
 #    (optional) what rpc/queuing service to use
-#    Defaults to impl_kombu (rabbitmq)
+#    Defaults to 'rabbit'
 #  [*rabbit_host*]
 #    ip or hostname of the rabbit server. Optional. Defaults to '127.0.0.1'
 #  [*rabbit_port*]
@@ -99,7 +99,7 @@ class ceilometer(
   $verbose                            = false,
   $use_syslog                         = false,
   $log_facility                       = 'LOG_USER',
-  $rpc_backend                        = 'ceilometer.openstack.common.rpc.impl_kombu',
+  $rpc_backend                        = 'rabbit',
   $rabbit_host                        = '127.0.0.1',
   $rabbit_port                        = 5672,
   $rabbit_hosts                       = undef,
@@ -182,7 +182,8 @@ class ceilometer(
 
   Package['ceilometer-common'] -> Ceilometer_config<||>
 
-  if $rpc_backend == 'ceilometer.openstack.common.rpc.impl_kombu' {
+  # we keep "ceilometer.openstack.common.rpc.impl_kombu" for backward compatibility
+  if $rpc_backend == 'ceilometer.openstack.common.rpc.impl_kombu' or $rpc_backend == 'rabbit' {
 
     if $rabbit_hosts {
       ceilometer_config { 'oslo_messaging_rabbit/rabbit_host': ensure => absent }
@@ -250,7 +251,8 @@ class ceilometer(
 
   }
 
-  if $rpc_backend == 'ceilometer.openstack.common.rpc.impl_qpid' {
+  # we keep "ceilometer.openstack.common.rpc.impl_qpid" for backward compatibility
+  if $rpc_backend == 'ceilometer.openstack.common.rpc.impl_qpid' or $rpc_backend == 'qpid' {
 
     ceilometer_config {
       'DEFAULT/qpid_hostname'              : value => $qpid_hostname;

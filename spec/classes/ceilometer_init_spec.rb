@@ -24,7 +24,7 @@ describe 'ceilometer' do
 
   let :qpid_params do
     {
-      :rpc_backend   => "ceilometer.openstack.common.rpc.impl_qpid",
+      :rpc_backend   => 'qpid',
       :qpid_hostname => 'localhost',
       :qpid_port     => 5672,
       :qpid_username => 'guest',
@@ -55,6 +55,11 @@ describe 'ceilometer' do
         it_configures 'a ceilometer base installation'
         it_configures 'rabbit with SSL support'
         it_configures 'rabbit with HA support'
+      end
+
+      context("with legacy rpc_backend value") do
+        before { params.merge!( rabbit_params ).merge!(:rpc_backend => 'ceilometer.openstack.common.rpc.impl_kombu') }
+        it { is_expected.to contain_ceilometer_config('DEFAULT/rpc_backend').with_value('ceilometer.openstack.common.rpc.impl_kombu') }
       end
     end
 
@@ -307,12 +312,17 @@ describe 'ceilometer' do
     end
 
     context("with mandatory parameters set") do
-      it { is_expected.to contain_ceilometer_config('DEFAULT/rpc_backend').with_value('ceilometer.openstack.common.rpc.impl_qpid') }
+      it { is_expected.to contain_ceilometer_config('DEFAULT/rpc_backend').with_value('qpid') }
       it { is_expected.to contain_ceilometer_config('DEFAULT/qpid_hostname').with_value( params[:qpid_hostname] ) }
       it { is_expected.to contain_ceilometer_config('DEFAULT/qpid_port').with_value( params[:qpid_port] ) }
       it { is_expected.to contain_ceilometer_config('DEFAULT/qpid_username').with_value( params[:qpid_username]) }
       it { is_expected.to contain_ceilometer_config('DEFAULT/qpid_password').with_value(params[:qpid_password]) }
       it { is_expected.to contain_ceilometer_config('DEFAULT/qpid_password').with_value( params[:qpid_password] ).with_secret(true) }
+    end
+
+    context("with legacy rpc_backend value") do
+      before { params.merge!( qpid_params ).merge!(:rpc_backend => 'ceilometer.openstack.common.rpc.impl_qpid') }
+      it { is_expected.to contain_ceilometer_config('DEFAULT/rpc_backend').with_value('ceilometer.openstack.common.rpc.impl_qpid') }
     end
 
     context("failing if the rpc_backend is not present") do
