@@ -79,8 +79,3 @@ Contributors
 * https://github.com/openstack/puppet-ceilometer/graphs/contributors
 
 This is the ceilometer module.
-
-Contact
--------
-
-techs@enovance.com
