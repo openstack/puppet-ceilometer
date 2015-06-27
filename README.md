@@ -17,9 +17,9 @@ Ceilometer
 Overview
 --------
 
-The ceilometer module is part of [Stackforge](https://github.com/stackforge), an effort by the
+The ceilometer module is part of [OpenStack](https://github.com/openstack), an effort by the
 OpenStack infrastructure team to provice continuous integration testing and code review for
-OpenStack and OpenStack community projects not part of the core software. The module itself
+OpenStack and OpenStack community projects as part of the core software. The module itself
 is used to flexibly configure and manage the metering service for OpenStack.
 
 Module Description
@@ -77,7 +77,7 @@ Developer documentation for the entire puppet-openstack project
 Contributors
 ------------
 
-* https://github.com/stackforge/puppet-ceilometer/graphs/contributors
+* https://github.com/openstack/puppet-ceilometer/graphs/contributors
 
 This is the ceilometer module.
 
