@@ -1,3 +1,32 @@
+##2015-07-08 - 6.0.0
+###Summary
+
+This is a backwards-incompatible major release for OpenStack Kilo.
+
+####Backwards-incompatible changes
+- Move rabbit/kombu settings to oslo_messaging_rabbit section
+
+####Features
+- Puppet 4.x support
+- make crontab for expirer optional
+- Refactorise Keystone resources management
+- db: Added postgresql backend using openstacklib helper
+- Implement Ceilometer-API as a WSGI process support
+- Add support for ceilometer-polling agent
+- Add support for identity_uri
+- Tag all Ceilometer packages
+- Add udp_address/udp_port parameters for collector.
+- Deprecate old public, internal and admin parameters
+
+####Bugfixes
+- Ensure python-mysqldb is installed before MySQL db_sync
+- Fix dependency on nova-common package
+
+####Maintenance
+- Acceptance tests with Beaker
+- Fix spec tests for RSpec 3.x and Puppet 4.x
+
+
 ##2015-06-17 - 5.1.0
 ###Summary
 
