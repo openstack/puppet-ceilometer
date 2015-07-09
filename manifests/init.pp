@@ -74,6 +74,9 @@
 #    Valid values are TLSv1, SSLv23 and SSLv3. SSLv2 may be
 #    available on some distributions.
 #    Defaults to 'TLSv1'
+#  [*memcached_servers*]
+#    (optional) A list of memcached server(s) to use for caching.
+#    Defaults to undef
 #
 # [*qpid_hostname*]
 # [*qpid_port*]
@@ -113,6 +116,7 @@ class ceilometer(
   $kombu_ssl_certfile                 = undef,
   $kombu_ssl_keyfile                  = undef,
   $kombu_ssl_version                  = 'TLSv1',
+  $memcached_servers                  = undef,
   $qpid_hostname                      = 'localhost',
   $qpid_port                          = 5672,
   $qpid_username                      = 'guest',
@@ -304,4 +308,17 @@ class ceilometer(
     }
   }
 
+  if $memcached_servers {
+    validate_array($memcached_servers)
+  }
+
+  if $memcached_servers {
+    ceilometer_config {
+      'DEFAULT/memcached_servers': value  => join($memcached_servers, ',')
+    }
+  } else {
+    ceilometer_config {
+      'DEFAULT/memcached_servers': ensure => absent;
+    }
+  }
 }

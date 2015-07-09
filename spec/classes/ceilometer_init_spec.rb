@@ -331,6 +331,16 @@ describe 'ceilometer' do
     end
   end
 
+  shared_examples_for 'memcached support' do
+    context "with memcached enabled" do
+      before { params.merge!(
+        :memcached_servers => ['1.2.3.4','1.2.3.5']
+      ) }
+
+      it { is_expected.to contain_ceilometer_config('DEFAULT/memcached_servers').with_value('1.2.3.4,1.2.3.5') }
+    end
+  end
+
   context 'on Debian platforms' do
     let :facts do
       { :osfamily => 'Debian' }
