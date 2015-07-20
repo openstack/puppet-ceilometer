@@ -121,7 +121,7 @@ describe 'ceilometer with mysql' do
     end
 
     describe cron do
-      it { should have_entry('1 0 * * * ceilometer-expirer').with_user('ceilometer') }
+      it { is_expected.to have_entry('1 0 * * * ceilometer-expirer').with_user('ceilometer') }
     end
 
   end
