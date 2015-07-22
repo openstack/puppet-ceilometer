@@ -91,7 +91,6 @@ describe 'ceilometer::api' do
             :hasstatus  => true,
             :hasrestart => true,
             :require    => 'Class[Ceilometer::Db]',
-            :subscribe  => 'Exec[ceilometer-dbsync]',
             :tag        => 'ceilometer-service',
           )
         end
