@@ -96,7 +96,7 @@ class ceilometer::api (
   package { 'ceilometer-api':
     ensure => $package_ensure,
     name   => $::ceilometer::params::api_package_name,
-    tag    => 'openstack',
+    tag    => ['openstack', 'ceilometer-package'],
   }
 
   if $manage_service {
@@ -115,7 +115,8 @@ class ceilometer::api (
     hasstatus  => true,
     hasrestart => true,
     require    => Class['ceilometer::db'],
-    subscribe  => Exec['ceilometer-dbsync']
+    subscribe  => Exec['ceilometer-dbsync'],
+    tag        => 'ceilometer-service',
   }
 
   ceilometer_config {

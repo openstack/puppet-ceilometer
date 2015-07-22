@@ -104,7 +104,7 @@ class ceilometer::agent::polling (
   package { 'ceilometer-polling':
     ensure => $package_ensure,
     name   => $::ceilometer::params::agent_polling_package_name,
-    tag    => 'openstack',
+    tag    => ['openstack', 'ceilometer-package'],
   }
 
   if $namespaces_real {
@@ -123,6 +123,7 @@ class ceilometer::agent::polling (
     enable     => $enabled,
     hasstatus  => true,
     hasrestart => true,
+    tag        => 'ceilometer-service',
   }
 
   if $coordination_url {

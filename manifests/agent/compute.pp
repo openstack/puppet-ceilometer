@@ -30,7 +30,7 @@ class ceilometer::agent::compute (
   package { 'ceilometer-agent-compute':
     ensure => $package_ensure,
     name   => $::ceilometer::params::agent_compute_package_name,
-    tag    => 'openstack',
+    tag    => ['openstack', 'ceilometer-package'],
   }
 
   if $::ceilometer::params::libvirt_group {
@@ -58,6 +58,7 @@ class ceilometer::agent::compute (
     enable     => $enabled,
     hasstatus  => true,
     hasrestart => true,
+    tag        => 'ceilometer-service',
   }
 
   #NOTE(dprince): This is using a custom (inline) file_line provider
