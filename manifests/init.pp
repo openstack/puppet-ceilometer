@@ -177,7 +177,7 @@ class ceilometer(
   package { 'ceilometer-common':
     ensure => $package_ensure,
     name   => $::ceilometer::params::common_package_name,
-    tag    => 'openstack',
+    tag    => ['openstack', 'ceilometer-package'],
   }
 
   Package['ceilometer-common'] -> Ceilometer_config<||>

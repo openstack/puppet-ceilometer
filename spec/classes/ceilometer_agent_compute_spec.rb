@@ -23,7 +23,7 @@ describe 'ceilometer::agent::compute' do
         :ensure => 'installed',
         :name   => platform_params[:agent_package_name],
         :before => ['Service[ceilometer-agent-compute]'],
-        :tag    => 'openstack'
+        :tag    => ['openstack', 'ceilometer-package'],
       )
     end
 
@@ -73,7 +73,8 @@ describe 'ceilometer::agent::compute' do
             :name       => platform_params[:agent_service_name],
             :enable     => params[:enabled],
             :hasstatus  => true,
-            :hasrestart => true
+            :hasrestart => true,
+            :tag        => 'ceilometer-service',
           )
         end
       end
@@ -92,7 +93,8 @@ describe 'ceilometer::agent::compute' do
           :name       => platform_params[:agent_service_name],
           :enable     => false,
           :hasstatus  => true,
-          :hasrestart => true
+          :hasrestart => true,
+          :tag        => 'ceilometer-service',
         )
       end
     end

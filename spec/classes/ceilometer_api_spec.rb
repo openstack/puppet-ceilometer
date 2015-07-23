@@ -35,7 +35,7 @@ describe 'ceilometer::api' do
       is_expected.to contain_package('ceilometer-api').with(
         :ensure => 'latest',
         :name   => platform_params[:api_package_name],
-        :tag    => 'openstack',
+        :tag    => ['openstack', 'ceilometer-package'],
       )
     end
 
@@ -90,7 +90,8 @@ describe 'ceilometer::api' do
             :hasstatus  => true,
             :hasrestart => true,
             :require    => 'Class[Ceilometer::Db]',
-            :subscribe  => 'Exec[ceilometer-dbsync]'
+            :subscribe  => 'Exec[ceilometer-dbsync]',
+            :tag        => 'ceilometer-service',
           )
         end
       end
@@ -109,7 +110,8 @@ describe 'ceilometer::api' do
           :name       => platform_params[:api_service_name],
           :enable     => false,
           :hasstatus  => true,
-          :hasrestart => true
+          :hasrestart => true,
+          :tag        => 'ceilometer-service',
         )
       end
     end
