@@ -37,7 +37,7 @@ Setup
 
 ### Installing ceilometer
 
-  example% puppet module install puppetlabs/ceilometer
+  example% puppet module install openstack/ceilometer
 
 ### Beginning with ceilometer
 
