@@ -3,7 +3,8 @@ require 'spec_helper'
 describe 'ceilometer::api' do
 
   let :pre_condition do
-    "class { 'ceilometer': metering_secret => 's3cr3t' }"
+    "class { 'ceilometer': metering_secret => 's3cr3t' }
+     include ::ceilometer::db"
   end
 
   let :params do
@@ -113,11 +114,51 @@ describe 'ceilometer::api' do
         )
       end
     end
+
+    context 'when running ceilometer-api in wsgi' do
+      before do
+        params.merge!({ :service_name   => 'httpd' })
+      end
+
+      let :pre_condition do
+        "include ::apache
+         include ::ceilometer::db
+         class { 'ceilometer': metering_secret => 's3cr3t' }"
+      end
+
+      it 'configures ceilometer-api service with Apache' do
+        is_expected.to contain_service('ceilometer-api').with(
+          :ensure     => 'stopped',
+          :name       => platform_params[:api_service_name],
+          :enable     => false,
+          :tag        => 'ceilometer-service',
+        )
+      end
+    end
+
+    context 'when service_name is not valid' do
+      before do
+        params.merge!({ :service_name   => 'foobar' })
+      end
+
+      let :pre_condition do
+        "include ::apache
+         include ::ceilometer::db
+         class { 'ceilometer': metering_secret => 's3cr3t' }"
+      end
+
+      it_raises 'a Puppet::Error', /Invalid service_name/
+    end
   end
 
   context 'on Debian platforms' do
     let :facts do
-      { :osfamily => 'Debian' }
+      { :osfamily               => 'Debian',
+        :operatingsystem        => 'Debian',
+        :operatingsystemrelease => '8.0',
+        :concat_basedir         => '/var/lib/puppet/concat',
+        :fqdn                   => 'some.host.tld',
+        :processorcount         => 2 }
     end
 
     let :platform_params do
@@ -130,7 +171,12 @@ describe 'ceilometer::api' do
 
   context 'on RedHat platforms' do
     let :facts do
-      { :osfamily => 'RedHat' }
+      { :osfamily               => 'RedHat',
+        :operatingsystem        => 'RedHat',
+        :operatingsystemrelease => '7.1',
+        :fqdn                   => 'some.host.tld',
+        :concat_basedir         => '/var/lib/puppet/concat',
+        :processorcount         => 2 }
     end
 
     let :platform_params do

@@ -68,7 +68,7 @@ class ceilometer::params {
         }
       }
       $ceilometer_wsgi_script_path    = '/usr/lib/cgi-bin/ceilometer'
-      $ceilometer_wsgi_script_source  = '/usr/share/ceilometer/app.wsgi'
+      $ceilometer_wsgi_script_source  = '/usr/lib/python2.7/dist-packages/ceilometer/api/app.wsgi'
     }
     default: {
       fail("Unsupported osfamily: ${::osfamily} operatingsystem: \

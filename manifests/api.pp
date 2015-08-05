@@ -64,6 +64,15 @@
 #    (optional) ensure state for package.
 #    Defaults to 'present'
 #
+# [*service_name*]
+#   (optional) Name of the service that will be providing the
+#   server functionality of ceilometer-api.
+#   If the value is 'httpd', this means ceilometer-api will be a web
+#   service, and you must use another class to configure that
+#   web service. For example, use class { 'ceilometer::wsgi::apache'...}
+#   to make keystone be a web app using apache mod_wsgi.
+#   Defaults to '$::ceilometer::params::api_service_name'
+#
 class ceilometer::api (
   $manage_service             = true,
   $enabled                    = true,
@@ -75,23 +84,24 @@ class ceilometer::api (
   $keystone_identity_uri      = false,
   $host                       = '0.0.0.0',
   $port                       = '8777',
+  $service_name               = $::ceilometer::params::api_service_name,
   # DEPRECATED PARAMETERS
   $keystone_host              = '127.0.0.1',
   $keystone_port              = '35357',
   $keystone_auth_admin_prefix = false,
   $keystone_protocol          = 'http',
-) {
+) inherits ceilometer::params {
 
   include ::ceilometer::params
   include ::ceilometer::policy
 
   validate_string($keystone_password)
 
-  Ceilometer_config<||> ~> Service['ceilometer-api']
-  Class['ceilometer::policy'] ~> Service['ceilometer-api']
+  Ceilometer_config<||> ~> Service[$service_name]
+  Class['ceilometer::policy'] ~> Service[$service_name]
 
   Package['ceilometer-api'] -> Ceilometer_config<||>
-  Package['ceilometer-api'] -> Service['ceilometer-api']
+  Package['ceilometer-api'] -> Service[$service_name]
   Package['ceilometer-api'] -> Class['ceilometer::policy']
   package { 'ceilometer-api':
     ensure => $package_ensure,
@@ -106,16 +116,30 @@ class ceilometer::api (
       $service_ensure = 'stopped'
     }
   }
+  Package['ceilometer-common'] -> Service[$service_name]
 
-  Package['ceilometer-common'] -> Service['ceilometer-api']
-  service { 'ceilometer-api':
-    ensure     => $service_ensure,
-    name       => $::ceilometer::params::api_service_name,
-    enable     => $enabled,
-    hasstatus  => true,
-    hasrestart => true,
-    require    => Class['ceilometer::db'],
-    subscribe  => Exec['ceilometer-dbsync']
+  if $service_name == $::ceilometer::params::api_service_name {
+    service { 'ceilometer-api':
+      ensure     => $service_ensure,
+      name       => $::ceilometer::params::api_service_name,
+      enable     => $enabled,
+      hasstatus  => true,
+      hasrestart => true,
+      require    => Class['ceilometer::db'],
+      subscribe  => Exec['ceilometer-dbsync'],
+      tag        => 'ceilometer-service',
+    }
+  } elsif $service_name == 'httpd' {
+    include ::apache::params
+    service { 'ceilometer-api':
+      ensure => 'stopped',
+      name   => $::ceilometer::params::api_service_name,
+      enable => false,
+      tag    => 'ceilometer-service',
+    }
+    Class['ceilometer::db'] -> Service[$service_name]
+  } else {
+    fail('Invalid service_name. Either keystone/openstack-ceilometer-api for running as a standalone service, or httpd for being run by a httpd server')
   }
 
   ceilometer_config {
