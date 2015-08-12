@@ -41,4 +41,8 @@ Puppet::Type.newtype(:ceilometer_config) do
     defaultto false
   end
 
+  autorequire(:package) do
+    'ceilometer-common'
+  end
+
 end

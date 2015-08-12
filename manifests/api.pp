@@ -90,7 +90,6 @@ class ceilometer::api (
   Ceilometer_config<||> ~> Service['ceilometer-api']
   Class['ceilometer::policy'] ~> Service['ceilometer-api']
 
-  Package['ceilometer-api'] -> Ceilometer_config<||>
   Package['ceilometer-api'] -> Service['ceilometer-api']
   Package['ceilometer-api'] -> Class['ceilometer::policy']
   package { 'ceilometer-api':
