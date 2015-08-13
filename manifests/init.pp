@@ -202,8 +202,6 @@ class ceilometer(
     tag    => ['openstack', 'ceilometer-package'],
   }
 
-  Package['ceilometer-common'] -> Ceilometer_config<||>
-
   # we keep "ceilometer.openstack.common.rpc.impl_kombu" for backward compatibility
   if $rpc_backend == 'ceilometer.openstack.common.rpc.impl_kombu' or $rpc_backend == 'rabbit' {
 
