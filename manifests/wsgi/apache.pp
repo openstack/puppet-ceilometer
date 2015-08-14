@@ -18,8 +18,7 @@
 # Class to serve Ceilometer API with apache mod_wsgi in place of ceilometer-api service.
 #
 # Serving Ceilometer API from apache is the recommended way to go for production
-# systems as the current keystone implementation is not multi-processor aware,
-# thus limiting the performance for concurrent accesses.
+# because of limited performance for concurrent accesses when running eventlet.
 #
 # When using this class you should disable your ceilometer-api service.
 #

@@ -70,7 +70,7 @@
 #   If the value is 'httpd', this means ceilometer-api will be a web
 #   service, and you must use another class to configure that
 #   web service. For example, use class { 'ceilometer::wsgi::apache'...}
-#   to make keystone be a web app using apache mod_wsgi.
+#   to make ceilometer-api be a web app using apache mod_wsgi.
 #   Defaults to '$::ceilometer::params::api_service_name'
 #
 class ceilometer::api (
@@ -138,7 +138,7 @@ class ceilometer::api (
     }
     Class['ceilometer::db'] -> Service[$service_name]
   } else {
-    fail('Invalid service_name. Either keystone/openstack-ceilometer-api for running as a standalone service, or httpd for being run by a httpd server')
+    fail('Invalid service_name. Either ceilometer/openstack-ceilometer-api for running as a standalone service, or httpd for being run by a httpd server')
   }
 
   ceilometer_config {
