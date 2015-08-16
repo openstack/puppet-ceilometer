@@ -98,6 +98,8 @@ describe 'ceilometer with mysql' do
         rabbit_userid       => 'ceilometer',
         rabbit_password     => 'an_even_bigger_secret',
         rabbit_host         => '127.0.0.1',
+        debug               => true,
+        verbose             => true,
       }
       class { '::ceilometer::db::mysql':
         password => 'a_big_secret',
