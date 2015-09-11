@@ -41,7 +41,8 @@ class ceilometer::alarm::evaluator (
 
   include ::ceilometer::params
 
-  validate_re("${evaluation_interval}",'^(\d+)$')
+  # Cast $evaluation_interval to a string
+  validate_re("${evaluation_interval}",'^(\d+)$') # lint:ignore:only_variable_string
 
   Ceilometer_config<||> ~> Service['ceilometer-alarm-evaluator']
 
