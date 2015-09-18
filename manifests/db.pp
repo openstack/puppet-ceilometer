@@ -50,12 +50,6 @@ class ceilometer::db (
     }
   }
 
-  if $sync_db {
-    $command = $::ceilometer::params::dbsync_command
-  } else {
-    $command = '/bin/true'
-  }
-
   if $backend_package and !defined(Package[$backend_package]) {
     package {'ceilometer-backend-package':
       ensure => present,
@@ -68,15 +62,8 @@ class ceilometer::db (
     'database/connection': value => $database_connection, secret => true;
   }
 
-  Ceilometer_config['database/connection'] ~> Exec['ceilometer-dbsync']
-
-  exec { 'ceilometer-dbsync':
-    command     => $command,
-    path        => '/usr/bin',
-    user        => $::ceilometer::params::user,
-    refreshonly => true,
-    logoutput   => on_failure,
-    subscribe   => Ceilometer_config['database/connection']
+  if $sync_db {
+    include ::ceilometer::db::sync
   }
 
 }

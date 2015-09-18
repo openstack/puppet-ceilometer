@@ -69,10 +69,6 @@ describe 'ceilometer::collector' do
         )
       end
 
-      it 'configures relationships on database' do
-        is_expected.to contain_class('ceilometer::db').with_before(['Service[ceilometer-collector]'])
-        is_expected.to contain_exec('ceilometer-dbsync').with_notify(['Service[ceilometer-collector]'])
-      end
     end
 
     context 'when disabled' do

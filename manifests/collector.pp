@@ -53,8 +53,6 @@ class ceilometer::collector (
   if $manage_service {
     if $enabled {
       $service_ensure = 'running'
-      Class['ceilometer::db'] -> Service['ceilometer-collector']
-      Exec['ceilometer-dbsync'] ~> Service['ceilometer-collector']
     } else {
       $service_ensure = 'stopped'
     }

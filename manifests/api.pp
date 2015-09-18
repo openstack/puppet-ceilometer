@@ -115,6 +115,7 @@ class ceilometer::api (
       $service_ensure = 'stopped'
     }
   }
+
   Package['ceilometer-common'] -> Service[$service_name]
 
   if $service_name == $::ceilometer::params::api_service_name {

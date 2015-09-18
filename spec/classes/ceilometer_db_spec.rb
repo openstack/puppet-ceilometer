@@ -25,14 +25,8 @@ describe 'ceilometer::db' do
       is_expected.to contain_ceilometer_config('database/connection').with_value( params[:database_connection] ).with_secret(true)
     end
 
-    it 'runs ceilometer-dbsync' do
-      is_expected.to contain_exec('ceilometer-dbsync').with(
-        :command     => 'ceilometer-dbsync --config-file=/etc/ceilometer/ceilometer.conf',
-        :path        => '/usr/bin',
-        :refreshonly => 'true',
-        :user        => 'ceilometer',
-        :logoutput   => 'on_failure'
-      )
+    it 'includes ceilometer::db::sync' do
+      is_expected.to contain_class('ceilometer::db::sync')
     end
   end
 
@@ -59,14 +53,8 @@ describe 'ceilometer::db' do
       is_expected.to contain_ceilometer_config('database/connection').with_value( params[:database_connection] ).with_secret(true)
     end
 
-    it 'runs ceilometer-dbsync' do
-      is_expected.to contain_exec('ceilometer-dbsync').with(
-        :command     => '/bin/true',
-        :path        => '/usr/bin',
-        :refreshonly => 'true',
-        :user        => 'ceilometer',
-        :logoutput   => 'on_failure'
-      )
+    it 'does not include ceilometer::db::sync' do
+      is_expected.not_to contain_class('ceilometer::db::sync')
     end
   end
 
@@ -92,14 +80,8 @@ describe 'ceilometer::db' do
         :name => 'python-pymongo')
     end
 
-    it 'runs ceilometer-dbsync' do
-      is_expected.to contain_exec('ceilometer-dbsync').with(
-        :command     => 'ceilometer-dbsync --config-file=/etc/ceilometer/ceilometer.conf',
-        :path        => '/usr/bin',
-        :refreshonly => 'true',
-        :user        => 'ceilometer',
-        :logoutput   => 'on_failure'
-      )
+    it 'includes ceilometer::db::sync' do
+      is_expected.to contain_class('ceilometer::db::sync')
     end
   end
 
@@ -124,14 +106,8 @@ describe 'ceilometer::db' do
       is_expected.to contain_ceilometer_config('database/connection').with_value( params[:database_connection] ).with_secret(true)
     end
 
-    it 'runs ceilometer-dbsync' do
-      is_expected.to contain_exec('ceilometer-dbsync').with(
-        :command     => '/bin/true',
-        :path        => '/usr/bin',
-        :refreshonly => 'true',
-        :user        => 'ceilometer',
-        :logoutput   => 'on_failure'
-      )
+    it 'does not include ceilomter::db::sync' do
+      is_expected.not_to contain_class('ceilometer::db::sync')
     end
   end
 
@@ -154,14 +130,8 @@ describe 'ceilometer::db' do
         :name => 'python-pysqlite2')
     end
 
-    it 'runs ceilometer-dbsync' do
-      is_expected.to contain_exec('ceilometer-dbsync').with(
-        :command     => 'ceilometer-dbsync --config-file=/etc/ceilometer/ceilometer.conf',
-        :path        => '/usr/bin',
-        :refreshonly => 'true',
-        :user        => 'ceilometer',
-        :logoutput   => 'on_failure'
-      )
+    it 'includes ceilometer::db::sync' do
+      is_expected.to contain_class('ceilometer::db::sync')
     end
   end
 
