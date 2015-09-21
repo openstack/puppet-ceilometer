@@ -21,11 +21,6 @@
 #
 # === Parameters
 #
-# [*time_to_live*]
-#   (optional) Number of seconds that samples are kept in the database.
-#   Should be a valid integer
-#   Defaults to '-1' to disable TTL and keep forever the datas.
-#
 #  [*enable_cron*]
 #    (optional) Whether to configure a crontab entry to run the expiry.
 #    Defaults to true.
@@ -45,20 +40,27 @@
 #  [*weekday*]
 #    (optional) Defaults to '*'.
 #
+# [*time_to_live*]
+#   (optional) DEPRECATED. Number of seconds that samples are kept in the database.
+#   Should be a valid integer
+#   Defaults to '-1' to disable TTL and keep forever the datas.
 
 class ceilometer::expirer (
-  $time_to_live   = '-1',
   $enable_cron    = True,
   $minute         = 1,
   $hour           = 0,
   $monthday       = '*',
   $month          = '*',
   $weekday        = '*',
+  # Deprecated parameters
+  $time_to_live   = '-1',
 ) {
 
   include ::ceilometer::params
 
   Package<| title == 'ceilometer-common' |> -> Class['ceilometer::expirer']
+
+  warning('Parameter "time_to_live" is deprecated and will be removed in next release. Use metering_time_to_live in "ceilometer" class instead.')
 
   ceilometer_config {
     'database/time_to_live': value => $time_to_live;
