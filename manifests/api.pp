@@ -73,6 +73,10 @@
 #   to make ceilometer-api be a web app using apache mod_wsgi.
 #   Defaults to '$::ceilometer::params::api_service_name'
 #
+# [*api_workers*]
+#   (optional) Number of workers for Ceilometer API server (integer value).
+#   Defaults to $::os_service_default
+#
 class ceilometer::api (
   $manage_service             = true,
   $enabled                    = true,
@@ -85,6 +89,7 @@ class ceilometer::api (
   $host                       = '0.0.0.0',
   $port                       = '8777',
   $service_name               = $::ceilometer::params::api_service_name,
+  $api_workers                = $::os_service_default,
   # DEPRECATED PARAMETERS
   $keystone_host              = '127.0.0.1',
   $keystone_port              = '35357',
@@ -145,6 +150,7 @@ class ceilometer::api (
   }
 
   ceilometer_config {
+    'DEFAULT/api_workers'                  : value => $api_workers;
     'keystone_authtoken/admin_tenant_name' : value => $keystone_tenant;
     'keystone_authtoken/admin_user'        : value => $keystone_user;
     'keystone_authtoken/admin_password'    : value => $keystone_password, secret => true;

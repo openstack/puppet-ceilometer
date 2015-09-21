@@ -52,6 +52,7 @@ describe 'ceilometer::api' do
       is_expected.to contain_ceilometer_config('keystone_authtoken/auth_uri').with_value( params[:keystone_protocol] + "://" + params[:keystone_host] + ":5000/" )
       is_expected.to contain_ceilometer_config('api/host').with_value( params[:host] )
       is_expected.to contain_ceilometer_config('api/port').with_value( params[:port] )
+      is_expected.to contain_ceilometer_config('DEFAULT/api_workers').with_value('<SERVICE DEFAULT>')
     end
 
     context 'when specifying keystone_auth_admin_prefix' do
