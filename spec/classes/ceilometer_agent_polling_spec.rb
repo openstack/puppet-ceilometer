@@ -37,19 +37,6 @@ describe 'ceilometer::agent::polling' do
               :before => /Package\[ceilometer-common\]/
           )
       end
-
-      it 'configures nova notification driver' do
-        is_expected.to contain_file_line_after('nova-notification-driver-common').with(
-          :line   => 'notification_driver=nova.openstack.common.notifier.rpc_notifier',
-          :path   => '/etc/nova/nova.conf',
-          :notify => 'Service[nova-compute]'
-        )
-        is_expected.to contain_file_line_after('nova-notification-driver-ceilometer').with(
-          :line   => 'notification_driver=ceilometer.compute.nova_notifier',
-          :path   => '/etc/nova/nova.conf',
-          :notify => 'Service[nova-compute]'
-        )
-      end
     end
 
     it 'installs ceilometer-polling package' do
