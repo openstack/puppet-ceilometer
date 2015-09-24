@@ -1,10 +1,39 @@
-# Configures the ceilometer database
-# This class will install the required libraries depending on the driver
-# specified in the connection_string parameter
+# == Class: ceilometer::db
+#
+#  Configures the ceilometer database
+#  This class will install the required libraries depending on the driver
+#  specified in the connection_string parameter
 #
 # == Parameters
-#  [*database_connection*]
-#    the connection string. format: [driver]://[user]:[password]@[host]/[database]
+
+# [*database_connection*]
+#   Url used to connect to database.
+#   (Optional) Defaults to 'mysql://ceilometer:ceilometer@localhost/ceilometer'.
+#
+# [*database_idle_timeout*]
+#   Timeout when db connections should be reaped.
+#   (Optional) Defaults to 3600.
+#
+# [*database_min_pool_size*]
+#   Minimum number of SQL connections to keep open in a pool.
+#   (Optional) Defaults to 1.
+#
+# [*database_max_pool_size*]
+#   Maximum number of SQL connections to keep open in a pool.
+#   (Optional) Defaults to 10.
+#
+# [*database_max_retries*]
+#   Maximum db connection retries during startup.
+#   Setting -1 implies an infinite retry count.
+#   (Optional) Defaults to 10.
+#
+# [*database_retry_interval*]
+#   Interval between retries of opening a sql connection.
+#   (Optional) Defaults to 10.
+#
+# [*database_max_overflow*]
+#   If set, use this value for max_overflow with sqlalchemy.
+#   (Optional) Defaults to 20.
 #
 #  [*sync_db*]
 #    enable dbsync.
@@ -13,9 +42,15 @@
 #    (optional) Deprecated. Does nothing.
 #
 class ceilometer::db (
-  $database_connection = 'mysql://ceilometer:ceilometer@localhost/ceilometer',
-  $sync_db             = true,
-  $mysql_module        = undef,
+  $database_connection     = 'mysql://ceilometer:ceilometer@localhost/ceilometer',
+  $database_idle_timeout   = 3600,
+  $database_min_pool_size  = 1,
+  $database_max_pool_size  = 10,
+  $database_max_retries    = 10,
+  $database_retry_interval = 10,
+  $database_max_overflow   = 20,
+  $sync_db                 = true,
+  $mysql_module            = undef,
 ) {
 
   include ::ceilometer::params
@@ -32,9 +67,8 @@ class ceilometer::db (
   case $database_connection {
     /^mysql:\/\//: {
       $backend_package = false
-
-      include ::mysql::bindings::python
-      Package<| title == 'python-mysqldb' |> -> Class['ceilometer::db']
+      require 'mysql::bindings'
+      require 'mysql::bindings::python'
     }
     /^postgresql:\/\//: {
       $backend_package = $::ceilometer::params::psycopg_package_name
@@ -59,7 +93,13 @@ class ceilometer::db (
   }
 
   ceilometer_config {
-    'database/connection': value => $database_connection, secret => true;
+    'database/connection':     value => $database_connection, secret => true;
+    'database/idle_timeout':   value => $database_idle_timeout;
+    'database/min_pool_size':  value => $database_min_pool_size;
+    'database/max_retries':    value => $database_max_retries;
+    'database/retry_interval': value => $database_retry_interval;
+    'database/max_pool_size':  value => $database_max_pool_size;
+    'database/max_overflow':   value => $database_max_overflow;
   }
 
   if $sync_db {
