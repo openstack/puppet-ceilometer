@@ -29,14 +29,20 @@
 #  [*auth_cacert*]
 #    Certificate chain for SSL validation. Optional; Defaults to 'None'
 #
+#  [*auth_endpoint_type*]
+#    Type of endpoint in Identity service catalog to use for
+#    communication with OpenStack services.
+#    Optional. Defaults to undef.
+#
 class ceilometer::agent::auth (
   $auth_password,
-  $auth_url         = 'http://localhost:5000/v2.0',
-  $auth_region      = 'RegionOne',
-  $auth_user        = 'ceilometer',
-  $auth_tenant_name = 'services',
-  $auth_tenant_id   = '',
-  $auth_cacert      = undef,
+  $auth_url           = 'http://localhost:5000/v2.0',
+  $auth_region        = 'RegionOne',
+  $auth_user          = 'ceilometer',
+  $auth_tenant_name   = 'services',
+  $auth_tenant_id     = '',
+  $auth_cacert        = undef,
+  $auth_endpoint_type = undef,
 ) {
 
   if ! $auth_cacert {
@@ -56,6 +62,12 @@ class ceilometer::agent::auth (
   if ($auth_tenant_id != '') {
     ceilometer_config {
       'service_credentials/os_tenant_id' : value => $auth_tenant_id;
+    }
+  }
+
+  if $auth_endpoint_type {
+    ceilometer_config {
+      'service_credentials/os_endpoint_type' : value => $auth_endpoint_type;
     }
   }
 
