@@ -47,19 +47,6 @@ describe 'ceilometer::agent::compute' do
         )
     end
 
-    it 'configures nova notification driver' do
-      is_expected.to contain_file_line_after('nova-notification-driver-common').with(
-        :line   => 'notification_driver=nova.openstack.common.notifier.rpc_notifier',
-        :path   => '/etc/nova/nova.conf',
-        :notify => 'Service[nova-compute]'
-      )
-      is_expected.to contain_file_line_after('nova-notification-driver-ceilometer').with(
-        :line   => 'notification_driver=ceilometer.compute.nova_notifier',
-        :path   => '/etc/nova/nova.conf',
-        :notify => 'Service[nova-compute]'
-      )
-    end
-
     [{:enabled => true}, {:enabled => false}].each do |param_hash|
       context "when service should be #{param_hash[:enabled] ? 'enabled' : 'disabled'}" do
         before do
