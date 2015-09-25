@@ -12,7 +12,6 @@ describe 'ceilometer::agent::auth' do
       :auth_user        => 'ceilometer',
       :auth_password    => 'password',
       :auth_tenant_name => 'services',
-      :enabled          => true,
     }
   end
 
@@ -35,6 +34,22 @@ describe 'ceilometer::agent::auth' do
       it { is_expected.to contain_ceilometer_config('service_credentials/os_cacert').with_value(params[:auth_cacert]) }
     end
 
+  end
+
+  context 'on Debian platforms' do
+    let :facts do
+      { :osfamily => 'Debian' }
+    end
+
+    it_configures 'ceilometer-agent-auth'
+  end
+
+  context 'on RedHat platforms' do
+    let :facts do
+      { :osfamily => 'RedHat' }
+    end
+
+    it_configures 'ceilometer-agent-auth'
   end
 
 end
