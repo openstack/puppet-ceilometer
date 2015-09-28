@@ -106,25 +106,6 @@ describe 'ceilometer' do
       )
     end
 
-    it 'configures ceilometer configuration folder' do
-      is_expected.to contain_file('/etc/ceilometer/').with(
-        :ensure  => 'directory',
-        :owner   => 'ceilometer',
-        :group   => 'ceilometer',
-        :mode    => '0750',
-        :require => 'Package[ceilometer-common]'
-      )
-    end
-
-    it 'configures ceilometer configuration file' do
-      is_expected.to contain_file('/etc/ceilometer/ceilometer.conf').with(
-        :owner   => 'ceilometer',
-        :group   => 'ceilometer',
-        :mode    => '0640',
-        :require => 'Package[ceilometer-common]'
-      )
-    end
-
     it 'installs ceilometer common package' do
       is_expected.to contain_package('ceilometer-common').with(
         :ensure => 'present',

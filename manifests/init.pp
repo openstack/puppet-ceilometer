@@ -172,10 +172,6 @@ class ceilometer(
     fail('The kombu_ssl_certfile and kombu_ssl_keyfile parameters must be used together')
   }
 
-  File {
-    require => Package['ceilometer-common'],
-  }
-
   group { 'ceilometer':
     name    => 'ceilometer',
     require => Package['ceilometer-common'],
@@ -186,19 +182,6 @@ class ceilometer(
     gid     => 'ceilometer',
     system  => true,
     require => Package['ceilometer-common'],
-  }
-
-  file { '/etc/ceilometer/':
-    ensure => directory,
-    owner  => 'ceilometer',
-    group  => 'ceilometer',
-    mode   => '0750',
-  }
-
-  file { '/etc/ceilometer/ceilometer.conf':
-    owner => 'ceilometer',
-    group => 'ceilometer',
-    mode  => '0640',
   }
 
   package { 'ceilometer-common':
