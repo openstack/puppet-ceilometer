@@ -126,7 +126,6 @@ class ceilometer::api (
       hasstatus  => true,
       hasrestart => true,
       require    => Class['ceilometer::db'],
-      subscribe  => Exec['ceilometer-dbsync'],
       tag        => 'ceilometer-service',
     }
   } elsif $service_name == 'httpd' {
