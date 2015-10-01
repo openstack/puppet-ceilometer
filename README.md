@@ -1,7 +1,7 @@
 Ceilometer
 ==========
 
-5.1.0 - 2014.2 - Juno
+5.2.0 - 2014.2 - Juno
 
 #### Table of Contents
 
@@ -71,6 +71,9 @@ This is the ceilometer module.
 
 Release Notes
 -------------
+
+** 5.2.0 **
+* Add an ability to manage use_stderr parameter
 
 ** 5.1.0 **
 * Add support for configuring coordination/backend_url
