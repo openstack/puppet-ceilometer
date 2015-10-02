@@ -204,8 +204,7 @@ class ceilometer::keystone::auth (
         ensure => present,
       }
     }
-    Keystone_role['ResellerAdmin'] -> Keystone_user_role["${auth_name}@${tenant}"] ~>
-      Service <| name == 'ceilometer-api' |>
+    Keystone_role['ResellerAdmin'] -> Keystone_user_role["${auth_name}@${tenant}"]
   }
 
 }
