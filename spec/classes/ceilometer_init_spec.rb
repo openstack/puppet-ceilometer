@@ -88,6 +88,7 @@ describe 'ceilometer' do
 
   shared_examples_for 'a ceilometer base installation' do
 
+    it { is_expected.to contain_class('ceilometer::logging') }
     it { is_expected.to contain_class('ceilometer::params') }
 
     it 'configures ceilometer group' do
@@ -124,49 +125,10 @@ describe 'ceilometer' do
       it { expect { is_expected.to raise_error(Puppet::Error) } }
     end
 
-    it 'configures debug and verbosity' do
-      is_expected.to contain_ceilometer_config('DEFAULT/debug').with_value( params[:debug] )
-      is_expected.to contain_ceilometer_config('DEFAULT/verbose').with_value( params[:verbose] )
-    end
-
-    it 'configures use_stderr option' do
-      is_expected.to contain_ceilometer_config('DEFAULT/use_stderr').with_value( params[:use_stderr] )
-    end
-
-    it 'configures logging directory by default' do
-      is_expected.to contain_ceilometer_config('DEFAULT/log_dir').with_value( params[:log_dir] )
-    end
-
-    context 'with logging directory disabled' do
-      before { params.merge!( :log_dir => false) }
-
-      it { is_expected.to contain_ceilometer_config('DEFAULT/log_dir').with_ensure('absent') }
-    end
-
     it 'configures notification_topics' do
       is_expected.to contain_ceilometer_config('DEFAULT/notification_topics').with_value('notifications')
     end
 
-    it 'configures syslog to be disabled by default' do
-      is_expected.to contain_ceilometer_config('DEFAULT/use_syslog').with_value('false')
-    end
-
-    context 'with syslog enabled' do
-      before { params.merge!( :use_syslog => 'true' ) }
-
-      it { is_expected.to contain_ceilometer_config('DEFAULT/use_syslog').with_value('true') }
-      it { is_expected.to contain_ceilometer_config('DEFAULT/syslog_log_facility').with_value('LOG_USER') }
-    end
-
-    context 'with syslog enabled and custom settings' do
-      before { params.merge!(
-       :use_syslog   => 'true',
-       :log_facility => 'LOG_LOCAL0'
-      ) }
-
-      it { is_expected.to contain_ceilometer_config('DEFAULT/use_syslog').with_value('true') }
-      it { is_expected.to contain_ceilometer_config('DEFAULT/syslog_log_facility').with_value('LOG_LOCAL0') }
-    end
 
     context 'with overriden notification_topics parameter' do
       before { params.merge!( :notification_topics => ['notifications', 'custom']) }

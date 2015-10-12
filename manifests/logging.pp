@@ -1,8 +1,33 @@
 # Class ceilometer::logging
 #
-#  ceilometer extended logging configuration
+#  ceilometer logging configuration
 #
 # == parameters
+#
+#  [*verbose*]
+#    (Optional) Should the daemons log verbose messages
+#    Defaults to 'false'
+#
+#  [*debug*]
+#    (Optional) Should the daemons log debug messages
+#    Defaults to 'false'
+#
+#  [*use_syslog*]
+#    (Optional) Use syslog for logging.
+#    Defaults to 'false'
+#
+#  [*use_stderr*]
+#    (optional) Use stderr for logging
+#    Defaults to 'true'
+#
+#  [*log_facility*]
+#    (Optional) Syslog facility to receive log lines.
+#    Defaults to 'LOG_USER'
+#
+#  [*log_dir*]
+#    (optional) Directory where logs should be stored.
+#    If set to boolean false, it will not log to any directory.
+#    Defaults to '/var/log/ceilometer'
 #
 #  [*logging_context_format_string*]
 #    (optional) Format string to use for log messages with context.
@@ -66,6 +91,12 @@
 #    Example: 'Y-%m-%d %H:%M:%S'
 
 class ceilometer::logging(
+  $use_syslog                    = false,
+  $use_stderr                    = true,
+  $log_facility                  = 'LOG_USER',
+  $log_dir                       = '/var/log/ceilometer',
+  $verbose                       = false,
+  $debug                         = false,
   $logging_context_format_string = undef,
   $logging_default_format_string = undef,
   $logging_debug_format_suffix   = undef,
@@ -78,6 +109,24 @@ class ceilometer::logging(
   $instance_uuid_format          = undef,
   $log_date_format               = undef,
 ) {
+
+  # NOTE(spredzy): In order to keep backward compatibility we rely on the pick function
+  # to use ceilometer::<myparam> first then ceilometer::logging::<myparam>.
+  $use_syslog_real = pick($::ceilometer::use_syslog,$use_syslog)
+  $use_stderr_real = pick($::ceilometer::use_stderr,$use_stderr)
+  $log_facility_real = pick($::ceilometer::log_facility,$log_facility)
+  $log_dir_real = pick($::ceilometer::log_dir,$log_dir)
+  $verbose_real  = pick($::ceilometer::verbose,$verbose)
+  $debug_real = pick($::ceilometer::debug,$debug)
+
+  ceilometer_config {
+    'DEFAULT/debug'              : value => $debug_real;
+    'DEFAULT/verbose'            : value => $verbose_real;
+    'DEFAULT/use_stderr'         : value => $use_stderr_real;
+    'DEFAULT/use_syslog'         : value => $use_syslog_real;
+    'DEFAULT/log_dir'            : value => $log_dir_real;
+    'DEFAULT/syslog_log_facility': value => $log_facility_real;
+  }
 
   if $logging_context_format_string {
     ceilometer_config {

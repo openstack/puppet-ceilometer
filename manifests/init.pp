@@ -27,22 +27,22 @@
 #  [*package_ensure*]
 #    ensure state for package. Optional. Defaults to 'present'
 #  [*debug*]
-#    should the daemons log debug messages. Optional. Defaults to 'False'
+#    should the daemons log debug messages. Optional. Defaults to undef
 #  [*log_dir*]
 #    (optional) directory to which ceilometer logs are sent.
 #    If set to boolean false, it will not log to any directory.
-#    Defaults to '/var/log/ceilometer'
+#    Defaults to undef
 #  [*verbose*]
-#    should the daemons log verbose messages. Optional. Defaults to 'False'
+#    should the daemons log verbose messages. Optional. Defaults to undef
 #  [*use_syslog*]
 #    (optional) Use syslog for logging
-#    Defaults to false
+#    Defaults to undef
 #  [*use_stderr*]
 #    (optional) Use stderr for logging
-#    Defaults to true
+#    Defaults to undef
 #  [*log_facility*]
 #    (optional) Syslog facility to receive log lines.
-#    Defaults to 'LOG_USER'
+#    Defaults to undef
 # [*rpc_backend*]
 #    (optional) what rpc/queuing service to use
 #    Defaults to 'rabbit'
@@ -119,12 +119,12 @@ class ceilometer(
   $metering_secret                    = false,
   $notification_topics                = ['notifications'],
   $package_ensure                     = 'present',
-  $debug                              = false,
-  $log_dir                            = '/var/log/ceilometer',
-  $verbose                            = false,
-  $use_syslog                         = false,
-  $use_stderr                         = true,
-  $log_facility                       = 'LOG_USER',
+  $debug                              = undef,
+  $log_dir                            = undef,
+  $verbose                            = undef,
+  $use_syslog                         = undef,
+  $use_stderr                         = undef,
+  $log_facility                       = undef,
   $rpc_backend                        = 'rabbit',
   $rabbit_host                        = '127.0.0.1',
   $rabbit_port                        = 5672,
@@ -157,6 +157,7 @@ class ceilometer(
 
   validate_string($metering_secret)
 
+  include ::ceilometer::logging
   include ::ceilometer::params
 
   if $kombu_ssl_ca_certs and !$rabbit_use_ssl {
@@ -285,36 +286,10 @@ class ceilometer(
     'DEFAULT/http_timeout'                : value => $http_timeout;
     'DEFAULT/rpc_backend'                 : value => $rpc_backend;
     'publisher/metering_secret'           : value => $metering_secret, secret => true;
-    'DEFAULT/debug'                       : value => $debug;
-    'DEFAULT/verbose'                     : value => $verbose;
-    'DEFAULT/use_stderr'                  : value => $use_stderr;
     'DEFAULT/notification_topics'         : value => join($notification_topics, ',');
     'database/event_time_to_live'         : value => $event_time_to_live;
     'database/metering_time_to_live'      : value => $metering_time_to_live;
     'database/alarm_history_time_to_live' : value => $alarm_history_time_to_live;
-  }
-
-  # Log configuration
-  if $log_dir {
-    ceilometer_config {
-      'DEFAULT/log_dir' : value  => $log_dir;
-    }
-  } else {
-    ceilometer_config {
-      'DEFAULT/log_dir' : ensure => absent;
-    }
-  }
-
-  # Syslog configuration
-  if $use_syslog {
-    ceilometer_config {
-      'DEFAULT/use_syslog':           value => true;
-      'DEFAULT/syslog_log_facility':  value => $log_facility;
-    }
-  } else {
-    ceilometer_config {
-      'DEFAULT/use_syslog':           value => false;
-    }
   }
 
   if $memcached_servers {
