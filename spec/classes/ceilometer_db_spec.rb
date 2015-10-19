@@ -2,137 +2,95 @@ require 'spec_helper'
 
 describe 'ceilometer::db' do
 
-  # debian has "python-pymongo"
+  shared_examples 'ceilometer::db' do
+
+    context 'with default parameters' do
+
+      it { is_expected.to contain_class('ceilometer::params') }
+      it { is_expected.to contain_class('ceilometer::db::sync') }
+      it { is_expected.to contain_ceilometer_config('database/connection').with_value('mysql://ceilometer:ceilometer@localhost/ceilometer').with_secret(true) }
+      it { is_expected.to contain_ceilometer_config('database/idle_timeout').with_value('3600') }
+      it { is_expected.to contain_ceilometer_config('database/min_pool_size').with_value('1') }
+      it { is_expected.to contain_ceilometer_config('database/max_retries').with_value('10') }
+      it { is_expected.to contain_ceilometer_config('database/retry_interval').with_value('10') }
+
+    end
+
+    context 'with specific parameters' do
+      let :params do
+        { :database_connection     => 'mongodb://localhost:1234/ceilometer',
+          :database_idle_timeout   => '3601',
+          :database_min_pool_size  => '2',
+          :database_max_retries    => '11',
+          :database_retry_interval => '11',
+          :sync_db                 => false }
+      end
+
+      it { is_expected.to contain_class('ceilometer::params') }
+      it { is_expected.not_to contain_class('ceilometer::db::sync') }
+      it { is_expected.to contain_ceilometer_config('database/connection').with_value('mongodb://localhost:1234/ceilometer').with_secret(true) }
+      it { is_expected.to contain_ceilometer_config('database/idle_timeout').with_value('3601') }
+      it { is_expected.to contain_ceilometer_config('database/min_pool_size').with_value('2') }
+      it { is_expected.to contain_ceilometer_config('database/max_retries').with_value('11') }
+      it { is_expected.to contain_ceilometer_config('database/retry_interval').with_value('11') }
+
+    end
+
+    context 'with mongodb backend' do
+      let :params do
+        { :database_connection     => 'mongodb://localhost:1234/ceilometer', }
+      end
+
+      it 'install the proper backend package' do
+        is_expected.to contain_package('ceilometer-backend-package').with(
+          :ensure => 'present',
+          :name   => 'python-pymongo',
+          :tag    => 'openstack'
+        )
+      end
+
+    end
+
+
+    context 'with incorrect database_connection string' do
+      let :params do
+        { :database_connection     => 'redis://ceilometer:ceilometer@localhost/ceilometer', }
+      end
+
+      it_raises 'a Puppet::Error', /validate_re/
+    end
+
+  end
+
   context 'on Debian platforms' do
     let :facts do
       { :osfamily => 'Debian' }
     end
 
-    let :params do
-      { :database_connection => 'mongodb://localhost:1234/ceilometer',
-        :sync_db             => true }
-    end
+    it_configures 'ceilometer::db'
 
-    it { is_expected.to contain_class('ceilometer::params') }
+    context 'with sqlite backend' do
+      let :params do
+        { :database_connection     => 'sqlite:///var/lib/ceilometer.db', }
+      end
 
-    it 'installs python-mongodb package' do
-      is_expected.to contain_package('ceilometer-backend-package').with(
-        :ensure => 'present',
-        :name   => 'python-pymongo',
-        :tag    => 'openstack'
-      )
-      is_expected.to contain_ceilometer_config('database/connection').with_value('mongodb://localhost:1234/ceilometer')
-      is_expected.to contain_ceilometer_config('database/connection').with_value( params[:database_connection] ).with_secret(true)
-    end
+      it 'install the proper backend package' do
+        is_expected.to contain_package('ceilometer-backend-package').with(
+          :ensure => 'present',
+          :name   => 'python-pysqlite2',
+          :tag    => 'openstack'
+        )
+      end
 
-    it 'includes ceilometer::db::sync' do
-      is_expected.to contain_class('ceilometer::db::sync')
     end
   end
 
   context 'on Redhat platforms' do
     let :facts do
-      { :osfamily => 'Redhat',
-        :operatingsystem => 'Fedora',
-        :operatingsystemrelease => 21
-      }
+      { :osfamily => 'RedHat' }
     end
 
-    let :params do
-      { :database_connection => 'mongodb://localhost:1234/ceilometer',
-        :sync_db             => false }
-    end
-
-    it { is_expected.to contain_class('ceilometer::params') }
-
-    it 'installs pymongo package' do
-      is_expected.to contain_package('ceilometer-backend-package').with(
-        :ensure => 'present',
-        :name => 'python-pymongo')
-      is_expected.to contain_ceilometer_config('database/connection').with_value('mongodb://localhost:1234/ceilometer')
-      is_expected.to contain_ceilometer_config('database/connection').with_value( params[:database_connection] ).with_secret(true)
-    end
-
-    it 'does not include ceilometer::db::sync' do
-      is_expected.not_to contain_class('ceilometer::db::sync')
-    end
-  end
-
-  # RHEL has python-pymongo too
-  context 'on Redhat platforms' do
-    let :facts do
-      { :osfamily => 'Redhat',
-        :operatingsystem => 'CentOS',
-        :operatingsystemrelease => 6.4
-      }
-    end
-
-    let :params do
-      { :database_connection => 'mongodb://localhost:1234/ceilometer',
-        :sync_db             => true }
-    end
-
-    it { is_expected.to contain_class('ceilometer::params') }
-
-    it 'installs pymongo package' do
-      is_expected.to contain_package('ceilometer-backend-package').with(
-        :ensure => 'present',
-        :name => 'python-pymongo')
-    end
-
-    it 'includes ceilometer::db::sync' do
-      is_expected.to contain_class('ceilometer::db::sync')
-    end
-  end
-
-  # RHEL has python-sqlite2
-  context 'on Redhat platforms' do
-    let :facts do
-      { :osfamily => 'Redhat',
-        :operatingsystem => 'CentOS',
-        :operatingsystemrelease => 6.4
-      }
-    end
-
-    let :params do
-      { :database_connection => 'sqlite:///var/lib/ceilometer.db',
-        :sync_db             => false }
-    end
-
-    it { is_expected.to contain_class('ceilometer::params') }
-
-    it 'installs pymongo package' do
-      is_expected.to contain_ceilometer_config('database/connection').with_value('sqlite:///var/lib/ceilometer.db')
-      is_expected.to contain_ceilometer_config('database/connection').with_value( params[:database_connection] ).with_secret(true)
-    end
-
-    it 'does not include ceilomter::db::sync' do
-      is_expected.not_to contain_class('ceilometer::db::sync')
-    end
-  end
-
-  # debian has "python-pysqlite2"
-  context 'on Debian platforms' do
-    let :facts do
-      { :osfamily => 'Debian' }
-    end
-
-    let :params do
-      { :database_connection => 'sqlite:///var/lib/ceilometer.db',
-        :sync_db             => true }
-    end
-
-    it { is_expected.to contain_class('ceilometer::params') }
-
-    it 'installs python-mongodb package' do
-      is_expected.to contain_package('ceilometer-backend-package').with(
-        :ensure => 'present',
-        :name => 'python-pysqlite2')
-    end
-
-    it 'includes ceilometer::db::sync' do
-      is_expected.to contain_class('ceilometer::db::sync')
-    end
+    it_configures 'ceilometer::db'
   end
 
 end
