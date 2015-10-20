@@ -71,7 +71,8 @@ class ceilometer::db (
       require 'mysql::bindings::python'
     }
     /^postgresql:\/\//: {
-      $backend_package = $::ceilometer::params::psycopg_package_name
+      $backend_package = false
+      require 'postgresql::lib::python'
     }
     /^mongodb:\/\//: {
       $backend_package = $::ceilometer::params::pymongo_package_name
