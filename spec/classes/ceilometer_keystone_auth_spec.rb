@@ -32,7 +32,6 @@ describe 'ceilometer::keystone::auth' do
           :ensure   => 'present',
           :password => params[:password],
           :email    => default_params[:email],
-          :tenant   => default_params[:tenant]
         )
       end
 
@@ -80,7 +79,6 @@ describe 'ceilometer::keystone::auth' do
           :ensure   => 'present',
           :password => params[:password],
           :email    => params[:email],
-          :tenant   => params[:tenant]
         )
       end
 
