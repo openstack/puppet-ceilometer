@@ -27,7 +27,6 @@ class ceilometer::params {
       $alarm_notifier_service_name     = 'openstack-ceilometer-alarm-notifier'
       $alarm_evaluator_service_name    = 'openstack-ceilometer-alarm-evaluator'
       $pymongo_package_name            = 'python-pymongo'
-      $psycopg_package_name            = 'python-psycopg2'
       $agent_notification_service_name = 'openstack-ceilometer-notification'
       $ceilometer_wsgi_script_path     = '/var/www/cgi-bin/ceilometer'
       $ceilometer_wsgi_script_source   = '/usr/lib/python2.7/site-packages/ceilometer/api/app.wsgi'
@@ -55,7 +54,6 @@ class ceilometer::params {
       $alarm_evaluator_service_name    = 'ceilometer-alarm-evaluator'
       # db packages
       $pymongo_package_name            = 'python-pymongo'
-      $psycopg_package_name            = 'python-psycopg2'
       $sqlite_package_name             = 'python-pysqlite2'
 
       # Operating system specific
