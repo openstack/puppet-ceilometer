@@ -262,24 +262,24 @@ describe 'ceilometer' do
 
   shared_examples_for 'qpid support' do
     context("with default parameters") do
-      it { is_expected.to contain_ceilometer_config('DEFAULT/qpid_reconnect').with_value(true) }
-      it { is_expected.to contain_ceilometer_config('DEFAULT/qpid_reconnect_timeout').with_value('0') }
-      it { is_expected.to contain_ceilometer_config('DEFAULT/qpid_reconnect_limit').with_value('0') }
-      it { is_expected.to contain_ceilometer_config('DEFAULT/qpid_reconnect_interval_min').with_value('0') }
-      it { is_expected.to contain_ceilometer_config('DEFAULT/qpid_reconnect_interval_max').with_value('0') }
-      it { is_expected.to contain_ceilometer_config('DEFAULT/qpid_reconnect_interval').with_value('0') }
-      it { is_expected.to contain_ceilometer_config('DEFAULT/qpid_heartbeat').with_value('60') }
-      it { is_expected.to contain_ceilometer_config('DEFAULT/qpid_protocol').with_value('tcp') }
-      it { is_expected.to contain_ceilometer_config('DEFAULT/qpid_tcp_nodelay').with_value(true) }
+      it { is_expected.to contain_ceilometer_config('oslo_messaging_qpid/qpid_reconnect').with_value(true) }
+      it { is_expected.to contain_ceilometer_config('oslo_messaging_qpid/qpid_reconnect_timeout').with_value('0') }
+      it { is_expected.to contain_ceilometer_config('oslo_messaging_qpid/qpid_reconnect_limit').with_value('0') }
+      it { is_expected.to contain_ceilometer_config('oslo_messaging_qpid/qpid_reconnect_interval_min').with_value('0') }
+      it { is_expected.to contain_ceilometer_config('oslo_messaging_qpid/qpid_reconnect_interval_max').with_value('0') }
+      it { is_expected.to contain_ceilometer_config('oslo_messaging_qpid/qpid_reconnect_interval').with_value('0') }
+      it { is_expected.to contain_ceilometer_config('oslo_messaging_qpid/qpid_heartbeat').with_value('60') }
+      it { is_expected.to contain_ceilometer_config('oslo_messaging_qpid/qpid_protocol').with_value('tcp') }
+      it { is_expected.to contain_ceilometer_config('oslo_messaging_qpid/qpid_tcp_nodelay').with_value(true) }
     end
 
     context("with mandatory parameters set") do
       it { is_expected.to contain_ceilometer_config('DEFAULT/rpc_backend').with_value('qpid') }
-      it { is_expected.to contain_ceilometer_config('DEFAULT/qpid_hostname').with_value( params[:qpid_hostname] ) }
-      it { is_expected.to contain_ceilometer_config('DEFAULT/qpid_port').with_value( params[:qpid_port] ) }
-      it { is_expected.to contain_ceilometer_config('DEFAULT/qpid_username').with_value( params[:qpid_username]) }
-      it { is_expected.to contain_ceilometer_config('DEFAULT/qpid_password').with_value(params[:qpid_password]) }
-      it { is_expected.to contain_ceilometer_config('DEFAULT/qpid_password').with_value( params[:qpid_password] ).with_secret(true) }
+      it { is_expected.to contain_ceilometer_config('oslo_messaging_qpid/qpid_hostname').with_value( params[:qpid_hostname] ) }
+      it { is_expected.to contain_ceilometer_config('oslo_messaging_qpid/qpid_port').with_value( params[:qpid_port] ) }
+      it { is_expected.to contain_ceilometer_config('oslo_messaging_qpid/qpid_username').with_value( params[:qpid_username]) }
+      it { is_expected.to contain_ceilometer_config('oslo_messaging_qpid/qpid_password').with_value(params[:qpid_password]) }
+      it { is_expected.to contain_ceilometer_config('oslo_messaging_qpid/qpid_password').with_value( params[:qpid_password] ).with_secret(true) }
     end
 
     context("with legacy rpc_backend value") do
