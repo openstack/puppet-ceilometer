@@ -38,9 +38,6 @@
 #  [*sync_db*]
 #    enable dbsync.
 #
-#  [*mysql_module*]
-#    (optional) Deprecated. Does nothing.
-#
 class ceilometer::db (
   $database_connection     = 'mysql://ceilometer:ceilometer@localhost/ceilometer',
   $database_idle_timeout   = 3600,
@@ -50,14 +47,9 @@ class ceilometer::db (
   $database_retry_interval = 10,
   $database_max_overflow   = 20,
   $sync_db                 = true,
-  $mysql_module            = undef,
 ) {
 
   include ::ceilometer::params
-
-  if $mysql_module {
-    warning('The mysql_module parameter is deprecated. The latest 2.x mysql module will be used.')
-  }
 
   Package<| title == 'ceilometer-common' |> -> Class['ceilometer::db']
 
