@@ -1,7 +1,16 @@
 #
 # Class to execute ceilometer dbsync
 #
-class ceilometer::db::sync {
+# == Parameters
+#
+# [*extra_params*]
+#   (optional) String of extra command line parameters
+#   to append to the ceilometer-dbsync command.
+#   Defaults to undef
+#
+class ceilometer::db::sync(
+  $extra_params = undef,
+) {
 
   include ::ceilometer::params
 
@@ -12,7 +21,7 @@ class ceilometer::db::sync {
   Ceilometer_config<| title == 'database/connection' |> ~> Exec['ceilometer-dbsync']
 
   exec { 'ceilometer-dbsync':
-    command     => $::ceilometer::params::dbsync_command,
+    command     => "${::ceilometer::params::dbsync_command} ${extra_params}",
     path        => '/usr/bin',
     user        => $::ceilometer::params::user,
     refreshonly => true,

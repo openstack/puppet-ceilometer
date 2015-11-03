@@ -6,7 +6,7 @@ describe 'ceilometer::db::sync' do
 
     it 'runs ceilometer-dbsync' do
       is_expected.to contain_exec('ceilometer-dbsync').with(
-        :command     => 'ceilometer-dbsync --config-file=/etc/ceilometer/ceilometer.conf',
+        :command     => 'ceilometer-dbsync --config-file=/etc/ceilometer/ceilometer.conf ',
         :path        => '/usr/bin',
         :refreshonly => 'true',
         :user        => 'ceilometer',
@@ -14,7 +14,25 @@ describe 'ceilometer::db::sync' do
       )
     end
 
+    describe 'overriding extra_params' do
+      let :params do
+        {
+          :extra_params => '--config-file=/etc/ceilometer/ceilometer_01.conf',
+        }
+      end
+
+      it { is_expected.to contain_exec('ceilometer-dbsync').with(
+        :command    => 'ceilometer-dbsync --config-file=/etc/ceilometer/ceilometer.conf --config-file=/etc/ceilometer/ceilometer_01.conf',
+        :path       => '/usr/bin',
+        :user       => 'ceilometer',
+        :refreshonly => 'true',
+        :logoutput   => 'on_failure'
+      )
+      }
+    end
+
   end
+
 
   context 'on a RedHat osfamily' do
     let :facts do
