@@ -13,6 +13,7 @@ describe 'ceilometer::db' do
       it { is_expected.to contain_ceilometer_config('database/min_pool_size').with_value('1') }
       it { is_expected.to contain_ceilometer_config('database/max_retries').with_value('10') }
       it { is_expected.to contain_ceilometer_config('database/retry_interval').with_value('10') }
+      it { is_expected.not_to contain_ceilometer_config('database/mongodb_replica_set') }
 
     end
 
@@ -33,12 +34,14 @@ describe 'ceilometer::db' do
       it { is_expected.to contain_ceilometer_config('database/min_pool_size').with_value('2') }
       it { is_expected.to contain_ceilometer_config('database/max_retries').with_value('11') }
       it { is_expected.to contain_ceilometer_config('database/retry_interval').with_value('11') }
+      it { is_expected.to contain_ceilometer_config('database/mongodb_replica_set').with_ensure( 'absent' ) }
 
     end
 
-    context 'with mongodb backend' do
+    context 'with mongodb backend and replica set' do
       let :params do
-        { :database_connection     => 'mongodb://localhost:1234/ceilometer', }
+        { :database_connection     => 'mongodb://localhost:1234/ceilometer',
+          :mongodb_replica_set     => 'foobar' }
       end
 
       it 'install the proper backend package' do
@@ -48,6 +51,8 @@ describe 'ceilometer::db' do
           :tag    => 'openstack'
         )
       end
+
+      it { is_expected.to contain_ceilometer_config('database/mongodb_replica_set').with_value( 'foobar' ) }
 
     end
 
