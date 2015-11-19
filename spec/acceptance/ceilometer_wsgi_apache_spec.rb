@@ -34,8 +34,6 @@ describe 'ceilometer with mysql' do
         rabbit_password     => 'an_even_bigger_secret',
         rabbit_host         => '127.0.0.1',
       }
-      # Until https://review.openstack.org/177593 is merged:
-      Package<| title == 'python-mysqldb' |> -> Class['ceilometer::db']
       class { '::ceilometer::db::mysql':
         password => 'a_big_secret',
       }
