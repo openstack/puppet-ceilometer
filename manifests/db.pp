@@ -61,13 +61,17 @@ class ceilometer::db (
   Package<| title == 'ceilometer-common' |> -> Class['ceilometer::db']
 
   validate_re($database_connection,
-    '(sqlite|mysql|postgresql|mongodb):\/\/(\S+:\S+@\S+\/\S+)?')
+    '^(sqlite|mysql(\+pymysql)?|postgresql|mongodb):\/\/(\S+:\S+@\S+\/\S+)?')
 
   case $database_connection {
-    /^mysql:\/\//: {
-      $backend_package = false
+    /^mysql(\+pymysql)?:\/\//: {
       require 'mysql::bindings'
       require 'mysql::bindings::python'
+      if $database_connection =~ /^mysql\+pymysql/ {
+        $backend_package = $::ceilometer::params::pymysql_package_name
+      } else {
+        $backend_package = false
+      }
     }
     /^postgresql:\/\//: {
       $backend_package = false

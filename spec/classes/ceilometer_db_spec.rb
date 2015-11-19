@@ -38,6 +38,16 @@ describe 'ceilometer::db' do
 
     end
 
+    context 'with pymysql connection' do
+      let :params do
+        { :database_connection     => 'mysql+pymysql://ceilometer:ceilometer@localhost/ceilometer' }
+      end
+
+      it { is_expected.to contain_class('ceilometer::params') }
+      it { is_expected.to contain_class('ceilometer::db::sync') }
+      it { is_expected.to contain_ceilometer_config('database/connection').with_value('mysql+pymysql://ceilometer:ceilometer@localhost/ceilometer').with_secret(true) }
+    end
+
     context 'with mongodb backend and replica set' do
       let :params do
         { :database_connection     => 'mongodb://localhost:1234/ceilometer',
@@ -75,6 +85,14 @@ describe 'ceilometer::db' do
       end
     end
 
+    context 'with incorrect pymysql database_connection string' do
+      let :params do
+        { :database_connection     => 'foo+pymysql://ceilometer:ceilometer@localhost/ceilometer', }
+      end
+
+      it_raises 'a Puppet::Error', /validate_re/
+    end
+
   end
 
   context 'on Debian platforms' do
@@ -86,6 +104,20 @@ describe 'ceilometer::db' do
     end
 
     it_configures 'ceilometer::db'
+
+    context 'using pymysql driver' do
+      let :params do
+        { :database_connection     => 'mysql+pymysql:///ceilometer:ceilometer@localhost/ceilometer', }
+      end
+
+      it 'install the proper backend package' do
+        is_expected.to contain_package('ceilometer-backend-package').with(
+          :ensure => 'present',
+          :name   => 'python-pymysql',
+          :tag    => 'openstack'
+        )
+      end
+    end
 
     context 'with sqlite backend' do
       let :params do
@@ -111,6 +143,14 @@ describe 'ceilometer::db' do
     end
 
     it_configures 'ceilometer::db'
+
+    context 'using pymysql driver' do
+      let :params do
+        { :database_connection     => 'mysql+pymysql:///ceilometer:ceilometer@localhost/ceilometer', }
+      end
+
+      it { is_expected.not_to contain_package('ceilometer-backend-package') }
+    end
   end
 
 end
