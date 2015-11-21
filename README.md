@@ -41,12 +41,7 @@ Setup
 
 ### Beginning with ceilometer
 
-To utilize the ceilometer module's functionality you will need to declare multiple resources.
-The following is a modified excerpt from the [openstack module](httpd://github.com/stackforge/puppet
--openstack).
-This is not an exhaustive list of all the components needed. We recommend that you consult and under
-stand the [openstack module](https://github.com/stackforge/puppet-openstack) and the [core](http://d
-ocs.openstack.org) documentation to assist you in understanding the available deployment options.
+To utilize the ceilometer module's functionality you will need to declare multiple resources. This is not an exhaustive list of all the components needed. We recommend that you consult and understand the [core openstack](http://docs.openstack.org) documentation to assist you in understanding the available deployment options.
 
 ```puppet
 class { '::ceilometer':
