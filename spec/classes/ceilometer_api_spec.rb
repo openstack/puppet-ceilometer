@@ -172,12 +172,13 @@ describe 'ceilometer::api' do
 
   context 'on RedHat platforms' do
     let :facts do
-      { :osfamily               => 'RedHat',
-        :operatingsystem        => 'RedHat',
-        :operatingsystemrelease => '7.1',
-        :fqdn                   => 'some.host.tld',
-        :concat_basedir         => '/var/lib/puppet/concat',
-        :processorcount         => 2 }
+      { :osfamily                  => 'RedHat',
+        :operatingsystem           => 'RedHat',
+        :operatingsystemrelease    => '7.1',
+        :operatingsystemmajrelease => '7',
+        :fqdn                      => 'some.host.tld',
+        :concat_basedir            => '/var/lib/puppet/concat',
+        :processorcount            => 2 }
     end
 
     let :platform_params do
