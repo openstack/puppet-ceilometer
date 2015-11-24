@@ -87,10 +87,10 @@ describe 'ceilometer::wsgi::apache' do
 
   context 'on RedHat platforms' do
     let :facts do
-      global_facts.merge({
+      @default_facts.merge(global_facts.merge({
         :osfamily               => 'RedHat',
         :operatingsystemrelease => '7.0'
-      })
+      }))
     end
 
     let :platform_parameters do
@@ -107,11 +107,11 @@ describe 'ceilometer::wsgi::apache' do
 
   context 'on Debian platforms' do
     let :facts do
-      global_facts.merge({
+      @default_facts.merge(global_facts.merge({
         :osfamily               => 'Debian',
         :operatingsystem        => 'Debian',
         :operatingsystemrelease => '7.0'
-      })
+      }))
     end
 
     let :platform_parameters do

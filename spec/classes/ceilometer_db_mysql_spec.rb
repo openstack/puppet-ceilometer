@@ -35,7 +35,7 @@ describe 'ceilometer::db::mysql' do
 
   context 'on Debian platforms' do
     let :facts do
-      { :osfamily => 'Debian' }
+      @default_facts.merge({ :osfamily => 'Debian' })
     end
 
     it_configures 'ceilometer mysql database'
@@ -43,7 +43,7 @@ describe 'ceilometer::db::mysql' do
 
   context 'on RedHat platforms' do
     let :facts do
-      { :osfamily => 'RedHat' }
+      @default_facts.merge({ :osfamily => 'RedHat' })
     end
 
     it_configures 'ceilometer mysql database'
@@ -51,7 +51,7 @@ describe 'ceilometer::db::mysql' do
 
   describe "overriding allowed_hosts param to array" do
     let :facts do
-      { :osfamily => "Debian" }
+      @default_facts.merge({ :osfamily => "Debian" })
     end
     let :params do
       {
@@ -64,7 +64,7 @@ describe 'ceilometer::db::mysql' do
 
   describe "overriding allowed_hosts param to string" do
     let :facts do
-      { :osfamily => 'RedHat' }
+      @default_facts.merge({ :osfamily => 'RedHat' })
     end
     let :params do
       {
@@ -77,7 +77,7 @@ describe 'ceilometer::db::mysql' do
 
   describe "overriding allowed_hosts param equals to host param " do
     let :facts do
-      { :osfamily => 'RedHat' }
+      @default_facts.merge({ :osfamily => 'RedHat' })
     end
     let :params do
       {
