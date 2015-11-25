@@ -1,3 +1,50 @@
+##2015-11-25 - 7.0.0
+###Summary
+
+This is a backwards-incompatible major release for OpenStack Liberty.
+
+####Backwards-incompatible changes
+- change section name for AMQP qpid parameters
+- remove deprecated mysql_module
+
+####Features
+- keystone/auth: make service description configurable
+- add support for RabbitMQ connection heartbeat
+- simplify parameters for rpc_backend
+- add tag to package and service resources
+- enable support for memcached_servers
+- add ability to specify ttl and timeout parameters
+- add ability to manage use_stderr parameter
+- creation of ceilometer::db::sync
+- reflect provider change in puppet-openstacklib
+- make 'alarm_history_time_to_live' parameter configurable
+- update ceilometer::db class to match other module pattern
+- implement auth_endpoint_type parameter
+- stop managing File resources
+- put all the logging related parameters to the logging class
+- add mongodb_replica_set option
+- allow customization of db sync command line
+
+####Bugfixes
+- rely on autorequire for config resource ordering
+- compute agent: do not try to configure nova.conf
+- agent/auth: bring consistent how we manage empty parameters
+- remove the api service subscription on db sync
+- wsgi: make sure eventlet process is stopped before httpd
+- auth: drop service dependency for Keystone_user_role
+
+####Maintenance
+- fix rspec 3.x syntax
+- initial msync run for all Puppet OpenStack modules
+- acceptance: enable debug & verbosity for OpenStack logs
+- acceptance/eventlet: make sure apache is stopped
+- acceptance: use common bits from puppet-openstack-integration
+- rspec: run tests for ::ceilometer::agent::auth
+- try to use zuul-cloner to prepare fixtures
+- spec: Enable webmock connect to IPv4 link-local
+- db: Use postgresql lib class for psycopg package
+- remove class_parameter_defaults puppet-lint check
+
 ##2015-10-10 - 6.1.0
 ###Summary
 
