@@ -60,6 +60,7 @@ describe 'ceilometer with mysql' do
       class { '::ceilometer::wsgi::apache':
         ssl => false,
       }
+      class { '::ceilometer::dispatcher::gnocchi': }
       EOS
 
 

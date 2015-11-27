@@ -83,6 +83,7 @@ describe 'ceilometer with mysql' do
         keystone_password     => 'a_big_secret',
         keystone_identity_uri => 'http://127.0.0.1:35357/',
       }
+      class { '::ceilometer::dispatcher::gnocchi': }
       EOS
 
 
