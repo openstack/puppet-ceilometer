@@ -22,12 +22,24 @@
 #    (optional) the ceilometer collector udp bind port.
 #    Defaults to '4952'
 #
+#  [*meter_dispatcher*]
+#    (optional) dispatcher driver(s) to process meter data.
+#    Can be an array or a string.
+#    Defaults to 'database'
+#
+#  [*event_dispatcher*]
+#    (optional) dispatcher driver(s) to process event data.
+#    Can be an array or a string.
+#    Defaults to 'database'
+#
 class ceilometer::collector (
-  $manage_service = true,
-  $enabled        = true,
-  $package_ensure = 'present',
-  $udp_address    = '0.0.0.0',
-  $udp_port       = '4952',
+  $manage_service   = true,
+  $enabled          = true,
+  $package_ensure   = 'present',
+  $udp_address      = '0.0.0.0',
+  $udp_port         = '4952',
+  $meter_dispatcher = 'database',
+  $event_dispatcher = 'database',
 ) {
 
   include ::ceilometer::params
@@ -41,8 +53,10 @@ class ceilometer::collector (
   }
 
   ceilometer_config {
-    'collector/udp_address' : value => $udp_address;
-    'collector/udp_port'    : value => $udp_port;
+    'collector/udp_address':    value => $udp_address;
+    'collector/udp_port':       value => $udp_port;
+    'DEFAULT/meter_dispatcher': value => join(any2array($meter_dispatcher), ',');
+    'DEFAULT/event_dispatcher': value => join(any2array($event_dispatcher), ',');
   }
 
   Package[$::ceilometer::params::collector_package_name] -> Service['ceilometer-collector']
