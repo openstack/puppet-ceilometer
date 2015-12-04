@@ -263,6 +263,8 @@ class ceilometer(
   # we keep "ceilometer.openstack.common.rpc.impl_qpid" for backward compatibility
   if $rpc_backend == 'ceilometer.openstack.common.rpc.impl_qpid' or $rpc_backend == 'qpid' {
 
+    warning('Qpid driver is removed from Oslo.messaging in the Mitaka release')
+
     ceilometer_config {
       'oslo_messaging_qpid/qpid_hostname'              : value => $qpid_hostname;
       'oslo_messaging_qpid/qpid_port'                  : value => $qpid_port;
