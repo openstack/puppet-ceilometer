@@ -31,4 +31,10 @@ class { '::ceilometer::wsgi::apache':
 class { '::ceilometer::collector':
   meter_dispatcher => ['gnocchi'],
 }
-class { '::ceilometer::dispatcher::gnocchi': }
+class { '::ceilometer::dispatcher::gnocchi':
+  filter_service_activity   => false,
+  filter_project            => true,
+  url                       => 'https://gnocchi:8041',
+  archive_policy            => 'high',
+  resources_definition_file => 'gnocchi.yaml',
+}
