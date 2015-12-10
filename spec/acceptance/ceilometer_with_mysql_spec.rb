@@ -40,7 +40,7 @@ describe 'ceilometer with mysql' do
       class { '::keystone':
         verbose             => true,
         debug               => true,
-        database_connection => 'mysql://keystone:keystone@127.0.0.1/keystone',
+        database_connection => 'mysql+pymysql://keystone:keystone@127.0.0.1/keystone',
         admin_token         => 'admin_token',
         enabled             => true,
       }
@@ -66,7 +66,7 @@ describe 'ceilometer with mysql' do
         password => 'a_big_secret',
       }
       class { '::ceilometer::db':
-        database_connection => 'mysql://ceilometer:a_big_secret@127.0.0.1/ceilometer?charset=utf8',
+        database_connection => 'mysql+pymysql://ceilometer:a_big_secret@127.0.0.1/ceilometer?charset=utf8',
       }
       class { '::ceilometer::keystone::auth':
         password => 'a_big_secret',

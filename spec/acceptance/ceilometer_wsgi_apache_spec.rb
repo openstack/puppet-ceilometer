@@ -38,7 +38,7 @@ describe 'ceilometer with mysql' do
         password => 'a_big_secret',
       }
       class { '::ceilometer::db':
-        database_connection => 'mysql://ceilometer:a_big_secret@127.0.0.1/ceilometer?charset=utf8',
+        database_connection => 'mysql+pymysql://ceilometer:a_big_secret@127.0.0.1/ceilometer?charset=utf8',
       }
       class { '::ceilometer::keystone::auth':
         password => 'a_big_secret',
