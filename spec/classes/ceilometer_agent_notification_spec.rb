@@ -47,6 +47,16 @@ describe 'ceilometer::agent::notification' do
     it 'configures notifications parameters in ceilometer.conf' do
       is_expected.to contain_ceilometer_config('notification/ack_on_event_error').with_value( params[:ack_on_event_error] )
       is_expected.to contain_ceilometer_config('notification/store_events').with_value( params[:store_events] )
+      is_expected.to contain_ceilometer_config('notification/disable_non_metric_meters').with_value('<SERVICE DEFAULT>')
+    end
+
+    context 'with disabled non-metric meters' do
+      before do
+        params.merge!({ :disable_non_metric_meters => true })
+      end
+      it 'disables non-metric meters' do
+        is_expected.to contain_ceilometer_config('notification/disable_non_metric_meters').with_value(params[:disable_non_metric_meters])
+      end
     end
 
     [{:enabled => true}, {:enabled => false}].each do |param_hash|
