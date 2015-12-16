@@ -42,18 +42,21 @@
 # [*disable_non_metric_meters*]
 #   (optional) Disable or enable the collection of non-metric meters.
 #   Default to $::os_service_default
+# [*notification_workers*]
+#   (optional) Number of workers for notification service (integer value).
+#   Defaults to $::os_service_default
 #
 #  [*package_ensure*]
 #    (optional) ensure state for package.
 #    Defaults to 'present'
 #
-
 class ceilometer::agent::notification (
   $manage_service            = true,
   $enabled                   = true,
   $ack_on_event_error        = true,
   $store_events              = false,
   $disable_non_metric_meters = $::os_service_default,
+  $notification_workers      = $::os_service_default,
   $package_ensure            = 'present',
 ) {
 
@@ -92,6 +95,7 @@ class ceilometer::agent::notification (
     'notification/ack_on_event_error'       : value => $ack_on_event_error;
     'notification/store_events'             : value => $store_events;
     'notification/disable_non_metric_meters': value => $disable_non_metric_meters;
+    'DEFAULT/notification_workers'          : value => $notification_workers;
   }
 
 }
