@@ -43,15 +43,14 @@ describe 'ceilometer::keystone::auth' do
       end
 
       it 'configures ceilometer service' do
-        is_expected.to contain_keystone_service( default_params[:auth_name] ).with(
+        is_expected.to contain_keystone_service("#{default_params[:auth_name]}::#{default_params[:service_type]}").with(
           :ensure      => 'present',
-          :type        => default_params[:service_type],
           :description => 'Openstack Metering Service'
         )
       end
 
       it 'configure ceilometer endpoints' do
-        is_expected.to contain_keystone_endpoint("#{default_params[:region]}/#{default_params[:auth_name]}").with(
+        is_expected.to contain_keystone_endpoint("#{default_params[:region]}/#{default_params[:auth_name]}::#{default_params[:service_type]}").with(
           :ensure       => 'present',
           :public_url   => default_params[:public_url],
           :admin_url    => default_params[:admin_url],
@@ -90,15 +89,14 @@ describe 'ceilometer::keystone::auth' do
       end
 
       it 'configures ceilometer service' do
-        is_expected.to contain_keystone_service( params[:auth_name] ).with(
+        is_expected.to contain_keystone_service("#{params[:auth_name]}::#{params[:service_type]}").with(
           :ensure      => 'present',
-          :type        => params[:service_type],
           :description => 'Openstack Metering Service'
         )
       end
 
       it 'configure ceilometer endpoints' do
-        is_expected.to contain_keystone_endpoint("#{params[:region]}/#{params[:auth_name]}").with(
+        is_expected.to contain_keystone_endpoint("#{params[:region]}/#{params[:auth_name]}::#{params[:service_type]}").with(
           :ensure       => 'present',
           :public_url   => params[:public_url],
           :admin_url    => params[:admin_url],
@@ -110,7 +108,7 @@ describe 'ceilometer::keystone::auth' do
         before do
           params.delete!(:configure_endpoint)
           it 'does not configure ceilometer endpoints' do
-            is_expected.to_not contain_keystone_endpoint("#{params[:region]}/#{params[:auth_name]}")
+            is_expected.to_not contain_keystone_endpoint("#{params[:region]}/#{params[:auth_name]}::#{params[:service_type]}")
           end
         end
       end
@@ -127,12 +125,13 @@ describe 'ceilometer::keystone::auth' do
           :port              => '65001',
           :public_protocol   => 'https',
           :admin_protocol    => 'ftp',
-          :internal_protocol => 'gopher'
+          :internal_protocol => 'gopher',
+          :service_type      => 'metering',
         })
       end
 
       it 'configure ceilometer endpoints' do
-        is_expected.to contain_keystone_endpoint("#{params[:region]}/#{params[:auth_name]}").with(
+        is_expected.to contain_keystone_endpoint("#{params[:region]}/#{params[:auth_name]}::#{params[:service_type]}").with(
           :ensure       => 'present',
           :public_url   => "#{params[:public_protocol]}://#{params[:public_address]}:#{params[:port]}",
           :admin_url    => "#{params[:admin_protocol]}://#{params[:admin_address]}:#{params[:port]}",
@@ -154,10 +153,10 @@ describe 'ceilometer::keystone::auth' do
         is_expected.to contain_keystone_user_role('ceilometer@services')
       end
       it 'configures correct service name' do
-        is_expected.to contain_keystone_service('ceilometer_service')
+        is_expected.to contain_keystone_service('ceilometer_service::metering')
       end
       it 'configures correct endpoint name' do
-        is_expected.to contain_keystone_endpoint('RegionOne/ceilometer_service')
+        is_expected.to contain_keystone_endpoint('RegionOne/ceilometer_service::metering')
       end
     end
 
@@ -169,9 +168,8 @@ describe 'ceilometer::keystone::auth' do
       it { is_expected.to_not contain_keystone_user('ceilometer') }
       it { is_expected.to contain_keystone_user_role('ceilometer@services') }
 
-      it { is_expected.to contain_keystone_service('ceilometer').with(
-        :ensure => 'present',
-        :type        => 'metering',
+      it { is_expected.to contain_keystone_service('ceilometer::metering').with(
+        :ensure      => 'present',
         :description => 'Openstack Metering Service'
       )}
     end
@@ -187,9 +185,8 @@ describe 'ceilometer::keystone::auth' do
       it { is_expected.to_not contain_keystone_user('ceilometer') }
       it { is_expected.to_not contain_keystone_user_role('ceilometer@services') }
 
-      it { is_expected.to contain_keystone_service('ceilometer').with(
-        :ensure => 'present',
-        :type        => 'metering',
+      it { is_expected.to contain_keystone_service('ceilometer::metering').with(
+        :ensure      => 'present',
         :description => 'Openstack Metering Service'
       )}
     end
