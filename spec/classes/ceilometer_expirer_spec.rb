@@ -27,7 +27,7 @@ describe 'ceilometer::expirer' do
   end
 
   let :params do
-    { :time_to_live => '-1' }
+    {}
   end
 
   shared_examples_for 'ceilometer-expirer' do
@@ -60,10 +60,6 @@ describe 'ceilometer::expirer' do
           :enable_cron => false })
       end
       it { is_expected.to_not contain_cron('ceilometer-expirer') }
-    end
-
-    it 'configures database section in ceilometer.conf' do
-      is_expected.to contain_ceilometer_config('database/time_to_live').with_value( params[:time_to_live] )
     end
 
   end
