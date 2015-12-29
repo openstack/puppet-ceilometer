@@ -10,9 +10,6 @@ describe 'ceilometer::api' do
   let :params do
     { :enabled           => true,
       :manage_service    => true,
-      :keystone_host     => '127.0.0.1',
-      :keystone_port     => '35357',
-      :keystone_protocol => 'http',
       :keystone_user     => 'ceilometer',
       :keystone_password => 'ceilometer-passw0rd',
       :keystone_tenant   => 'services',
@@ -41,41 +38,15 @@ describe 'ceilometer::api' do
     end
 
     it 'configures keystone authentication middleware' do
-      is_expected.to contain_ceilometer_config('keystone_authtoken/auth_host').with_value( params[:keystone_host] )
-      is_expected.to contain_ceilometer_config('keystone_authtoken/auth_port').with_value( params[:keystone_port] )
-      is_expected.to contain_ceilometer_config('keystone_authtoken/auth_protocol').with_value( params[:keystone_protocol] )
       is_expected.to contain_ceilometer_config('keystone_authtoken/admin_tenant_name').with_value( params[:keystone_tenant] )
       is_expected.to contain_ceilometer_config('keystone_authtoken/admin_user').with_value( params[:keystone_user] )
       is_expected.to contain_ceilometer_config('keystone_authtoken/admin_password').with_value( params[:keystone_password] )
       is_expected.to contain_ceilometer_config('keystone_authtoken/admin_password').with_value( params[:keystone_password] ).with_secret(true)
-      is_expected.to contain_ceilometer_config('keystone_authtoken/auth_admin_prefix').with_ensure('absent')
-      is_expected.to contain_ceilometer_config('keystone_authtoken/auth_uri').with_value( params[:keystone_protocol] + "://" + params[:keystone_host] + ":5000/" )
+      is_expected.to contain_ceilometer_config('keystone_authtoken/auth_uri').with_value("http://127.0.0.1:5000/")
+      is_expected.to contain_ceilometer_config('keystone_authtoken/identity_uri').with_value("http://127.0.0.1:35357/")
       is_expected.to contain_ceilometer_config('api/host').with_value( params[:host] )
       is_expected.to contain_ceilometer_config('api/port').with_value( params[:port] )
       is_expected.to contain_ceilometer_config('DEFAULT/api_workers').with_value('<SERVICE DEFAULT>')
-    end
-
-    context 'when specifying keystone_auth_admin_prefix' do
-      describe 'with a correct value' do
-        before { params['keystone_auth_admin_prefix'] = '/keystone/admin' }
-        it { is_expected.to contain_ceilometer_config('keystone_authtoken/auth_admin_prefix').with_value('/keystone/admin') }
-      end
-
-      [
-        '/keystone/',
-        'keystone/',
-        'keystone',
-        '/keystone/admin/',
-        'keystone/admin/',
-        'keystone/admin'
-      ].each do |auth_admin_prefix|
-        describe "with an incorrect value #{auth_admin_prefix}" do
-          before { params['keystone_auth_admin_prefix'] = auth_admin_prefix }
-
-          it { expect { is_expected.to contain_ceilomete_config('keystone_authtoken/auth_admin_prefix') }.to \
-            raise_error(Puppet::Error, /validate_re\(\): "#{auth_admin_prefix}" does not match/) }
-        end
-      end
     end
 
     [{:enabled => true}, {:enabled => false}].each do |param_hash|
@@ -190,56 +161,19 @@ describe 'ceilometer::api' do
     it_configures 'ceilometer-api'
   end
 
-  describe 'with custom auth_uri' do
-    let :facts do
-      @default_facts.merge({ :osfamily => 'RedHat' })
-    end
-    before do
-      params.merge!({
-        :keystone_auth_uri => 'https://foo.bar:1234/',
-      })
-    end
-    it 'should configure custom auth_uri correctly' do
-      is_expected.to contain_ceilometer_config('keystone_authtoken/auth_uri').with_value( 'https://foo.bar:1234/' )
-    end
-  end
-
-  describe "with custom keystone identity_uri" do
-    let :facts do
-      @default_facts.merge({ :osfamily => 'RedHat' })
-    end
-    before do
-      params.merge!({
-        :keystone_identity_uri => 'https://foo.bar:1234/',
-      })
-    end
-    it 'configures identity_uri' do
-      is_expected.to contain_ceilometer_config('keystone_authtoken/identity_uri').with_value("https://foo.bar:1234/");
-      # since only auth_uri is set the deprecated auth parameters should
-      # still get set in case they are still in use
-      is_expected.to contain_ceilometer_config('keystone_authtoken/auth_host').with_value('127.0.0.1');
-      is_expected.to contain_ceilometer_config('keystone_authtoken/auth_port').with_value('35357');
-      is_expected.to contain_ceilometer_config('keystone_authtoken/auth_protocol').with_value('http');
-    end
-  end
-
   describe "with custom keystone identity_uri and auth_uri" do
     let :facts do
       @default_facts.merge({ :osfamily => 'RedHat' })
     end
     before do
-      params.merge!({ 
+      params.merge!({
         :keystone_identity_uri => 'https://foo.bar:35357/',
-        :keystone_auth_uri => 'https://foo.bar:5000/v2.0/',
+        :keystone_auth_uri => 'https://foo.bar:5000/',
       })
     end
     it 'configures identity_uri and auth_uri but deprecates old auth settings' do
       is_expected.to contain_ceilometer_config('keystone_authtoken/identity_uri').with_value("https://foo.bar:35357/");
-      is_expected.to contain_ceilometer_config('keystone_authtoken/auth_uri').with_value("https://foo.bar:5000/v2.0/");
-      is_expected.to contain_ceilometer_config('keystone_authtoken/auth_admin_prefix').with(:ensure => 'absent')
-      is_expected.to contain_ceilometer_config('keystone_authtoken/auth_port').with(:ensure => 'absent')
-      is_expected.to contain_ceilometer_config('keystone_authtoken/auth_protocol').with(:ensure => 'absent')
-      is_expected.to contain_ceilometer_config('keystone_authtoken/auth_host').with(:ensure => 'absent')
+      is_expected.to contain_ceilometer_config('keystone_authtoken/auth_uri').with_value("https://foo.bar:5000/");
     end
   end
 
