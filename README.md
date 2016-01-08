@@ -57,6 +57,7 @@ class { '::ceilometer::alarm::evaluator': }
 class { '::ceilometer::alarm::notifier': }
 class { '::ceilometer::agent::central': }
 class { '::ceilometer::agent::notification': }
+class { '::ceilometer::db': }
 class { '::ceilometer::api':
   enabled               => true,
   keystone_password     => 'a_big_secret',
