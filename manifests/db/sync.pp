@@ -1,12 +1,13 @@
+# == Class: ceilometer::db::sync
 #
 # Class to execute ceilometer dbsync
 #
-# == Parameters
+# === Parameters:
 #
 # [*extra_params*]
-#   (optional) String of extra command line parameters
+#   (Optional) String of extra command line parameters
 #   to append to the ceilometer-dbsync command.
-#   Defaults to undef
+#   Defaults to undef.
 #
 class ceilometer::db::sync(
   $extra_params = undef,

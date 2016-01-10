@@ -1,63 +1,64 @@
-# Installs & configure the ceilometer api service
+# == Class: ceilometer::api
 #
-# == Parameters
+# Installs & configure the Ceilometer api service
 #
-#  [*enabled*]
-#    (optional) Should the service be enabled.
-#    Defaults to true
+# === Parameters
 #
-#  [*manage_service*]
-#    (optional) Whether the service should be managed by Puppet.
-#    Defaults to true.
+# [*enabled*]
+#   (Optional) Should the service be enabled.
+#   Defaults to true.
+#
+# [*manage_service*]
+#   (Optional) Whether the service should be managed by Puppet.
+#   Defaults to true.
 #
 # [*keystone_user*]
 #   (optional) The name of the auth user
-#   Defaults to ceilometer
+#   Defaults to ceilometer.
 #
-#  [*keytone_user*]
-#    (optional) User to authenticate with.
-#    Defaults to 'ceilometer'.
+# [*keytone_user*]
+#   (Optional) User to authenticate with.
+#   Defaults to 'ceilometer'.
 #
-#  [*keystone_tenant*]
-#    (optional) Tenant to authenticate with.
-#    Defaults to 'services'.
+# [*keystone_tenant*]
+#   (Optional) Tenant to authenticate with.
+#   Defaults to 'services'.
 #
-#  [*keystone_password*]
-#    Password to authenticate with.
-#    Mandatory.
+# [*keystone_password*]
+#   (Required) Password to authenticate with.
 #
 # [*keystone_auth_uri*]
-#   (optional) Public Identity API endpoint.
+#   (Optional) Public Identity API endpoint.
 #   Defaults to 'http://127.0.0.1:5000/'.
 #
 # [*keystone_identity_uri*]
-#   (optional) Complete admin Identity API endpoint.
-#   Defaults to: 'http://127.0.0.1:35357/'
+#   (Optional) Complete admin Identity API endpoint.
+#   Defaults to 'http://127.0.0.1:35357/'.
 #
-#  [*host*]
-#    (optional) The ceilometer api bind address.
-#    Defaults to 0.0.0.0
+# [*host*]
+#   (Optional) The ceilometer api bind address.
+#   Defaults to '0.0.0.0'.
 #
-#  [*port*]
-#    (optional) The ceilometer api port.
-#    Defaults to 8777
+# [*port*]
+#   (Optional) The ceilometer api port.
+#   Defaults to 8777.
 #
-#  [*package_ensure*]
-#    (optional) ensure state for package.
-#    Defaults to 'present'
+# [*package_ensure*]
+#   (Optional) ensure state for package.
+#   Defaults to 'present'.
 #
 # [*service_name*]
-#   (optional) Name of the service that will be providing the
+#   (Optional) Name of the service that will be providing the
 #   server functionality of ceilometer-api.
 #   If the value is 'httpd', this means ceilometer-api will be a web
 #   service, and you must use another class to configure that
 #   web service. For example, use class { 'ceilometer::wsgi::apache'...}
 #   to make ceilometer-api be a web app using apache mod_wsgi.
-#   Defaults to '$::ceilometer::params::api_service_name'
+#   Defaults to '$::ceilometer::params::api_service_name'.
 #
 # [*api_workers*]
-#   (optional) Number of workers for Ceilometer API server (integer value).
-#   Defaults to $::os_service_default
+#   (Optional) Number of workers for Ceilometer API server (integer value).
+#   Defaults to $::os_service_default.
 #
 class ceilometer::api (
   $manage_service             = true,

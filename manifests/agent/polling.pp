@@ -1,35 +1,37 @@
+# == Class: ceilometer::agent::polling
+#
 # Installs/configures the ceilometer polling agent
 #
-# == Parameters
-#  [*enabled*]
-#    (optional) Should the service be enabled.
-#    Defaults to true.
+# === Parameters:
 #
-#  [*manage_service*]
-#    (optional)  Whether the service should be managed by Puppet.
-#    Defaults to true.
+# [*enabled*]
+#   (Optional) Should the service be enabled.
+#   Defaults to true.
 #
-#  [*package_ensure*]
-#    (optional) ensure state for package.
-#    Defaults to 'present'
+# [*manage_service*]
+#   (Optional)  Whether the service should be managed by Puppet.
+#   Defaults to true.
 #
-#  [*central_namespace*]
-#    (optional) Use central namespace for polling agent.
-#    Defaults to true.
+# [*package_ensure*]
+#   (Optional) ensure state for package.
+#   Defaults to 'present'
 #
-#  [*compute_namespace*]
-#    (optional) Use compute namespace for polling agent.
-#    Defaults to true.
+# [*central_namespace*]
+#   (Optional) Use central namespace for polling agent.
+#   Defaults to true.
 #
-#  [*ipmi_namespace*]
-#    (optional) Use ipmi namespace for polling agent.
-#    Defaults to true.
+# [*compute_namespace*]
+#   (Optional) Use compute namespace for polling agent.
+#   Defaults to true.
 #
-#  [*coordination_url*]
-#    (optional) The url to use for distributed group membership coordination.
-#    Defaults to undef.
+# [*ipmi_namespace*]
+#   (Optional) Use ipmi namespace for polling agent.
+#   Defaults to true.
 #
-
+# [*coordination_url*]
+#   (Optional) The url to use for distributed group membership coordination.
+#   Defaults to undef.
+#
 class ceilometer::agent::polling (
   $manage_service    = true,
   $enabled           = true,

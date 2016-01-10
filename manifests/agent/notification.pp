@@ -22,33 +22,35 @@
 # about configuring the agents that must also run and share a config
 # file with the OVS plugin if both are on the same machine.
 #
-# === Parameters
+# === Parameters:
+#
 # [*enabled*]
-#   (optional) Should the service be enabled.
+#   (Optional) Should the service be enabled.
 #   Defaults to true.
 #
 # [*manage_service*]
-#   (optional)  Whether the service should be managed by Puppet.
+#   (Optional)  Whether the service should be managed by Puppet.
 #   Defaults to true.
 #
 # [*ack_on_event_error*]
-#   (optional) Acknowledge message when event persistence fails.
-#   Defaults to true
+#   (Optional) Acknowledge message when event persistence fails.
+#   Defaults to true.
 #
 # [*store_events*]
-#   (optional) Save event details.
-#   Defaults to false
+#   (Optional) Save event details.
+#   Defaults to false.
 #
 # [*disable_non_metric_meters*]
-#   (optional) Disable or enable the collection of non-metric meters.
-#   Default to $::os_service_default
-# [*notification_workers*]
-#   (optional) Number of workers for notification service (integer value).
-#   Defaults to $::os_service_default
+#   (Optional) Disable or enable the collection of non-metric meters.
+#   Default to $::os_service_default.
 #
-#  [*package_ensure*]
-#    (optional) ensure state for package.
-#    Defaults to 'present'
+# [*notification_workers*]
+#   (Optional) Number of workers for notification service (integer value).
+#   Defaults to $::os_service_default.
+#
+# [*package_ensure*]
+#   (Optional) ensure state for package.
+#   Defaults to 'present'.
 #
 class ceilometer::agent::notification (
   $manage_service            = true,
