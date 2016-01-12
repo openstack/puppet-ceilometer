@@ -1,33 +1,36 @@
+# == Class: ceilometer::alarm::evaluator
+#
 # Installs the ceilometer alarm evaluator service
 #
-# == Params
-#  [*enabled*]
-#    (optional) Should the service be enabled.
-#    Defaults to true.
+# === Parameters:
 #
-#  [*manage_service*]
-#    (optional) Whether the service should be managed by Puppet.
-#    Defaults to true.
+# [*enabled*]
+#   (Optional) Should the service be enabled.
+#   Defaults to true.
 #
-#  [*evaluation_interval*]
-#    (optional) Define the time interval for the alarm evaluator
-#    Defaults to 60.
+# [*manage_service*]
+#   (Optional) Whether the service should be managed by Puppet.
+#   Defaults to true.
 #
-#  [*evaluation_service*]
-#    (optional) Define which service use for the evaluator
-#    Defaults to 'ceilometer.alarm.service.SingletonAlarmService'.
+# [*evaluation_interval*]
+#   (Optional) Define the time interval for the alarm evaluator
+#   Defaults to 60.
 #
-#  [*partition_rpc_topic*]
-#    (optional) Define which topic the alarm evaluator should access
-#    Defaults to 'alarm_partition_coordination'.
+# [*evaluation_service*]
+#   (Optional) Define which service use for the evaluator
+#   Defaults to 'ceilometer.alarm.service.SingletonAlarmService'.
 #
-#  [*record_history*]
-#    (optional) Record alarm change events
-#    Defaults to true.
+# [*partition_rpc_topic*]
+#   (Optional) Define which topic the alarm evaluator should access
+#   Defaults to 'alarm_partition_coordination'.
 #
-#  [*coordination_url*]
-#    (optional) The url to use for distributed group membership coordination.
-#    Defaults to undef.
+# [*record_history*]
+#   (Optional) Record alarm change events
+#   Defaults to true.
+#
+# [*coordination_url*]
+#   (Optional) The url to use for distributed group membership coordination.
+#   Defaults to undef.
 #
 class ceilometer::alarm::evaluator (
   $manage_service      = true,

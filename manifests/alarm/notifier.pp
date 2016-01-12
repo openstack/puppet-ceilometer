@@ -1,29 +1,32 @@
+# == Class: ceilometer::alarm::notifier
+#
 # Installs the ceilometer alarm notifier service
 #
-# == Params
-#  [*enabled*]
-#    (optional) Should the service be enabled.
-#    Defaults to true.
+# === Parameters:
 #
-#  [*manage_service*]
-#    (optional) Whether the service should be managed by Puppet.
-#    Defaults to true.
+# [*enabled*]
+#   (Optional) Should the service be enabled.
+#   Defaults to true.
 #
-#  [*notifier_rpc_topic*]
-#    (optional) Define on which topic the notifier will have access.
-#    Defaults to undef.
+# [*manage_service*]
+#   (Optional) Whether the service should be managed by Puppet.
+#   Defaults to true.
 #
-#  [*rest_notifier_certificate_key*]
-#    (optional) Define the certificate key for the rest service.
-#    Defaults to undef.
+# [*notifier_rpc_topic*]
+#   (Optional) Define on which topic the notifier will have access.
+#   Defaults to undef.
 #
-#  [*rest_notifier_certificate_file*]
-#    (optional) Define the certificate file for the rest service.
-#    Defaults to undef.
+# [*rest_notifier_certificate_key*]
+#   (Optional) Define the certificate key for the rest service.
+#   Defaults to undef.
 #
-#  [*rest_notifier_ssl_verify*]
-#    (optional) Should the ssl verify parameter be enabled.
-#    Defaults to true.
+# [*rest_notifier_certificate_file*]
+#   (optional) Define the certificate file for the rest service.
+#   Defaults to undef.
+#
+# [*rest_notifier_ssl_verify*]
+#   (optional) Should the ssl verify parameter be enabled.
+#   Defaults to true.
 #
 class ceilometer::alarm::notifier (
   $manage_service                 = true,

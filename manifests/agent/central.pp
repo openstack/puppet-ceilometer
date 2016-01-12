@@ -1,21 +1,24 @@
+# == Class: ceilometer::agent::central
+#
 # Installs/configures the ceilometer central agent
 #
-# == Parameters
-#  [*enabled*]
-#    (optional) Should the service be enabled.
-#    Defaults to true.
+# === Parameters:
 #
-#  [*manage_service*]
-#    (optional)  Whether the service should be managed by Puppet.
-#    Defaults to true.
+# [*enabled*]
+#   (Optional) Should the service be enabled.
+#   Defaults to true.
 #
-#  [*package_ensure*]
-#    (optional) ensure state for package.
-#    Defaults to 'present'
+# [*manage_service*]
+#   (Optional)  Whether the service should be managed by Puppet.
+#   Defaults to true.
 #
-#  [*coordination_url*]
-#    (optional) The url to use for distributed group membership coordination.
-#    Defaults to undef.
+# [*package_ensure*]
+#   (Optional) ensure state for package.
+#   Defaults to 'present'.
+#
+# [*coordination_url*]
+#   (Optional) The url to use for distributed group membership coordination.
+#   Defaults to undef.
 #
 
 class ceilometer::agent::central (

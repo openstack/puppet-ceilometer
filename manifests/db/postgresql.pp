@@ -3,7 +3,7 @@
 # Class that configures postgresql for ceilometer
 # Requires the Puppetlabs postgresql module.
 #
-# === Parameters
+# === Parameters:
 #
 # [*password*]
 #   (Required) Password to connect to the database.
@@ -16,13 +16,13 @@
 #   (Optional) User to connect to the database.
 #   Defaults to 'ceilometer'.
 #
-#  [*encoding*]
-#    (Optional) The charset to use for the database.
-#    Default to undef.
+# [*encoding*]
+#   (Optional) The charset to use for the database.
+#   Default to undef.
 #
-#  [*privileges*]
-#    (Optional) Privileges given to the database user.
-#    Default to 'ALL'
+# [*privileges*]
+#   (Optional) Privileges given to the database user.
+#   Default to 'ALL'.
 #
 class ceilometer::db::postgresql(
   $password,

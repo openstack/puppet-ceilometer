@@ -1,4 +1,7 @@
-# Parameters for puppet-ceilometer
+# == Class: ceilometer::params
+#
+# These parameters need to be accessed from several locations and
+# should be considered to be constant
 #
 class ceilometer::params {
 

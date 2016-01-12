@@ -2,15 +2,15 @@
 #
 # Configure the ceilometer policies
 #
-# === Parameters
+# === Parameters:
 #
 # [*policies*]
-#   (optional) Set of policies to configure for ceilometer
+#   (Optional) Set of policies to configure for ceilometer
 #   Example : { 'ceilometer-context_is_admin' => {'context_is_admin' => 'true'}, 'ceilometer-default' => {'default' => 'rule:admin_or_owner'} }
 #   Defaults to empty hash.
 #
 # [*policy_path*]
-#   (optional) Path to the ceilometer policy.json file
+#   (Optional) Path to the ceilometer policy.json file
 #   Defaults to /etc/ceilometer/policy.json
 #
 class ceilometer::policy (

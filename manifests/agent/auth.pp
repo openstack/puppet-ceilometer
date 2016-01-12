@@ -1,38 +1,41 @@
+# == Class: ceilometer::agent::auth
+#
 # The ceilometer::agent::auth class helps configure common
 # auth settings for the agents.
 #
-# == Parameters
-#  [*auth_url*]
-#    the keystone public endpoint
-#    Optional. Defaults to 'http://localhost:5000/v2.0'
+# === Parameters:
 #
-#  [*auth_region*]
-#    the keystone region of this node
-#    Optional. Defaults to 'RegionOne'
+# [*auth_url*]
+#   (Optional) the keystone public endpoint
+#   Defaults to 'http://localhost:5000/v2.0'.
 #
-#  [*auth_user*]
-#    the keystone user for ceilometer services
-#    Optional. Defaults to 'ceilometer'
+# [*auth_region*]
+#   (Optional) the keystone region of this node
+#   Defaults to 'RegionOne'.
 #
-#  [*auth_password*]
-#    the keystone password for ceilometer services
-#    Required.
+# [*auth_user*]
+#   (Optional) the keystone user for ceilometer services
+#   Defaults to 'ceilometer'.
 #
-#  [*auth_tenant_name*]
-#    the keystone tenant name for ceilometer services
-#    Optional. Defaults to 'services'
+# [*auth_password*]
+#   (Required) the keystone password for ceilometer services
 #
-#  [*auth_tenant_id*]
-#    the keystone tenant id for ceilometer services.
-#    Optional. Defaults to undef.
+# [*auth_tenant_name*]
+#   (Optional) the keystone tenant name for ceilometer services
+#   Defaults to 'services'.
 #
-#  [*auth_cacert*]
-#    Certificate chain for SSL validation. Optional; Defaults to 'None'
+# [*auth_tenant_id*]
+#   (Optional) the keystone tenant id for ceilometer services.
+#   Defaults to undef.
 #
-#  [*auth_endpoint_type*]
-#    Type of endpoint in Identity service catalog to use for
-#    communication with OpenStack services.
-#    Optional. Defaults to undef.
+# [*auth_cacert*]
+#   (Optional) Certificate chain for SSL validation.
+#   Defaults to 'None'.
+#
+# [*auth_endpoint_type*]
+#   (Optional) Type of endpoint in Identity service catalog to use for
+#   communication with OpenStack services.
+#   Defaults to undef.
 #
 class ceilometer::agent::auth (
   $auth_password,

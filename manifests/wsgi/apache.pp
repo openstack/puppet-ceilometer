@@ -15,6 +15,8 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
+# == Class: ceilometer::wsgi::apache
+#
 # Class to serve Ceilometer API with apache mod_wsgi in place of ceilometer-api service.
 #
 # Serving Ceilometer API from apache is the recommended way to go for production
@@ -22,55 +24,55 @@
 #
 # When using this class you should disable your ceilometer-api service.
 #
-# == Parameters
+# === Parameters:
 #
-#   [*servername*]
-#     The servername for the virtualhost.
-#     Optional. Defaults to $::fqdn
+# [*servername*]
+#   (Optional) The servername for the virtualhost.
+#   Defaults to $::fqdn.
 #
-#   [*port*]
-#     The port.
-#     Optional. Defaults to 8777
+# [*port*]
+#   (Optional) The port.
+#   Defaults to 8777.
 #
-#   [*bind_host*]
-#     The host/ip address Apache will listen on.
-#     Optional. Defaults to undef (listen on all ip addresses).
+# [*bind_host*]
+#   (Optional) The host/ip address Apache will listen on.
+#   Defaults to undef (listen on all ip addresses).
 #
-#   [*path*]
-#     The prefix for the endpoint.
-#     Optional. Defaults to '/'
+# [*path*]
+#   (Optional) The prefix for the endpoint.
+#   Defaults to '/'.
 #
-#   [*ssl*]
-#     Use ssl ? (boolean)
-#     Optional. Defaults to true
+# [*ssl*]
+#   (Optional) Use ssl ? (boolean)
+#   Defaults to true.
 #
-#   [*workers*]
-#     Number of WSGI workers to spawn.
-#     Optional. Defaults to 1
+# [*workers*]
+#   (Optional) Number of WSGI workers to spawn.
+#   Defaults to 1.
 #
-#   [*priority*]
-#     (optional) The priority for the vhost.
-#     Defaults to '10'
+# [*priority*]
+#   (Optional) The priority for the vhost.
+#   Defaults to '10'.
 #
-#   [*threads*]
-#     (optional) The number of threads for the vhost.
-#     Defaults to $::processorcount
+# [*threads*]
+#   (Optional) The number of threads for the vhost.
+#   Defaults to $::processorcount.
 #
-#   [*ssl_cert*]
-#   [*ssl_key*]
-#   [*ssl_chain*]
-#   [*ssl_ca*]
-#   [*ssl_crl_path*]
-#   [*ssl_crl*]
-#   [*ssl_certs_dir*]
-#     apache::vhost ssl parameters.
-#     Optional. Default to apache::vhost 'ssl_*' defaults.
+# [*ssl_cert*]
+# [*ssl_key*]
+# [*ssl_chain*]
+# [*ssl_ca*]
+# [*ssl_crl_path*]
+# [*ssl_crl*]
+# [*ssl_certs_dir*]
+#   (Optional) apache::vhost ssl parameters.
+#   Default to apache::vhost 'ssl_*' defaults.
 #
-# == Dependencies
+# === Dependencies:
 #
 #   requires Class['apache'] & Class['ceilometer']
 #
-# == Examples
+# === Examples:
 #
 #   include apache
 #
