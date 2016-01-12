@@ -11,7 +11,7 @@
 #
 # [*auth_region*]
 #   (Optional) the keystone region of this node
-#   Defaults to 'RegionOne'.
+#   Defaults to $::os_service_default.
 #
 # [*auth_user*]
 #   (Optional) the keystone user for ceilometer services
@@ -40,7 +40,7 @@
 class ceilometer::agent::auth (
   $auth_password,
   $auth_url           = 'http://localhost:5000/v2.0',
-  $auth_region        = 'RegionOne',
+  $auth_region        = $::os_service_default,
   $auth_user          = 'ceilometer',
   $auth_tenant_name   = 'services',
   $auth_tenant_id     = undef,

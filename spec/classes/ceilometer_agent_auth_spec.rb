@@ -8,7 +8,7 @@ describe 'ceilometer::agent::auth' do
 
   let :params do
     { :auth_url         => 'http://localhost:5000/v2.0',
-      :auth_region      => 'RegionOne',
+      :auth_region      => '<SERVICE DEFAULT>',
       :auth_user        => 'ceilometer',
       :auth_password    => 'password',
       :auth_tenant_name => 'services',
@@ -19,7 +19,7 @@ describe 'ceilometer::agent::auth' do
 
     it 'configures authentication' do
       is_expected.to contain_ceilometer_config('service_credentials/os_auth_url').with_value('http://localhost:5000/v2.0')
-      is_expected.to contain_ceilometer_config('service_credentials/os_region_name').with_value('RegionOne')
+      is_expected.to contain_ceilometer_config('service_credentials/os_region_name').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ceilometer_config('service_credentials/os_username').with_value('ceilometer')
       is_expected.to contain_ceilometer_config('service_credentials/os_password').with_value('password')
       is_expected.to contain_ceilometer_config('service_credentials/os_password').with_value(params[:auth_password]).with_secret(true)
