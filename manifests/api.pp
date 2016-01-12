@@ -128,7 +128,7 @@ class ceilometer::api (
   }
 
   ceilometer_config {
-    'DEFAULT/api_workers'                  : value => $api_workers;
+    'api/workers'                          : value => $api_workers;
     'keystone_authtoken/admin_tenant_name' : value => $keystone_tenant;
     'keystone_authtoken/admin_user'        : value => $keystone_user;
     'keystone_authtoken/admin_password'    : value => $keystone_password, secret => true;

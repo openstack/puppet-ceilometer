@@ -53,9 +53,9 @@ describe 'ceilometer::collector' do
       it 'configures ceilometer-collector server' do
         is_expected.to contain_ceilometer_config('collector/udp_address').with_value( '0.0.0.0' )
         is_expected.to contain_ceilometer_config('collector/udp_port').with_value( '4952' )
+        is_expected.to contain_ceilometer_config('collector/workers').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_ceilometer_config('DEFAULT/meter_dispatcher').with_value( 'database' )
         is_expected.to contain_ceilometer_config('DEFAULT/event_dispatcher').with_value( 'database' )
-        is_expected.to contain_ceilometer_config('DEFAULT/collector_workers').with_value('<SERVICE DEFAULT>')
       end
 
       it 'installs ceilometer-collector package' do
