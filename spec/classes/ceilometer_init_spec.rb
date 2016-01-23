@@ -113,6 +113,10 @@ describe 'ceilometer' do
       is_expected.to contain_ceilometer_config('DEFAULT/notification_topics').with_value('notifications')
     end
 
+    context 'with rabbitmq durable queues configured' do
+      before { params.merge!( :amqp_durable_queues => true ) }
+      it_configures 'rabbit with durable queues'
+    end
 
     context 'with overriden notification_topics parameter' do
       before { params.merge!( :notification_topics => ['notifications', 'custom']) }
@@ -175,6 +179,11 @@ describe 'ceilometer' do
     it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_hosts').with_value( params[:rabbit_hosts].join(',') ) }
     it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value('true') }
 
+  end
+  shared_examples_for 'rabbit with durable queues' do
+    it 'in ceilometer' do
+      is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/amqp_durable_queues').with_value(true)
+    end
   end
 
   shared_examples_for 'rabbit with connection heartbeats' do

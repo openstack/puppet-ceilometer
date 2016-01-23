@@ -108,6 +108,10 @@
 #    (Optional) Connect over SSL for RabbitMQ
 #    Defaults to false.
 #
+#  [*amqp_durable_queues*]
+#    (optional) Define queues as "durable" to rabbitmq.
+#    Defaults to $::os_service_default
+#
 #  [*kombu_ssl_ca_certs*]
 #    (Optional) SSL certification authority file (valid only if SSL enabled).
 #    Defaults to undef.
@@ -169,6 +173,7 @@ class ceilometer(
   $rabbit_virtual_host                = '/',
   $rabbit_heartbeat_timeout_threshold = 0,
   $rabbit_heartbeat_rate              = 2,
+  $amqp_durable_queues                = $::os_service_default,
   $rabbit_use_ssl                     = false,
   $kombu_ssl_ca_certs                 = undef,
   $kombu_ssl_certfile                 = undef,
@@ -257,6 +262,7 @@ class ceilometer(
         'oslo_messaging_rabbit/rabbit_use_ssl':               value => $rabbit_use_ssl;
         'oslo_messaging_rabbit/heartbeat_timeout_threshold':  value => $rabbit_heartbeat_timeout_threshold;
         'oslo_messaging_rabbit/heartbeat_rate':               value => $rabbit_heartbeat_rate;
+        'oslo_messaging_rabbit/amqp_durable_queues':          value => $amqp_durable_queues;
       }
 
       if $rabbit_use_ssl {
