@@ -89,6 +89,10 @@
 #    (Optional) virtualhost to use.
 #    Defaults to '/'.
 #
+# [*rabbit_ha_queues*]
+#   (Optional) Use HA queues in RabbitMQ (x-ha-policy: all).
+#   Defaults to undef.
+#
 # [*rabbit_heartbeat_timeout_threshold*]
 #   (Optional) Number of seconds after which the RabbitMQ broker is considered
 #   down if the heartbeat keepalive fails.  Any value >0 enables heartbeats.
@@ -171,6 +175,7 @@ class ceilometer(
   $rabbit_userid                      = 'guest',
   $rabbit_password                    = '',
   $rabbit_virtual_host                = '/',
+  $rabbit_ha_queues                   = undef,
   $rabbit_heartbeat_timeout_threshold = 0,
   $rabbit_heartbeat_rate              = 2,
   $amqp_durable_queues                = $::os_service_default,
@@ -249,11 +254,15 @@ class ceilometer(
       }
     }
 
+    if $rabbit_ha_queues == undef {
       if size($rabbit_hosts) > 1 {
         ceilometer_config { 'oslo_messaging_rabbit/rabbit_ha_queues': value => true }
       } else {
         ceilometer_config { 'oslo_messaging_rabbit/rabbit_ha_queues': value => false }
       }
+    } else {
+      ceilometer_config { 'oslo_messaging_rabbit/rabbit_ha_queues': value => $rabbit_ha_queues }
+    }
 
       ceilometer_config {
         'oslo_messaging_rabbit/rabbit_userid':                value => $rabbit_userid;

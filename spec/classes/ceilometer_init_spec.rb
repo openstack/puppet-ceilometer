@@ -45,6 +45,12 @@ describe 'ceilometer' do
       it_configures 'rabbit with SSL support'
       it_configures 'rabbit without HA support (with backward compatibility)'
       it_configures 'rabbit with connection heartbeats'
+
+      context 'with rabbit_ha_queues' do
+        before { params.merge!( rabbit_params ).merge!( :rabbit_ha_queues => true ) }
+        it_configures 'rabbit with rabbit_ha_queues'
+       end
+
     end
 
     context 'with rabbit_hosts parameter' do
@@ -161,6 +167,13 @@ describe 'ceilometer' do
     it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_hosts').with_value( params[:rabbit_hosts].join(',') ) }
     it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value('false') }
 
+  end
+
+  shared_examples_for 'rabbit with rabbit_ha_queues' do
+
+    it 'configures rabbit' do
+      is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value( params[:rabbit_ha_queues] )
+    end
   end
 
   shared_examples_for 'rabbit with HA support' do
