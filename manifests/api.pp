@@ -27,11 +27,11 @@
 # [*keystone_password*]
 #   (Required) Password to authenticate with.
 #
-# [*keystone_auth_uri*]
+# [*auth_uri*]
 #   (Optional) Public Identity API endpoint.
 #   Defaults to 'http://127.0.0.1:5000/'.
 #
-# [*keystone_identity_uri*]
+# [*identity_uri*]
 #   (Optional) Complete admin Identity API endpoint.
 #   Defaults to 'http://127.0.0.1:35357/'.
 #
@@ -60,6 +60,16 @@
 #   (Optional) Number of workers for Ceilometer API server (integer value).
 #   Defaults to $::os_service_default.
 #
+# [*keystone_auth_uri*]
+#   (optional) DEPRECATED Public Identity API endpoint.
+#   Defaults to false.
+#   Use auth_uri instead.
+#
+# [*keystone_identity_uri*]
+#   (optional) DEPRECATED Complete admin Identity API endpoint.
+#   Defaults to false.
+#   Use identity_uri instead.
+#
 class ceilometer::api (
   $manage_service             = true,
   $enabled                    = true,
@@ -67,12 +77,15 @@ class ceilometer::api (
   $keystone_user              = 'ceilometer',
   $keystone_tenant            = 'services',
   $keystone_password          = false,
-  $keystone_auth_uri          = 'http://127.0.0.1:5000/',
-  $keystone_identity_uri      = 'http://127.0.0.1:35357/',
+  $auth_uri                   = 'http://127.0.0.1:5000/',
+  $identity_uri               = 'http://127.0.0.1:35357/',
   $host                       = '0.0.0.0',
   $port                       = '8777',
   $service_name               = $::ceilometer::params::api_service_name,
   $api_workers                = $::os_service_default,
+  # DEPRECATED PARAMETERS
+  $keystone_auth_uri          = false,
+  $keystone_identity_uri      = false,
 ) inherits ceilometer::params {
 
   include ::ceilometer::params
@@ -136,9 +149,23 @@ class ceilometer::api (
     'api/port'                             : value => $port;
   }
 
+  if $keystone_auth_uri {
+    warning('The keystone_auth_uri parameter is deprecated. Please use auth_uri instead.')
+    $auth_uri_real = $keystone_auth_uri
+  } else {
+    $auth_uri_real = $auth_uri
+  }
+
+  if $keystone_identity_uri {
+    warning('The keystone_identity_uri parameter is deprecated. Please use identity_uri instead.')
+    $identity_uri_real = $keystone_identity_uri
+  } else {
+    $identity_uri_real = $identity_uri
+  }
+
   ceilometer_config {
-    'keystone_authtoken/auth_uri'     : value => $keystone_auth_uri;
-    'keystone_authtoken/identity_uri' : value => $keystone_identity_uri;
+    'keystone_authtoken/auth_uri'     : value => $auth_uri_real;
+    'keystone_authtoken/identity_uri' : value => $identity_uri_real;
   }
 
 }
