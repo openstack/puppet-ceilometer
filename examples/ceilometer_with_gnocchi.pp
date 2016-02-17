@@ -33,7 +33,7 @@ class { '::ceilometer::collector':
 }
 class { '::ceilometer::dispatcher::gnocchi':
   filter_service_activity   => false,
-  filter_project            => true,
+  filter_project            => 'gnocchi_swift',
   url                       => 'https://gnocchi:8041',
   archive_policy            => 'high',
   resources_definition_file => 'gnocchi.yaml',
