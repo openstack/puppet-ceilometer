@@ -53,8 +53,6 @@ class { '::ceilometer':
 class { '::ceilometer::client': }
 class { '::ceilometer::collector': }
 class { '::ceilometer::expirer': }
-class { '::ceilometer::alarm::evaluator': }
-class { '::ceilometer::alarm::notifier': }
 class { '::ceilometer::agent::central': }
 class { '::ceilometer::agent::notification': }
 class { '::ceilometer::db': }

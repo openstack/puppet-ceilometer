@@ -1,4 +1,4 @@
-# == Class: ceilometer::alarm::evaluator
+# == Deprecated class: ceilometer::alarm::evaluator
 #
 # Installs the ceilometer alarm evaluator service
 #
@@ -6,82 +6,42 @@
 #
 # [*enabled*]
 #   (Optional) Should the service be enabled.
-#   Defaults to true.
+#   Defaults to undef.
 #
 # [*manage_service*]
 #   (Optional) Whether the service should be managed by Puppet.
-#   Defaults to true.
+#   Defaults to undef.
 #
 # [*evaluation_interval*]
 #   (Optional) Define the time interval for the alarm evaluator
-#   Defaults to 60.
+#   Defaults to undef.
 #
 # [*evaluation_service*]
 #   (Optional) Define which service use for the evaluator
-#   Defaults to 'ceilometer.alarm.service.SingletonAlarmService'.
+#   Defaults to undef.
 #
 # [*partition_rpc_topic*]
 #   (Optional) Define which topic the alarm evaluator should access
-#   Defaults to 'alarm_partition_coordination'.
+#   Defaults to undef.
 #
 # [*record_history*]
 #   (Optional) Record alarm change events
-#   Defaults to true.
+#   Defaults to undef.
 #
 # [*coordination_url*]
 #   (Optional) The url to use for distributed group membership coordination.
 #   Defaults to undef.
 #
 class ceilometer::alarm::evaluator (
-  $manage_service      = true,
-  $enabled             = true,
-  $evaluation_interval = 60,
-  $evaluation_service  = 'ceilometer.alarm.service.SingletonAlarmService',
-  $partition_rpc_topic = 'alarm_partition_coordination',
-  $record_history      = true,
+  $manage_service      = undef,
+  $enabled             = undef,
+  $evaluation_interval = undef,
+  $evaluation_service  = undef,
+  $partition_rpc_topic = undef,
+  $record_history      = undef,
   $coordination_url    = undef,
 ) {
 
-  include ::ceilometer::params
+  warning('Class is deprecated and will be removed. Use Aodh module to deploy Alarm Evaluator service')
 
-  # Cast $evaluation_interval to a string
-  validate_re("${evaluation_interval}",'^(\d+)$') # lint:ignore:only_variable_string
-
-  Ceilometer_config<||> ~> Service['ceilometer-alarm-evaluator']
-
-  Package[$::ceilometer::params::alarm_package_name] -> Service['ceilometer-alarm-evaluator']
-  Package[$::ceilometer::params::alarm_package_name] -> Package<| title == 'ceilometer-alarm' |>
-  ensure_packages($::ceilometer::params::alarm_package_name,
-    { tag => 'openstack' }
-  )
-
-  if $manage_service {
-    if $enabled {
-      $service_ensure = 'running'
-    } else {
-      $service_ensure = 'stopped'
-    }
-  }
-
-  Package['ceilometer-common'] -> Service['ceilometer-alarm-evaluator']
-
-  service { 'ceilometer-alarm-evaluator':
-    ensure     => $service_ensure,
-    name       => $::ceilometer::params::alarm_evaluator_service_name,
-    enable     => $enabled,
-    hasstatus  => true,
-    hasrestart => true
-  }
-
-  ceilometer_config {
-    'alarm/evaluation_interval' :  value => $evaluation_interval;
-    'alarm/evaluation_service'  :  value => $evaluation_service;
-    'alarm/partition_rpc_topic' :  value => $partition_rpc_topic;
-    'alarm/record_history'      :  value => $record_history;
-  }
-
-  if $coordination_url {
-    ensure_resource('ceilometer_config', 'coordination/backend_url',
-      {'value' => $coordination_url})
-  }
 }

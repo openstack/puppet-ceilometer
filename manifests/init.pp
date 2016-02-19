@@ -19,11 +19,6 @@
 #    (<= 0 means forever)
 #    Defaults to -1.
 #
-#  [*alarm_history_time_to_live*]
-#    (Optional) Number of seconds that alarm histories are kept in the database for
-#    (<= 0 means forever)
-#    Defaults to -1.
-#
 #  [*metering_secret*]
 #   (Required)  Secret key for signing messages.
 #
@@ -140,6 +135,7 @@
 #
 # === DEPRECATED PARAMETERS:
 #
+# [*alarm_history_time_to_live*]
 # [*qpid_hostname*]
 # [*qpid_port*]
 # [*qpid_username*]
@@ -158,7 +154,6 @@ class ceilometer(
   $http_timeout                       = '600',
   $event_time_to_live                 = '-1',
   $metering_time_to_live              = '-1',
-  $alarm_history_time_to_live         = '-1',
   $metering_secret                    = false,
   $notification_topics                = ['notifications'],
   $package_ensure                     = 'present',
@@ -186,6 +181,7 @@ class ceilometer(
   $kombu_ssl_version                  = 'TLSv1',
   $memcached_servers                  = undef,
   # DEPRECATED PARAMETERS
+  $alarm_history_time_to_live         = undef,
   $qpid_hostname                      = undef,
   $qpid_port                          = undef,
   $qpid_username                      = undef,
@@ -217,6 +213,10 @@ class ceilometer(
   }
   if ($kombu_ssl_certfile and !$kombu_ssl_keyfile) or ($kombu_ssl_keyfile and !$kombu_ssl_certfile) {
     fail('The kombu_ssl_certfile and kombu_ssl_keyfile parameters must be used together')
+  }
+
+  if $alarm_history_time_to_live {
+    warning('alarm_history_time_to_live parameter is deprecated. It should be configured for Aodh.')
   }
 
   group { 'ceilometer':
@@ -324,7 +324,6 @@ class ceilometer(
     'DEFAULT/notification_topics'         : value => join($notification_topics, ',');
     'database/event_time_to_live'         : value => $event_time_to_live;
     'database/metering_time_to_live'      : value => $metering_time_to_live;
-    'database/alarm_history_time_to_live' : value => $alarm_history_time_to_live;
   }
 
   if $memcached_servers {

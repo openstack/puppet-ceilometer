@@ -1,4 +1,4 @@
-# == Class: ceilometer::alarm::notifier
+# == Class: ceilometer::dispatcher::gnocchi
 #
 # Configure Gnocchi dispatcher for Ceilometer
 #

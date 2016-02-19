@@ -1,4 +1,4 @@
-# == Class: ceilometer::alarm::notifier
+# == Deprecated class: ceilometer::alarm::notifier
 #
 # Installs the ceilometer alarm notifier service
 #
@@ -6,11 +6,11 @@
 #
 # [*enabled*]
 #   (Optional) Should the service be enabled.
-#   Defaults to true.
+#   Defaults to undef.
 #
 # [*manage_service*]
 #   (Optional) Whether the service should be managed by Puppet.
-#   Defaults to true.
+#   Defaults to undef.
 #
 # [*notifier_rpc_topic*]
 #   (Optional) Define on which topic the notifier will have access.
@@ -26,62 +26,17 @@
 #
 # [*rest_notifier_ssl_verify*]
 #   (optional) Should the ssl verify parameter be enabled.
-#   Defaults to true.
+#   Defaults to undef.
 #
 class ceilometer::alarm::notifier (
-  $manage_service                 = true,
-  $enabled                        = true,
+  $manage_service                 = undef,
+  $enabled                        = undef,
   $notifier_rpc_topic             = undef,
   $rest_notifier_certificate_key  = undef,
   $rest_notifier_certificate_file = undef,
-  $rest_notifier_ssl_verify       = true,
+  $rest_notifier_ssl_verify       = undef,
 ) {
 
-  include ::ceilometer::params
-
-  validate_bool($rest_notifier_ssl_verify)
-
-  Ceilometer_config<||> ~> Service['ceilometer-alarm-notifier']
-
-  Package[$::ceilometer::params::alarm_package_name] -> Service['ceilometer-alarm-notifier']
-  Package[$::ceilometer::params::alarm_package_name] -> Package<| title == 'ceilometer-alarm' |>
-  ensure_packages($::ceilometer::params::alarm_package_name,
-    { tag => 'openstack' }
-  )
-
-  if $manage_service {
-    if $enabled {
-      $service_ensure = 'running'
-    } else {
-      $service_ensure = 'stopped'
-    }
-  }
-
-  Package['ceilometer-common'] -> Service['ceilometer-alarm-notifier']
-
-  service { 'ceilometer-alarm-notifier':
-    ensure     => $service_ensure,
-    name       => $::ceilometer::params::alarm_notifier_service_name,
-    enable     => $enabled,
-    hasstatus  => true,
-    hasrestart => true
-  }
-
-  if $notifier_rpc_topic != undef {
-    ceilometer_config {
-      'alarm/notifier_rpc_topic' : value => $notifier_rpc_topic;
-    }
-  }
-  if $rest_notifier_certificate_key  != undef {
-    ceilometer_config {
-      'alarm/rest_notifier_certificate_key' :value => $rest_notifier_certificate_key;
-      'alarm/rest_notifier_ssl_verify'      :value => $rest_notifier_ssl_verify;
-    }
-  }
-  if $rest_notifier_certificate_file != undef {
-    ceilometer_config {
-      'alarm/rest_notifier_certificate_file' :value => $rest_notifier_certificate_file;
-    }
-  }
+  warning('Class is deprecated and will be removed. Use Aodh module to deploy Alarm Notifier service')
 
 }

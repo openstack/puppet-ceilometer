@@ -18,7 +18,6 @@ class ceilometer::params {
       $api_package_name                = 'openstack-ceilometer-api'
       $collector_package_name          = 'openstack-ceilometer-collector'
       $agent_notification_package_name = 'openstack-ceilometer-notification'
-      $alarm_package_name              = ['openstack-ceilometer-alarm']
       $common_package_name             = 'openstack-ceilometer-common'
       $client_package_name             = 'python-ceilometerclient'
       # service names
@@ -27,8 +26,6 @@ class ceilometer::params {
       $agent_polling_service_name      = 'openstack-ceilometer-polling'
       $api_service_name                = 'openstack-ceilometer-api'
       $collector_service_name          = 'openstack-ceilometer-collector'
-      $alarm_notifier_service_name     = 'openstack-ceilometer-alarm-notifier'
-      $alarm_evaluator_service_name    = 'openstack-ceilometer-alarm-evaluator'
       $pymongo_package_name            = 'python-pymongo'
       $agent_notification_service_name = 'openstack-ceilometer-notification'
       $ceilometer_wsgi_script_path     = '/var/www/cgi-bin/ceilometer'
@@ -46,7 +43,6 @@ class ceilometer::params {
       $agent_notification_package_name = 'ceilometer-agent-notification'
       $common_package_name             = 'ceilometer-common'
       $client_package_name             = 'python-ceilometerclient'
-      $alarm_package_name              = ['ceilometer-alarm-notifier','ceilometer-alarm-evaluator']
       # service names
       $agent_central_service_name      = 'ceilometer-agent-central'
       $agent_compute_service_name      = 'ceilometer-agent-compute'
@@ -54,8 +50,6 @@ class ceilometer::params {
       $collector_service_name          = 'ceilometer-collector'
       $api_service_name                = 'ceilometer-api'
       $agent_notification_service_name = 'ceilometer-agent-notification'
-      $alarm_notifier_service_name     = 'ceilometer-alarm-notifier'
-      $alarm_evaluator_service_name    = 'ceilometer-alarm-evaluator'
       # db packages
       $pymongo_package_name            = 'python-pymongo'
       $sqlite_package_name             = 'python-pysqlite2'

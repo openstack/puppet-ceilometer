@@ -74,14 +74,6 @@ node default {
   # class { 'ceilometer::agent::central':
   # }
 
-  # Install alarm notifier
-  class { '::ceilometer::alarm::notifier':
-  }
-
-  # Install alarm evaluator
-  class { '::ceilometer::alarm::evaluator':
-  }
-
   # Purge old meters
   class { '::ceilometer::expirer': }
 
