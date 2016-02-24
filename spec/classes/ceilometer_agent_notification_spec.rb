@@ -111,6 +111,65 @@ describe 'ceilometer::agent::notification' do
         )
       end
     end
+
+    context "with event_pipeline management enabled" do
+      before { params.merge!(
+        :manage_event_pipeline => true
+      ) }
+
+      it { is_expected.to contain_file('event_pipeline').with(
+        'path' => '/etc/ceilometer/event_pipeline.yaml',
+      ) }
+
+      it { 'configures event_pipeline with the default notifier'
+        verify_contents(catalogue, 'event_pipeline', [
+          "---",
+          "sources:",
+          "    - name: event_source",
+          "      events:",
+          "          - \"*\"",
+          "      sinks:",
+          "          - event_sink",
+          "sinks:",
+          "    - name: event_sink",
+          "      transformers:",
+          "      triggers:",
+          "      publishers:",
+          "          - notifier://",
+      ])}
+    end
+
+    context "with multiple event_pipeline publishers specified" do
+      before { params.merge!(
+        :manage_event_pipeline => true,
+        :event_pipeline_publishers => ['notifier://', 'notifier://?topic=alarm.all']
+      ) }
+
+      it { 'configures event_pipeline with multiple publishers'
+        verify_contents(catalogue, 'event_pipeline', [
+          "---",
+          "sources:",
+          "    - name: event_source",
+          "      events:",
+          "          - \"*\"",
+          "      sinks:",
+          "          - event_sink",
+          "sinks:",
+          "    - name: event_sink",
+          "      transformers:",
+          "      triggers:",
+          "      publishers:",
+          "          - notifier://",
+          "          - notifier://?topic=alarm.all",
+      ])}
+    end
+
+    context "with event_pipeline management disabled" do
+      before { params.merge!(
+        :manage_event_pipeline => false
+      ) }
+        it { is_expected.not_to contain_file('event_pipeline') }
+    end
   end
 
   context 'on Debian platforms' do

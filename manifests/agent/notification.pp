@@ -57,6 +57,16 @@
 #   (Optional) ensure state for package.
 #   Defaults to 'present'.
 #
+# [*manage_event_pipeline*]
+#   (Optional) Whether to manage event_pipeline.yaml
+#   Defaults to false
+#
+# [*event_pipeline_publishers*]
+#   (Optional) A list of publishers to put in event_pipeline.yaml
+#   Add 'notifier://?topic=alarm.all' to the list if you are using Aodh
+#   for alarms.
+#   Defaults to ['notifier://'],
+#
 class ceilometer::agent::notification (
   $manage_service            = true,
   $enabled                   = true,
@@ -66,6 +76,8 @@ class ceilometer::agent::notification (
   $notification_workers      = $::os_service_default,
   $messaging_urls            = $::os_service_default,
   $package_ensure            = 'present',
+  $manage_event_pipeline     = false,
+  $event_pipeline_publishers = ['notifier://'],
 ) {
 
   include ::ceilometer::params
@@ -98,6 +110,20 @@ class ceilometer::agent::notification (
     hasstatus  => true,
     hasrestart => true,
     tag        => 'ceilometer-service'
+  }
+
+  if ($manage_event_pipeline) {
+    validate_array($event_pipeline_publishers)
+
+    file { 'event_pipeline':
+      ensure                  => present,
+      path                    => $::ceilometer::params::event_pipeline,
+      content                 => template('ceilometer/event_pipeline.yaml.erb'),
+      selinux_ignore_defaults => true
+    }
+
+    Package<| tag == 'ceilometer-package' |> -> File['event_pipeline']
+    File['event_pipeline'] ~> Service['ceilometer-agent-notification']
   }
 
   ceilometer_config {

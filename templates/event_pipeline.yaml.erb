@@ -1,0 +1,15 @@
+---
+sources:
+    - name: event_source
+      events:
+          - "*"
+      sinks:
+          - event_sink
+sinks:
+    - name: event_sink
+      transformers:
+      triggers:
+      publishers:
+<% @event_pipeline_publishers.each do |publisher| -%>
+          - <%= publisher %>
+<% end -%>

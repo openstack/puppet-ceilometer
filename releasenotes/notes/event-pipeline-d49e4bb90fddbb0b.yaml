@@ -1,0 +1,3 @@
+---
+features:
+  - Add the ability to manage publishers in event_pipeline.yaml
