@@ -1,0 +1,5 @@
+---
+deprecations:
+  - Deprecate Ceilometer alarm classes.
+    Alarming services (evaluator and notifier) in Mitaka
+    were moved to Aodh OpenStack project.

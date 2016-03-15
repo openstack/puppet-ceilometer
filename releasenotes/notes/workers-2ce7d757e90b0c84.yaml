@@ -1,0 +1,3 @@
+---
+features:
+  - Ability to configure api, collector and notification workers.
