@@ -1,0 +1,5 @@
+---
+features:
+  - Configure oslo related sections using puppet-oslo module.
+    Messaging, database, logging, policy and notification parameters
+    are configured from oslo defines now.

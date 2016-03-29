@@ -35,12 +35,6 @@
 #   (Optional) If set, use this value for max_overflow with sqlalchemy.
 #   Defaults to $::os_service_default.
 #
-# [*mongodb_replica_set*]
-#   (Optional) DEPRECATED. The name of the replica set which is used to connect to MongoDB
-#   database. If it is set, MongoReplicaSetClient will be used instead
-#   of MongoClient.
-#   Defaults to undef (string value).
-#
 # [*sync_db*]
 #   (Optional) enable dbsync.
 #   Defaults to true.
@@ -54,62 +48,18 @@ class ceilometer::db (
   $database_retry_interval = $::os_service_default,
   $database_max_overflow   = $::os_service_default,
   $sync_db                 = true,
-  # DEPRECATED PARAMETERS
-  $mongodb_replica_set     = undef,
 ) {
-
-  include ::ceilometer::params
 
   Package<| title == 'ceilometer-common' |> -> Class['ceilometer::db']
 
-  if $mongodb_replica_set {
-    warning('mongodb_replica_set parameter is deprecated in Mitaka and has no effect. Add ?replicaSet=myreplicatset in database_connection instead.')
-  }
-
-  validate_re($database_connection,
-    '^(sqlite|mysql(\+pymysql)?|postgresql|mongodb):\/\/(\S+:\S+@\S+\/\S+)?')
-
-  case $database_connection {
-    /^mysql(\+pymysql)?:\/\//: {
-      require 'mysql::bindings'
-      require 'mysql::bindings::python'
-      if $database_connection =~ /^mysql\+pymysql/ {
-        $backend_package = $::ceilometer::params::pymysql_package_name
-      } else {
-        $backend_package = false
-      }
-    }
-    /^postgresql:\/\//: {
-      $backend_package = false
-      require 'postgresql::lib::python'
-    }
-    /^mongodb:\/\//: {
-      $backend_package = $::ceilometer::params::pymongo_package_name
-    }
-    /^sqlite:\/\//: {
-      $backend_package = $::ceilometer::params::sqlite_package_name
-    }
-    default: {
-      fail('Unsupported backend configured')
-    }
-  }
-
-  if $backend_package and !defined(Package[$backend_package]) {
-    package {'ceilometer-backend-package':
-      ensure => present,
-      name   => $backend_package,
-      tag    => 'openstack',
-    }
-  }
-
-  ceilometer_config {
-    'database/connection':     value => $database_connection, secret => true;
-    'database/idle_timeout':   value => $database_idle_timeout;
-    'database/min_pool_size':  value => $database_min_pool_size;
-    'database/max_retries':    value => $database_max_retries;
-    'database/retry_interval': value => $database_retry_interval;
-    'database/max_pool_size':  value => $database_max_pool_size;
-    'database/max_overflow':   value => $database_max_overflow;
+  oslo::db { 'ceilometer_config':
+    connection     => $database_connection,
+    idle_timeout   => $database_idle_timeout,
+    min_pool_size  => $database_min_pool_size,
+    max_retries    => $database_max_retries,
+    retry_interval => $database_retry_interval,
+    max_pool_size  => $database_max_pool_size,
+    max_overflow   => $database_max_overflow,
   }
 
   if $sync_db {

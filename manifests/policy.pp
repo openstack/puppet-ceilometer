@@ -26,4 +26,6 @@ class ceilometer::policy (
 
   create_resources('openstacklib::policy::base', $policies)
 
+  oslo::policy { 'ceilometer_config': policy_file => $policy_path }
+
 }

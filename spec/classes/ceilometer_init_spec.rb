@@ -22,7 +22,6 @@ describe 'ceilometer' do
       :rabbit_port        => 5672,
       :rabbit_userid      => 'guest',
       :rabbit_password    => '',
-      :rabbit_virtual_host => '/',
     }
   end
 
@@ -68,7 +67,7 @@ describe 'ceilometer' do
 
       context("with legacy rpc_backend value") do
         before { params.merge!( rabbit_params ).merge!(:rpc_backend => 'ceilometer.openstack.common.rpc.impl_kombu') }
-        it { is_expected.to contain_ceilometer_config('DEFAULT/rpc_backend').with_value('ceilometer.openstack.common.rpc.impl_kombu') }
+        it { is_expected.to contain_ceilometer_config('DEFAULT/rpc_backend').with_value('rabbit') }
       end
     end
 
@@ -114,7 +113,7 @@ describe 'ceilometer' do
     end
 
     it 'configures notification_topics' do
-      is_expected.to contain_ceilometer_config('DEFAULT/notification_topics').with_value('notifications')
+      is_expected.to contain_ceilometer_config('oslo_messaging_notifications/topics').with_value('notifications')
     end
 
     context 'with rabbitmq durable queues configured' do
@@ -126,7 +125,7 @@ describe 'ceilometer' do
       before { params.merge!( :notification_topics => ['notifications', 'custom']) }
 
       it 'configures notification_topics' do
-        is_expected.to contain_ceilometer_config('DEFAULT/notification_topics').with_value('notifications,custom')
+        is_expected.to contain_ceilometer_config('oslo_messaging_notifications/topics').with_value('notifications,custom')
       end
     end
   end
@@ -137,15 +136,15 @@ describe 'ceilometer' do
       is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_userid').with_value( params[:rabbit_userid] )
       is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_password').with_value( params[:rabbit_password] )
       is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_password').with_value( params[:rabbit_password] ).with_secret(true)
-      is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_virtual_host').with_value( params[:rabbit_virtual_host] )
-      is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/heartbeat_timeout_threshold').with_value('0')
-      is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/heartbeat_rate').with_value('2')
+      is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_virtual_host').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/heartbeat_timeout_threshold').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/heartbeat_rate').with_value('<SERVICE DEFAULT>')
     end
 
     it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_host').with_value( params[:rabbit_host] ) }
     it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_port').with_value( params[:rabbit_port] ) }
-    it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_hosts').with_value( "#{params[:rabbit_host]}:#{params[:rabbit_port]}" ) }
-    it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value('false') }
+    it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_hosts').with_value('<SERVICE DEFAULT>') }
+    it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value('<SERVICE DEFAULT>') }
 
   end
 
@@ -155,15 +154,15 @@ describe 'ceilometer' do
       is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_userid').with_value( params[:rabbit_userid] )
       is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_password').with_value( params[:rabbit_password] )
       is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_password').with_value( params[:rabbit_password] ).with_secret(true)
-      is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_virtual_host').with_value( params[:rabbit_virtual_host] )
-      is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/heartbeat_timeout_threshold').with_value('0')
-      is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/heartbeat_rate').with_value('2')
+      is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_virtual_host').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/heartbeat_timeout_threshold').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/heartbeat_rate').with_value('<SERVICE DEFAULT>')
     end
 
-    it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_host').with_ensure('absent') }
-    it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_port').with_ensure('absent') }
+    it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_host').with_value('<SERVICE DEFAULT>') }
+    it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_port').with_value('<SERVICE DEFAULT>') }
     it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_hosts').with_value( params[:rabbit_hosts].join(',') ) }
-    it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value('false') }
+    it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value('<SERVICE DEFAULT>') }
 
   end
 
@@ -180,15 +179,15 @@ describe 'ceilometer' do
       is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_userid').with_value( params[:rabbit_userid] )
       is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_password').with_value( params[:rabbit_password] )
       is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_password').with_value( params[:rabbit_password] ).with_secret(true)
-      is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_virtual_host').with_value( params[:rabbit_virtual_host] )
-      is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/heartbeat_timeout_threshold').with_value('0')
-      is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/heartbeat_rate').with_value('2')
+      is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_virtual_host').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/heartbeat_timeout_threshold').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/heartbeat_rate').with_value('<SERVICE DEFAULT>')
     end
 
-    it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_host').with_ensure('absent') }
-    it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_port').with_ensure('absent') }
+    it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_host').with_value('<SERVICE DEFAULT>') }
+    it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_port').with_value('<SERVICE DEFAULT>') }
     it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_hosts').with_value( params[:rabbit_hosts].join(',') ) }
-    it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value('true') }
+    it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value(true) }
 
   end
   shared_examples_for 'rabbit with durable queues' do
@@ -211,23 +210,23 @@ describe 'ceilometer' do
 
   shared_examples_for 'rabbit with SSL support' do
     context "with default parameters" do
-      it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_use_ssl').with_value('false') }
-      it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/kombu_ssl_ca_certs').with_ensure('absent') }
-      it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/kombu_ssl_certfile').with_ensure('absent') }
-      it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/kombu_ssl_keyfile').with_ensure('absent') }
-      it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/kombu_ssl_version').with_ensure('absent') }
+      it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_use_ssl').with_value('<SERVICE DEFAULT>') }
+      it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/kombu_ssl_ca_certs').with_value('<SERVICE DEFAULT>') }
+      it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/kombu_ssl_certfile').with_value('<SERVICE DEFAULT>') }
+      it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/kombu_ssl_keyfile').with_value('<SERVICE DEFAULT>') }
+      it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/kombu_ssl_version').with_value('<SERVICE DEFAULT>') }
     end
 
     context "with SSL enabled with kombu" do
       before { params.merge!(
-        :rabbit_use_ssl     => 'true',
+        :rabbit_use_ssl     => true,
         :kombu_ssl_ca_certs => '/path/to/ca.crt',
         :kombu_ssl_certfile => '/path/to/cert.crt',
         :kombu_ssl_keyfile  => '/path/to/cert.key',
         :kombu_ssl_version  => 'TLSv1'
       ) }
 
-      it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_use_ssl').with_value('true') }
+      it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_use_ssl').with_value(true) }
       it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/kombu_ssl_ca_certs').with_value('/path/to/ca.crt') }
       it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/kombu_ssl_certfile').with_value('/path/to/cert.crt') }
       it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/kombu_ssl_keyfile').with_value('/path/to/cert.key') }
@@ -236,14 +235,14 @@ describe 'ceilometer' do
 
     context "with SSL enabled without kombu" do
       before { params.merge!(
-        :rabbit_use_ssl     => 'true'
+        :rabbit_use_ssl  => true
       ) }
 
-      it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_use_ssl').with_value('true') }
-      it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/kombu_ssl_ca_certs').with_ensure('absent') }
-      it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/kombu_ssl_certfile').with_ensure('absent') }
-      it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/kombu_ssl_keyfile').with_ensure('absent') }
-      it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/kombu_ssl_version').with_value('TLSv1') }
+      it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_use_ssl').with_value(true) }
+      it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/kombu_ssl_ca_certs').with_value('<SERVICE DEFAULT>') }
+      it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/kombu_ssl_certfile').with_value('<SERVICE DEFAULT>') }
+      it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/kombu_ssl_keyfile').with_value('<SERVICE DEFAULT>') }
+      it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/kombu_ssl_version').with_value('<SERVICE DEFAULT>') }
     end
 
     context "with SSL wrongly configured" do
