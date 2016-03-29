@@ -68,7 +68,8 @@ describe 'ceilometer::collector' do
           :name       => platform_params[:collector_service_name],
           :enable     => true,
           :hasstatus  => true,
-          :hasrestart => true
+          :hasrestart => true,
+          :tag        => 'ceilometer-service'
         )
       end
 
@@ -87,7 +88,8 @@ describe 'ceilometer::collector' do
           :name       => platform_params[:collector_service_name],
           :enable     => false,
           :hasstatus  => true,
-          :hasrestart => true
+          :hasrestart => true,
+          :tag        => 'ceilometer-service'
         )
       end
     end
@@ -104,7 +106,8 @@ describe 'ceilometer::collector' do
           :name       => platform_params[:collector_service_name],
           :enable     => false,
           :hasstatus  => true,
-          :hasrestart => true
+          :hasrestart => true,
+          :tag        => 'ceilometer-service'
         )
       end
     end
