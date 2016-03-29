@@ -78,6 +78,7 @@ class ceilometer::collector (
     name       => $::ceilometer::params::collector_service_name,
     enable     => $enabled,
     hasstatus  => true,
-    hasrestart => true
+    hasrestart => true,
+    tag        => 'ceilometer-service'
   }
 }

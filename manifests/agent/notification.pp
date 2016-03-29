@@ -80,7 +80,8 @@ class ceilometer::agent::notification (
     name       => $::ceilometer::params::agent_notification_service_name,
     enable     => $enabled,
     hasstatus  => true,
-    hasrestart => true
+    hasrestart => true,
+    tag        => 'ceilometer-service'
   }
 
   ceilometer_config {

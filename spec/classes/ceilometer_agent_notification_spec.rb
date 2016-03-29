@@ -61,7 +61,8 @@ describe 'ceilometer::agent::notification' do
             :name       => platform_params[:agent_notification_service_name],
             :enable     => params[:enabled],
             :hasstatus  => true,
-            :hasrestart => true
+            :hasrestart => true,
+            :tag        => 'ceilometer-service'
           )
         end
       end
@@ -80,7 +81,8 @@ describe 'ceilometer::agent::notification' do
           :name       => platform_params[:agent_notification_service_name],
           :enable     => false,
           :hasstatus  => true,
-          :hasrestart => true
+          :hasrestart => true,
+          :tag        => 'ceilometer-service'
         )
       end
     end
