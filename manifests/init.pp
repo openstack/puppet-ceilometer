@@ -147,19 +147,6 @@
 # === DEPRECATED PARAMETERS:
 #
 # [*alarm_history_time_to_live*]
-# [*qpid_hostname*]
-# [*qpid_port*]
-# [*qpid_username*]
-# [*qpid_password*]
-# [*qpid_heartbeat*]
-# [*qpid_protocol*]
-# [*qpid_tcp_nodelay*]
-# [*qpid_reconnect*]
-# [*qpid_reconnect_timeout*]
-# [*qpid_reconnect_limit*]
-# [*qpid_reconnect_interval*]
-# [*qpid_reconnect_interval_min*]
-# [*qpid_reconnect_interval_max*]
 #
 class ceilometer(
   $http_timeout                       = '600',
@@ -195,19 +182,6 @@ class ceilometer(
   $memcached_servers                  = $::os_service_default,
   # DEPRECATED PARAMETERS
   $alarm_history_time_to_live         = undef,
-  $qpid_hostname                      = undef,
-  $qpid_port                          = undef,
-  $qpid_username                      = undef,
-  $qpid_password                      = undef,
-  $qpid_heartbeat                     = undef,
-  $qpid_protocol                      = undef,
-  $qpid_tcp_nodelay                   = undef,
-  $qpid_reconnect                     = undef,
-  $qpid_reconnect_timeout             = undef,
-  $qpid_reconnect_limit               = undef,
-  $qpid_reconnect_interval_min        = undef,
-  $qpid_reconnect_interval_max        = undef,
-  $qpid_reconnect_interval            = undef,
 ) {
 
   validate_string($metering_secret)
