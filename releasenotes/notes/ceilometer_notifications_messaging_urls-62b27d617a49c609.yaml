@@ -1,0 +1,6 @@
+---
+features:
+  - Switched ceilometer_config from ini_setting type to openstack_config type.
+  - Added the ability to pass in messaging_urls into notifications agent. This
+    will allow a user to configure ceilometer to talk to different virtualhosts
+    or entirely different messaging queues.

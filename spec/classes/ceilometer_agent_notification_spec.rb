@@ -98,6 +98,19 @@ describe 'ceilometer::agent::notification' do
       end
     end
 
+    context 'with multiple messaging urls' do
+      before do
+        params.merge!({
+          :messaging_urls => ['rabbit://rabbit_user:password@localhost/nova',
+                              'rabbit://rabbit_user:password@localhost/neutron'] })
+      end
+
+      it 'configures two messaging urls' do
+        is_expected.to contain_ceilometer_config('notification/messaging_urls').with_value(
+          ['rabbit://rabbit_user:password@localhost/nova', 'rabbit://rabbit_user:password@localhost/neutron']
+        )
+      end
+    end
   end
 
   context 'on Debian platforms' do

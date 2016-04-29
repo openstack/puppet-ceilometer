@@ -26,8 +26,8 @@
 #   or Puppet catalog compilation will fail with duplicate resources.
 #
 class ceilometer::config (
-  $ceilometer_config        = {},
-  $ceilometer_api_paste_ini = {},
+  $ceilometer_config           = {},
+  $ceilometer_api_paste_ini    = {},
 ) {
 
   validate_hash($ceilometer_config)

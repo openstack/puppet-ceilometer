@@ -48,6 +48,11 @@
 #   (Optional) Number of workers for notification service (integer value).
 #   Defaults to $::os_service_default.
 #
+# [*messaging_urls*]
+#   (Optional) Messaging urls to listen for notifications. (Array of urls)
+#   The format should be transport://user:pass@host1:port[,hostN:portN]/virtual_host
+#   Defaults to $::os_service_default.
+#
 # [*package_ensure*]
 #   (Optional) ensure state for package.
 #   Defaults to 'present'.
@@ -59,6 +64,7 @@ class ceilometer::agent::notification (
   $store_events              = false,
   $disable_non_metric_meters = $::os_service_default,
   $notification_workers      = $::os_service_default,
+  $messaging_urls            = $::os_service_default,
   $package_ensure            = 'present',
 ) {
 
@@ -99,6 +105,6 @@ class ceilometer::agent::notification (
     'notification/store_events'             : value => $store_events;
     'notification/disable_non_metric_meters': value => $disable_non_metric_meters;
     'notification/workers'                  : value => $notification_workers;
+    'notification/messaging_urls'           : value => $messaging_urls;
   }
-
 }
