@@ -30,12 +30,12 @@ describe 'Puppet::Type.type(:ceilometer_config)' do
 
   it 'should accept a valid value' do
     @ceilometer_config[:value] = 'bar'
-    expect(@ceilometer_config[:value]).to eq('bar')
+    expect(@ceilometer_config[:value]).to eq(['bar'])
   end
 
   it 'should not accept a value with whitespace' do
     @ceilometer_config[:value] = 'b ar'
-    expect(@ceilometer_config[:value]).to eq('b ar')
+    expect(@ceilometer_config[:value]).to eq(['b ar'])
   end
 
   it 'should accept valid ensure values' do
