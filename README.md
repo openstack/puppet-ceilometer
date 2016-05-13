@@ -45,7 +45,7 @@ To utilize the ceilometer module's functionality you will need to declare multip
 
 ```puppet
 class { '::ceilometer':
-  metering_secret     => 'secrete',
+  telemetry_secret    => 'secrete',
   rabbit_userid       => 'ceilometer',
   rabbit_password     => 'an_even_bigger_secret',
   rabbit_host         => '127.0.0.1',

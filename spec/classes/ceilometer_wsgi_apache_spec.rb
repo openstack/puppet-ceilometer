@@ -11,7 +11,7 @@ describe 'ceilometer::wsgi::apache' do
   end
 
   let :pre_condition do
-    "class { 'ceilometer': metering_secret => 's3cr3t' }"
+    "class { 'ceilometer': telemetry_secret => 's3cr3t' }"
   end
 
   shared_examples_for 'apache serving ceilometer with mod_wsgi' do

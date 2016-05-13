@@ -29,7 +29,7 @@ describe 'ceilometer with mysql' do
 
       # Ceilometer resources
       class { '::ceilometer':
-        metering_secret     => 'secrete',
+        telemetry_secret    => 'secrete',
         rabbit_userid       => 'ceilometer',
         rabbit_password     => 'an_even_bigger_secret',
         rabbit_host         => '127.0.0.1',

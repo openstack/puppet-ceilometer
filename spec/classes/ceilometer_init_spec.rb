@@ -7,7 +7,7 @@ describe 'ceilometer' do
       :http_timeout               => '600',
       :event_time_to_live         => '604800',
       :metering_time_to_live      => '604800',
-      :metering_secret            => 'metering-s3cr3t',
+      :telemetry_secret           => 'metering-s3cr3t',
       :package_ensure             => 'present',
       :debug                      => 'False',
       :log_dir                    => '/var/log/ceilometer',
@@ -102,13 +102,13 @@ describe 'ceilometer' do
       )
     end
 
-    it 'configures required metering_secret' do
-      is_expected.to contain_ceilometer_config('publisher/metering_secret').with_value('metering-s3cr3t')
-      is_expected.to contain_ceilometer_config('publisher/metering_secret').with_value( params[:metering_secret] ).with_secret(true)
+    it 'configures required telemetry_secret' do
+      is_expected.to contain_ceilometer_config('publisher/telemetry_secret').with_value('metering-s3cr3t')
+      is_expected.to contain_ceilometer_config('publisher/telemetry_secret').with_value( params[:telemetry_secret] ).with_secret(true)
     end
 
-    context 'without the required metering_secret' do
-      before { params.delete(:metering_secret) }
+    context 'without the required telemetry_secret' do
+      before { params.delete(:telemetry_secret) }
       it { expect { is_expected.to raise_error(Puppet::Error) } }
     end
 
@@ -205,6 +205,25 @@ describe 'ceilometer' do
 
       it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/heartbeat_timeout_threshold').with_value('60') }
       it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/heartbeat_rate').with_value('10') }
+    end
+  end
+
+
+  # Cleanup in Ocata
+  shared_examples_for 'using old metering_secret param' do
+    context "with old metering_secret param it uses telemetry_secret instead" do
+      before { params.merge!(
+          :metering_secret => 'broncos',
+          :telemetry_secret => 'metering-s3cr3t',
+      ) }
+      it { is_expected.to contain_ceilometer_config('publisher/telemetry_secret').with_value('metering-s3cr3t') }
+    end
+    context "with old metering_secret param set and telemetry_secret unset" do
+      before { params.merge!(
+          :metering_secret => 'broncos',
+          :telemetry_secret => nil,
+      ) }
+      it { is_expected.to contain_ceilometer_config('publisher/telemetry_secret').with_value('broncos') }
     end
   end
 

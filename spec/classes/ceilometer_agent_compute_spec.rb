@@ -5,7 +5,7 @@ describe 'ceilometer::agent::compute' do
   let :pre_condition do
     "include nova\n" +
     "include nova::compute\n" +
-    "class { 'ceilometer': metering_secret => 's3cr3t' }"
+    "class { 'ceilometer': telemetry_secret => 's3cr3t' }"
   end
 
   let :params do

@@ -19,7 +19,7 @@
 #    (<= 0 means forever)
 #    Defaults to -1.
 #
-#  [*metering_secret*]
+#  [*telemetry_secret*]
 #   (Required)  Secret key for signing messages.
 #
 #  [*notification_topics*]
@@ -140,11 +140,15 @@
 #   (string value)
 #   Defaults to $::os_service_default
 #
-#  [*memcached_servers*]
-#    (Optional) A list of memcached server(s) to use for caching. (list value)
-#    Defaults to $::os_service_default
+# [*memcached_servers*]
+#   (Optional) A list of memcached server(s) to use for caching. (list value)
+#   Defaults to $::os_service_default
 #
 # === DEPRECATED PARAMETERS:
+#  [*metering_secret*]
+#   (optional)  Secret key for signing messages.
+#   This option has been renamed to telemetry_secret in Mitaka.
+#   Don't define this if using telemetry_secret.
 #
 # [*alarm_history_time_to_live*]
 #
@@ -152,7 +156,7 @@ class ceilometer(
   $http_timeout                       = '600',
   $event_time_to_live                 = '-1',
   $metering_time_to_live              = '-1',
-  $metering_secret                    = false,
+  $telemetry_secret                   = false,
   $notification_topics                = ['notifications'],
   $package_ensure                     = 'present',
   $debug                              = undef,
@@ -182,12 +186,25 @@ class ceilometer(
   $memcached_servers                  = $::os_service_default,
   # DEPRECATED PARAMETERS
   $alarm_history_time_to_live         = undef,
+  $metering_secret                    = undef,
 ) {
-
-  validate_string($metering_secret)
 
   include ::ceilometer::logging
   include ::ceilometer::params
+
+  # Cleanup in Ocata.
+  if $telemetry_secret {
+    validate_string($telemetry_secret)
+    if $metering_secret {
+      warning('Both $metering_secret and $telemetry_secret defined, using $telemetry_secret')
+    }
+    $telemetry_secret_real = $telemetry_secret
+  }
+  else {
+    warning('metering_secret has been renamed to telemetry_secret. metering_secret will continue to work until Ocata.')
+    validate_string($metering_secret)
+    $telemetry_secret_real = $metering_secret
+  }
 
   if $alarm_history_time_to_live {
     warning('alarm_history_time_to_live parameter is deprecated. It should be configured for Aodh.')
@@ -239,7 +256,7 @@ class ceilometer(
   # Once we got here, we can act as an honey badger on the rpc used.
   ceilometer_config {
     'DEFAULT/http_timeout'                : value => $http_timeout;
-    'publisher/metering_secret'           : value => $metering_secret, secret => true;
+    'publisher/telemetry_secret'          : value => $telemetry_secret_real, secret => true;
     'database/event_time_to_live'         : value => $event_time_to_live;
     'database/metering_time_to_live'      : value => $metering_time_to_live;
   }
