@@ -37,41 +37,58 @@
 #   communication with OpenStack services.
 #   Defaults to undef.
 #
+# [*auth_user_domain_name*]
+#   (Optional) domain name for auth user.
+#   Defaults to $::os_service_default.
+#
+# [*auth_project_domain_name*]
+#   (Optional) domain name for auth project.
+#   Defaults to $::os_service_default.
+#
+# [*auth_type*]
+#   (Optional) Authentication type to load.
+#   Defaults to $::os_service_default.
+#
 class ceilometer::agent::auth (
   $auth_password,
-  $auth_url           = 'http://localhost:5000/v2.0',
-  $auth_region        = $::os_service_default,
-  $auth_user          = 'ceilometer',
-  $auth_tenant_name   = 'services',
-  $auth_tenant_id     = undef,
-  $auth_cacert        = undef,
-  $auth_endpoint_type = undef,
+  $auth_url                 = 'http://localhost:5000/v2.0',
+  $auth_region              = $::os_service_default,
+  $auth_user                = 'ceilometer',
+  $auth_tenant_name         = 'services',
+  $auth_tenant_id           = undef,
+  $auth_cacert              = undef,
+  $auth_endpoint_type       = undef,
+  $auth_user_domain_name    = $::os_service_default,
+  $auth_project_domain_name = $::os_service_default,
+  $auth_type                = $::os_service_default,
 ) {
 
   if ! $auth_cacert {
-    ceilometer_config { 'service_credentials/os_cacert': ensure => absent }
+    ceilometer_config { 'service_credentials/ca_file': ensure => absent }
   } else {
-    ceilometer_config { 'service_credentials/os_cacert': value => $auth_cacert }
+    ceilometer_config { 'service_credentials/ca_file': value => $auth_cacert }
   }
 
   ceilometer_config {
-    'service_credentials/os_auth_url'    : value => $auth_url;
-    'service_credentials/os_region_name' : value => $auth_region;
-    'service_credentials/os_username'    : value => $auth_user;
-    'service_credentials/os_password'    : value => $auth_password, secret => true;
-    'service_credentials/os_tenant_name' : value => $auth_tenant_name;
+    'service_credentials/auth_url'           : value => $auth_url;
+    'service_credentials/region_name'        : value => $auth_region;
+    'service_credentials/username'           : value => $auth_user;
+    'service_credentials/password'           : value => $auth_password, secret => true;
+    'service_credentials/project_name'       : value => $auth_tenant_name;
+    'service_credentials/user_domain_name'   : value => $auth_user_domain_name;
+    'service_credentials/project_domain_name': value => $auth_project_domain_name;
+    'service_credentials/auth_type'          : value => $auth_type;
   }
 
   if $auth_tenant_id {
     ceilometer_config {
-      'service_credentials/os_tenant_id' : value => $auth_tenant_id;
+      'service_credentials/project_id' : value => $auth_tenant_id;
     }
   }
 
   if $auth_endpoint_type {
     ceilometer_config {
-      'service_credentials/os_endpoint_type' : value => $auth_endpoint_type;
+      'service_credentials/interface' : value => $auth_endpoint_type;
     }
   }
-
 }
