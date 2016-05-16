@@ -23,7 +23,7 @@ require 'spec_helper'
 describe 'ceilometer::agent::notification' do
 
   let :pre_condition do
-    "class { 'ceilometer': metering_secret => 's3cr3t' }"
+    "class { 'ceilometer': telemetry_secret => 's3cr3t' }"
   end
 
   let :params do

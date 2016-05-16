@@ -3,7 +3,7 @@ require 'spec_helper'
 describe 'ceilometer::api' do
 
   let :pre_condition do
-    "class { 'ceilometer': metering_secret => 's3cr3t' }
+    "class { 'ceilometer': telemetry_secret => 's3cr3t' }
      include ::ceilometer::db"
   end
 
@@ -96,7 +96,7 @@ describe 'ceilometer::api' do
       let :pre_condition do
         "include ::apache
          include ::ceilometer::db
-         class { 'ceilometer': metering_secret => 's3cr3t' }"
+         class { 'ceilometer': telemetry_secret => 's3cr3t' }"
       end
 
       it 'configures ceilometer-api service with Apache' do
@@ -117,7 +117,7 @@ describe 'ceilometer::api' do
       let :pre_condition do
         "include ::apache
          include ::ceilometer::db
-         class { 'ceilometer': metering_secret => 's3cr3t' }"
+         class { 'ceilometer': telemetry_secret => 's3cr3t' }"
       end
 
       it_raises 'a Puppet::Error', /Invalid service_name/

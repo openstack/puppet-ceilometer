@@ -12,9 +12,9 @@ node default {
 
   # Add the base ceilometer class & parameters
   # This class is required by ceilometer agents & api classes
-  # The metering_secret parameter is mandatory
+  # The telemetry_secret parameter is mandatory
   class { '::ceilometer':
-    metering_secret => 'darksecret'
+    telemetry_secret => 'darksecret'
   }
 
   # Configure the ceilometer database
