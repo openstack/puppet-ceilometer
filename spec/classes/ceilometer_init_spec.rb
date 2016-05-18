@@ -11,7 +11,6 @@ describe 'ceilometer' do
       :package_ensure             => 'present',
       :debug                      => 'False',
       :log_dir                    => '/var/log/ceilometer',
-      :verbose                    => 'False',
       :use_stderr                 => 'True',
     }
   end
