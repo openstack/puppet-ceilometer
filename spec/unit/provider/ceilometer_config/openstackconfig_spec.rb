@@ -23,7 +23,7 @@ $LOAD_PATH.push(
 
 require 'spec_helper'
 
-provider_class = Puppet::Type.type(:ceilometer_config).provider(:ini_setting)
+provider_class = Puppet::Type.type(:ceilometer_config).provider(:openstackconfig)
 
 describe provider_class do
 
