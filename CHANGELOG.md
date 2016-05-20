@@ -1,3 +1,19 @@
+##2016-05-20 - 7.1.0
+
+###Summary
+
+This is a feature and bugfix release in the Liberty series.
+
+####Features
+
+- Support of PyMySQL driver for MySQL backend
+- Implement Gnocchi dispatcher
+
+####Maintenance
+
+- Add deprecation warning for Qpid rpc driver
+
+
 ##2015-11-25 - 7.0.0
 ###Summary
 
