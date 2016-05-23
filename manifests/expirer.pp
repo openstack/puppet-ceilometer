@@ -42,7 +42,7 @@
 #
 
 class ceilometer::expirer (
-  $enable_cron = True,
+  $enable_cron = true,
   $minute      = 1,
   $hour        = 0,
   $monthday    = '*',
