@@ -7,7 +7,7 @@ describe 'ceilometer::agent::auth' do
   end
 
   let :params do
-    { :auth_url         => 'http://localhost:5000/v2.0',
+    { :auth_url         => 'http://localhost:5000',
       :auth_region      => '<SERVICE DEFAULT>',
       :auth_user        => 'ceilometer',
       :auth_password    => 'password',
@@ -18,16 +18,16 @@ describe 'ceilometer::agent::auth' do
   shared_examples_for 'ceilometer-agent-auth' do
 
     it 'configures authentication' do
-      is_expected.to contain_ceilometer_config('service_credentials/auth_url').with_value('http://localhost:5000/v2.0')
+      is_expected.to contain_ceilometer_config('service_credentials/auth_url').with_value('http://localhost:5000')
       is_expected.to contain_ceilometer_config('service_credentials/region_name').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ceilometer_config('service_credentials/username').with_value('ceilometer')
       is_expected.to contain_ceilometer_config('service_credentials/password').with_value('password')
       is_expected.to contain_ceilometer_config('service_credentials/password').with_value(params[:auth_password]).with_secret(true)
       is_expected.to contain_ceilometer_config('service_credentials/project_name').with_value('services')
       is_expected.to contain_ceilometer_config('service_credentials/ca_file').with(:ensure => 'absent')
-      is_expected.to contain_ceilometer_config('service_credentials/user_domain_name').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_ceilometer_config('service_credentials/project_domain_name').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_ceilometer_config('service_credentials/auth_type').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ceilometer_config('service_credentials/user_domain_name').with_value('Default')
+      is_expected.to contain_ceilometer_config('service_credentials/project_domain_name').with_value('Default')
+      is_expected.to contain_ceilometer_config('service_credentials/auth_type').with_value('password')
     end
 
     context 'when overriding parameters' do

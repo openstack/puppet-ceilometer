@@ -7,7 +7,7 @@
 #
 # [*auth_url*]
 #   (Optional) the keystone public endpoint
-#   Defaults to 'http://localhost:5000/v2.0'.
+#   Defaults to 'http://localhost:5000'.
 #
 # [*auth_region*]
 #   (Optional) the keystone region of this node
@@ -39,28 +39,28 @@
 #
 # [*auth_user_domain_name*]
 #   (Optional) domain name for auth user.
-#   Defaults to $::os_service_default.
+#   Defaults to 'Default'.
 #
 # [*auth_project_domain_name*]
 #   (Optional) domain name for auth project.
-#   Defaults to $::os_service_default.
+#   Defaults to 'Default'.
 #
 # [*auth_type*]
 #   (Optional) Authentication type to load.
-#   Defaults to $::os_service_default.
+#   Defaults to 'password'.
 #
 class ceilometer::agent::auth (
   $auth_password,
-  $auth_url                 = 'http://localhost:5000/v2.0',
+  $auth_url                 = 'http://localhost:5000',
   $auth_region              = $::os_service_default,
   $auth_user                = 'ceilometer',
   $auth_tenant_name         = 'services',
   $auth_tenant_id           = undef,
   $auth_cacert              = undef,
   $auth_endpoint_type       = undef,
-  $auth_user_domain_name    = $::os_service_default,
-  $auth_project_domain_name = $::os_service_default,
-  $auth_type                = $::os_service_default,
+  $auth_user_domain_name    = 'Default',
+  $auth_project_domain_name = 'Default',
+  $auth_type                = 'password',
 ) {
 
   if ! $auth_cacert {
