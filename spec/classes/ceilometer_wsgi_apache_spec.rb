@@ -53,7 +53,7 @@ describe 'ceilometer::wsgi::apache' do
         'wsgi_script_aliases'         => { '/' => "#{platform_parameters[:wsgi_script_path]}/app" },
         'require'                     => 'File[ceilometer_wsgi]'
       )}
-      it { is_expected.to contain_file("#{platform_parameters[:httpd_ports_file]}") }
+      it { is_expected.to contain_concat("#{platform_parameters[:httpd_ports_file]}") }
     end
 
     describe 'when overriding parameters using different ports' do
@@ -81,7 +81,7 @@ describe 'ceilometer::wsgi::apache' do
         'require'                     => 'File[ceilometer_wsgi]'
       )}
 
-      it { is_expected.to contain_file("#{platform_parameters[:httpd_ports_file]}") }
+      it { is_expected.to contain_concat("#{platform_parameters[:httpd_ports_file]}") }
     end
   end
 
