@@ -1,6 +1,6 @@
 {
   "name": "openstack-ceilometer",
-  "version": "8.0.1",
+  "version": "8.1.0",
   "author": "eNovance and OpenStack Contributors",
   "summary": "Puppet module for OpenStack Ceilometer",
   "license": "Apache-2.0",
@@ -25,8 +25,8 @@
   "dependencies": [
     { "name": "puppetlabs/apache", "version_requirement": ">=1.8.0 <2.0.0" },
     { "name": "puppetlabs/inifile", "version_requirement": ">=1.4.0 <2.0.0" },
-    { "name": "openstack/keystone", "version_requirement": ">=8.0.0 <9.0.0" },
+    { "name": "openstack/keystone", "version_requirement": ">=8.1.0 <9.0.0" },
     { "name": "puppetlabs/stdlib", "version_requirement": ">=4.9.0 <5.0.0" },
-    { "name": "openstack/openstacklib", "version_requirement": ">=8.0.0 <9.0.0" }
+    { "name": "openstack/openstacklib", "version_requirement": ">=8.1.0 <9.0.0" }
   ]
 }
