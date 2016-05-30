@@ -26,12 +26,9 @@ class ceilometer::params {
       $agent_polling_service_name      = 'openstack-ceilometer-polling'
       $api_service_name                = 'openstack-ceilometer-api'
       $collector_service_name          = 'openstack-ceilometer-collector'
-      $pymongo_package_name            = 'python-pymongo'
       $agent_notification_service_name = 'openstack-ceilometer-notification'
       $ceilometer_wsgi_script_path     = '/var/www/cgi-bin/ceilometer'
       $ceilometer_wsgi_script_source   = '/usr/lib/python2.7/site-packages/ceilometer/api/app.wsgi'
-      $sqlite_package_name             = undef
-      $pymysql_package_name            = undef
     }
     'Debian': {
       # package names
@@ -50,10 +47,6 @@ class ceilometer::params {
       $collector_service_name          = 'ceilometer-collector'
       $api_service_name                = 'ceilometer-api'
       $agent_notification_service_name = 'ceilometer-agent-notification'
-      # db packages
-      $pymongo_package_name            = 'python-pymongo'
-      $sqlite_package_name             = 'python-pysqlite2'
-      $pymysql_package_name            = 'python-pymysql'
 
       # Operating system specific
       case $::operatingsystem {
