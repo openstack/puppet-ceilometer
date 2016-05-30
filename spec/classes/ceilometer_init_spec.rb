@@ -115,8 +115,13 @@ describe 'ceilometer' do
       it { expect { is_expected.to raise_error(Puppet::Error) } }
     end
 
-    it 'configures notification_topics' do
+    it 'configures default transport_url' do
+      is_expected.to contain_ceilometer_config('DEFAULT/transport_url').with_value('<SERVICE DEFAULT>')
+    end
+
+    it 'configures notifications' do
       is_expected.to contain_ceilometer_config('oslo_messaging_notifications/topics').with_value('notifications')
+      is_expected.to contain_ceilometer_config('oslo_messaging_notifications/transport_url').with_value('<SERVICE DEFAULT>')
     end
 
     context 'with rabbitmq durable queues configured' do
@@ -124,11 +129,25 @@ describe 'ceilometer' do
       it_configures 'rabbit with durable queues'
     end
 
-    context 'with overriden notification_topics parameter' do
-      before { params.merge!( :notification_topics => ['notifications', 'custom']) }
+    context 'with overriden transport_url parameter' do
+      before { params.merge!( :default_transport_url => 'rabbit://rabbit_user:password@localhost:5673' ) }
 
-      it 'configures notification_topics' do
+      it 'configures transport_url' do
+        is_expected.to contain_ceilometer_config('DEFAULT/transport_url').with_value('rabbit://rabbit_user:password@localhost:5673')
+      end
+    end
+
+    context 'with overriden notification parameters' do
+      before {
+        params.merge!(
+          :notification_topics        => ['notifications', 'custom'],
+          :notification_transport_url => 'rabbit://rabbit_user:password@localhost:5673',
+        )
+      }
+
+      it 'configures notifications' do
         is_expected.to contain_ceilometer_config('oslo_messaging_notifications/topics').with_value('notifications,custom')
+        is_expected.to contain_ceilometer_config('oslo_messaging_notifications/transport_url').with_value('rabbit://rabbit_user:password@localhost:5673')
       end
     end
   end

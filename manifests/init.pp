@@ -47,6 +47,18 @@
 #    (Optional) Syslog facility to receive log lines.
 #    Defaults to undef.
 #
+# [*default_transport_url*]
+#    (optional) A URL representing the messaging driver to use and its full
+#    configuration. Transport URLs take the form:
+#      transport://user:pass@host1:port[,hostN:portN]/virtual_host
+#    Defaults to $::os_service_default
+#
+# [*notification_transport_url*]
+#   (optional) A URL representing the messaging driver to use for notifications
+#   and its full configuration. Transport URLs take the form:
+#     transport://user:pass@host1:port[,hostN:portN]/virtual_host
+#   Defaults to $::os_service_default
+#
 #  [*rpc_backend*]
 #    The messaging driver to use, defaults to rabbit. Other drivers include
 #    amqp and zmq. (string value)
@@ -227,6 +239,8 @@ class ceilometer(
   $log_dir                            = undef,
   $use_stderr                         = undef,
   $log_facility                       = undef,
+  $default_transport_url              = $::os_service_default,
+  $notification_transport_url         = $::os_service_default,
   $rpc_backend                        = $::os_service_default,
   $rabbit_host                        = $::os_service_default,
   $rabbit_port                        = $::os_service_default,
@@ -369,7 +383,14 @@ class ceilometer(
     'database/metering_time_to_live'      : value => $metering_time_to_live;
   }
 
-  oslo::messaging::notifications { 'ceilometer_config': topics => $notification_topics }
+  oslo::messaging::notifications { 'ceilometer_config':
+    transport_url => $notification_transport_url,
+    topics        => $notification_topics,
+  }
+
+  oslo::messaging::default { 'ceilometer_config':
+    transport_url => $default_transport_url,
+  }
 
   oslo::cache { 'ceilometer_config':
     memcache_servers => $memcached_servers,
