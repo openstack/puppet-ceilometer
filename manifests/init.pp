@@ -39,6 +39,10 @@
 #    If set to boolean false, it will not log to any directory.
 #    Defaults to undef.
 #
+#  [*use_syslog*]
+#    (Optional) Use syslog for logging
+#    Defaults to undef.
+#
 #  [*use_stderr*]
 #    (Optional) Use stderr for logging
 #    Defaults to undef.
@@ -223,11 +227,6 @@
 #  [*verbose*]
 #    (Optional) Deprecated. should the daemons log verbose messages.
 #    Defaults to undef.
-#
-#  [*use_syslog*]
-#    (Optional) Deprecated. Use syslog for logging
-#    Defaults to undef.
-#
 class ceilometer(
   $http_timeout                       = '600',
   $event_time_to_live                 = '-1',
@@ -237,6 +236,7 @@ class ceilometer(
   $package_ensure                     = 'present',
   $debug                              = undef,
   $log_dir                            = undef,
+  $use_syslog                         = undef,
   $use_stderr                         = undef,
   $log_facility                       = undef,
   $default_transport_url              = $::os_service_default,
@@ -280,7 +280,6 @@ class ceilometer(
   $alarm_history_time_to_live         = undef,
   $metering_secret                    = undef,
   $verbose                            = undef,
-  $use_syslog                         = undef,
 ) {
 
   include ::ceilometer::logging
@@ -289,12 +288,6 @@ class ceilometer(
   if $verbose {
     warning('verbose is deprecated, has no effect and will be removed after Newton cycle.')
   }
-
-  if $use_syslog {
-    warning('use_syslog is deprecated, has no effect and will be removed after Newton cycle.')
-  }
-
-
   # Cleanup in Ocata.
   if $telemetry_secret {
     validate_string($telemetry_secret)

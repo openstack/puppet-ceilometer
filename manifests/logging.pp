@@ -8,6 +8,10 @@
 #   (Optional) Should the daemons log debug messages
 #   Defaults to $::os_service_default.
 #
+# [*use_syslog*]
+#   (Optional) Use syslog for logging.
+#   Defaults to $::os_service_default.
+#
 # [*use_stderr*]
 #   (Optional) Use stderr for logging
 #   Defaults to $::os_service_default.
@@ -87,11 +91,8 @@
 #   (Optional) Deprecated. Should the daemons log verbose messages
 #   Defaults to undef
 #
-#  [*use_syslog*]
-#    (Optional) Deprecated. Use syslog for logging.
-#    Defaults to undef
-#
 class ceilometer::logging(
+  $use_syslog                    = $::os_service_default,
   $use_stderr                    = $::os_service_default,
   $log_facility                  = $::os_service_default,
   $log_dir                       = '/var/log/ceilometer',
@@ -109,11 +110,11 @@ class ceilometer::logging(
   $log_date_format               = $::os_service_default,
   # Deprecated
   $verbose                       = undef,
-  $use_syslog                    = undef,
 ) {
 
   # NOTE(spredzy): In order to keep backward compatibility we rely on the pick function
   # to use ceilometer::<myparam> first then ceilometer::logging::<myparam>.
+  $use_syslog_real = pick($::ceilometer::use_syslog,$use_syslog)
   $use_stderr_real = pick($::ceilometer::use_stderr,$use_stderr)
   $log_facility_real = pick($::ceilometer::log_facility,$log_facility)
   $log_dir_real = pick($::ceilometer::log_dir,$log_dir)
@@ -123,13 +124,10 @@ class ceilometer::logging(
     warning('verbose is deprecated, has no effect and will be removed after Newton cycle.')
   }
 
-  if $use_syslog {
-    warning('use_syslog is deprecated, has no effect and will be removed in a future release.')
-  }
-
   oslo::log { 'ceilometer_config':
     debug                         => $debug_real,
     use_stderr                    => $use_stderr_real,
+    use_syslog                    => $use_syslog_real,
     log_dir                       => $log_dir_real,
     syslog_log_facility           => $log_facility_real,
     logging_context_format_string => $logging_context_format_string,
