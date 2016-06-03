@@ -62,53 +62,6 @@
 #   This url should *not* contain any trailing '/'.
 #   Defaults to 'http://127.0.0.1:8777'.
 #
-# [*port*]
-#   (Optional) DEPRECATED: Use public_url, internal_url and admin_url instead.
-#   Setting this parameter overrides public_url, internal_url and admin_url parameters.
-#   Default port for endpoints.
-#   Defaults to 8777.
-#
-# [*public_protocol*]
-#   (Optional) DEPRECATED: Use public_url instead.
-#   Protocol for public endpoint.
-#   Setting this parameter overrides public_url parameter.
-#   Defaults to 'http'.
-#
-# [*public_address*]
-#   (Optional) DEPRECATED: Use public_url instead.
-#   Public address for endpoint.
-#   Setting this parameter overrides public_url parameter.
-#   Defaults to '127.0.0.1'.
-#
-# [*internal_protocol*]
-#   (Optional) DEPRECATED: Use internal_url instead.
-#   Protocol for internal endpoint.
-#   Setting this parameter overrides internal_url parameter.
-#   Defaults to 'http'.
-#
-# [*internal_address*]
-#   (Optional) DEPRECATED: Use internal_url instead.
-#   Internal address for endpoint.
-#   Setting this parameter overrides internal_url parameter.
-#   Defaults to '127.0.0.1'.
-#
-# [*admin_protocol*]
-#   (Optional) DEPRECATED: Use admin_url instead.
-#   Protocol for admin endpoint.
-#   Setting this parameter overrides admin_url parameter.
-#   Defaults to 'http'.
-#
-# [*admin_address*]
-#   (Optional) DEPRECATED: Use admin_url instead.
-#   Admin address for endpoint.
-#   Setting this parameter overrides admin_url parameter.
-#   Defaults to '127.0.0.1'.
-#
-# === Deprecation notes:
-#
-# If any value is provided for public_protocol, public_address or port parameters,
-# public_url will be completely ignored. The same applies for internal and admin parameters.
-#
 # === Examples:
 #
 #  class { 'ceilometer::keystone::auth':
@@ -132,74 +85,11 @@ class ceilometer::keystone::auth (
   $public_url           = 'http://127.0.0.1:8777',
   $admin_url            = 'http://127.0.0.1:8777',
   $internal_url         = 'http://127.0.0.1:8777',
-  # DEPRECATED PARAMETERS
-  $port                 = undef,
-  $public_protocol      = undef,
-  $public_address       = undef,
-  $internal_protocol    = undef,
-  $internal_address     = undef,
-  $admin_protocol       = undef,
-  $admin_address        = undef,
 ) {
 
   validate_string($password)
 
-  if $port {
-    warning('The port parameter is deprecated, use public_url, internal_url and admin_url instead.')
-  }
-
-  if $public_protocol {
-    warning('The public_protocol parameter is deprecated, use public_url instead.')
-  }
-
-  if $internal_protocol {
-    warning('The internal_protocol parameter is deprecated, use internal_url instead.')
-  }
-
-  if $admin_protocol {
-    warning('The admin_protocol parameter is deprecated, use admin_url instead.')
-  }
-
-  if $public_address {
-    warning('The public_address parameter is deprecated, use public_url instead.')
-  }
-
-  if $internal_address {
-    warning('The internal_address parameter is deprecated, use internal_url instead.')
-  }
-
-  if $admin_address {
-    warning('The admin_address parameter is deprecated, use admin_url instead.')
-  }
-
   $service_name_real = pick($service_name, $auth_name)
-
-  if ($public_protocol or $public_address or $port) {
-    $public_url_real = sprintf('%s://%s:%s',
-      pick($public_protocol, 'http'),
-      pick($public_address, '127.0.0.1'),
-      pick($port, '8777'))
-  } else {
-    $public_url_real = $public_url
-  }
-
-  if ($admin_protocol or $admin_address or $port) {
-    $admin_url_real = sprintf('%s://%s:%s',
-      pick($admin_protocol, 'http'),
-      pick($admin_address, '127.0.0.1'),
-      pick($port, '8777'))
-  } else {
-    $admin_url_real = $admin_url
-  }
-
-  if ($internal_protocol or $internal_address or $port) {
-    $internal_url_real = sprintf('%s://%s:%s',
-      pick($internal_protocol, 'http'),
-      pick($internal_address, '127.0.0.1'),
-      pick($port, '8777'))
-  } else {
-    $internal_url_real = $internal_url
-  }
 
   ::keystone::resource::service_identity { $auth_name:
     configure_user      => $configure_user,
@@ -213,9 +103,9 @@ class ceilometer::keystone::auth (
     email               => $email,
     tenant              => $tenant,
     roles               => ['admin', 'ResellerAdmin'],
-    public_url          => $public_url_real,
-    admin_url           => $admin_url_real,
-    internal_url        => $internal_url_real,
+    public_url          => $public_url,
+    admin_url           => $admin_url,
+    internal_url        => $internal_url,
   }
 
   if $configure_user_role {
