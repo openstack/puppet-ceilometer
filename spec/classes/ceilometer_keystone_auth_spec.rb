@@ -114,32 +114,6 @@ describe 'ceilometer::keystone::auth' do
       end
     end
 
-    context 'with deprecated parameters' do
-      before do
-        params.merge!({
-          :auth_name         => 'mighty-ceilometer',
-          :region            => 'RegionFortyTwo',
-          :public_address    => '10.0.0.1',
-          :admin_address     => '10.0.0.2',
-          :internal_address  => '10.0.0.3',
-          :port              => '65001',
-          :public_protocol   => 'https',
-          :admin_protocol    => 'ftp',
-          :internal_protocol => 'gopher',
-          :service_type      => 'metering',
-        })
-      end
-
-      it 'configure ceilometer endpoints' do
-        is_expected.to contain_keystone_endpoint("#{params[:region]}/#{params[:auth_name]}::#{params[:service_type]}").with(
-          :ensure       => 'present',
-          :public_url   => "#{params[:public_protocol]}://#{params[:public_address]}:#{params[:port]}",
-          :admin_url    => "#{params[:admin_protocol]}://#{params[:admin_address]}:#{params[:port]}",
-          :internal_url => "#{params[:internal_protocol]}://#{params[:internal_address]}:#{params[:port]}"
-        )
-      end
-    end
-
     context 'when overriding service name' do
       before do
         params.merge!({
