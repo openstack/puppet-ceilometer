@@ -29,7 +29,7 @@
 #
 # [*service_name*]
 #   (Optional) Name of the service.
-#   Defaults to value of auth_name.
+#   Defaults to 'ceilometer'.
 #
 # [*service_type*]
 #   (Optional) Type of service. Optional.
@@ -76,7 +76,7 @@ class ceilometer::keystone::auth (
   $auth_name            = 'ceilometer',
   $configure_user       = true,
   $configure_user_role  = true,
-  $service_name         = undef,
+  $service_name         = 'ceilometer',
   $service_type         = 'metering',
   $service_description  = 'Openstack Metering Service',
   $region               = 'RegionOne',
@@ -89,16 +89,15 @@ class ceilometer::keystone::auth (
 
   validate_string($password)
 
-  $service_name_real = pick($service_name, $auth_name)
-
-  ::keystone::resource::service_identity { $auth_name:
+  ::keystone::resource::service_identity { 'ceilometer':
     configure_user      => $configure_user,
     configure_user_role => $configure_user_role,
     configure_endpoint  => $configure_endpoint,
     service_type        => $service_type,
     service_description => $service_description,
-    service_name        => $service_name_real,
+    service_name        => $service_name,
     region              => $region,
+    auth_name           => $auth_name,
     password            => $password,
     email               => $email,
     tenant              => $tenant,
