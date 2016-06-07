@@ -12,6 +12,7 @@ describe 'ceilometer' do
       :debug                      => 'False',
       :log_dir                    => '/var/log/ceilometer',
       :use_stderr                 => 'True',
+      :purge_config               => false,
     }
   end
 
@@ -103,6 +104,12 @@ describe 'ceilometer' do
         :name   => platform_params[:common_package_name],
         :tag    => ['openstack', 'ceilometer-package'],
       )
+    end
+
+    it 'passes purge to resource' do
+      is_expected.to contain_resources('ceilometer_config').with({
+        :purge => false
+      })
     end
 
     it 'configures required telemetry_secret' do

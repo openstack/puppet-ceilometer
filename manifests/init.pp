@@ -216,6 +216,11 @@
 #   (Optional) Password for message broker authentication
 #   Defaults to $::os_service_default.
 #
+# [*purge_config*]
+#   (optional) Whether to set only the specified config options
+#   in the ceilometer config.
+#   Defaults to false.
+#
 # === DEPRECATED PARAMETERS:
 #  [*metering_secret*]
 #   (optional)  Secret key for signing messages.
@@ -276,6 +281,7 @@ class ceilometer(
   $amqp_sasl_config_name              = $::os_service_default,
   $amqp_username                      = $::os_service_default,
   $amqp_password                      = $::os_service_default,
+  $purge_config                       = false,
   # DEPRECATED PARAMETERS
   $alarm_history_time_to_live         = undef,
   $metering_secret                    = undef,
@@ -322,6 +328,10 @@ class ceilometer(
     ensure => $package_ensure,
     name   => $::ceilometer::params::common_package_name,
     tag    => ['openstack', 'ceilometer-package'],
+  }
+
+  resources { 'ceilometer_config':
+    purge => $purge_config,
   }
 
   # we keep "ceilometer.openstack.common.rpc.impl_kombu" for backward compatibility
