@@ -16,7 +16,7 @@
 #   (optional) The name of the auth user
 #   Defaults to ceilometer.
 #
-# [*keytone_user*]
+# [*keystone_user*]
 #   (Optional) User to authenticate with.
 #   Defaults to 'ceilometer'.
 #
