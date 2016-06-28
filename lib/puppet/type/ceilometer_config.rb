@@ -10,7 +10,6 @@ Puppet::Type.newtype(:ceilometer_config) do
   newproperty(:value, :array_matching => :all) do
     desc 'The value of the setting to be defined.'
     def insync?(is)
-      puts is
       return true if @should.empty?
       return false unless is.is_a? Array
       return false unless is.length == @should.length
