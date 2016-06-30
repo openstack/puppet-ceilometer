@@ -27,6 +27,11 @@
 # [*keystone_password*]
 #   (Required) Password to authenticate with.
 #
+# [*memcached_servers*]
+#   (optinal) a list of memcached server(s) to use for caching. If left
+#   undefined, tokens will instead be cached in-process.
+#   Defaults to $::os_service_default.
+#
 # [*auth_uri*]
 #   (Optional) Public Identity API endpoint.
 #   Defaults to 'http://127.0.0.1:5000/'.
@@ -77,6 +82,7 @@ class ceilometer::api (
   $keystone_user              = 'ceilometer',
   $keystone_tenant            = 'services',
   $keystone_password          = false,
+  $memcached_servers          = $::os_service_default,
   $auth_uri                   = 'http://127.0.0.1:5000/',
   $identity_uri               = 'http://127.0.0.1:35357/',
   $host                       = '0.0.0.0',
@@ -145,6 +151,7 @@ class ceilometer::api (
     'keystone_authtoken/admin_tenant_name' : value => $keystone_tenant;
     'keystone_authtoken/admin_user'        : value => $keystone_user;
     'keystone_authtoken/admin_password'    : value => $keystone_password, secret => true;
+    'keystone_authtoken/memcached_servers' : value => join(any2array($memcached_servers), ',');
     'api/host'                             : value => $host;
     'api/port'                             : value => $port;
   }

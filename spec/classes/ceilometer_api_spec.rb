@@ -44,6 +44,7 @@ describe 'ceilometer::api' do
       is_expected.to contain_ceilometer_config('keystone_authtoken/admin_password').with_value( params[:keystone_password] ).with_secret(true)
       is_expected.to contain_ceilometer_config('keystone_authtoken/auth_uri').with_value("http://127.0.0.1:5000/")
       is_expected.to contain_ceilometer_config('keystone_authtoken/identity_uri').with_value("http://127.0.0.1:35357/")
+      is_expected.to contain_ceilometer_config('keystone_authtoken/memcached_servers').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ceilometer_config('api/host').with_value( params[:host] )
       is_expected.to contain_ceilometer_config('api/port').with_value( params[:port] )
       is_expected.to contain_ceilometer_config('api/workers').with_value('<SERVICE DEFAULT>')
@@ -66,6 +67,16 @@ describe 'ceilometer::api' do
             :tag        => 'ceilometer-service',
           )
         end
+      end
+    end
+
+    context 'with memcached servers' do
+      before do
+        params.merge!({ :memcached_servers => '1.1.1.1:11211', })
+      end
+
+      it 'configures ceilometer-api service' do
+        is_expected.to contain_ceilometer_config('keystone_authtoken/memcached_servers').with_value('1.1.1.1:11211')
       end
     end
 
