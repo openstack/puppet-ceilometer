@@ -4,6 +4,7 @@
 # should be considered to be constant
 #
 class ceilometer::params {
+  include ::openstacklib::defaults
 
   $dbsync_command  = 'ceilometer-dbsync --config-file=/etc/ceilometer/ceilometer.conf'
   $expirer_command = 'ceilometer-expirer'
