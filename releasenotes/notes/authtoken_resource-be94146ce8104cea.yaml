@@ -1,0 +1,20 @@
+---
+features:
+  - Configure keystonemiddleware in a consistent way with all options required
+    for Keystone v3.
+deprecations:
+  - ceilometer::api::identity_uri is deprecated in favor of
+    ceilometer::keystone::authtoken::auth_url
+  - ceilometer::api::auth_uri is deprecated in favor of
+    ceilometer::keystone::authtoken::auth_uri
+  - ceilometer::api::keystone_tenant is deprecated in favor of
+    ceilometer::keystone::authtoken::project_name.
+  - ceilometer::api::keystone_user is deprecated in favor of
+    ceilometer::keystone::authtoken::username.
+  - ceilometer::api::keystone_password is deprecated in favor of
+    ceilometer::keystone::authtoken::password.
+  - ceilometer::api::memcached_servers is deprecated in favor of
+    ceilometer::keystone::authtoken::memcached_servers.
+other:
+  - remove deprecated parameter ceilometer::api::keystone_auth_uri and
+    ceilometer::api::keystone_identity_uri

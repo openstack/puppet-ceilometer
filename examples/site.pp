@@ -29,11 +29,12 @@ node default {
   #   require             => Class['mongodb'],
   # }
 
-  # Install the ceilometer-api service
-  # The keystone_password parameter is mandatory
-  class { '::ceilometer::api':
-    keystone_password => 'tralalayouyou'
+  # Configure keystonemiddleware for ceilometer
+  class { '::ceilometer::keystone::authtoken':
+    password => 'tralalayouyou'
   }
+  # Install the ceilometer-api service
+  class { '::ceilometer::api': }
 
   # Set common auth parameters used by all agents (compute/central)
   class { '::ceilometer::agent::auth':

@@ -12,34 +12,6 @@
 #   (Optional) Whether the service should be managed by Puppet.
 #   Defaults to true.
 #
-# [*keystone_user*]
-#   (optional) The name of the auth user
-#   Defaults to ceilometer.
-#
-# [*keystone_user*]
-#   (Optional) User to authenticate with.
-#   Defaults to 'ceilometer'.
-#
-# [*keystone_tenant*]
-#   (Optional) Tenant to authenticate with.
-#   Defaults to 'services'.
-#
-# [*keystone_password*]
-#   (Required) Password to authenticate with.
-#
-# [*memcached_servers*]
-#   (optinal) a list of memcached server(s) to use for caching. If left
-#   undefined, tokens will instead be cached in-process.
-#   Defaults to $::os_service_default.
-#
-# [*auth_uri*]
-#   (Optional) Public Identity API endpoint.
-#   Defaults to 'http://127.0.0.1:5000/'.
-#
-# [*identity_uri*]
-#   (Optional) Complete admin Identity API endpoint.
-#   Defaults to 'http://127.0.0.1:35357/'.
-#
 # [*host*]
 #   (Optional) The ceilometer api bind address.
 #   Defaults to '0.0.0.0'.
@@ -65,39 +37,85 @@
 #   (Optional) Number of workers for Ceilometer API server (integer value).
 #   Defaults to $::os_service_default.
 #
-# [*keystone_auth_uri*]
-#   (optional) DEPRECATED Public Identity API endpoint.
-#   Defaults to false.
-#   Use auth_uri instead.
+# [*auth_strategy*]
+#   (Optional) Type of authentication to be used.
+#   Defaults to 'keystone'
 #
-# [*keystone_identity_uri*]
-#   (optional) DEPRECATED Complete admin Identity API endpoint.
-#   Defaults to false.
-#   Use identity_uri instead.
+# = DEPRECATED PARAMETER
+#
+# [*identity_uri*]
+#   (Optional) DEPRECATED Use ceilometer::keystone::authtoken::auth_url instead.
+#   Defaults to undef
+#
+# [*auth_uri*]
+#   (Optional) DEPRECATED Use ceilometer::keystone::authtoken::auth_uri instead
+#   Defaults to undef
+#
+# [*keystone_user*]
+#   (Optional) DEPRECATED Use ceilometer::keystone::authtoken::username instead.
+#   Defaults to undef
+#
+# [*keystone_tenant*]
+#   (Optional) DEPRECATED Use ceilometer::keystone::authtoken::project_name instead.
+#   Defaults to undef
+#
+# [*keystone_password*]
+#   (Optional) DEPRECATED. Use ceilometer::keystone::authtoken::password instead.
+#   Defaults to undef
+#
+# [*memcached_servers*]
+#   (Optional) DEPRECATED. Use ceilometer::keystone::authtoken::memcached_servers instead.
+#   Defaults to undef
 #
 class ceilometer::api (
-  $manage_service             = true,
-  $enabled                    = true,
-  $package_ensure             = 'present',
-  $keystone_user              = 'ceilometer',
-  $keystone_tenant            = 'services',
-  $keystone_password          = false,
-  $memcached_servers          = $::os_service_default,
-  $auth_uri                   = 'http://127.0.0.1:5000/',
-  $identity_uri               = 'http://127.0.0.1:35357/',
-  $host                       = '0.0.0.0',
-  $port                       = '8777',
-  $service_name               = $::ceilometer::params::api_service_name,
-  $api_workers                = $::os_service_default,
+  $manage_service    = true,
+  $enabled           = true,
+  $package_ensure    = 'present',
+  $host              = '0.0.0.0',
+  $port              = '8777',
+  $service_name      = $::ceilometer::params::api_service_name,
+  $api_workers       = $::os_service_default,
+  $auth_strategy     = 'keystone',
   # DEPRECATED PARAMETERS
-  $keystone_auth_uri          = false,
-  $keystone_identity_uri      = false,
+  $identity_uri      = undef,
+  $auth_uri          = undef,
+  $keystone_user     = undef,
+  $keystone_tenant   = undef,
+  $keystone_password = undef,
+  $memcached_servers = undef,
 ) inherits ceilometer::params {
 
   include ::ceilometer::params
   include ::ceilometer::policy
 
-  validate_string($keystone_password)
+  if $auth_strategy == 'keystone' {
+    include ::ceilometer::keystone::authtoken
+  }
+
+  if $identity_uri {
+    warning('ceilometer::api::identity_uri is deprecated, use ceilometer::keystone::authtoken::auth_url instead')
+  }
+
+  if $auth_uri {
+    warning('ceilometer::api::auth_uri is deprecated, use ceilometer::keystone::authtoken::auth_uri instead')
+  }
+
+  if $keystone_user {
+    warning('ceilometer::api::keystone_user is deprecated, use ceilometer::keystone::authtoken::username instead')
+  }
+
+  if $keystone_tenant {
+    warning('ceilometer::api::keystone_tenant is deprecated, use ceilometer::keystone::authtoken::project_name instead')
+  }
+
+  if $keystone_password {
+    warning('ceilometer::api::keystone_password is deprecated, use ceilometer::keystone::authtoken::password instead')
+  }
+
+  if $memcached_servers {
+    warning('ceilometer::api::memcached_servers is deprecated, use ceilometer::keystone::authtoken::memcached_servers instead')
+  }
+
 
   Ceilometer_config<||> ~> Service[$service_name]
   Class['ceilometer::policy'] ~> Service[$service_name]
@@ -147,32 +165,9 @@ class ceilometer::api (
   }
 
   ceilometer_config {
-    'api/workers'                          : value => $api_workers;
-    'keystone_authtoken/admin_tenant_name' : value => $keystone_tenant;
-    'keystone_authtoken/admin_user'        : value => $keystone_user;
-    'keystone_authtoken/admin_password'    : value => $keystone_password, secret => true;
-    'keystone_authtoken/memcached_servers' : value => join(any2array($memcached_servers), ',');
-    'api/host'                             : value => $host;
-    'api/port'                             : value => $port;
-  }
-
-  if $keystone_auth_uri {
-    warning('The keystone_auth_uri parameter is deprecated. Please use auth_uri instead.')
-    $auth_uri_real = $keystone_auth_uri
-  } else {
-    $auth_uri_real = $auth_uri
-  }
-
-  if $keystone_identity_uri {
-    warning('The keystone_identity_uri parameter is deprecated. Please use identity_uri instead.')
-    $identity_uri_real = $keystone_identity_uri
-  } else {
-    $identity_uri_real = $identity_uri
-  }
-
-  ceilometer_config {
-    'keystone_authtoken/auth_uri'     : value => $auth_uri_real;
-    'keystone_authtoken/identity_uri' : value => $identity_uri_real;
+    'api/workers': value => $api_workers;
+    'api/host':    value => $host;
+    'api/port':    value => $port;
   }
 
 }
