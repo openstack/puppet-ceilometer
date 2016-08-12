@@ -53,6 +53,7 @@ class ceilometer::agent::polling (
       User['ceilometer'] {
         groups => ['nova', $::ceilometer::params::libvirt_group]
       }
+      Package <| title == 'libvirt' |> -> User['ceilometer']
     } else {
       User['ceilometer'] {
         groups => ['nova']
@@ -61,6 +62,7 @@ class ceilometer::agent::polling (
 
     $compute_namespace_name = 'compute'
 
+    Package <| title == 'ceilometer-common' |> -> User['ceilometer']
     Package <| title == 'nova-common' |> -> Package['ceilometer-common']
   }
 
