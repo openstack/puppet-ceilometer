@@ -40,11 +40,13 @@ class ceilometer::agent::compute (
     User['ceilometer'] {
       groups => ['nova', $::ceilometer::params::libvirt_group]
     }
+    Package <| title == 'libvirt' |> -> User['ceilometer']
   } else {
     User['ceilometer'] {
       groups => ['nova']
     }
   }
+  Package <| title == 'ceilometer-common' |> -> User['ceilometer']
 
   if $manage_service {
     if $enabled {
