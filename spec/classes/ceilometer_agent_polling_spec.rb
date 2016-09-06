@@ -48,7 +48,7 @@ describe 'ceilometer::agent::polling' do
       )
     end
 
-    it 'configures central agent' do
+    it 'configures polling namespaces' do
       is_expected.to contain_ceilometer_config('DEFAULT/polling_namespaces').with_value('central,compute,ipmi')
     end
 
@@ -74,6 +74,18 @@ describe 'ceilometer::agent::polling' do
             :tag        => 'ceilometer-service',
           )
         end
+      end
+    end
+
+    context 'with central and ipmi polling namespaces disabled' do
+      before do
+        params.merge!({
+          :central_namespace => false,
+          :ipmi_namespace    => false })
+      end
+
+      it 'configures compute polling namespace' do
+        is_expected.to contain_ceilometer_config('DEFAULT/polling_namespaces').with_value('compute')
       end
     end
 
