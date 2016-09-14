@@ -6,7 +6,10 @@
 #
 # [*policies*]
 #   (Optional) Set of policies to configure for ceilometer
-#   Example : { 'ceilometer-context_is_admin' => {'context_is_admin' => 'true'}, 'ceilometer-default' => {'default' => 'rule:admin_or_owner'} }
+#   Example : {
+#               'ceilometer-context_is_admin' => {'context_is_admin' => 'true'},
+#               'ceilometer-default' => {'default' => 'rule:admin_or_owner'}
+#             }
 #   Defaults to empty hash.
 #
 # [*policy_path*]
