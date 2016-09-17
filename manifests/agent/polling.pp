@@ -79,7 +79,7 @@ class ceilometer::agent::polling (
   }
 
   $namespaces = [$central_namespace_name, $compute_namespace_name, $ipmi_namespace_name]
-  $namespaces_real = inline_template('<%= @namespaces.find_all {|x| x !~ /^undef/ }.join "," %>')
+  $namespaces_real = inline_template('<%= @namespaces.select { |x| x and x !~ /^undef/ }.compact.join "," %>')
 
   package { 'ceilometer-polling':
     ensure => $package_ensure,
