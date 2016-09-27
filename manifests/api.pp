@@ -161,8 +161,8 @@ class ceilometer::api (
     # we need to make sure ceilometer-api/eventlet is stopped before trying to start apache
     Service['ceilometer-api'] -> Service[$service_name]
   } else {
-    fail('Invalid service_name. Either ceilometer/openstack-ceilometer-api for \
-          running as a standalone service, or httpd for being run by a httpd server')
+    fail("Invalid service_name. Either ceilometer/openstack-ceilometer-api for \
+running as a standalone service, or httpd for being run by a httpd server")
   }
 
   ceilometer_config {
