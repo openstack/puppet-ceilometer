@@ -229,9 +229,6 @@
 #
 # [*alarm_history_time_to_live*]
 #
-#  [*verbose*]
-#    (Optional) Deprecated. should the daemons log verbose messages.
-#    Defaults to undef.
 class ceilometer(
   $http_timeout                       = '600',
   $event_time_to_live                 = '-1',
@@ -285,15 +282,11 @@ class ceilometer(
   # DEPRECATED PARAMETERS
   $alarm_history_time_to_live         = undef,
   $metering_secret                    = undef,
-  $verbose                            = undef,
 ) {
 
   include ::ceilometer::logging
   include ::ceilometer::params
 
-  if $verbose {
-    warning('verbose is deprecated, has no effect and will be removed after Newton cycle.')
-  }
   # Cleanup in Ocata.
   if $telemetry_secret {
     validate_string($telemetry_secret)
