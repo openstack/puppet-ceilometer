@@ -1,0 +1,4 @@
+---
+features:
+  - This adds the enable_proxy_headers parsing option which is used by the
+    http_proxy_to_wsgi middleware.

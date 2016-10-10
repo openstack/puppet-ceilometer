@@ -35,6 +35,7 @@ describe 'ceilometer::api' do
       is_expected.to contain_ceilometer_config('api/host').with_value( params[:host] )
       is_expected.to contain_ceilometer_config('api/port').with_value( params[:port] )
       is_expected.to contain_ceilometer_config('api/workers').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ceilometer_config('oslo_middleware/enable_proxy_headers_parsing').with_value('<SERVICE DEFAULT>')
     end
 
     [{:enabled => true}, {:enabled => false}].each do |param_hash|
@@ -83,6 +84,14 @@ describe 'ceilometer::api' do
         is_expected.to contain_ceilometer_config(
           'keystone_authtoken/memcached_servers').with_value('memcached01:11211,memcached02:11211')
       end
+    end
+
+    context 'with enable_proxy_headers_parsing' do
+      before do
+        params.merge!({:enable_proxy_headers_parsing => true })
+      end
+
+      it { is_expected.to contain_ceilometer_config('oslo_middleware/enable_proxy_headers_parsing').with_value(true) }
     end
 
     context 'with disabled service managing' do

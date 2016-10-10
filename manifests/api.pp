@@ -41,6 +41,11 @@
 #   (Optional) Type of authentication to be used.
 #   Defaults to 'keystone'
 #
+# [*enable_proxy_headers_parsing*]
+#   (Optional) Enable paste middleware to handle SSL requests through
+#   HTTPProxyToWSGI middleware.
+#   Defaults to $::os_service_default.
+#
 # = DEPRECATED PARAMETER
 #
 # [*identity_uri*]
@@ -68,21 +73,22 @@
 #   Defaults to undef
 #
 class ceilometer::api (
-  $manage_service    = true,
-  $enabled           = true,
-  $package_ensure    = 'present',
-  $host              = '0.0.0.0',
-  $port              = '8777',
-  $service_name      = $::ceilometer::params::api_service_name,
-  $api_workers       = $::os_service_default,
-  $auth_strategy     = 'keystone',
+  $manage_service               = true,
+  $enabled                      = true,
+  $package_ensure               = 'present',
+  $host                         = '0.0.0.0',
+  $port                         = '8777',
+  $service_name                 = $::ceilometer::params::api_service_name,
+  $api_workers                  = $::os_service_default,
+  $auth_strategy                = 'keystone',
+  $enable_proxy_headers_parsing = $::os_service_default,
   # DEPRECATED PARAMETERS
-  $identity_uri      = undef,
-  $auth_uri          = undef,
-  $keystone_user     = undef,
-  $keystone_tenant   = undef,
-  $keystone_password = undef,
-  $memcached_servers = undef,
+  $identity_uri                 = undef,
+  $auth_uri                     = undef,
+  $keystone_user                = undef,
+  $keystone_tenant              = undef,
+  $keystone_password            = undef,
+  $memcached_servers            = undef,
 ) inherits ceilometer::params {
 
   include ::ceilometer::params
@@ -169,6 +175,10 @@ running as a standalone service, or httpd for being run by a httpd server")
     'api/workers': value => $api_workers;
     'api/host':    value => $host;
     'api/port':    value => $port;
+  }
+
+  oslo::middleware { 'ceilometer_config':
+    enable_proxy_headers_parsing => $enable_proxy_headers_parsing,
   }
 
 }
