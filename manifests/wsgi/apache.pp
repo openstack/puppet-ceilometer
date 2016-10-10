@@ -56,7 +56,7 @@
 #
 # [*threads*]
 #   (Optional) The number of threads for the vhost.
-#   Defaults to $::processorcount.
+#   Defaults to $::os_workers.
 #
 # [*ssl_cert*]
 # [*ssl_key*]
@@ -92,7 +92,7 @@ class ceilometer::wsgi::apache (
   $ssl_crl_path  = undef,
   $ssl_crl       = undef,
   $ssl_certs_dir = undef,
-  $threads       = $::processorcount,
+  $threads       = $::os_workers,
   $priority      = '10',
 ) {
 
