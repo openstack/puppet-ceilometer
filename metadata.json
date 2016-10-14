@@ -1,6 +1,6 @@
 {
   "name": "openstack-ceilometer",
-  "version": "9.4.0",
+  "version": "9.4.1",
   "author": "eNovance and OpenStack Contributors",
   "summary": "Puppet module for OpenStack Ceilometer",
   "license": "Apache-2.0",
