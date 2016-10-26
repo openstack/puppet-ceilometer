@@ -31,6 +31,7 @@ class ceilometer::params {
       $agent_notification_service_name = 'openstack-ceilometer-notification'
       $ceilometer_wsgi_script_path     = '/var/www/cgi-bin/ceilometer'
       $ceilometer_wsgi_script_source   = '/usr/lib/python2.7/site-packages/ceilometer/api/app.wsgi'
+      $libvirt_group                   = undef
     }
     'Debian': {
       # package names
