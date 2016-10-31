@@ -68,32 +68,7 @@
 #    amqp and zmq. (string value)
 #    Default to $::os_service_default
 #
-#  [*rabbit_host*]
-#   (Optional) The RabbitMQ broker address where a single node is used.
-#   (string value)
-#   Defaults to $::os_service_default
-#
-#  [*rabbit_port*]
-#   (Optional) The RabbitMQ broker port where a single node is used.
-#   (port value)
-#   Defaults to $::os_service_default
-#
-#  [*rabbit_hosts*]
-#   (Optional) RabbitMQ HA cluster host:port pairs. (array value)
-#   Defaults to $::os_service_default
-#
-#  [*rabbit_userid*]
-#   (Optional) The RabbitMQ userid. (string value)
-#   Defaults to $::os_service_default
-#
-#  [*rabbit_password*]
-#   (Optional) The RabbitMQ password. (string value)
-#   Defaults to $::os_service_default
-#
-#  [*rabbit_virtual_host*]
-#   (Optional) The RabbitMQ virtual host. (string value)
-#   Defaults to $::os_service_default
-#
+
 # [*rabbit_ha_queues*]
 #   (Optional) Use HA queues in RabbitMQ (x-ha-policy: all). If you change this
 #   option, you must wipe the RabbitMQ database. (boolean value)
@@ -229,6 +204,32 @@
 #
 # [*alarm_history_time_to_live*]
 #
+#  [*rabbit_host*]
+#   (Optional) The RabbitMQ broker address where a single node is used.
+#   (string value)
+#   Defaults to $::os_service_default
+#
+#  [*rabbit_port*]
+#   (Optional) The RabbitMQ broker port where a single node is used.
+#   (port value)
+#   Defaults to $::os_service_default
+#
+#  [*rabbit_hosts*]
+#   (Optional) RabbitMQ HA cluster host:port pairs. (array value)
+#   Defaults to $::os_service_default
+#
+#  [*rabbit_userid*]
+#   (Optional) The RabbitMQ userid. (string value)
+#   Defaults to $::os_service_default
+#
+#  [*rabbit_password*]
+#   (Optional) The RabbitMQ password. (string value)
+#   Defaults to $::os_service_default
+#
+#  [*rabbit_virtual_host*]
+#   (Optional) The RabbitMQ virtual host. (string value)
+#   Defaults to $::os_service_default
+#
 class ceilometer(
   $http_timeout                       = '600',
   $event_time_to_live                 = '-1',
@@ -244,12 +245,6 @@ class ceilometer(
   $default_transport_url              = $::os_service_default,
   $notification_transport_url         = $::os_service_default,
   $rpc_backend                        = $::os_service_default,
-  $rabbit_host                        = $::os_service_default,
-  $rabbit_port                        = $::os_service_default,
-  $rabbit_hosts                       = $::os_service_default,
-  $rabbit_userid                      = $::os_service_default,
-  $rabbit_password                    = $::os_service_default,
-  $rabbit_virtual_host                = $::os_service_default,
   $rabbit_ha_queues                   = $::os_service_default,
   $rabbit_heartbeat_timeout_threshold = $::os_service_default,
   $rabbit_heartbeat_rate              = $::os_service_default,
@@ -282,6 +277,12 @@ class ceilometer(
   # DEPRECATED PARAMETERS
   $alarm_history_time_to_live         = undef,
   $metering_secret                    = undef,
+  $rabbit_host                        = $::os_service_default,
+  $rabbit_port                        = $::os_service_default,
+  $rabbit_hosts                       = $::os_service_default,
+  $rabbit_userid                      = $::os_service_default,
+  $rabbit_password                    = $::os_service_default,
+  $rabbit_virtual_host                = $::os_service_default,
 ) {
 
   include ::ceilometer::logging
@@ -303,6 +304,17 @@ class ceilometer(
 
   if $alarm_history_time_to_live {
     warning('alarm_history_time_to_live parameter is deprecated. It should be configured for Aodh.')
+  }
+
+  if !is_service_default($rabbit_host) or
+    !is_service_default($rabbit_hosts) or
+    !is_service_default($rabbit_password) or
+    !is_service_default($rabbit_port) or
+    !is_service_default($rabbit_userid) or
+    !is_service_default($rabbit_virtual_host) {
+    warning("ceilometer::rabbit_host, ceilometer::rabbit_hosts, ceilometer::rabbit_password, \
+ceilometer::rabbit_port, ceilometer::rabbit_userid and ceilometer::rabbit_virtual_host are \
+deprecated. Please use ceilometer::default_transport_url instead.")
   }
 
   group { 'ceilometer':

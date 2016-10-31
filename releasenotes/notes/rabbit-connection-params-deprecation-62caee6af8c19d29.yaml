@@ -1,0 +1,7 @@
+---
+deprecations:
+  - ceilometer::rabbit_host, ceilometer::rabbit_hosts,
+    ceilometer::rabbit_password, ceilometer::rabbit_port,
+    ceilometer::rabbit_userid and ceilometer::rabbit_virtual_host are
+    deprecated. ceilometer::default_transport_url should be used to configure
+    the messaging backend connection information.
