@@ -223,23 +223,16 @@ class ceilometer::keystone::authtoken(
   $token_cache_time               = $::os_service_default,
 ) {
 
-  if is_service_default($password) and ! $::ceilometer::api::keystone_password {
+  if is_service_default($password) {
     fail('Please set password for ceilometer service user')
   }
 
-  $username_real = pick($::ceilometer::api::keystone_user,$username)
-  $password_real = pick($::ceilometer::api::keystone_password,$password)
-  $project_name_real = pick($::ceilometer::api::keystone_tenant,$project_name)
-  $auth_uri_real = pick($::ceilometer::api::auth_uri, $auth_uri)
-  $auth_url_real = pick($::ceilometer::api::identity_uri, $auth_url)
-  $memcached_servers_real = pick($::ceilometer::api::memcached_servers, $memcached_servers)
-
   keystone::resource::authtoken { 'ceilometer_config':
-    username                       => $username_real,
-    password                       => $password_real,
-    project_name                   => $project_name_real,
-    auth_url                       => $auth_url_real,
-    auth_uri                       => $auth_uri_real,
+    username                       => $username,
+    password                       => $password,
+    project_name                   => $project_name,
+    auth_url                       => $auth_url,
+    auth_uri                       => $auth_uri,
     auth_version                   => $auth_version,
     auth_type                      => $auth_type,
     auth_section                   => $auth_section,
@@ -265,7 +258,7 @@ class ceilometer::keystone::authtoken(
     memcache_security_strategy     => $memcache_security_strategy,
     memcache_use_advanced_pool     => $memcache_use_advanced_pool,
     memcache_pool_unused_timeout   => $memcache_pool_unused_timeout,
-    memcached_servers              => $memcached_servers_real,
+    memcached_servers              => $memcached_servers,
     region_name                    => $region_name,
     revocation_cache_time          => $revocation_cache_time,
     signing_dir                    => $signing_dir,
