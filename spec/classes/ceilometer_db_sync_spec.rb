@@ -43,7 +43,7 @@ describe 'ceilometer::db::sync' do
         }))
       end
 
-      it_configures 'ceilometer-dbsync'
+      it_behaves_like 'ceilometer-dbsync'
     end
   end
 

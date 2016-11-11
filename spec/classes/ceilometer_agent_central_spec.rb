@@ -77,29 +77,27 @@ describe 'ceilometer::agent::central' do
 
   end
 
-  context 'on Debian platforms' do
-    let :facts do
-      @default_facts.merge({ :osfamily => 'Debian' })
-    end
+  on_supported_os({
+    :supported_os => OSDefaults.get_supported_os
+  }).each do |os,facts|
+    context "on #{os}" do
+      let (:facts) do
+        facts.merge!(OSDefaults.get_facts())
+      end
 
-    let :platform_params do
-      { :agent_package_name => 'ceilometer-agent-central',
-        :agent_service_name => 'ceilometer-agent-central' }
-    end
+      let :platform_params do
+        case facts[:osfamily]
+        when 'Debian'
+          { :agent_package_name => 'ceilometer-agent-central',
+            :agent_service_name => 'ceilometer-agent-central' }
+        when 'RedHat'
+          { :agent_package_name => 'openstack-ceilometer-central',
+            :agent_service_name => 'openstack-ceilometer-central' }
+        end
+      end
 
-    it_configures 'ceilometer-agent-central'
+      it_behaves_like 'ceilometer-agent-central'
+    end
   end
 
-  context 'on RedHat platforms' do
-    let :facts do
-      @default_facts.merge({ :osfamily => 'RedHat' })
-    end
-
-    let :platform_params do
-      { :agent_package_name => 'openstack-ceilometer-central',
-        :agent_service_name => 'openstack-ceilometer-central' }
-    end
-
-    it_configures 'ceilometer-agent-central'
-  end
 end

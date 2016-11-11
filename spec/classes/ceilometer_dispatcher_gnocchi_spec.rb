@@ -35,20 +35,16 @@ describe 'ceilometer::dispatcher::gnocchi' do
     end
   end
 
-  context 'on Debian platforms' do
-    let :facts do
-      @default_facts.merge({ :osfamily => 'Debian' })
+  on_supported_os({
+    :supported_os   => OSDefaults.get_supported_os
+  }).each do |os,facts|
+    context "on #{os}" do
+      let (:facts) do
+        facts.merge(OSDefaults.get_facts())
+      end
+
+      it_behaves_like 'ceilometer-gnocchi-dispatcher'
     end
-
-    it_configures 'ceilometer-gnocchi-dispatcher'
-  end
-
-  context 'on RedHat platforms' do
-    let :facts do
-      @default_facts.merge({ :osfamily => 'RedHat' })
-    end
-
-    it_configures 'ceilometer-gnocchi-dispatcher'
   end
 
 end

@@ -149,41 +149,30 @@ describe 'ceilometer::api' do
     end
   end
 
-  context 'on Debian platforms' do
-    let :facts do
-      @default_facts.merge({ :osfamily               => 'Debian',
-        :operatingsystem        => 'Debian',
-        :operatingsystemrelease => '8.0',
-        :concat_basedir         => '/var/lib/puppet/concat',
-        :fqdn                   => 'some.host.tld',
-      })
+  on_supported_os({
+    :supported_os => OSDefaults.get_supported_os
+  }).each do |os,facts|
+    context "on #{os}" do
+      let (:facts) do
+        facts.merge!(OSDefaults.get_facts({
+          :concat_basedir         => '/var/lib/puppet/concat',
+          :fqdn                   => 'some.host.tld',
+        }))
+      end
+
+      let :platform_params do
+        case facts[:osfamily]
+        when 'Debian'
+          { :api_package_name => 'ceilometer-api',
+            :api_service_name => 'ceilometer-api' }
+        when 'RedHat'
+          { :api_package_name => 'openstack-ceilometer-api',
+            :api_service_name => 'openstack-ceilometer-api' }
+        end
+      end
+
+      it_behaves_like 'ceilometer-api'
     end
-
-    let :platform_params do
-      { :api_package_name => 'ceilometer-api',
-        :api_service_name => 'ceilometer-api' }
-    end
-
-    it_configures 'ceilometer-api'
-  end
-
-  context 'on RedHat platforms' do
-    let :facts do
-      @default_facts.merge({ :osfamily               => 'RedHat',
-        :operatingsystem        => 'RedHat',
-        :operatingsystemrelease => '7.1',
-        :operatingsystemmajrelease => '7',
-        :fqdn                   => 'some.host.tld',
-        :concat_basedir         => '/var/lib/puppet/concat',
-      })
-    end
-
-    let :platform_params do
-      { :api_package_name => 'openstack-ceilometer-api',
-        :api_service_name => 'openstack-ceilometer-api' }
-    end
-
-    it_configures 'ceilometer-api'
   end
 
 end

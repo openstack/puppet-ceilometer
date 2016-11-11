@@ -114,45 +114,34 @@ describe 'ceilometer::agent::polling' do
 
   end
 
-  context 'on Debian platforms' do
-    let :facts do
-      @default_facts.merge({ :osfamily => 'Debian' })
-    end
-
-    let :platform_params do
-      { :agent_package_name => 'ceilometer-polling',
-        :agent_service_name => 'ceilometer-polling' }
-    end
-
-    context 'on Ubuntu operating systems' do
-      before do
-        facts.merge!( :operatingsystem => 'Ubuntu' )
-        platform_params.merge!( :libvirt_group => 'libvirtd' )
+  on_supported_os({
+    :supported_os => OSDefaults.get_supported_os
+  }).each do |os,facts|
+    context "on #{os}" do
+      let (:facts) do
+        facts.merge!(OSDefaults.get_facts())
       end
 
-      it_configures 'ceilometer-polling'
-    end
-
-    context 'on other operating systems' do
-      before do
-        platform_params.merge!( :libvirt_group => 'libvirt' )
+      let :platform_params do
+        case facts[:osfamily]
+        when 'Debian'
+          if facts[:operatingsystem] == 'Ubuntu'
+            { :agent_package_name => 'ceilometer-polling',
+              :agent_service_name => 'ceilometer-polling',
+              :libvirt_group      => 'libvirtd' }
+          else
+            { :agent_package_name => 'ceilometer-polling',
+              :agent_service_name => 'ceilometer-polling',
+              :libvirt_group      => 'libvirt' }
+          end
+        when 'RedHat'
+            { :agent_package_name => 'openstack-ceilometer-polling',
+              :agent_service_name => 'openstack-ceilometer-polling' }
+        end
       end
 
-      it_configures 'ceilometer-polling'
+      it_behaves_like 'ceilometer-polling'
     end
-
   end
 
-  context 'on RedHat platforms' do
-    let :facts do
-      @default_facts.merge({ :osfamily => 'RedHat' })
-    end
-
-    let :platform_params do
-      { :agent_package_name => 'openstack-ceilometer-polling',
-        :agent_service_name => 'openstack-ceilometer-polling' }
-    end
-
-    it_configures 'ceilometer-polling'
-  end
 end

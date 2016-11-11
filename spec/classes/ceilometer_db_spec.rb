@@ -91,30 +91,7 @@ describe 'ceilometer::db' do
 
   end
 
-  context 'on Debian platforms' do
-    let :facts do
-      @default_facts.merge({ :osfamily => 'Debian',
-        :operatingsystem => 'Debian',
-        :operatingsystemrelease => 'jessie',
-      })
-    end
-
-    it_configures 'ceilometer::db'
-
-    context 'using pymysql driver' do
-      let :params do
-        { :database_connection     => 'mysql+pymysql:///ceilometer:ceilometer@localhost/ceilometer', }
-      end
-
-      it 'install the proper backend package' do
-        is_expected.to contain_package('db_backend_package').with(
-          :ensure => 'present',
-          :name   => 'python-pymysql',
-          :tag    => 'openstack'
-        )
-      end
-    end
-
+  shared_examples_for 'ceilometer::db on Debian' do
     context 'with sqlite backend' do
       let :params do
         { :database_connection     => 'sqlite:///var/lib/ceilometer.db', }
@@ -127,27 +104,53 @@ describe 'ceilometer::db' do
           :tag    => 'openstack'
         )
       end
-
     end
-  end
-
-  context 'on Redhat platforms' do
-    let :facts do
-      @default_facts.merge({ :osfamily => 'RedHat',
-        :operatingsystemrelease => '7.1',
-      })
-    end
-
-    it_configures 'ceilometer::db'
 
     context 'using pymysql driver' do
       let :params do
-        { :database_connection     => 'mysql+pymysql:///ceilometer:ceilometer@localhost/ceilometer', }
+        { :database_connection => 'mysql+pymysql:///ceilometer:ceilometer@localhost/ceilometer', }
+      end
+
+      it 'install the proper backend package' do
+        is_expected.to contain_package('db_backend_package').with(
+          :ensure => 'present',
+          :name   => 'python-pymysql',
+          :tag    => 'openstack'
+        )
+      end
+    end
+  end
+
+  shared_examples_for 'ceilometer::db on RedHat' do
+    context 'using pymysql driver' do
+      let :params do
+        { :database_connection => 'mysql+pymysql:///ceilometer:ceilometer@localhost/ceilometer', }
       end
 
       it { is_expected.not_to contain_package('db_backend_package') }
     end
   end
 
-end
+  on_supported_os({
+    :supported_os => OSDefaults.get_supported_os
+  }).each do |os,facts|
+    context "on #{os}" do
+      let (:facts) do
+        facts.merge!(OSDefaults.get_facts({
+          :concat_basedir         => '/var/lib/puppet/concat',
+          :fqdn                   => 'some.host.tld',
+        }))
+      end
 
+      case facts[:osfamily]
+      when 'Debian'
+        it_behaves_like 'ceilometer::db on Debian'
+      when 'RedHat'
+        it_behaves_like 'ceilometer::db on RedHat'
+      end
+
+      it_behaves_like 'ceilometer::db'
+    end
+  end
+
+end

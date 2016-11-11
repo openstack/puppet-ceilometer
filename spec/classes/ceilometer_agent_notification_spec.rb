@@ -172,94 +172,27 @@ describe 'ceilometer::agent::notification' do
     end
   end
 
-  context 'on Debian platforms' do
-    let :facts do
-      @default_facts.merge({ :osfamily => 'Debian' })
+  on_supported_os({
+    :supported_os => OSDefaults.get_supported_os
+  }).each do |os,facts|
+    context "on #{os}" do
+      let (:facts) do
+        facts.merge!(OSDefaults.get_facts())
+      end
+
+      let :platform_params do
+        case facts[:osfamily]
+        when 'Debian'
+          { :agent_notification_package_name => 'ceilometer-agent-notification',
+            :agent_notification_service_name => 'ceilometer-agent-notification' }
+        when 'RedHat'
+          { :agent_notification_package_name => 'openstack-ceilometer-notification',
+            :agent_notification_service_name => 'openstack-ceilometer-notification' }
+        end
+      end
+
+      it_behaves_like 'ceilometer-agent-notification'
     end
-
-    let :platform_params do
-      { :agent_notification_package_name => 'ceilometer-agent-notification',
-        :agent_notification_service_name => 'ceilometer-agent-notification' }
-    end
-
-    it_configures 'ceilometer-agent-notification'
-  end
-
-  context 'on RedHat platforms' do
-    let :facts do
-      @default_facts.merge({ :osfamily => 'RedHat' })
-    end
-
-    let :platform_params do
-      { :agent_notification_package_name => 'openstack-ceilometer-notification',
-        :agent_notification_service_name => 'openstack-ceilometer-notification' }
-    end
-
-    it_configures 'ceilometer-agent-notification'
-  end
-
-  context 'on RHEL 7' do
-    let :facts do
-      @default_facts.merge({ :osfamily                  => 'RedHat',
-        :operatingsystem           => 'RedHat',
-        :operatingsystemmajrelease => 7
-      })
-    end
-
-    let :platform_params do
-      { :agent_notification_package_name => 'openstack-ceilometer-notification',
-        :agent_notification_service_name => 'openstack-ceilometer-notification' }
-    end
-
-    it_configures 'ceilometer-agent-notification'
-  end
-
-  context 'on CentOS 7' do
-    let :facts do
-      @default_facts.merge({ :osfamily                  => 'RedHat',
-        :operatingsystem           => 'CentOS',
-        :operatingsystemmajrelease => 7
-      })
-    end
-
-    let :platform_params do
-      { :agent_notification_package_name => 'openstack-ceilometer-notification',
-        :agent_notification_service_name => 'openstack-ceilometer-notification' }
-    end
-
-    it_configures 'ceilometer-agent-notification'
-  end
-
-  context 'on Scientific 7' do
-    let :facts do
-      @default_facts.merge({ :osfamily                  => 'RedHat',
-        :operatingsystem           => 'Scientific',
-        :operatingsystemmajrelease => 7
-      })
-    end
-
-    let :platform_params do
-      { :agent_notification_package_name => 'openstack-ceilometer-notification',
-        :agent_notification_service_name => 'openstack-ceilometer-notification' }
-    end
-
-    it_configures 'ceilometer-agent-notification'
-  end
-
-  context 'on Fedora 20' do
-    let :facts do
-      @default_facts.merge({ :osfamily               => 'RedHat',
-        :operatingsystem        => 'Fedora',
-        :operatingsystemrelease => 20
-      })
-    end
-
-    let :platform_params do
-      { :agent_notification_package_name => 'openstack-ceilometer-notification',
-        :agent_notification_service_name => 'openstack-ceilometer-notification' }
-    end
-
-    it_configures 'ceilometer-agent-notification'
   end
 
 end

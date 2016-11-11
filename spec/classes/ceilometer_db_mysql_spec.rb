@@ -31,60 +31,48 @@ describe 'ceilometer::db::mysql' do
         :charset       => params[:charset]
       )
     end
+
+    describe "overriding allowed_hosts param to array" do
+      let :params do
+        {
+          :password       => 'ceilometerpass',
+          :allowed_hosts  => ['localhost','%']
+        }
+      end
+
+    end
+
+    describe "overriding allowed_hosts param to string" do
+      let :params do
+        {
+          :password       => 'ceilometerpass2',
+          :allowed_hosts  => '192.168.1.1'
+        }
+      end
+
+    end
+
+    describe "overriding allowed_hosts param equals to host param " do
+      let :params do
+        {
+          :password       => 'ceilometerpass2',
+          :allowed_hosts  => 'localhost'
+        }
+      end
+
+    end
   end
 
-  context 'on Debian platforms' do
-    let :facts do
-      @default_facts.merge({ :osfamily => 'Debian' })
-    end
+  on_supported_os({
+    :supported_os => OSDefaults.get_supported_os
+  }).each do |os,facts|
+    context "on #{os}" do
+      let (:facts) do
+        facts.merge!(OSDefaults.get_facts())
+      end
 
-    it_configures 'ceilometer mysql database'
+      it_behaves_like 'ceilometer mysql database'
+    end
   end
 
-  context 'on RedHat platforms' do
-    let :facts do
-      @default_facts.merge({ :osfamily => 'RedHat' })
-    end
-
-    it_configures 'ceilometer mysql database'
-  end
-
-  describe "overriding allowed_hosts param to array" do
-    let :facts do
-      @default_facts.merge({ :osfamily => "Debian" })
-    end
-    let :params do
-      {
-        :password       => 'ceilometerpass',
-        :allowed_hosts  => ['localhost','%']
-      }
-    end
-
-  end
-
-  describe "overriding allowed_hosts param to string" do
-    let :facts do
-      @default_facts.merge({ :osfamily => 'RedHat' })
-    end
-    let :params do
-      {
-        :password       => 'ceilometerpass2',
-        :allowed_hosts  => '192.168.1.1'
-      }
-    end
-
-  end
-
-  describe "overriding allowed_hosts param equals to host param " do
-    let :facts do
-      @default_facts.merge({ :osfamily => 'RedHat' })
-    end
-    let :params do
-      {
-        :password       => 'ceilometerpass2',
-        :allowed_hosts  => 'localhost'
-      }
-    end
-
-  end
 end

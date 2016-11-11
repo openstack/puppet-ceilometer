@@ -138,7 +138,7 @@ describe 'ceilometer::keystone::authtoken' do
         facts.merge!(OSDefaults.get_facts())
       end
 
-      it_configures 'ceilometer authtoken'
+      it_behaves_like 'ceilometer authtoken'
     end
   end
 

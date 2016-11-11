@@ -113,29 +113,27 @@ describe 'ceilometer::collector' do
     end
   end
 
-  context 'on Debian platforms' do
-    let :facts do
-      @default_facts.merge({ :osfamily => 'Debian' })
-    end
+  on_supported_os({
+    :supported_os => OSDefaults.get_supported_os
+  }).each do |os,facts|
+    context "on #{os}" do
+      let (:facts) do
+        facts.merge!(OSDefaults.get_facts())
+      end
 
-    let :platform_params do
-      { :collector_package_name => 'ceilometer-collector',
-        :collector_service_name => 'ceilometer-collector' }
-    end
+      let :platform_params do
+        case facts[:osfamily]
+        when 'Debian'
+          { :collector_package_name => 'ceilometer-collector',
+            :collector_service_name => 'ceilometer-collector' }
+        when 'RedHat'
+          { :collector_package_name => 'openstack-ceilometer-collector',
+            :collector_service_name => 'openstack-ceilometer-collector' }
+        end
+      end
 
-    it_configures 'ceilometer-collector'
+      it_behaves_like 'ceilometer-collector'
+    end
   end
 
-  context 'on RedHat platforms' do
-    let :facts do
-      @default_facts.merge({ :osfamily => 'RedHat' })
-    end
-
-    let :platform_params do
-      { :collector_package_name => 'openstack-ceilometer-collector',
-        :collector_service_name => 'openstack-ceilometer-collector' }
-    end
-
-    it_configures 'ceilometer-collector'
-  end
 end

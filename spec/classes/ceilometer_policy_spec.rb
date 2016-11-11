@@ -32,7 +32,7 @@ describe 'ceilometer::policy' do
         facts.merge!(OSDefaults.get_facts())
       end
 
-      it_configures 'ceilometer policies'
+      it_behaves_like 'ceilometer policies'
     end
   end
 
