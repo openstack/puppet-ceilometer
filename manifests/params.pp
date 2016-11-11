@@ -6,7 +6,7 @@
 class ceilometer::params {
   include ::openstacklib::defaults
 
-  $dbsync_command  = 'ceilometer-dbsync --config-file=/etc/ceilometer/ceilometer.conf'
+  $dbsync_command  = 'ceilometer-upgrade --config-file=/etc/ceilometer/ceilometer.conf --skip-gnocchi-resource-types'
   $expirer_command = 'ceilometer-expirer'
   $user            = 'ceilometer'
   $event_pipeline  = '/etc/ceilometer/event_pipeline.yaml'

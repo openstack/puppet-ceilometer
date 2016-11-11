@@ -1,0 +1,5 @@
+---
+fixes:
+  - In ocata cycle, ceilometer-dbsync has been removed
+    and ceilometer-upgrade must be used to create or
+    upgrade database schema and gnocchi resource types.

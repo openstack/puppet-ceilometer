@@ -6,7 +6,7 @@ describe 'ceilometer::db::sync' do
 
     it 'runs ceilometer-dbsync' do
       is_expected.to contain_exec('ceilometer-dbsync').with(
-        :command     => 'ceilometer-dbsync --config-file=/etc/ceilometer/ceilometer.conf ',
+        :command     => 'ceilometer-upgrade --config-file=/etc/ceilometer/ceilometer.conf --skip-gnocchi-resource-types ',
         :path        => '/usr/bin',
         :refreshonly => 'true',
         :user        => 'ceilometer',
@@ -22,7 +22,7 @@ describe 'ceilometer::db::sync' do
       end
 
       it { is_expected.to contain_exec('ceilometer-dbsync').with(
-        :command    => 'ceilometer-dbsync --config-file=/etc/ceilometer/ceilometer.conf --config-file=/etc/ceilometer/ceilometer_01.conf',
+        :command    => 'ceilometer-upgrade --config-file=/etc/ceilometer/ceilometer.conf --skip-gnocchi-resource-types --config-file=/etc/ceilometer/ceilometer_01.conf',
         :path       => '/usr/bin',
         :user       => 'ceilometer',
         :refreshonly => 'true',

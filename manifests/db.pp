@@ -41,7 +41,7 @@
 #   Defaults to $::os_service_default.
 #
 # [*sync_db*]
-#   (Optional) enable dbsync.
+#   (Optional) enable database schema installation.
 #   Defaults to true.
 #
 class ceilometer::db (
