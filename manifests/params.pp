@@ -6,10 +6,11 @@
 class ceilometer::params {
   include ::openstacklib::defaults
 
-  $dbsync_command  = 'ceilometer-upgrade --config-file=/etc/ceilometer/ceilometer.conf --skip-gnocchi-resource-types'
-  $expirer_command = 'ceilometer-expirer'
-  $user            = 'ceilometer'
-  $event_pipeline  = '/etc/ceilometer/event_pipeline.yaml'
+  $dbsync_command      = 'ceilometer-upgrade --config-file=/etc/ceilometer/ceilometer.conf --skip-gnocchi-resource-types'
+  $expirer_command     = 'ceilometer-expirer'
+  $user                = 'ceilometer'
+  $event_pipeline      = '/etc/ceilometer/event_pipeline.yaml'
+  $client_package_name = 'python-ceilometerclient'
 
   case $::osfamily {
     'RedHat': {
@@ -21,7 +22,6 @@ class ceilometer::params {
       $collector_package_name          = 'openstack-ceilometer-collector'
       $agent_notification_package_name = 'openstack-ceilometer-notification'
       $common_package_name             = 'openstack-ceilometer-common'
-      $client_package_name             = 'python-ceilometerclient'
       # service names
       $agent_central_service_name      = 'openstack-ceilometer-central'
       $agent_compute_service_name      = 'openstack-ceilometer-compute'
@@ -42,7 +42,6 @@ class ceilometer::params {
       $collector_package_name          = 'ceilometer-collector'
       $agent_notification_package_name = 'ceilometer-agent-notification'
       $common_package_name             = 'ceilometer-common'
-      $client_package_name             = 'python-ceilometerclient'
       # service names
       $agent_central_service_name      = 'ceilometer-agent-central'
       $agent_compute_service_name      = 'ceilometer-agent-compute'
