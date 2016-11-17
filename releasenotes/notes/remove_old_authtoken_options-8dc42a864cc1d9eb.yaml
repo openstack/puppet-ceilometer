@@ -1,0 +1,8 @@
+---
+other:
+  - removed deprecated ceilometer::api::keystone_user
+  - removed deprecated ceilometer::api::keystone_password
+  - removed deprecated ceilometer::api::keystone_tenant
+  - removed deprecated ceilometer::api::auth_uri
+  - removed deprecated ceilometer::api::identity_uri
+  - removed deprecated ceilometer::api::memcached_servers

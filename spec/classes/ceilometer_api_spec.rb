@@ -4,13 +4,15 @@ describe 'ceilometer::api' do
 
   let :pre_condition do
     "class { 'ceilometer': telemetry_secret => 's3cr3t' }
-     include ::ceilometer::db"
+     include ::ceilometer::db
+     class { '::ceilometer::keystone::authtoken':
+       password => 'a_big_secret',
+     }"
   end
 
   let :params do
     { :enabled        => true,
       :manage_service => true,
-      :keystone_password => 'ceilometer-passw0rd',
       :host           => '0.0.0.0',
       :port           => '8777',
       :package_ensure => 'latest',
@@ -58,34 +60,6 @@ describe 'ceilometer::api' do
       end
     end
 
-    context 'with deprecated parameters' do
-      before do
-        params.merge!({
-          :auth_uri           => 'https://10.0.0.1:5000/deprecated',
-          :keystone_user      => 'myuser',
-          :keystone_password  => 'mypasswd',
-          :identity_uri       => 'http://10.0.0.1:35357/deprecated',
-          :keystone_tenant    => 'service_project',
-          :memcached_servers  => ['memcached01:11211','memcached02:11211'],
-        })
-      end
-
-      it 'configures keystone_authtoken middleware' do
-        is_expected.to contain_ceilometer_config(
-          'keystone_authtoken/auth_uri').with_value(params[:auth_uri])
-        is_expected.to contain_ceilometer_config(
-          'keystone_authtoken/username').with_value(params[:keystone_user])
-        is_expected.to contain_ceilometer_config(
-          'keystone_authtoken/password').with_value(params[:keystone_password]).with_secret(true)
-        is_expected.to contain_ceilometer_config(
-          'keystone_authtoken/auth_url').with_value(params[:identity_uri])
-        is_expected.to contain_ceilometer_config(
-          'keystone_authtoken/project_name').with_value(params[:keystone_tenant])
-        is_expected.to contain_ceilometer_config(
-          'keystone_authtoken/memcached_servers').with_value('memcached01:11211,memcached02:11211')
-      end
-    end
-
     context 'with enable_proxy_headers_parsing' do
       before do
         params.merge!({:enable_proxy_headers_parsing => true })
@@ -121,7 +95,10 @@ describe 'ceilometer::api' do
       let :pre_condition do
         "include ::apache
          include ::ceilometer::db
-         class { 'ceilometer': telemetry_secret => 's3cr3t' }"
+         class { 'ceilometer': telemetry_secret => 's3cr3t' }
+         class { '::ceilometer::keystone::authtoken':
+           password => 'a_big_secret',
+         }"
       end
 
       it 'configures ceilometer-api service with Apache' do
@@ -142,7 +119,10 @@ describe 'ceilometer::api' do
       let :pre_condition do
         "include ::apache
          include ::ceilometer::db
-         class { 'ceilometer': telemetry_secret => 's3cr3t' }"
+         class { 'ceilometer': telemetry_secret => 's3cr3t' }
+         class { '::ceilometer::keystone::authtoken':
+           password => 'a_big_secret',
+         }"
       end
 
       it_raises 'a Puppet::Error', /Invalid service_name/
