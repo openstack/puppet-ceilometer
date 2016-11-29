@@ -21,6 +21,7 @@ describe 'ceilometer::agent::polling' do
 
   shared_examples_for 'ceilometer-polling' do
 
+    it { is_expected.to contain_class('ceilometer::deps') }
     it { is_expected.to contain_class('ceilometer::params') }
 
     context 'when compute_namespace => true' do
@@ -43,19 +44,12 @@ describe 'ceilometer::agent::polling' do
       is_expected.to contain_package('ceilometer-polling').with(
         :ensure => 'latest',
         :name   => platform_params[:agent_package_name],
-        :before => ['Service[ceilometer-polling]'],
         :tag    => ['openstack', 'ceilometer-package'],
       )
     end
 
     it 'configures polling namespaces' do
       is_expected.to contain_ceilometer_config('DEFAULT/polling_namespaces').with_value('central,compute,ipmi')
-    end
-
-    it 'ensures ceilometer-common is installed before the service' do
-      is_expected.to contain_package('ceilometer-common').with(
-        :before => /Service\[ceilometer-polling\]/
-      )
     end
 
     [{:enabled => true}, {:enabled => false}].each do |param_hash|

@@ -58,6 +58,7 @@ class ceilometer::api (
   $enable_proxy_headers_parsing = $::os_service_default,
 ) inherits ceilometer::params {
 
+  include ::ceilometer::deps
   include ::ceilometer::params
   include ::ceilometer::policy
 
@@ -65,11 +66,6 @@ class ceilometer::api (
     include ::ceilometer::keystone::authtoken
   }
 
-  Ceilometer_config<||> ~> Service[$service_name]
-  Class['ceilometer::policy'] ~> Service[$service_name]
-
-  Package['ceilometer-api'] -> Service[$service_name]
-  Package['ceilometer-api'] -> Class['ceilometer::policy']
   package { 'ceilometer-api':
     ensure => $package_ensure,
     name   => $::ceilometer::params::api_package_name,
@@ -84,8 +80,6 @@ class ceilometer::api (
     }
   }
 
-  Package['ceilometer-common'] -> Service[$service_name]
-
   if $service_name == $::ceilometer::params::api_service_name {
     service { 'ceilometer-api':
       ensure     => $service_ensure,
@@ -93,7 +87,6 @@ class ceilometer::api (
       enable     => $enabled,
       hasstatus  => true,
       hasrestart => true,
-      require    => Class['ceilometer::db'],
       tag        => 'ceilometer-service',
     }
   } elsif $service_name == 'httpd' {
@@ -104,7 +97,6 @@ class ceilometer::api (
       enable => false,
       tag    => 'ceilometer-service',
     }
-    Class['ceilometer::db'] -> Service[$service_name]
 
     # we need to make sure ceilometer-api/eventlet is stopped before trying to start apache
     Service['ceilometer-api'] -> Service[$service_name]

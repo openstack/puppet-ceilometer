@@ -4,6 +4,7 @@ describe 'ceilometer::client' do
 
   shared_examples_for 'ceilometer client' do
 
+    it { is_expected.to contain_class('ceilometer::deps') }
     it { is_expected.to contain_class('ceilometer::params') }
 
     it 'installs ceilometer client package' do

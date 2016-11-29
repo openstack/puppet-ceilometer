@@ -30,6 +30,8 @@ class ceilometer::config (
   $ceilometer_api_paste_ini    = {},
 ) {
 
+  include ::ceilometer::deps
+
   validate_hash($ceilometer_config)
   validate_hash($ceilometer_api_paste_ini)
 

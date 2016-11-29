@@ -63,6 +63,8 @@ class ceilometer::agent::auth (
   $auth_type                = 'password',
 ) {
 
+  include ::ceilometer::deps
+
   if ! $auth_cacert {
     ceilometer_config { 'service_credentials/ca_file': ensure => absent }
   } else {

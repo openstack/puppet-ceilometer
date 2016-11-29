@@ -21,6 +21,8 @@ class ceilometer::policy (
   $policy_path = '/etc/ceilometer/policy.json',
 ) {
 
+  include ::ceilometer::deps
+
   validate_hash($policies)
 
   Openstacklib::Policy::Base {

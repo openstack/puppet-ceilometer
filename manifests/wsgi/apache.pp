@@ -96,6 +96,7 @@ class ceilometer::wsgi::apache (
   $priority      = '10',
 ) {
 
+  include ::ceilometer::deps
   include ::ceilometer::params
   include ::apache
   include ::apache::mod::wsgi

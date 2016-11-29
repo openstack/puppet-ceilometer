@@ -223,6 +223,8 @@ class ceilometer::keystone::authtoken(
   $token_cache_time               = $::os_service_default,
 ) {
 
+  include ::ceilometer::deps
+
   if is_service_default($password) {
     fail('Please set password for ceilometer service user')
   }

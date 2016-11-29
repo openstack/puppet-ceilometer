@@ -40,7 +40,6 @@
 #  [*weekday*]
 #    (optional) Defaults to '*'.
 #
-
 class ceilometer::expirer (
   $enable_cron = true,
   $minute      = 1,
@@ -52,7 +51,7 @@ class ceilometer::expirer (
 
   include ::ceilometer::params
 
-  Package<| title == 'ceilometer-common' |> -> Class['ceilometer::expirer']
+  Anchor['ceilometer::install::end'] ~> Class['ceilometer::expirer']
 
   if $enable_cron {
     cron { 'ceilometer-expirer':

@@ -285,6 +285,7 @@ class ceilometer(
   $rabbit_virtual_host                = $::os_service_default,
 ) {
 
+  include ::ceilometer::deps
   include ::ceilometer::logging
   include ::ceilometer::params
 
@@ -319,14 +320,14 @@ deprecated. Please use ceilometer::default_transport_url instead.")
 
   group { 'ceilometer':
     name    => 'ceilometer',
-    require => Package['ceilometer-common'],
+    require => Anchor['ceilometer::install::end'],
   }
 
   user { 'ceilometer':
     name    => 'ceilometer',
     gid     => 'ceilometer',
     system  => true,
-    require => Package['ceilometer-common'],
+    require => Anchor['ceilometer::install::end'],
   }
 
   package { 'ceilometer-common':

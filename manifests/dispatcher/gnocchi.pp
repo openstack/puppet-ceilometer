@@ -34,6 +34,8 @@ class ceilometer::dispatcher::gnocchi (
   $resources_definition_file = $::os_service_default,
 ) {
 
+  include ::ceilometer::deps
+
   ceilometer_config {
     'dispatcher_gnocchi/filter_service_activity':   value => $filter_service_activity;
     'dispatcher_gnocchi/filter_project':            value => $filter_project;

@@ -104,6 +104,8 @@ class ceilometer::logging(
   $log_date_format               = $::os_service_default,
 ) {
 
+  include ::ceilometer::deps
+
   # NOTE(spredzy): In order to keep backward compatibility we rely on the pick function
   # to use ceilometer::<myparam> first then ceilometer::logging::<myparam>.
   $use_syslog_real = pick($::ceilometer::use_syslog,$use_syslog)

@@ -85,7 +85,7 @@ describe 'ceilometer' do
     it 'configures ceilometer group' do
       is_expected.to contain_group('ceilometer').with(
         :name    => 'ceilometer',
-        :require => 'Package[ceilometer-common]'
+        :require => 'Anchor[ceilometer::install::end]'
       )
     end
 
@@ -94,7 +94,7 @@ describe 'ceilometer' do
         :name    => 'ceilometer',
         :gid     => 'ceilometer',
         :system  => true,
-        :require => 'Package[ceilometer-common]'
+        :require => 'Anchor[ceilometer::install::end]'
       )
     end
 

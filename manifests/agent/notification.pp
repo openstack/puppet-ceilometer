@@ -80,17 +80,13 @@ class ceilometer::agent::notification (
   $event_pipeline_publishers = ['notifier://'],
 ) {
 
+  include ::ceilometer::deps
   include ::ceilometer::params
-
-  Ceilometer_config<||> ~> Service['ceilometer-agent-notification']
-
-  Package[$::ceilometer::params::agent_notification_package_name] ->
-  Service['ceilometer-agent-notification']
 
   ensure_resource('package', [$::ceilometer::params::agent_notification_package_name],
     {
       ensure => $package_ensure,
-      tag    => 'openstack'
+      tag    => ['openstack', 'ceilometer-package']
     }
   )
 
@@ -102,7 +98,6 @@ class ceilometer::agent::notification (
     }
   }
 
-  Package['ceilometer-common'] -> Service['ceilometer-agent-notification']
   service { 'ceilometer-agent-notification':
     ensure     => $service_ensure,
     name       => $::ceilometer::params::agent_notification_service_name,
@@ -119,11 +114,9 @@ class ceilometer::agent::notification (
       ensure                  => present,
       path                    => $::ceilometer::params::event_pipeline,
       content                 => template('ceilometer/event_pipeline.yaml.erb'),
-      selinux_ignore_defaults => true
+      selinux_ignore_defaults => true,
+      tag                     => 'event-pipeline',
     }
-
-    Package<| tag == 'ceilometer-package' |> -> File['event_pipeline']
-    File['event_pipeline'] ~> Service['ceilometer-agent-notification']
   }
 
   ceilometer_config {

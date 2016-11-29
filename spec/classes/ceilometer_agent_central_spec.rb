@@ -16,20 +16,14 @@ describe 'ceilometer::agent::central' do
 
   shared_examples_for 'ceilometer-agent-central' do
 
+    it { is_expected.to contain_class('ceilometer::deps') }
     it { is_expected.to contain_class('ceilometer::params') }
 
     it 'installs ceilometer-agent-central package' do
       is_expected.to contain_package('ceilometer-agent-central').with(
         :ensure => 'latest',
         :name   => platform_params[:agent_package_name],
-        :before => ['Service[ceilometer-agent-central]'],
         :tag    => ['openstack', 'ceilometer-package'],
-      )
-    end
-
-    it 'ensures ceilometer-common is installed before the service' do
-      is_expected.to contain_package('ceilometer-common').with(
-        :before => /Service\[ceilometer-agent-central\]/
       )
     end
 

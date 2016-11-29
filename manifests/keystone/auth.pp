@@ -87,6 +87,8 @@ class ceilometer::keystone::auth (
   $internal_url         = 'http://127.0.0.1:8777',
 ) {
 
+  include ::ceilometer::deps
+
   validate_string($password)
 
   ::keystone::resource::service_identity { 'ceilometer':

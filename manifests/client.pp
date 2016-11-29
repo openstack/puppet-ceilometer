@@ -12,6 +12,7 @@ class ceilometer::client (
   $ensure = 'present'
 ) {
 
+  include ::ceilometer::deps
   include ::ceilometer::params
 
   package { 'python-ceilometerclient':

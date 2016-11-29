@@ -16,6 +16,7 @@ describe 'ceilometer::agent::compute' do
 
   shared_examples_for 'ceilometer-agent-compute' do
 
+    it { is_expected.to contain_class('ceilometer::deps') }
     it { is_expected.to contain_class('ceilometer::params') }
 
     it 'installs ceilometer-agent-compute package' do

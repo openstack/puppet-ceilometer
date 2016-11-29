@@ -28,11 +28,9 @@ class ceilometer::agent::central (
   $coordination_url = undef,
 ) {
 
+  include ::ceilometer::deps
   include ::ceilometer::params
 
-  Ceilometer_config<||> ~> Service['ceilometer-agent-central']
-
-  Package['ceilometer-agent-central'] -> Service['ceilometer-agent-central']
   package { 'ceilometer-agent-central':
     ensure => $package_ensure,
     name   => $::ceilometer::params::agent_central_package_name,
@@ -47,7 +45,6 @@ class ceilometer::agent::central (
     }
   }
 
-  Package['ceilometer-common'] -> Service['ceilometer-agent-central']
   service { 'ceilometer-agent-central':
     ensure     => $service_ensure,
     name       => $::ceilometer::params::agent_central_service_name,

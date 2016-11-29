@@ -56,7 +56,7 @@ class ceilometer::db (
   $sync_db                 = true,
 ) {
 
-  Package<| title == 'ceilometer-common' |> -> Class['ceilometer::db']
+  include ::ceilometer::deps
 
   oslo::db { 'ceilometer_config':
     db_max_retries => $database_db_max_retries,

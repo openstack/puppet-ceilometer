@@ -42,6 +42,8 @@ class ceilometer::db::mysql(
   $collate       = 'utf8_general_ci',
 ) {
 
+  include ::ceilometer::deps
+
   validate_string($password)
 
   ::openstacklib::db::mysql { 'ceilometer':
@@ -54,5 +56,7 @@ class ceilometer::db::mysql(
     allowed_hosts => $allowed_hosts,
   }
 
-  ::Openstacklib::Db::Mysql['ceilometer'] ~> Exec<| title == 'ceilometer-dbsync' |>
+  Anchor['ceilometer::db::begin']
+  ~> Class['ceilometer::db::mysql']
+  ~> Anchor['ceilometer::db::end']
 }

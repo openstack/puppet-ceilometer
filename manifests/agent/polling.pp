@@ -42,6 +42,7 @@ class ceilometer::agent::polling (
   $coordination_url  = undef,
 ) inherits ceilometer {
 
+  include ::ceilometer::deps
   include ::ceilometer::params
 
   if $central_namespace {
@@ -92,10 +93,6 @@ class ceilometer::agent::polling (
       'DEFAULT/polling_namespaces': value => $namespaces_real
     }
   }
-
-  Ceilometer_config<||> ~> Service['ceilometer-polling']
-  Package['ceilometer-polling'] -> Service['ceilometer-polling']
-  Package['ceilometer-common'] -> Service['ceilometer-polling']
 
   service { 'ceilometer-polling':
     ensure     => $service_ensure,

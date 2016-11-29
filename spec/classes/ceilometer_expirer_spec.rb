@@ -32,6 +32,7 @@ describe 'ceilometer::expirer' do
 
   shared_examples_for 'ceilometer-expirer' do
 
+    it { is_expected.to contain_class('ceilometer::deps') }
     it { is_expected.to contain_class('ceilometer::params') }
 
     it 'installs ceilometer common package' do

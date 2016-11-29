@@ -32,6 +32,8 @@ class ceilometer::db::postgresql(
   $privileges = 'ALL',
 ) {
 
+  include ::ceilometer::deps
+
   ::openstacklib::db::postgresql { 'ceilometer':
     password_hash => postgresql_password($user, $password),
     dbname        => $dbname,
@@ -40,6 +42,7 @@ class ceilometer::db::postgresql(
     privileges    => $privileges,
   }
 
-  ::Openstacklib::Db::Postgresql['ceilometer']    ~> Exec<| title == 'ceilometer-dbsync' |>
-
+  Anchor['ceilometer::db::begin']
+  ~> Class['ceilometer::db::postgresql']
+  ~> Anchor['ceilometer::db::end']
 }

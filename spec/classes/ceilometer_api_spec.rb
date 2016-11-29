@@ -21,6 +21,7 @@ describe 'ceilometer::api' do
 
   shared_examples_for 'ceilometer-api' do
 
+    it { is_expected.to contain_class('ceilometer::deps') }
     it { is_expected.to contain_class('ceilometer::params') }
     it { is_expected.to contain_class('ceilometer::policy') }
     it { is_expected.to contain_class('ceilometer::keystone::authtoken') }
@@ -53,10 +54,11 @@ describe 'ceilometer::api' do
             :enable     => params[:enabled],
             :hasstatus  => true,
             :hasrestart => true,
-            :require    => 'Class[Ceilometer::Db]',
             :tag        => 'ceilometer-service',
           )
         end
+        it { is_expected.to contain_service('ceilometer-api').that_subscribes_to('Anchor[ceilometer::service::begin]')}
+        it { is_expected.to contain_service('ceilometer-api').that_notifies('Anchor[ceilometer::service::end]')}
       end
     end
 
