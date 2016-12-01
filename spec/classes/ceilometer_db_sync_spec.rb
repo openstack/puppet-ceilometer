@@ -10,6 +10,8 @@ describe 'ceilometer::db::sync' do
         :path        => '/usr/bin',
         :refreshonly => 'true',
         :user        => 'ceilometer',
+        :try_sleep   => 5,
+        :tries       => 10,
         :logoutput   => 'on_failure',
         :subscribe   => ['Anchor[ceilometer::install::end]',
                          'Anchor[ceilometer::config::end]',
@@ -30,7 +32,13 @@ describe 'ceilometer::db::sync' do
         :path       => '/usr/bin',
         :user       => 'ceilometer',
         :refreshonly => 'true',
-        :logoutput   => 'on_failure'
+        :try_sleep   => 5,
+        :tries       => 10,
+        :logoutput   => 'on_failure',
+        :subscribe   => ['Anchor[ceilometer::install::end]',
+                         'Anchor[ceilometer::config::end]',
+                         'Anchor[ceilometer::dbsync::begin]'],
+        :notify      => 'Anchor[ceilometer::dbsync::end]',
       )
       }
     end
