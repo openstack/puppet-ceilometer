@@ -49,6 +49,13 @@ describe 'ceilometer::wsgi::apache' do
         'docroot_group'               => 'ceilometer',
         'ssl'                         => 'true',
         'wsgi_daemon_process'         => 'ceilometer',
+        'wsgi_daemon_process_options' => {
+          'user'         => 'ceilometer',
+          'group'        => 'ceilometer',
+          'processes'    => 1,
+          'threads'      => "#{global_facts[:os_workers]}",
+          'display-name' => 'ceilometer_wsgi',
+        },
         'wsgi_process_group'          => 'ceilometer',
         'wsgi_script_aliases'         => { '/' => "#{platform_parameters[:wsgi_script_path]}/app" },
         'require'                     => 'File[ceilometer_wsgi]'
@@ -59,11 +66,12 @@ describe 'ceilometer::wsgi::apache' do
     describe 'when overriding parameters using different ports' do
       let :params do
         {
-          :servername  => 'dummy.host',
-          :bind_host   => '10.42.51.1',
-          :port        => 12345,
-          :ssl         => false,
-          :workers     => 37,
+          :servername                => 'dummy.host',
+          :bind_host                 => '10.42.51.1',
+          :port                      => 12345,
+          :ssl                       => false,
+          :wsgi_process_display_name => 'ceilometer',
+          :workers                   => 37,
         }
       end
 
@@ -76,6 +84,13 @@ describe 'ceilometer::wsgi::apache' do
         'docroot_group'               => 'ceilometer',
         'ssl'                         => 'false',
         'wsgi_daemon_process'         => 'ceilometer',
+        'wsgi_daemon_process_options' => {
+            'user'         => 'ceilometer',
+            'group'        => 'ceilometer',
+            'processes'    => '37',
+            'threads'      => "#{global_facts[:os_workers]}",
+            'display-name' => 'ceilometer',
+        },
         'wsgi_process_group'          => 'ceilometer',
         'wsgi_script_aliases'         => { '/' => "#{platform_parameters[:wsgi_script_path]}/app" },
         'require'                     => 'File[ceilometer_wsgi]'
@@ -91,7 +106,9 @@ describe 'ceilometer::wsgi::apache' do
     context "on #{os}" do
       let (:facts) do
         facts.merge!(OSDefaults.get_facts({
-          :fqdn => 'some.host.tld'
+          :os_workers     => 8,
+          :concat_basedir => '/var/lib/puppet/concat',
+          :fqdn           => 'some.host.tld'
         }))
       end
 

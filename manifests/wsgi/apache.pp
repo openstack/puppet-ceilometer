@@ -58,6 +58,10 @@
 #   (Optional) The number of threads for the vhost.
 #   Defaults to $::os_workers.
 #
+# [*wsgi_process_display_name*]
+#   (optional) Name of the WSGI process display-name.
+#   Defaults to undef
+#
 # [*ssl_cert*]
 # [*ssl_key*]
 # [*ssl_chain*]
@@ -79,21 +83,22 @@
 #   class { 'ceilometer::wsgi::apache': }
 #
 class ceilometer::wsgi::apache (
-  $servername    = $::fqdn,
-  $port          = 8777,
-  $bind_host     = undef,
-  $path          = '/',
-  $ssl           = true,
-  $workers       = 1,
-  $ssl_cert      = undef,
-  $ssl_key       = undef,
-  $ssl_chain     = undef,
-  $ssl_ca        = undef,
-  $ssl_crl_path  = undef,
-  $ssl_crl       = undef,
-  $ssl_certs_dir = undef,
-  $threads       = $::os_workers,
-  $priority      = '10',
+  $servername                 = $::fqdn,
+  $port                       = 8777,
+  $bind_host                  = undef,
+  $path                       = '/',
+  $ssl                        = true,
+  $workers                    = 1,
+  $ssl_cert                   = undef,
+  $ssl_key                    = undef,
+  $ssl_chain                  = undef,
+  $ssl_ca                     = undef,
+  $ssl_crl_path               = undef,
+  $ssl_crl                    = undef,
+  $ssl_certs_dir              = undef,
+  $wsgi_process_display_name  = undef,
+  $threads                    = $::os_workers,
+  $priority                   = '10',
 ) {
 
   include ::ceilometer::deps
@@ -105,27 +110,28 @@ class ceilometer::wsgi::apache (
   }
 
   ::openstacklib::wsgi::apache { 'ceilometer_wsgi':
-    bind_host           => $bind_host,
-    bind_port           => $port,
-    group               => 'ceilometer',
-    path                => $path,
-    priority            => $priority,
-    servername          => $servername,
-    ssl                 => $ssl,
-    ssl_ca              => $ssl_ca,
-    ssl_cert            => $ssl_cert,
-    ssl_certs_dir       => $ssl_certs_dir,
-    ssl_chain           => $ssl_chain,
-    ssl_crl             => $ssl_crl,
-    ssl_crl_path        => $ssl_crl_path,
-    ssl_key             => $ssl_key,
-    threads             => $threads,
-    user                => 'ceilometer',
-    workers             => $workers,
-    wsgi_daemon_process => 'ceilometer',
-    wsgi_process_group  => 'ceilometer',
-    wsgi_script_dir     => $::ceilometer::params::ceilometer_wsgi_script_path,
-    wsgi_script_file    => 'app',
-    wsgi_script_source  => $::ceilometer::params::ceilometer_wsgi_script_source,
+    bind_host                 => $bind_host,
+    bind_port                 => $port,
+    group                     => 'ceilometer',
+    path                      => $path,
+    priority                  => $priority,
+    servername                => $servername,
+    ssl                       => $ssl,
+    ssl_ca                    => $ssl_ca,
+    ssl_cert                  => $ssl_cert,
+    ssl_certs_dir             => $ssl_certs_dir,
+    ssl_chain                 => $ssl_chain,
+    ssl_crl                   => $ssl_crl,
+    ssl_crl_path              => $ssl_crl_path,
+    ssl_key                   => $ssl_key,
+    threads                   => $threads,
+    user                      => 'ceilometer',
+    workers                   => $workers,
+    wsgi_daemon_process       => 'ceilometer',
+    wsgi_process_display_name => $wsgi_process_display_name,
+    wsgi_process_group        => 'ceilometer',
+    wsgi_script_dir           => $::ceilometer::params::ceilometer_wsgi_script_path,
+    wsgi_script_file          => 'app',
+    wsgi_script_source        => $::ceilometer::params::ceilometer_wsgi_script_source,
   }
 }
