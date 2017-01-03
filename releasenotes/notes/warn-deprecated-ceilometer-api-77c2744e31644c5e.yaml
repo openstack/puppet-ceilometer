@@ -1,0 +1,4 @@
+---
+deprecations:
+  - ceilometer API has been deprecated in Ocata. Warning the user
+    when ceilometer::api class is loaded.

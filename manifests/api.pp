@@ -62,6 +62,8 @@ class ceilometer::api (
   include ::ceilometer::params
   include ::ceilometer::policy
 
+  warning('ceilometer-api has been deprecated in Ocata and will be removed in future. Please use Aodh, Gnocchi and Panko modules instead.')
+
   if $auth_strategy == 'keystone' {
     include ::ceilometer::keystone::authtoken
   }
