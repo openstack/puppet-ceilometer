@@ -38,6 +38,10 @@ describe 'ceilometer::agent::polling' do
               :before => /Package\[ceilometer-common\]/
           )
       end
+
+      it 'configures agent compute' do
+        is_expected.to contain_ceilometer_config('compute/instance_discovery_method').with_value('<SERVICE DEFAULT>')
+      end
     end
 
     it 'installs ceilometer-polling package' do
@@ -68,6 +72,17 @@ describe 'ceilometer::agent::polling' do
             :tag        => 'ceilometer-service',
           )
         end
+      end
+    end
+
+
+    context 'when setting instance_discovery_method' do
+      before do
+        params.merge!({ :instance_discovery_method   => 'naive' })
+      end
+
+      it 'configures agent compute instance discovery' do
+        is_expected.to contain_ceilometer_config('compute/instance_discovery_method').with_value('naive')
       end
     end
 

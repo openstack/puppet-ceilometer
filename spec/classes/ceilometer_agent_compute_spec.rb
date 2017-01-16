@@ -28,6 +28,10 @@ describe 'ceilometer::agent::compute' do
       )
     end
 
+    it 'configures agent compute default instance discovery' do
+      is_expected.to contain_ceilometer_config('compute/instance_discovery_method').with_value('<SERVICE DEFAULT>')
+    end
+
     it 'adds ceilometer user to nova group and, if required, to libvirt group' do
       if platform_params[:libvirt_group]
         is_expected.to contain_user('ceilometer').with_groups(['nova', "#{platform_params[:libvirt_group]}"])
@@ -67,6 +71,18 @@ describe 'ceilometer::agent::compute' do
         end
       end
     end
+
+
+    context 'when setting instance_discovery_method' do
+      before do
+        params.merge!({ :instance_discovery_method   => 'naive' })
+      end
+
+      it 'configures agent compute instance discovery' do
+        is_expected.to contain_ceilometer_config('compute/instance_discovery_method').with_value('naive')
+      end
+    end
+
 
     context 'with disabled service managing' do
       before do

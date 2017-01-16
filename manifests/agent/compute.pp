@@ -17,15 +17,28 @@
 #   (Optional) ensure state for package.
 #   Defaults to 'present'.
 #
+# [*instance_discovery_method*]
+#   (Optional) method to discovery instances running on compute node
+#   Defaults to $::os_service_default
+#    * naive: poll nova to get all instances
+#    * workload_partitioning: poll nova to get instances of the compute
+#    * libvirt_metadata: get instances from libvirt metadata
+#      but without instance metadata (recommended for Gnocchi backend).
+#
 class ceilometer::agent::compute (
-  $manage_service   = true,
-  $enabled          = true,
-  $package_ensure   = 'present',
+  $manage_service            = true,
+  $enabled                   = true,
+  $package_ensure            = 'present',
+  $instance_discovery_method = $::os_service_default,
 ) inherits ceilometer {
 
   warning('This class is deprecated. Please use ceilometer::agent::polling with compute namespace instead.')
 
   include ::ceilometer::params
+
+  ceilometer_config {
+    'compute/instance_discovery_method': value => $instance_discovery_method,
+  }
 
   Ceilometer_config<||> ~> Service['ceilometer-agent-compute']
 

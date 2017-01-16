@@ -1,0 +1,9 @@
+---
+features:
+  - Add instance_discovery_method to ceilometer agent compute and polling
+    classes so this option is configurable.
+upgrade:
+  - When upgrading, ensure that you dont have both the agent compute as well
+    as the polling classes initialized as that would trigger a duplicate
+    declaration. Ceilometer::agent::compute is deprecated and will be removed
+    in pike release.

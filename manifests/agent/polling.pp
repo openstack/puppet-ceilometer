@@ -32,14 +32,23 @@
 #   (Optional) The url to use for distributed group membership coordination.
 #   Defaults to undef.
 #
+# [*instance_discovery_method*]
+#   (Optional) method to discovery instances running on compute node
+#   Defaults to $::os_service_default
+#    * naive: poll nova to get all instances
+#    * workload_partitioning: poll nova to get instances of the compute
+#    * libvirt_metadata: get instances from libvirt metadata
+#      but without instance metadata (recommended for Gnocchi backend).
+#
 class ceilometer::agent::polling (
-  $manage_service    = true,
-  $enabled           = true,
-  $package_ensure    = 'present',
-  $central_namespace = true,
-  $compute_namespace = true,
-  $ipmi_namespace    = true,
-  $coordination_url  = undef,
+  $manage_service            = true,
+  $enabled                   = true,
+  $package_ensure            = 'present',
+  $central_namespace         = true,
+  $compute_namespace         = true,
+  $ipmi_namespace            = true,
+  $coordination_url          = undef,
+  $instance_discovery_method = $::os_service_default,
 ) inherits ceilometer {
 
   include ::ceilometer::deps
@@ -65,6 +74,10 @@ class ceilometer::agent::polling (
 
     Package <| title == 'ceilometer-common' |> -> User['ceilometer']
     Package <| title == 'nova-common' |> -> Package['ceilometer-common']
+
+    ceilometer_config {
+      'compute/instance_discovery_method': value => $instance_discovery_method,
+    }
   }
 
   if $ipmi_namespace {
