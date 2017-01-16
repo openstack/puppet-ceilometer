@@ -1,0 +1,4 @@
+---
+deprecations:
+  - ceilometer::agent::central is deprecated and will be removed in a future
+    release.  Please switch to ceilometer::agent::polling with central namespace.

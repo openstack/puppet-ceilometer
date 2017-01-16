@@ -31,6 +31,8 @@ class ceilometer::agent::central (
   include ::ceilometer::deps
   include ::ceilometer::params
 
+  warning('This class is deprecated. Please use ceilometer::agent::central with central namespace instead.')
+
   package { 'ceilometer-agent-central':
     ensure => $package_ensure,
     name   => $::ceilometer::params::agent_central_package_name,

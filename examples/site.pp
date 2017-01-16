@@ -18,7 +18,7 @@ node default {
   }
 
   # Configure the ceilometer database
-  # Only needed if ceilometer::agent::central or ceilometer::api are declared
+  # Only needed if ceilometer::agent::polling or ceilometer::api are declared
   class { '::ceilometer::db':
   }
 

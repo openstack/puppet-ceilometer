@@ -15,7 +15,7 @@ class { '::ceilometer::keystone::auth':
 }
 class { '::ceilometer::client': }
 class { '::ceilometer::expirer': }
-class { '::ceilometer::agent::central': }
+class { '::ceilometer::agent::polling': }
 class { '::ceilometer::agent::notification': }
 class { '::ceilometer::keystone::authtoken':
   password => 'a_big_secret',

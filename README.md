@@ -58,7 +58,7 @@ class { '::ceilometer':
 class { '::ceilometer::client': }
 class { '::ceilometer::collector': }
 class { '::ceilometer::expirer': }
-class { '::ceilometer::agent::central': }
+class { '::ceilometer::agent::polling': }
 class { '::ceilometer::agent::notification': }
 class { '::ceilometer::db': }
 class { '::ceilometer::api':
