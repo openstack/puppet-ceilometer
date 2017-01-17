@@ -1,0 +1,11 @@
+---
+upgrade:
+  - |
+    The group for libvirt has changed for the polling and compute agent and
+    the module now expects the Debian specific naming conventions which are
+    supplied in libvirt-bin 2.5.0.
+fixes:
+  - |
+    The libvirt group name for the polling and compute agents is now 'libvirt'
+    on Ubuntu. If trying to use the Ocata module with previous packages, you
+    may run into issues around the group name.

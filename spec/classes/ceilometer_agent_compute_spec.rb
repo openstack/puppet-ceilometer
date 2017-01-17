@@ -100,15 +100,9 @@ describe 'ceilometer::agent::compute' do
       let :platform_params do
         case facts[:osfamily]
         when 'Debian'
-          if facts[:operatingsystem] == 'Ubuntu'
-            { :agent_package_name => 'ceilometer-agent-compute',
-              :agent_service_name => 'ceilometer-agent-compute',
-              :libvirt_group      => 'libvirtd' }
-          else
             { :agent_package_name => 'ceilometer-agent-compute',
               :agent_service_name => 'ceilometer-agent-compute',
               :libvirt_group      => 'libvirt' }
-          end
         when 'RedHat'
           { :agent_package_name => 'openstack-ceilometer-compute',
             :agent_service_name => 'openstack-ceilometer-compute' }

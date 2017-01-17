@@ -119,15 +119,9 @@ describe 'ceilometer::agent::polling' do
       let :platform_params do
         case facts[:osfamily]
         when 'Debian'
-          if facts[:operatingsystem] == 'Ubuntu'
-            { :agent_package_name => 'ceilometer-polling',
-              :agent_service_name => 'ceilometer-polling',
-              :libvirt_group      => 'libvirtd' }
-          else
             { :agent_package_name => 'ceilometer-polling',
               :agent_service_name => 'ceilometer-polling',
               :libvirt_group      => 'libvirt' }
-          end
         when 'RedHat'
             { :agent_package_name => 'openstack-ceilometer-polling',
               :agent_service_name => 'openstack-ceilometer-polling' }

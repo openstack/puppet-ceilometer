@@ -49,16 +49,7 @@ class ceilometer::params {
       $collector_service_name          = 'ceilometer-collector'
       $api_service_name                = 'ceilometer-api'
       $agent_notification_service_name = 'ceilometer-agent-notification'
-
-      # Operating system specific
-      case $::operatingsystem {
-        'Ubuntu': {
-          $libvirt_group = 'libvirtd'
-        }
-        default: {
-          $libvirt_group = 'libvirt'
-        }
-      }
+      $libvirt_group                   = 'libvirt'
       $ceilometer_wsgi_script_path    = '/usr/lib/cgi-bin/ceilometer'
       $ceilometer_wsgi_script_source  = '/usr/lib/python2.7/dist-packages/ceilometer/api/app.wsgi'
     }

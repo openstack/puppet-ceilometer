@@ -109,6 +109,10 @@ class ceilometer::wsgi::apache (
     include ::apache::mod::ssl
   }
 
+  # NOTE(aschultz): needed because the packaging may introduce some apache
+  # configuration files that apache may remove. See LP#1657309
+  Anchor['ceilometer::install::end'] -> Class['apache']
+
   ::openstacklib::wsgi::apache { 'ceilometer_wsgi':
     bind_host                 => $bind_host,
     bind_port                 => $port,
