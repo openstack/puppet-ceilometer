@@ -50,10 +50,11 @@ To utilize the ceilometer module's functionality you will need to declare multip
 
 ```puppet
 class { '::ceilometer':
-  telemetry_secret    => 'secrete',
-  rabbit_userid       => 'ceilometer',
-  rabbit_password     => 'an_even_bigger_secret',
-  rabbit_host         => '127.0.0.1',
+  telemetry_secret      => 'secrete',
+  default_transport_url => 'rabbit://ceilometer:an_even_bigger_secret@127.0.0.1:5672',
+}
+class { '::ceilometer::keystone::auth':
+  password => 'a_big_secret',
 }
 class { '::ceilometer::client': }
 class { '::ceilometer::collector': }
@@ -61,10 +62,12 @@ class { '::ceilometer::expirer': }
 class { '::ceilometer::agent::polling': }
 class { '::ceilometer::agent::notification': }
 class { '::ceilometer::db': }
+class { '::ceilometer::keystone::authtoken':
+  password => 'a_big_secret',
+  auth_url => 'http://127.0.0.1:35357/',
+}
 class { '::ceilometer::api':
-  enabled               => true,
-  keystone_password     => 'a_big_secret',
-  keystone_identity_uri => 'http://127.0.0.1:35357/',
+  enabled => true,
 }
 ```
 
