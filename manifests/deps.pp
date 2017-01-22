@@ -24,6 +24,10 @@ class ceilometer::deps {
   ~> Service<| tag == 'ceilometer-service' |>
   ~> anchor { 'ceilometer::service::end': }
 
+  # all db settings should be applied and all packages should be installed
+  # before dbsync starts
+  Oslo::Db<||> -> Anchor['ceilometer::dbsync::begin']
+
   # policy config should occur in the config block also.
   Anchor['ceilometer::config::begin']
   -> Openstacklib::Policy::Base<||>
