@@ -1,0 +1,5 @@
+---
+fixes:
+  - Replace ceilometer dbsync with upgrade command.
+    dbsync has been deprecated. Also remove the
+    skip gnocchi opts as gnocchi is default now.
