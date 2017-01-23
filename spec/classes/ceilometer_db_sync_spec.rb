@@ -2,11 +2,11 @@ require 'spec_helper'
 
 describe 'ceilometer::db::sync' do
 
-  shared_examples_for 'ceilometer-dbsync' do
+  shared_examples_for 'ceilometer-upgrade' do
 
-    it 'runs ceilometer-dbsync' do
-      is_expected.to contain_exec('ceilometer-dbsync').with(
-        :command     => 'ceilometer-upgrade --config-file=/etc/ceilometer/ceilometer.conf --skip-gnocchi-resource-types ',
+    it 'runs ceilometer-upgrade' do
+      is_expected.to contain_exec('ceilometer-upgrade').with(
+        :command     => 'ceilometer-upgrade --skip-gnocchi-resource-types',
         :path        => '/usr/bin',
         :refreshonly => 'true',
         :user        => 'ceilometer',
@@ -27,8 +27,8 @@ describe 'ceilometer::db::sync' do
         }
       end
 
-      it { is_expected.to contain_exec('ceilometer-dbsync').with(
-        :command    => 'ceilometer-upgrade --config-file=/etc/ceilometer/ceilometer.conf --skip-gnocchi-resource-types --config-file=/etc/ceilometer/ceilometer_01.conf',
+      it { is_expected.to contain_exec('ceilometer-upgrade').with(
+        :command    => 'ceilometer-upgrade --config-file=/etc/ceilometer/ceilometer_01.conf',
         :path       => '/usr/bin',
         :user       => 'ceilometer',
         :refreshonly => 'true',
@@ -55,7 +55,7 @@ describe 'ceilometer::db::sync' do
         }))
       end
 
-      it_behaves_like 'ceilometer-dbsync'
+      it_behaves_like 'ceilometer-upgrade'
     end
   end
 
