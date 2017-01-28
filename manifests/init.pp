@@ -57,6 +57,16 @@
 #      transport://user:pass@host1:port[,hostN:portN]/virtual_host
 #    Defaults to $::os_service_default
 #
+# [*rpc_response_timeout*]
+#  (Optional) Seconds to wait for a response from a call.
+#  Defaults to $::os_service_default
+#
+# [*control_exchange*]
+#   (Optional) The default exchange under which topics are scoped. May be
+#   overridden by an exchange name specified in the transport_url
+#   option.
+#   Defaults to $::os_service_default
+#
 # [*notification_transport_url*]
 #   (optional) A URL representing the messaging driver to use for notifications
 #   and its full configuration. Transport URLs take the form:
@@ -243,6 +253,8 @@ class ceilometer(
   $use_stderr                         = undef,
   $log_facility                       = undef,
   $default_transport_url              = $::os_service_default,
+  $rpc_response_timeout               = $::os_service_default,
+  $control_exchange                   = $::os_service_default,
   $notification_transport_url         = $::os_service_default,
   $rpc_backend                        = $::os_service_default,
   $rabbit_ha_queues                   = $::os_service_default,
@@ -398,7 +410,9 @@ deprecated. Please use ceilometer::default_transport_url instead.")
   }
 
   oslo::messaging::default { 'ceilometer_config':
-    transport_url => $default_transport_url,
+    transport_url        => $default_transport_url,
+    rpc_response_timeout => $rpc_response_timeout,
+    control_exchange     => $control_exchange,
   }
 
   oslo::cache { 'ceilometer_config':

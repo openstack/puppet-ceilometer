@@ -124,6 +124,8 @@ describe 'ceilometer' do
 
     it 'configures default transport_url' do
       is_expected.to contain_ceilometer_config('DEFAULT/transport_url').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ceilometer_config('DEFAULT/rpc_response_timeout').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ceilometer_config('DEFAULT/control_exchange').with_value('<SERVICE DEFAULT>')
     end
 
     it 'configures notifications' do
@@ -137,10 +139,18 @@ describe 'ceilometer' do
     end
 
     context 'with overriden transport_url parameter' do
-      before { params.merge!( :default_transport_url => 'rabbit://rabbit_user:password@localhost:5673' ) }
+      before {
+        params.merge!(
+          :default_transport_url => 'rabbit://rabbit_user:password@localhost:5673',
+          :rpc_response_timeout  => '120',
+          :control_exchange      => 'ceilometer',
+        )
+      }
 
       it 'configures transport_url' do
         is_expected.to contain_ceilometer_config('DEFAULT/transport_url').with_value('rabbit://rabbit_user:password@localhost:5673')
+        is_expected.to contain_ceilometer_config('DEFAULT/rpc_response_timeout').with_value('120')
+        is_expected.to contain_ceilometer_config('DEFAULT/control_exchange').with_value('ceilometer')
       end
     end
 
