@@ -5,61 +5,66 @@
 #
 # === Parameters:
 #
-#  [*http_timeout*]
-#    (Optional) Timeout seconds for HTTP requests.
-#    Defaults to 600.
+# [*http_timeout*]
+#   (Optional) Timeout seconds for HTTP requests.
+#   Defaults to 600.
 #
-#  [*event_time_to_live*]
-#    (Optional) Number of seconds that events are kept in the database for
-#    (<= 0 means forever)
-#    Defaults to -1.
+# [*event_time_to_live*]
+#   (Optional) Number of seconds that events are kept in the database for
+#   (<= 0 means forever)
+#   Defaults to -1.
 #
-#  [*metering_time_to_live*]
-#    (Optional) Number of seconds that samples are kept in the database for
-#    (<= 0 means forever)
-#    Defaults to -1.
+# [*metering_time_to_live*]
+#   (Optional) Number of seconds that samples are kept in the database for
+#   (<= 0 means forever)
+#   Defaults to -1.
 #
-#  [*telemetry_secret*]
-#   (Required)  Secret key for signing messages.
+# [*telemetry_secret*]
+#  (Required)  Secret key for signing messages.
 #
-#  [*notification_topics*]
-#    (Optional) AMQP topic used for OpenStack notifications (list value)
-#    Defaults to 'notifications'.
+# [*notification_topics*]
+#   (Optional) AMQP topic used for OpenStack notifications (list value)
+#   Defaults to 'notifications'.
 #
-#  [*package_ensure*]
-#    (Optional) ensure state for package.
-#    Defaults to 'present'.
+# [*notification_driver*]
+#   (optional) Driver or drivers to handle sending notifications.
+#   Value can be a string or a list.
+#   Defaults to $::os_service_default
 #
-#  [*debug*]
-#    (Optional) Should the daemons log debug messages.
-#    Defaults to undef.
+# [*package_ensure*]
+#   (Optional) ensure state for package.
+#   Defaults to 'present'.
 #
-#  [*log_dir*]
-#    (Optional) Directory to which ceilometer logs are sent.
-#    If set to $::os_service_default, it will not log to any directory.
-#    Defaults to undef.
+# [*debug*]
+#   (Optional) Should the daemons log debug messages.
+#   Defaults to undef.
 #
-#  [*use_syslog*]
-#    (Optional) Use syslog for logging
-#    Defaults to undef.
+# [*log_dir*]
+#   (Optional) Directory to which ceilometer logs are sent.
+#   If set to $::os_service_default, it will not log to any directory.
+#   Defaults to undef.
 #
-#  [*use_stderr*]
-#    (Optional) Use stderr for logging
-#    Defaults to undef.
+# [*use_syslog*]
+#   (Optional) Use syslog for logging
+#   Defaults to undef.
 #
-#  [*log_facility*]
-#    (Optional) Syslog facility to receive log lines.
-#    Defaults to undef.
+# [*use_stderr*]
+#   (Optional) Use stderr for logging
+#   Defaults to undef.
+#
+# [*log_facility*]
+#   (Optional) Syslog facility to receive log lines.
+#   Defaults to undef.
 #
 # [*default_transport_url*]
-#    (optional) A URL representing the messaging driver to use and its full
-#    configuration. Transport URLs take the form:
-#      transport://user:pass@host1:port[,hostN:portN]/virtual_host
-#    Defaults to $::os_service_default
+#   (optional) A URL representing the messaging driver to use and its full
+#   configuration. Transport URLs take the form:
+#     transport://user:pass@host1:port[,hostN:portN]/virtual_host
+#   Defaults to $::os_service_default
 #
 # [*rpc_response_timeout*]
-#  (Optional) Seconds to wait for a response from a call.
-#  Defaults to $::os_service_default
+#   (Optional) Seconds to wait for a response from a call.
+#   Defaults to $::os_service_default
 #
 # [*control_exchange*]
 #   (Optional) The default exchange under which topics are scoped. May be
@@ -73,12 +78,12 @@
 #     transport://user:pass@host1:port[,hostN:portN]/virtual_host
 #   Defaults to $::os_service_default
 #
-#  [*rpc_backend*]
-#    The messaging driver to use, defaults to rabbit. Other drivers include
-#    amqp and zmq. (string value)
-#    Default to $::os_service_default
+# [*rpc_backend*]
+#   (optional) The messaging driver to use, defaults to rabbit. Other drivers include
+#   amqp and zmq. (string value)
+#   Default to $::os_service_default
 #
-
+#
 # [*rabbit_ha_queues*]
 #   (Optional) Use HA queues in RabbitMQ (x-ha-policy: all). If you change this
 #   option, you must wipe the RabbitMQ database. (boolean value)
@@ -95,28 +100,28 @@
 #   we check the heartbeat. (integer value)
 #   Defaults to $::os_service_default
 #
-#  [*rabbit_use_ssl*]
+# [*rabbit_use_ssl*]
 #   (Optional) Connect over SSL for RabbitMQ. (boolean value)
 #   Defaults to $::os_service_default
 #
-#  [*amqp_durable_queues*]
-#    (optional) Define queues as "durable" to rabbitmq.
-#    Defaults to $::os_service_default
+# [*amqp_durable_queues*]
+#   (optional) Define queues as "durable" to rabbitmq.
+#   Defaults to $::os_service_default
 #
-#  [*kombu_ssl_ca_certs*]
+# [*kombu_ssl_ca_certs*]
 #   (Optional) SSL certification authority file (valid only if SSL enabled).
 #   (string value)
 #   Defaults to $::os_service_default
 #
-#  [*kombu_ssl_certfile*]
+# [*kombu_ssl_certfile*]
 #   (Optional) SSL cert file (valid only if SSL enabled). (string value)
 #   Defaults to $::os_service_default
 #
-#  [*kombu_ssl_keyfile*]
+# [*kombu_ssl_keyfile*]
 #   (Optional) SSL key file (valid only if SSL enabled). (string value)
 #   Defaults to $::os_service_default
 #
-#  [*kombu_ssl_version*]
+# [*kombu_ssl_version*]
 #   (Optional) SSL version to use (valid only if SSL enabled). '
 #   Valid values are TLSv1 and SSLv23. SSLv2, SSLv3, TLSv1_1,
 #   and TLSv1_2 may be available on some distributions. (string value)
@@ -214,29 +219,29 @@
 #
 # [*alarm_history_time_to_live*]
 #
-#  [*rabbit_host*]
+# [*rabbit_host*]
 #   (Optional) The RabbitMQ broker address where a single node is used.
 #   (string value)
 #   Defaults to $::os_service_default
 #
-#  [*rabbit_port*]
+# [*rabbit_port*]
 #   (Optional) The RabbitMQ broker port where a single node is used.
 #   (port value)
 #   Defaults to $::os_service_default
 #
-#  [*rabbit_hosts*]
+# [*rabbit_hosts*]
 #   (Optional) RabbitMQ HA cluster host:port pairs. (array value)
 #   Defaults to $::os_service_default
 #
-#  [*rabbit_userid*]
+# [*rabbit_userid*]
 #   (Optional) The RabbitMQ userid. (string value)
 #   Defaults to $::os_service_default
 #
-#  [*rabbit_password*]
+# [*rabbit_password*]
 #   (Optional) The RabbitMQ password. (string value)
 #   Defaults to $::os_service_default
 #
-#  [*rabbit_virtual_host*]
+# [*rabbit_virtual_host*]
 #   (Optional) The RabbitMQ virtual host. (string value)
 #   Defaults to $::os_service_default
 #
@@ -246,6 +251,7 @@ class ceilometer(
   $metering_time_to_live              = '-1',
   $telemetry_secret                   = false,
   $notification_topics                = ['notifications'],
+  $notification_driver                = $::os_service_default,
   $package_ensure                     = 'present',
   $debug                              = undef,
   $log_dir                            = undef,
@@ -407,6 +413,7 @@ deprecated. Please use ceilometer::default_transport_url instead.")
   oslo::messaging::notifications { 'ceilometer_config':
     transport_url => $notification_transport_url,
     topics        => $notification_topics,
+    driver        => $notification_driver,
   }
 
   oslo::messaging::default { 'ceilometer_config':

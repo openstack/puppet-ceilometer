@@ -1,0 +1,4 @@
+---
+features:
+  - Add new parameter "notification_driver", driver or drivers to
+    handle sending notifications. Value can be a string or a list.

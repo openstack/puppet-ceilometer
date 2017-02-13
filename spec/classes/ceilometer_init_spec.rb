@@ -130,6 +130,7 @@ describe 'ceilometer' do
 
     it 'configures notifications' do
       is_expected.to contain_ceilometer_config('oslo_messaging_notifications/topics').with_value('notifications')
+      is_expected.to contain_ceilometer_config('oslo_messaging_notifications/driver').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ceilometer_config('oslo_messaging_notifications/transport_url').with_value('<SERVICE DEFAULT>')
     end
 
@@ -158,12 +159,14 @@ describe 'ceilometer' do
       before {
         params.merge!(
           :notification_topics        => ['notifications', 'custom'],
+          :notification_driver        => 'messagingv1',
           :notification_transport_url => 'rabbit://rabbit_user:password@localhost:5673',
         )
       }
 
       it 'configures notifications' do
         is_expected.to contain_ceilometer_config('oslo_messaging_notifications/topics').with_value('notifications,custom')
+        is_expected.to contain_ceilometer_config('oslo_messaging_notifications/driver').with_value('messagingv1')
         is_expected.to contain_ceilometer_config('oslo_messaging_notifications/transport_url').with_value('rabbit://rabbit_user:password@localhost:5673')
       end
     end
