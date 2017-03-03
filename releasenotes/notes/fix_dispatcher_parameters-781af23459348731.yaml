@@ -1,0 +1,7 @@
+---
+deprecations:
+  - meter_dispatcher and event_dispatcher options are now deprecated,
+    please use meter_dispatchers and event_dispatchers options instead.
+other:
+  - Switch meter_dispatchers and event_dispatchers parameters to
+    $::os_service_default fact.

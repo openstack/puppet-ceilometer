@@ -25,19 +25,31 @@
 #   (Optional) the ceilometer collector udp bind port.
 #   Defaults to '4952'.
 #
-# [*meter_dispatcher*]
+# [*meter_dispatchers*]
 #   (Optional) dispatcher driver(s) to process meter data.
 #   Can be an array or a string.
-#   Defaults to 'database'.
+#   Defaults to $::os_service_default.
 #
-# [*event_dispatcher*]
+# [*event_dispatchers*]
 #   (Optional) dispatcher driver(s) to process event data.
 #   Can be an array or a string.
-#   Defaults to 'database'.
+#   Defaults to $::os_service_default.
 #
 # [*collector_workers*]
 #   (Optional) Number of workers for collector service (integer value).
 #   Defaults to $::os_service_default.
+#
+# DEPRECATED PARAMETERS
+#
+# [*meter_dispatcher*]
+#   (Optional) dispatcher driver(s) to process meter data.
+#   Can be an array or a string.
+#   Defaults to undef.
+#
+# [*event_dispatcher*]
+#   (Optional) dispatcher driver(s) to process event data.
+#   Can be an array or a string.
+#   Defaults to undef.
 #
 class ceilometer::collector (
   $manage_service    = true,
@@ -46,8 +58,11 @@ class ceilometer::collector (
   $udp_address       = '0.0.0.0',
   $udp_port          = '4952',
   $collector_workers = $::os_service_default,
-  $meter_dispatcher  = 'database',
-  $event_dispatcher  = 'database',
+  $meter_dispatchers = $::os_service_default,
+  $event_dispatchers = $::os_service_default,
+  # DEPRECATED PARAMETERS
+  $meter_dispatcher  = undef,
+  $event_dispatcher  = undef,
 ) {
 
   include ::ceilometer::deps
@@ -59,12 +74,26 @@ class ceilometer::collector (
     fail("${udp_address} is not a valid ip and is not empty")
   }
 
+  if $meter_dispatcher {
+    warning('The meter_dispatcher parameter is deprecated, please use meter_dispatchers instead.')
+    $meter_dispatchers_real = $meter_dispatcher
+  } else {
+    $meter_dispatchers_real = $meter_dispatchers
+  }
+
+  if $event_dispatcher {
+    warning('The event_dispatcher parameter is deprecated, please use event_dispatchers instead.')
+    $event_dispatchers_real = $event_dispatcher
+  } else {
+    $event_dispatchers_real = $event_dispatchers
+  }
+
   ceilometer_config {
     'collector/udp_address':     value => $udp_address;
     'collector/udp_port':        value => $udp_port;
     'collector/workers':         value => $collector_workers;
-    'DEFAULT/meter_dispatchers': value => join(any2array($meter_dispatcher), ',');
-    'DEFAULT/event_dispatchers': value => join(any2array($event_dispatcher), ',');
+    'DEFAULT/meter_dispatchers': value => join(any2array($meter_dispatchers_real), ',');
+    'DEFAULT/event_dispatchers': value => join(any2array($event_dispatchers_real), ',');
   }
 
   ensure_resource( 'package', [$::ceilometer::params::collector_package_name],

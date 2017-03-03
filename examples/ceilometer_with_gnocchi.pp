@@ -30,7 +30,7 @@ class { '::ceilometer::wsgi::apache':
 }
 
 class { '::ceilometer::collector':
-  meter_dispatcher => ['gnocchi'],
+  meter_dispatchers => ['gnocchi'],
 }
 class { '::ceilometer::dispatcher::gnocchi':
   filter_service_activity   => false,
