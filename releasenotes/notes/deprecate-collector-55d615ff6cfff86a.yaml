@@ -1,0 +1,6 @@
+---
+deprecations:
+  - Ceilometer collector is deprecated in pike release. Configure the
+    publisher directly instead to decide where the data should be sent
+    in pipeline.yaml. For example, set publisher to gnocchi:// to send
+    the data from ceilometer to gnocchi and bypass collector completely.
