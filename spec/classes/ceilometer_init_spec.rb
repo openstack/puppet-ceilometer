@@ -271,11 +271,13 @@ describe 'ceilometer' do
 
   shared_examples_for 'rabbit with SSL support' do
     context "with default parameters" do
-      it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_use_ssl').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/kombu_ssl_ca_certs').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/kombu_ssl_certfile').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/kombu_ssl_keyfile').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/kombu_ssl_version').with_value('<SERVICE DEFAULT>') }
+    it { is_expected.to contain_oslo__messaging__rabbit('ceilometer_config').with(
+      :rabbit_use_ssl     => '<SERVICE DEFAULT>',
+      :kombu_ssl_ca_certs => '<SERVICE DEFAULT>',
+      :kombu_ssl_certfile => '<SERVICE DEFAULT>',
+      :kombu_ssl_keyfile  => '<SERVICE DEFAULT>',
+      :kombu_ssl_version  => '<SERVICE DEFAULT>',
+    )}
     end
 
     context "with SSL enabled with kombu" do
@@ -287,11 +289,13 @@ describe 'ceilometer' do
         :kombu_ssl_version  => 'TLSv1'
       ) }
 
-      it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_use_ssl').with_value(true) }
-      it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/kombu_ssl_ca_certs').with_value('/path/to/ca.crt') }
-      it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/kombu_ssl_certfile').with_value('/path/to/cert.crt') }
-      it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/kombu_ssl_keyfile').with_value('/path/to/cert.key') }
-      it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/kombu_ssl_version').with_value('TLSv1') }
+    it { is_expected.to contain_oslo__messaging__rabbit('ceilometer_config').with(
+      :rabbit_use_ssl     => true,
+      :kombu_ssl_ca_certs => '/path/to/ca.crt',
+      :kombu_ssl_certfile => '/path/to/cert.crt',
+      :kombu_ssl_keyfile  => '/path/to/cert.key',
+      :kombu_ssl_version  => 'TLSv1'
+    )}
     end
 
     context "with SSL enabled without kombu" do
@@ -299,11 +303,9 @@ describe 'ceilometer' do
         :rabbit_use_ssl  => true
       ) }
 
-      it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_use_ssl').with_value(true) }
-      it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/kombu_ssl_ca_certs').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/kombu_ssl_certfile').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/kombu_ssl_keyfile').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/kombu_ssl_version').with_value('<SERVICE DEFAULT>') }
+    it { is_expected.to contain_oslo__messaging__rabbit('ceilometer_config').with(
+      :rabbit_use_ssl     => true,
+    )}
     end
 
     context "with SSL wrongly configured" do
