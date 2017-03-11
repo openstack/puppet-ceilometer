@@ -68,6 +68,8 @@ class ceilometer::collector (
   include ::ceilometer::deps
   include ::ceilometer::params
 
+  warning('This class is deprecated. Now the pipeline.yaml can be configured directly to send data eg: gnocchi://')
+
   # We accept udp_address to be set to empty instead of the usual undef to stay
   # close to the "strange" upstream interface.
   if (is_ip_address($udp_address) != true and $udp_address != '' ){
