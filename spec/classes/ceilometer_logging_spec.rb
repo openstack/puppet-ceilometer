@@ -54,7 +54,7 @@ describe 'ceilometer::logging' do
   end
 
   shared_examples 'basic default logging settings' do
-    it 'configures ceilometer logging settins with default values' do
+    it 'configures ceilometer logging settings with default values' do
       is_expected.to contain_ceilometer_config('DEFAULT/use_syslog').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_ceilometer_config('DEFAULT/use_stderr').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_ceilometer_config('DEFAULT/log_dir').with(:value => '/var/log/ceilometer')
@@ -63,7 +63,7 @@ describe 'ceilometer::logging' do
   end
 
   shared_examples 'basic non-default logging settings' do
-    it 'configures ceilometer logging settins with non-default values' do
+    it 'configures ceilometer logging settings with non-default values' do
       is_expected.to contain_ceilometer_config('DEFAULT/use_syslog').with(:value => 'true')
       is_expected.to contain_ceilometer_config('DEFAULT/use_stderr').with(:value => 'false')
       is_expected.to contain_ceilometer_config('DEFAULT/syslog_log_facility').with(:value => 'LOG_FOO')
