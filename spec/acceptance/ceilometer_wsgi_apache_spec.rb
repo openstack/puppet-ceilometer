@@ -14,7 +14,7 @@ describe 'ceilometer with mysql' do
 
       # TODO(aschultz): remove after fix for LP#1621384 hits RDO
       include ::gnocchi::client
-      Package['python-gnocchiclient'] -> Exec[ceilometer-dbsync]
+      Package['python-gnocchiclient'] -> Exec[ceilometer-upgrade]
 
       rabbitmq_user { 'ceilometer':
         admin    => true,
@@ -36,14 +36,18 @@ describe 'ceilometer with mysql' do
         telemetry_secret      => 'secrete',
         default_transport_url => 'rabbit://ceilometer:an_even_bigger_secret@127.0.0.1:5672',
       }
+      class { '::ceilometer::keystone::auth':
+        password => 'a_big_secret',
+      }
       class { '::ceilometer::db::mysql':
         password => 'a_big_secret',
       }
       class { '::ceilometer::db':
         database_connection => 'mysql+pymysql://ceilometer:a_big_secret@127.0.0.1/ceilometer?charset=utf8',
+	sync_db             => false,
       }
-      class { '::ceilometer::keystone::auth':
-        password => 'a_big_secret',
+      class { '::ceilometer::db::sync':
+        extra_params => '--skip-gnocchi-resource-types',
       }
       class { '::ceilometer::client': }
       class { '::ceilometer::collector': }
