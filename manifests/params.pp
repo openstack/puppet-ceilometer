@@ -10,6 +10,7 @@ class ceilometer::params {
   $expirer_command     = 'ceilometer-expirer'
   $user                = 'ceilometer'
   $event_pipeline      = '/etc/ceilometer/event_pipeline.yaml'
+  $pipeline            = '/etc/ceilometer/pipeline.yaml'
   $client_package_name = 'python-ceilometerclient'
 
   case $::osfamily {

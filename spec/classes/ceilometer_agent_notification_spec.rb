@@ -171,6 +171,23 @@ describe 'ceilometer::agent::notification' do
       ) }
         it { is_expected.not_to contain_file('event_pipeline') }
     end
+
+    context "with pipeline management enabled" do
+      before { params.merge!(
+        :manage_pipeline => true
+      ) }
+
+      it { is_expected.to contain_file('pipeline').with(
+        'path' => '/etc/ceilometer/pipeline.yaml',
+      ) }
+    end
+
+    context "with pipeline management disabled" do
+      before { params.merge!(
+        :manage_pipeline => false
+      ) }
+        it { is_expected.not_to contain_file('pipeline') }
+    end
   end
 
   on_supported_os({

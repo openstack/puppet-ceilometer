@@ -1,0 +1,5 @@
+---
+fixes:
+  - Add ability to configure pipeline yaml publishers. The default is
+    gnocchi. If you are using collector, override this param to
+    publisher:// instead.

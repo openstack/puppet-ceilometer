@@ -67,6 +67,16 @@
 #   for alarms.
 #   Defaults to ['gnocchi://'],
 #
+# [*manage_pipeline*]
+#   (Optional) Whether to manage pipeline.yaml
+#   Defaults to false
+#
+# [*pipeline_publishers*]
+#   (Optional) A list of publishers to put in pipeline.yaml.
+#   By default all the data is dispatched to gnocchi
+#   Defaults to ['gnocchi://'], If you are using collector
+#   override this to notifier:// instead.
+#
 class ceilometer::agent::notification (
   $manage_service            = true,
   $enabled                   = true,
@@ -78,6 +88,8 @@ class ceilometer::agent::notification (
   $package_ensure            = 'present',
   $manage_event_pipeline     = false,
   $event_pipeline_publishers = ['gnocchi://'],
+  $manage_pipeline           = false,
+  $pipeline_publishers       = ['gnocchi://'],
 ) {
 
   include ::ceilometer::deps
@@ -116,6 +128,18 @@ class ceilometer::agent::notification (
       content                 => template('ceilometer/event_pipeline.yaml.erb'),
       selinux_ignore_defaults => true,
       tag                     => 'event-pipeline',
+    }
+  }
+
+  if ($manage_pipeline) {
+    validate_array($pipeline_publishers)
+
+    file { 'pipeline':
+      ensure                  => present,
+      path                    => $::ceilometer::params::pipeline,
+      content                 => template('ceilometer/pipeline.yaml.erb'),
+      selinux_ignore_defaults => true,
+      tag                     => 'pipeline',
     }
   }
 
