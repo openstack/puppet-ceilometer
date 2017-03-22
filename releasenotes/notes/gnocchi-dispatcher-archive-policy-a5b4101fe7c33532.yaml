@@ -1,0 +1,4 @@
+---
+deprecations:
+  - archive_policy option of ceilometer::dispatcher::gnocchi is now deprecated
+    for removal, the parameter has no effect.
