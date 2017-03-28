@@ -124,6 +124,6 @@ class ceilometer::agent::notification (
     'notification/store_events'             : value => $store_events;
     'notification/disable_non_metric_meters': value => $disable_non_metric_meters;
     'notification/workers'                  : value => $notification_workers;
-    'notification/messaging_urls'           : value => $messaging_urls;
+    'notification/messaging_urls'           : value => $messaging_urls, secret => true;
   }
 }

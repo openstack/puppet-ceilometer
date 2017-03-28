@@ -109,7 +109,7 @@ describe 'ceilometer::agent::notification' do
       it 'configures two messaging urls' do
         is_expected.to contain_ceilometer_config('notification/messaging_urls').with_value(
           ['rabbit://rabbit_user:password@localhost/nova', 'rabbit://rabbit_user:password@localhost/neutron']
-        )
+        ).with_secret(true)
       end
     end
 
