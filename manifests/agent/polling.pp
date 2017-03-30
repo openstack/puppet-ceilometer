@@ -56,6 +56,8 @@ class ceilometer::agent::polling (
 
   if $central_namespace {
     $central_namespace_name = 'central'
+  } else {
+    $central_namespace_name = ''
   }
 
   if $compute_namespace {
@@ -78,10 +80,14 @@ class ceilometer::agent::polling (
     ceilometer_config {
       'compute/instance_discovery_method': value => $instance_discovery_method,
     }
+  } else {
+    $compute_namespace_name = ''
   }
 
   if $ipmi_namespace {
     $ipmi_namespace_name = 'ipmi'
+  } else {
+    $ipmi_namespace_name = ''
   }
 
   if $manage_service {
