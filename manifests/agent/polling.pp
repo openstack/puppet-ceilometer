@@ -46,6 +46,8 @@ class ceilometer::agent::polling (
 
   if $central_namespace {
     $central_namespace_name = 'central'
+  } else {
+    $central_namespace_name = ''
   }
 
   if $compute_namespace {
@@ -64,10 +66,14 @@ class ceilometer::agent::polling (
 
     Package <| title == 'ceilometer-common' |> -> User['ceilometer']
     Package <| title == 'nova-common' |> -> Package['ceilometer-common']
+  } else {
+    $compute_namespace_name = ''
   }
 
   if $ipmi_namespace {
     $ipmi_namespace_name = 'ipmi'
+  } else {
+    $ipmi_namespace_name = ''
   }
 
   if $manage_service {
