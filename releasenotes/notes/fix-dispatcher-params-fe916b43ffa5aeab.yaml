@@ -1,0 +1,4 @@
+---
+fixes:
+  - Fix dispatcher params to not convert the array into string. This way
+    its compatible with service defaults.
