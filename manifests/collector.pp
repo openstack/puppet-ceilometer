@@ -94,8 +94,8 @@ class ceilometer::collector (
     'collector/udp_address':     value => $udp_address;
     'collector/udp_port':        value => $udp_port;
     'collector/workers':         value => $collector_workers;
-    'DEFAULT/meter_dispatchers': value => join(any2array($meter_dispatchers_real), ',');
-    'DEFAULT/event_dispatchers': value => join(any2array($event_dispatchers_real), ',');
+    'DEFAULT/meter_dispatchers': value => any2array($meter_dispatchers_real);
+    'DEFAULT/event_dispatchers': value => any2array($event_dispatchers_real);
   }
 
   ensure_resource( 'package', [$::ceilometer::params::collector_package_name],
