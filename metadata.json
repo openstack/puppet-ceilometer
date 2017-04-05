@@ -1,73 +1,73 @@
 {
-  "name": "openstack-ceilometer",
-  "version": "11.0.0-dev",
-  "author": "eNovance and OpenStack Contributors",
-  "summary": "Puppet module for OpenStack Ceilometer",
-  "license": "Apache-2.0",
-  "source": "git://github.com/openstack/puppet-ceilometer.git",
-  "project_page": "https://launchpad.net/puppet-ceilometer",
-  "issues_url": "https://bugs.launchpad.net/puppet-ceilometer",
-  "requirements": [
-    {
-      "name": "pe",
-      "version_requirement": "4.x"
-    },
-    {
-      "name": "puppet",
-      "version_requirement": "4.x"
-    }
-  ],
-  "operatingsystem_support": [
-    {
-      "operatingsystem": "Debian",
-      "operatingsystemrelease": [
-        "8"
-      ]
-    },
-    {
-      "operatingsystem": "Fedora",
-      "operatingsystemrelease": [
-        "24"
-      ]
-    },
-    {
-      "operatingsystem": "RedHat",
-      "operatingsystemrelease": [
-        "7"
-      ]
-    },
-    {
-      "operatingsystem": "Ubuntu",
-      "operatingsystemrelease": [
-        "16.04"
-      ]
-    }
-  ],
-  "description": "Installs and configures OpenStack Ceilometer (Telemetry).",
-  "dependencies": [
-    {
-      "name": "puppetlabs/apache",
-      "version_requirement": ">=1.0.0 <2.0.0"
-    },
-    {
-      "name": "puppetlabs/inifile",
-      "version_requirement": ">=1.0.0 <2.0.0"
-    },
-    {
-      "name": "openstack/keystone",
-      "version_requirement": ">=11.0.0 <12.0.0"
-    },
-    {
-      "name": "puppetlabs/stdlib",
-      "version_requirement": ">=4.0.0 <5.0.0"
-    },
-    {
-      "name": "openstack/openstacklib",
-      "version_requirement": ">=11.0.0 <12.0.0"
-    },
-    {
-      "name": "openstack/oslo",
-      "version_requirement": ">=11.0.0 <12.0.0"
-    }
-  ]
+    "author": "eNovance and OpenStack Contributors",
+    "dependencies": [
+        {
+            "name": "puppetlabs/apache",
+            "version_requirement": ">=1.0.0 <2.0.0"
+        },
+        {
+            "name": "puppetlabs/inifile",
+            "version_requirement": ">=1.0.0 <2.0.0"
+        },
+        {
+            "name": "openstack/keystone",
+            "version_requirement": ">=11.0.0 <12.0.0"
+        },
+        {
+            "name": "puppetlabs/stdlib",
+            "version_requirement": ">=4.0.0 <5.0.0"
+        },
+        {
+            "name": "openstack/openstacklib",
+            "version_requirement": ">=11.0.0 <12.0.0"
+        },
+        {
+            "name": "openstack/oslo",
+            "version_requirement": ">=11.0.0 <12.0.0"
+        }
+    ],
+    "description": "Installs and configures OpenStack Ceilometer (Telemetry).",
+    "issues_url": "https://bugs.launchpad.net/puppet-ceilometer",
+    "license": "Apache-2.0",
+    "name": "openstack-ceilometer",
+    "operatingsystem_support": [
+        {
+            "operatingsystem": "Debian",
+            "operatingsystemrelease": [
+                "8"
+            ]
+        },
+        {
+            "operatingsystem": "Fedora",
+            "operatingsystemrelease": [
+                "24"
+            ]
+        },
+        {
+            "operatingsystem": "RedHat",
+            "operatingsystemrelease": [
+                "7"
+            ]
+        },
+        {
+            "operatingsystem": "Ubuntu",
+            "operatingsystemrelease": [
+                "16.04"
+            ]
+        }
+    ],
+    "project_page": "https://launchpad.net/puppet-ceilometer",
+    "requirements": [
+        {
+            "name": "pe",
+            "version_requirement": "4.x"
+        },
+        {
+            "name": "puppet",
+            "version_requirement": "4.x"
+        }
+    ],
+    "source": "git://github.com/openstack/puppet-ceilometer.git",
+    "summary": "Puppet module for OpenStack Ceilometer",
+    "version": "11.0.0"
 }
