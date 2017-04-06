@@ -1,0 +1,4 @@
+---
+fixes:
+  - Update the default event publisher to be gnocchi://. This is the
+    default upstream.

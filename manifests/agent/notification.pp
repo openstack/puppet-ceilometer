@@ -65,7 +65,7 @@
 #   (Optional) A list of publishers to put in event_pipeline.yaml
 #   Add 'notifier://?topic=alarm.all' to the list if you are using Aodh
 #   for alarms.
-#   Defaults to ['notifier://'],
+#   Defaults to ['gnocchi://'],
 #
 class ceilometer::agent::notification (
   $manage_service            = true,
@@ -77,7 +77,7 @@ class ceilometer::agent::notification (
   $messaging_urls            = $::os_service_default,
   $package_ensure            = 'present',
   $manage_event_pipeline     = false,
-  $event_pipeline_publishers = ['notifier://'],
+  $event_pipeline_publishers = ['gnocchi://'],
 ) {
 
   include ::ceilometer::deps
