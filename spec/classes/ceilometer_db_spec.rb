@@ -6,14 +6,16 @@ describe 'ceilometer::db' do
 
     context 'with default parameters' do
 
-      it { is_expected.to contain_ceilometer_config('database/db_max_retries').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_class('ceilometer::params') }
       it { is_expected.to contain_class('ceilometer::db::sync') }
-      it { is_expected.to contain_ceilometer_config('database/connection').with_value('mysql://ceilometer:ceilometer@localhost/ceilometer').with_secret(true) }
-      it { is_expected.to contain_ceilometer_config('database/idle_timeout').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_ceilometer_config('database/min_pool_size').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_ceilometer_config('database/max_retries').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_ceilometer_config('database/retry_interval').with_value('<SERVICE DEFAULT>') }
+      it { is_expected.to contain_oslo__db('ceilometer_config').with(
+        :db_max_retries => '<SERVICE DEFAULT>',
+        :connection     => 'mysql://ceilometer:ceilometer@localhost/ceilometer',
+        :idle_timeout   => '<SERVICE DEFAULT>',
+        :min_pool_size  => '<SERVICE DEFAULT>',
+        :max_retries    => '<SERVICE DEFAULT>',
+        :retry_interval => '<SERVICE DEFAULT>',
+      )}
 
     end
 
@@ -29,24 +31,28 @@ describe 'ceilometer::db' do
           :sync_db                 => false }
       end
 
-      it { is_expected.to contain_ceilometer_config('database/db_max_retries').with_value('-1') }
       it { is_expected.not_to contain_class('ceilometer::db::sync') }
-      it { is_expected.to contain_ceilometer_config('database/connection').with_value('mongodb://localhost:1234/ceilometer').with_secret(true) }
-      it { is_expected.to contain_ceilometer_config('database/idle_timeout').with_value('3601') }
-      it { is_expected.to contain_ceilometer_config('database/min_pool_size').with_value('2') }
-      it { is_expected.to contain_ceilometer_config('database/max_retries').with_value('11') }
-      it { is_expected.to contain_ceilometer_config('database/retry_interval').with_value('11') }
+      it { is_expected.to contain_oslo__db('ceilometer_config').with(
+        :db_max_retries => '-1',
+        :connection     => 'mongodb://localhost:1234/ceilometer',
+        :idle_timeout   => '3601',
+        :min_pool_size  => '2',
+        :max_retries    => '11',
+        :retry_interval => '11',
+      )}
 
     end
 
     context 'with pymysql connection' do
       let :params do
-        { :database_connection     => 'mysql+pymysql://ceilometer:ceilometer@localhost/ceilometer' }
+        { :database_connection => 'mysql+pymysql://ceilometer:ceilometer@localhost/ceilometer' }
       end
 
       it { is_expected.to contain_class('ceilometer::params') }
       it { is_expected.to contain_class('ceilometer::db::sync') }
-      it { is_expected.to contain_ceilometer_config('database/connection').with_value('mysql+pymysql://ceilometer:ceilometer@localhost/ceilometer').with_secret(true) }
+      it { is_expected.to contain_oslo__db('ceilometer_config').with(
+        :connection => 'mysql+pymysql://ceilometer:ceilometer@localhost/ceilometer',
+      )}
     end
 
     context 'with mongodb backend' do
@@ -65,7 +71,7 @@ describe 'ceilometer::db' do
 
     context 'with incorrect database_connection string' do
       let :params do
-        { :database_connection     => 'redis://ceilometer:ceilometer@localhost/ceilometer', }
+        { :database_connection => 'redis://ceilometer:ceilometer@localhost/ceilometer', }
       end
 
       it_raises 'a Puppet::Error', /validate_re/
@@ -73,7 +79,7 @@ describe 'ceilometer::db' do
 
     context 'with postgresql backend' do
       let :params do
-        { :database_connection     => 'postgresql://ceilometer:ceilometer@localhost/ceilometer', }
+        { :database_connection => 'postgresql://ceilometer:ceilometer@localhost/ceilometer', }
       end
 
       it 'install the proper backend package' do
@@ -83,7 +89,7 @@ describe 'ceilometer::db' do
 
     context 'with incorrect pymysql database_connection string' do
       let :params do
-        { :database_connection     => 'foo+pymysql://ceilometer:ceilometer@localhost/ceilometer', }
+        { :database_connection => 'foo+pymysql://ceilometer:ceilometer@localhost/ceilometer', }
       end
 
       it_raises 'a Puppet::Error', /validate_re/
@@ -94,7 +100,7 @@ describe 'ceilometer::db' do
   shared_examples_for 'ceilometer::db on Debian' do
     context 'with sqlite backend' do
       let :params do
-        { :database_connection     => 'sqlite:///var/lib/ceilometer.db', }
+        { :database_connection => 'sqlite:///var/lib/ceilometer.db', }
       end
 
       it 'install the proper backend package' do
