@@ -136,7 +136,7 @@ describe 'ceilometer::agent::notification' do
           "      transformers:",
           "      triggers:",
           "      publishers:",
-          "          - notifier://",
+          "          - gnocchi://",
       ])}
     end
 
