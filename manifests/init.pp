@@ -206,6 +206,14 @@
 #   (Optional) Password for message broker authentication
 #   Defaults to $::os_service_default.
 #
+# [*snmpd_readonly_username*]
+#   (Optional) User name for snmpd authentication
+#   Defaults to $::os_service_default.
+#
+# [*snmpd_readonly_user_password*]
+#   (Optional) Password for snmpd authentication
+#   Defaults to $::os_service_default.
+#
 # [*purge_config*]
 #   (optional) Whether to set only the specified config options
 #   in the ceilometer config.
@@ -291,6 +299,8 @@ class ceilometer(
   $amqp_sasl_config_name              = $::os_service_default,
   $amqp_username                      = $::os_service_default,
   $amqp_password                      = $::os_service_default,
+  $snmpd_readonly_username            = $::os_service_default,
+  $snmpd_readonly_user_password       = $::os_service_default,
   $purge_config                       = false,
   # DEPRECATED PARAMETERS
   $alarm_history_time_to_live         = undef,
@@ -408,6 +418,8 @@ deprecated. Please use ceilometer::default_transport_url instead.")
     'publisher/telemetry_secret'          : value => $telemetry_secret_real, secret => true;
     'database/event_time_to_live'         : value => $event_time_to_live;
     'database/metering_time_to_live'      : value => $metering_time_to_live;
+    'hardware/readonly_user_name'         : value => $snmpd_readonly_username;
+    'hardware/readonly_user_password'     : value => $snmpd_readonly_user_password;
   }
 
   oslo::messaging::notifications { 'ceilometer_config':

@@ -134,6 +134,11 @@ describe 'ceilometer' do
       is_expected.to contain_ceilometer_config('oslo_messaging_notifications/transport_url').with_value('<SERVICE DEFAULT>')
     end
 
+    it 'configures snmpd auth' do
+      is_expected.to contain_ceilometer_config('hardware/readonly_user_name').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ceilometer_config('hardware/readonly_user_password').with_value('<SERVICE DEFAULT>')
+    end
+
     context 'with rabbitmq durable queues configured' do
       before { params.merge!( :amqp_durable_queues => true ) }
       it_configures 'rabbit with durable queues'
