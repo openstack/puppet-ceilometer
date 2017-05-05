@@ -33,6 +33,7 @@ describe 'ceilometer with mysql' do
 
       # Ceilometer resources
       class { '::ceilometer':
+        debug                 => true,
         telemetry_secret      => 'secrete',
         default_transport_url => 'rabbit://ceilometer:an_even_bigger_secret@127.0.0.1:5672',
       }
