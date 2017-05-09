@@ -117,6 +117,24 @@ describe 'ceilometer::agent::polling' do
       end
     end
 
+    context "with polling management enabled" do
+      before { params.merge!(
+        :manage_polling   => true
+      ) }
+
+      it { is_expected.to contain_file('polling').with(
+        'path' => '/etc/ceilometer/polling.yaml',
+      ) }
+    end
+
+    context "with polling management disabled" do
+      before { params.merge!(
+        :manage_polling   => false
+      ) }
+
+      it { is_expected.not_to contain_file('polling') }
+    end
+
     it 'configures central agent' do
       is_expected.to contain_ceilometer_config('coordination/backend_url').with_value( params[:coordination_url] )
     end

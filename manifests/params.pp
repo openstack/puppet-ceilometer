@@ -11,6 +11,7 @@ class ceilometer::params {
   $user                = 'ceilometer'
   $event_pipeline      = '/etc/ceilometer/event_pipeline.yaml'
   $pipeline            = '/etc/ceilometer/pipeline.yaml'
+  $polling             = '/etc/ceilometer/polling.yaml'
   $client_package_name = 'python-ceilometerclient'
 
   case $::osfamily {
