@@ -144,6 +144,7 @@ class ceilometer::agent::polling (
       path                    => $::ceilometer::params::polling,
       content                 => template('ceilometer/polling.yaml.erb'),
       selinux_ignore_defaults => true,
+      tag                     => 'ceilometer-yamls',
     }
   }
 }

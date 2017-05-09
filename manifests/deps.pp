@@ -35,7 +35,7 @@ class ceilometer::deps {
 
   # Ensure files are modified in the config block
   Anchor['ceilometer::config::begin']
-  -> File<| tag == 'event-pipeline' |>
+  -> File<| tag == 'ceilometer-yamls' |>
   ~> Anchor['ceilometer::config::end']
 
   # Installation or config changes will always restart services.
