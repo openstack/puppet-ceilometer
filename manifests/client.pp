@@ -15,6 +15,9 @@ class ceilometer::client (
   include ::ceilometer::deps
   include ::ceilometer::params
 
+  warning('This class is deprecated and will be removed in future releases.
+           Use gnocchi, aodh or panko clients to access data instead.')
+
   package { 'python-ceilometerclient':
     ensure => $ensure,
     name   => $::ceilometer::params::client_package_name,

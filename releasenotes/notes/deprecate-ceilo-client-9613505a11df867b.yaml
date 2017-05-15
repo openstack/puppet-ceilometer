@@ -1,0 +1,4 @@
+---
+deprecations:
+  - Deprecate ceilometer::client as api is deprecated. Instead use gnocchi,
+    aodh and panko clients directly to query data.
