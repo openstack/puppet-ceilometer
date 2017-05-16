@@ -1,0 +1,4 @@
+---
+deprecations:
+  - memcached_servers option is now deprecated and will be removed in
+    the future release, please use memcache_servers instead.

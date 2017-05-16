@@ -4,24 +4,24 @@ describe 'ceilometer' do
 
   let :params do
     {
-      :http_timeout               => '600',
-      :event_time_to_live         => '604800',
-      :metering_time_to_live      => '604800',
-      :telemetry_secret           => 'metering-s3cr3t',
-      :package_ensure             => 'present',
-      :debug                      => 'False',
-      :log_dir                    => '/var/log/ceilometer',
-      :use_stderr                 => 'True',
-      :purge_config               => false,
+      :http_timeout          => '600',
+      :event_time_to_live    => '604800',
+      :metering_time_to_live => '604800',
+      :telemetry_secret      => 'metering-s3cr3t',
+      :package_ensure        => 'present',
+      :debug                 => 'False',
+      :log_dir               => '/var/log/ceilometer',
+      :use_stderr            => 'True',
+      :purge_config          => false,
     }
   end
 
   let :rabbit_params do
     {
-      :rabbit_host        => '127.0.0.1',
-      :rabbit_port        => 5672,
-      :rabbit_userid      => 'guest',
-      :rabbit_password    => '',
+      :rabbit_host     => '127.0.0.1',
+      :rabbit_port     => 5672,
+      :rabbit_userid   => 'guest',
+      :rabbit_password => '',
     }
   end
 
@@ -139,6 +139,10 @@ describe 'ceilometer' do
       is_expected.to contain_ceilometer_config('hardware/readonly_user_password').with_value('<SERVICE DEFAULT>')
     end
 
+    it 'configures cache backend' do
+      is_expected.to contain_ceilometer_config('cache/memcache_servers').with_value('<SERVICE DEFAULT>')
+    end
+
     context 'with rabbitmq durable queues configured' do
       before { params.merge!( :amqp_durable_queues => true ) }
       it_configures 'rabbit with durable queues'
@@ -157,6 +161,18 @@ describe 'ceilometer' do
         is_expected.to contain_ceilometer_config('DEFAULT/transport_url').with_value('rabbit://rabbit_user:password@localhost:5673')
         is_expected.to contain_ceilometer_config('DEFAULT/rpc_response_timeout').with_value('120')
         is_expected.to contain_ceilometer_config('DEFAULT/control_exchange').with_value('ceilometer')
+      end
+    end
+
+    context 'with overriden cache parameter' do
+      before {
+        params.merge!(
+          :memcache_servers => 'host1:11211,host2:11211',
+        )
+      }
+
+      it 'configures cache backend' do
+        is_expected.to contain_ceilometer_config('cache/memcache_servers').with_value('host1:11211,host2:11211')
       end
     end
 
