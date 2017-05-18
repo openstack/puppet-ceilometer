@@ -44,6 +44,7 @@ describe 'ceilometer::expirer' do
 
     it 'configures a cron' do
       is_expected.to contain_cron('ceilometer-expirer').with(
+        :ensure      => 'present',
         :command     => 'ceilometer-expirer',
         :environment => 'PATH=/bin:/usr/bin:/usr/sbin SHELL=/bin/sh',
         :user        => 'ceilometer',
@@ -60,7 +61,19 @@ describe 'ceilometer::expirer' do
         params.merge!({
           :enable_cron => false })
       end
-      it { is_expected.to_not contain_cron('ceilometer-expirer') }
+      it {
+        is_expected.to contain_cron('ceilometer-expirer').with(
+          :ensure      => 'absent',
+          :command     => 'ceilometer-expirer',
+          :environment => 'PATH=/bin:/usr/bin:/usr/sbin SHELL=/bin/sh',
+          :user        => 'ceilometer',
+          :minute      => 1,
+          :hour        => 0,
+          :monthday    => '*',
+          :month       => '*',
+          :weekday     => '*'
+        )
+      }
     end
 
   end
