@@ -83,7 +83,6 @@
 #   amqp and zmq. (string value)
 #   Default to $::os_service_default
 #
-#
 # [*rabbit_ha_queues*]
 #   (Optional) Use HA queues in RabbitMQ (x-ha-policy: all). If you change this
 #   option, you must wipe the RabbitMQ database. (boolean value)
@@ -98,6 +97,10 @@
 # [*rabbit_heartbeat_rate*]
 #   (Optional) How often times during the heartbeat_timeout_threshold
 #   we check the heartbeat. (integer value)
+#   Defaults to $::os_service_default
+#
+#  [*rabbit_qos_prefetch_count*]
+#   (Optional) Specifies the number of messages to prefetch.
 #   Defaults to $::os_service_default
 #
 # [*rabbit_use_ssl*]
@@ -278,6 +281,7 @@ class ceilometer(
   $rabbit_ha_queues                   = $::os_service_default,
   $rabbit_heartbeat_timeout_threshold = $::os_service_default,
   $rabbit_heartbeat_rate              = $::os_service_default,
+  $rabbit_qos_prefetch_count          = $::os_service_default,
   $amqp_durable_queues                = $::os_service_default,
   $rabbit_use_ssl                     = $::os_service_default,
   $kombu_ssl_ca_certs                 = $::os_service_default,
@@ -396,6 +400,7 @@ please use memcache_servers instead.")
       rabbit_ha_queues            => $rabbit_ha_queues,
       heartbeat_timeout_threshold => $rabbit_heartbeat_timeout_threshold,
       heartbeat_rate              => $rabbit_heartbeat_rate,
+      rabbit_qos_prefetch_count   => $rabbit_qos_prefetch_count,
       amqp_durable_queues         => $amqp_durable_queues,
       rabbit_use_ssl              => $rabbit_use_ssl,
       kombu_ssl_ca_certs          => $kombu_ssl_ca_certs,
