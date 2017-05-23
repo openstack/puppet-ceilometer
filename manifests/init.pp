@@ -138,7 +138,7 @@
 #   (string value)
 #   Defaults to $::os_service_default
 #
-# [*memcached_servers*]
+# [*memcache_servers*]
 #   (Optional) A list of memcached server(s) to use for caching. (list value)
 #   Defaults to $::os_service_default
 #
@@ -253,6 +253,10 @@
 #   (Optional) The RabbitMQ virtual host. (string value)
 #   Defaults to $::os_service_default
 #
+# [*memcached_servers*]
+#   (Optional) A list of memcached server(s) to use for caching. (list value)
+#   Defaults to $::os_service_default
+#
 class ceilometer(
   $http_timeout                       = '600',
   $event_time_to_live                 = '-1',
@@ -282,7 +286,7 @@ class ceilometer(
   $kombu_ssl_version                  = $::os_service_default,
   $kombu_reconnect_delay              = $::os_service_default,
   $kombu_compression                  = $::os_service_default,
-  $memcached_servers                  = $::os_service_default,
+  $memcache_servers                   = $::os_service_default,
   $amqp_server_request_prefix         = $::os_service_default,
   $amqp_broadcast_prefix              = $::os_service_default,
   $amqp_group_request_prefix          = $::os_service_default,
@@ -311,6 +315,7 @@ class ceilometer(
   $rabbit_userid                      = $::os_service_default,
   $rabbit_password                    = $::os_service_default,
   $rabbit_virtual_host                = $::os_service_default,
+  $memcached_servers                  = undef,
 ) {
 
   include ::ceilometer::deps
@@ -344,6 +349,15 @@ class ceilometer(
     warning("ceilometer::rabbit_host, ceilometer::rabbit_hosts, ceilometer::rabbit_password, \
 ceilometer::rabbit_port, ceilometer::rabbit_userid and ceilometer::rabbit_virtual_host are \
 deprecated. Please use ceilometer::default_transport_url instead.")
+  }
+
+  if $memcached_servers {
+    warning("memcached_servers parameter is deprecated and will be removed in the future release, \
+please use memcache_servers instead.")
+    $memcache_servers_real = $memcached_servers
+  }
+  else {
+    $memcache_servers_real = $memcache_servers
   }
 
   group { 'ceilometer':
@@ -435,6 +449,6 @@ deprecated. Please use ceilometer::default_transport_url instead.")
   }
 
   oslo::cache { 'ceilometer_config':
-    memcache_servers => $memcached_servers,
+    memcache_servers => $memcache_servers_real,
   }
 }
