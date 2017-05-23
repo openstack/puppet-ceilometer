@@ -16,7 +16,7 @@ Puppet::Type.type(:ceilometer_api_paste_ini).provide(
   end
 
   def self.file_path
-    '/etc/ceilometer/api-paste.ini'
+    '/etc/ceilometer/api_paste.ini'
   end
 
   # added for backwards compatibility with older versions of inifile

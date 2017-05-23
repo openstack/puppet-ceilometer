@@ -20,7 +20,7 @@
 #       value: barValue
 #
 # [*ceilometer_api_paste_ini*]
-#   (optional) Allow configuration of /etc/ceilometer/api-paste.ini options.
+#   (optional) Allow configuration of /etc/ceilometer/api_paste.ini options.
 #
 #   NOTE: The configuration MUST NOT be already handled by this module
 #   or Puppet catalog compilation will fail with duplicate resources.

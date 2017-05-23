@@ -3,7 +3,7 @@ Puppet::Type.newtype(:ceilometer_api_paste_ini) do
   ensurable
 
   newparam(:name, :namevar => true) do
-    desc 'Section/setting name to manage from /etc/ceilometer/api-paste.ini'
+    desc 'Section/setting name to manage from /etc/ceilometer/api_paste.ini'
     newvalues(/\S+\/\S+/)
   end
 
