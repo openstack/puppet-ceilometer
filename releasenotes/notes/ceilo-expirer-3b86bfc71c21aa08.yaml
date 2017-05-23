@@ -1,0 +1,5 @@
+---
+upgrade:
+  - When ceilometer::expirer::enable_cron is set to False, Puppet will
+    try to remove the crontab. It's useful when you upgrade from Ocata
+    to Pike and you want the crontab to be removed (the service is deprecated).

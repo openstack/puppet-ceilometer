@@ -23,6 +23,8 @@
 #
 #  [*enable_cron*]
 #    (optional) Whether to configure a crontab entry to run the expiry.
+#    When set to False, Puppet will try to remove the crontab.
+#    It's useful when we upgrade from Ocata to Pike and want to remove it.
 #    Defaults to true.
 #
 #  [*minute*]
@@ -54,16 +56,21 @@ class ceilometer::expirer (
   Anchor['ceilometer::install::end'] ~> Class['ceilometer::expirer']
 
   if $enable_cron {
-    cron { 'ceilometer-expirer':
-      command     => $ceilometer::params::expirer_command,
-      environment => 'PATH=/bin:/usr/bin:/usr/sbin SHELL=/bin/sh',
-      user        => 'ceilometer',
-      minute      => $minute,
-      hour        => $hour,
-      monthday    => $monthday,
-      month       => $month,
-      weekday     => $weekday
-    }
+    $ensure = 'present'
+  } else {
+    $ensure = 'absent'
+  }
+
+  cron { 'ceilometer-expirer':
+    ensure      => $ensure,
+    command     => $ceilometer::params::expirer_command,
+    environment => 'PATH=/bin:/usr/bin:/usr/sbin SHELL=/bin/sh',
+    user        => 'ceilometer',
+    minute      => $minute,
+    hour        => $hour,
+    monthday    => $monthday,
+    month       => $month,
+    weekday     => $weekday
   }
 
 }
