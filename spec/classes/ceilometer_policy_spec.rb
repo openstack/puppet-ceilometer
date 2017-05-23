@@ -20,7 +20,9 @@ describe 'ceilometer::policy' do
         :key   => 'context_is_admin',
         :value => 'foo:bar'
       })
-      is_expected.to contain_ceilometer_config('oslo_policy/policy_file').with_value('/etc/ceilometer/policy.json')
+      is_expected.to contain_oslo__policy('ceilometer_config').with(
+        :policy_file => '/etc/ceilometer/policy.json',
+      )
     end
   end
 
