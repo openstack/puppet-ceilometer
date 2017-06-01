@@ -13,8 +13,10 @@ describe 'ceilometer::db' do
         :connection     => 'mysql://ceilometer:ceilometer@localhost/ceilometer',
         :idle_timeout   => '<SERVICE DEFAULT>',
         :min_pool_size  => '<SERVICE DEFAULT>',
+        :max_pool_size  => '<SERVICE DEFAULT>',
         :max_retries    => '<SERVICE DEFAULT>',
         :retry_interval => '<SERVICE DEFAULT>',
+        :max_overflow   => '<SERVICE DEFAULT>',
       )}
 
     end
@@ -26,8 +28,10 @@ describe 'ceilometer::db' do
           :database_connection     => 'mongodb://localhost:1234/ceilometer',
           :database_idle_timeout   => '3601',
           :database_min_pool_size  => '2',
+          :database_max_pool_size  => '11',
           :database_max_retries    => '11',
           :database_retry_interval => '11',
+          :database_max_overflow   => '21',
           :sync_db                 => false }
       end
 
@@ -37,8 +41,10 @@ describe 'ceilometer::db' do
         :connection     => 'mongodb://localhost:1234/ceilometer',
         :idle_timeout   => '3601',
         :min_pool_size  => '2',
+        :max_pool_size  => '11',
         :max_retries    => '11',
         :retry_interval => '11',
+        :max_overflow   => '21',
       )}
 
     end
