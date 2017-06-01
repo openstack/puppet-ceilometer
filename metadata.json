@@ -69,5 +69,5 @@
     ],
     "source": "git://github.com/openstack/puppet-ceilometer.git",
     "summary": "Puppet module for OpenStack Ceilometer",
-    "version": "11.1.0-dev"
+    "version": "11.1.0"
 }
