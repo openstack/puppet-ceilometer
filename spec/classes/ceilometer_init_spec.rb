@@ -84,6 +84,7 @@ describe 'ceilometer' do
 
     it 'configures ceilometer group' do
       is_expected.to contain_group('ceilometer').with(
+        :ensure  => 'present',
         :name    => 'ceilometer',
         :require => 'Anchor[ceilometer::install::end]'
       )
@@ -91,6 +92,7 @@ describe 'ceilometer' do
 
     it 'configures ceilometer user' do
       is_expected.to contain_user('ceilometer').with(
+        :ensure  => 'present',
         :name    => 'ceilometer',
         :gid     => 'ceilometer',
         :system  => true,
