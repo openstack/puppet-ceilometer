@@ -1,7 +1,7 @@
 Team and repository tags
 ========================
 
-[![Team and repository tags](http://governance.openstack.org/badges/puppet-ceilometer.svg)](http://governance.openstack.org/reference/tags/index.html)
+[![Team and repository tags](https://governance.openstack.org/badges/puppet-ceilometer.svg)](http://governance.openstack.org/reference/tags/index.html)
 
 <!-- Change things from this point on -->
 
@@ -46,7 +46,7 @@ Setup
 
 ### Beginning with ceilometer
 
-To utilize the ceilometer module's functionality you will need to declare multiple resources. This is not an exhaustive list of all the components needed. We recommend that you consult and understand the [core openstack](http://docs.openstack.org) documentation to assist you in understanding the available deployment options.
+To utilize the ceilometer module's functionality you will need to declare multiple resources. This is not an exhaustive list of all the components needed. We recommend that you consult and understand the [core openstack](https://docs.openstack.org) documentation to assist you in understanding the available deployment options.
 
 ```puppet
 class { '::ceilometer':
@@ -131,7 +131,7 @@ Development
 
 Developer documentation for the entire puppet-openstack project
 
-* http://docs.openstack.org/developer/puppet-openstack-guide/
+* https://docs.openstack.org/developer/puppet-openstack-guide/
 
 Contributors
 ------------
