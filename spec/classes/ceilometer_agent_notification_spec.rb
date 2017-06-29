@@ -119,7 +119,10 @@ describe 'ceilometer::agent::notification' do
       ) }
 
       it { is_expected.to contain_file('event_pipeline').with(
-        'path' => '/etc/ceilometer/event_pipeline.yaml',
+        'path'  => '/etc/ceilometer/event_pipeline.yaml',
+        'owner' => 'root',
+        'group' => 'ceilometer',
+        'mode'  => '0640',
       ) }
 
       it { 'configures event_pipeline with the default notifier'
@@ -179,6 +182,9 @@ describe 'ceilometer::agent::notification' do
 
       it { is_expected.to contain_file('pipeline').with(
         'path' => '/etc/ceilometer/pipeline.yaml',
+        'mode'  => '0640',
+        'owner' => 'root',
+        'group' => 'ceilometer',
       ) }
     end
 
