@@ -36,10 +36,6 @@
 #   (Optional) Acknowledge message when event persistence fails.
 #   Defaults to true.
 #
-# [*store_events*]
-#   (Optional) Save event details.
-#   Defaults to false.
-#
 # [*disable_non_metric_meters*]
 #   (Optional) Disable or enable the collection of non-metric meters.
 #   Default to $::os_service_default.
@@ -77,11 +73,16 @@
 #   Defaults to ['gnocchi://'], If you are using collector
 #   override this to notifier:// instead.
 #
+# === DEPRECATED PARAMETERS:
+# [*store_events*]
+#   (Optional) Save event details.
+#   This option has been removed since Newton.
+#
+
 class ceilometer::agent::notification (
   $manage_service            = true,
   $enabled                   = true,
   $ack_on_event_error        = true,
-  $store_events              = false,
   $disable_non_metric_meters = $::os_service_default,
   $notification_workers      = $::os_service_default,
   $messaging_urls            = $::os_service_default,
@@ -90,10 +91,15 @@ class ceilometer::agent::notification (
   $event_pipeline_publishers = ['gnocchi://'],
   $manage_pipeline           = false,
   $pipeline_publishers       = ['gnocchi://'],
+  $store_events              = undef,
 ) {
 
   include ::ceilometer::deps
   include ::ceilometer::params
+
+  if $store_events != undef {
+    warning('store_events has been removed since Newton.')
+  }
 
   ensure_resource('package', [$::ceilometer::params::agent_notification_package_name],
     {

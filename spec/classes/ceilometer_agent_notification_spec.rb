@@ -29,8 +29,7 @@ describe 'ceilometer::agent::notification' do
   let :params do
     { :manage_service     => true,
       :enabled            => true,
-      :ack_on_event_error => true,
-      :store_events       => false }
+      :ack_on_event_error => true }
   end
 
   shared_examples_for 'ceilometer-agent-notification' do
@@ -48,7 +47,6 @@ describe 'ceilometer::agent::notification' do
     it 'configures notifications parameters in ceilometer.conf' do
       is_expected.to contain_ceilometer_config('notification/workers').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ceilometer_config('notification/ack_on_event_error').with_value( params[:ack_on_event_error] )
-      is_expected.to contain_ceilometer_config('notification/store_events').with_value( params[:store_events] )
       is_expected.to contain_ceilometer_config('notification/disable_non_metric_meters').with_value('<SERVICE DEFAULT>')
     end
 
