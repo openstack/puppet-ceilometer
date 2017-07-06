@@ -133,6 +133,9 @@ class ceilometer::agent::notification (
       path                    => $::ceilometer::params::event_pipeline,
       content                 => template('ceilometer/event_pipeline.yaml.erb'),
       selinux_ignore_defaults => true,
+      mode                    => '0640',
+      owner                   => 'root',
+      group                   => 'ceilometer',
       tag                     => 'ceilometer-yamls',
     }
   }
@@ -145,6 +148,9 @@ class ceilometer::agent::notification (
       path                    => $::ceilometer::params::pipeline,
       content                 => template('ceilometer/pipeline.yaml.erb'),
       selinux_ignore_defaults => true,
+      mode                    => '0640',
+      owner                   => 'root',
+      group                   => 'ceilometer',
       tag                     => 'ceilometer-yamls',
     }
   }
