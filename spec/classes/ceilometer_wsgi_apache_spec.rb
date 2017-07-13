@@ -1,69 +1,35 @@
 require 'spec_helper'
 
 describe 'ceilometer::wsgi::apache' do
-
-  let :global_facts do
-    {
-      :os_workers => 8,
-      :concat_basedir => '/var/lib/puppet/concat',
-      :fqdn           => 'some.host.tld'
-    }
-  end
-
   let :pre_condition do
     "class { 'ceilometer': telemetry_secret => 's3cr3t' }"
   end
 
   shared_examples_for 'apache serving ceilometer with mod_wsgi' do
-    it { is_expected.to contain_service('httpd').with_name(platform_parameters[:httpd_service_name]) }
-    it { is_expected.to contain_class('ceilometer::params') }
-    it { is_expected.to contain_class('apache') }
-    it { is_expected.to contain_class('apache::mod::wsgi') }
-
-    describe 'with default parameters' do
-
-      it { is_expected.to contain_file("#{platform_parameters[:wsgi_script_path]}").with(
-        'ensure'  => 'directory',
-        'owner'   => 'ceilometer',
-        'group'   => 'ceilometer',
-        'require' => 'Package[httpd]'
+    context 'with default parameters' do
+      it { is_expected.to contain_class('ceilometer::deps') }
+      it { is_expected.to contain_class('ceilometer::params') }
+      it { is_expected.to contain_class('apache') }
+      it { is_expected.to contain_class('apache::mod::wsgi') }
+      it { is_expected.to contain_class('apache::mod::ssl') }
+      it { is_expected.to contain_openstacklib__wsgi__apache('ceilometer_wsgi').with(
+        :bind_port           => 8777,
+        :group               => 'ceilometer',
+        :path                => '/',
+        :servername          => facts[:fqdn],
+        :ssl                 => true,
+        :threads             => facts[:os_workers],
+        :user                => 'ceilometer',
+        :workers             => 1,
+        :wsgi_daemon_process => 'ceilometer',
+        :wsgi_process_group  => 'ceilometer',
+        :wsgi_script_dir     => platform_params[:wsgi_script_path],
+        :wsgi_script_file    => 'app',
+        :wsgi_script_source  => platform_params[:wsgi_script_source],
       )}
-
-
-      it { is_expected.to contain_file('ceilometer_wsgi').with(
-        'ensure'  => 'file',
-        'path'    => "#{platform_parameters[:wsgi_script_path]}/app",
-        'source'  => platform_parameters[:wsgi_script_source],
-        'owner'   => 'ceilometer',
-        'group'   => 'ceilometer',
-        'mode'    => '0644'
-      )}
-      it { is_expected.to contain_file('ceilometer_wsgi').that_requires("File[#{platform_parameters[:wsgi_script_path]}]") }
-
-      it { is_expected.to contain_apache__vhost('ceilometer_wsgi').with(
-        'servername'                  => 'some.host.tld',
-        'ip'                          => nil,
-        'port'                        => '8777',
-        'docroot'                     => "#{platform_parameters[:wsgi_script_path]}",
-        'docroot_owner'               => 'ceilometer',
-        'docroot_group'               => 'ceilometer',
-        'ssl'                         => 'true',
-        'wsgi_daemon_process'         => 'ceilometer',
-        'wsgi_daemon_process_options' => {
-          'user'         => 'ceilometer',
-          'group'        => 'ceilometer',
-          'processes'    => 1,
-          'threads'      => "#{global_facts[:os_workers]}",
-          'display-name' => 'ceilometer_wsgi',
-        },
-        'wsgi_process_group'          => 'ceilometer',
-        'wsgi_script_aliases'         => { '/' => "#{platform_parameters[:wsgi_script_path]}/app" },
-        'require'                     => 'File[ceilometer_wsgi]'
-      )}
-      it { is_expected.to contain_concat("#{platform_parameters[:httpd_ports_file]}") }
     end
 
-    describe 'when overriding parameters using different ports' do
+    context 'when overriding parameters using different ports' do
       let :params do
         {
           :servername                => 'dummy.host',
@@ -74,29 +40,28 @@ describe 'ceilometer::wsgi::apache' do
           :workers                   => 37,
         }
       end
-
-      it { is_expected.to contain_apache__vhost('ceilometer_wsgi').with(
-        'servername'                  => 'dummy.host',
-        'ip'                          => '10.42.51.1',
-        'port'                        => '12345',
-        'docroot'                     => "#{platform_parameters[:wsgi_script_path]}",
-        'docroot_owner'               => 'ceilometer',
-        'docroot_group'               => 'ceilometer',
-        'ssl'                         => 'false',
-        'wsgi_daemon_process'         => 'ceilometer',
-        'wsgi_daemon_process_options' => {
-            'user'         => 'ceilometer',
-            'group'        => 'ceilometer',
-            'processes'    => '37',
-            'threads'      => "#{global_facts[:os_workers]}",
-            'display-name' => 'ceilometer',
-        },
-        'wsgi_process_group'          => 'ceilometer',
-        'wsgi_script_aliases'         => { '/' => "#{platform_parameters[:wsgi_script_path]}/app" },
-        'require'                     => 'File[ceilometer_wsgi]'
+      it { is_expected.to contain_class('ceilometer::deps') }
+      it { is_expected.to contain_class('ceilometer::params') }
+      it { is_expected.to contain_class('apache') }
+      it { is_expected.to contain_class('apache::mod::wsgi') }
+      it { is_expected.to_not contain_class('apache::mod::ssl') }
+      it { is_expected.to contain_openstacklib__wsgi__apache('ceilometer_wsgi').with(
+        :bind_host                 => '10.42.51.1',
+        :bind_port                 => 12345,
+        :group                     => 'ceilometer',
+        :path                      => '/',
+        :servername                => 'dummy.host',
+        :ssl                       => false,
+        :threads                   => facts[:os_workers],
+        :user                      => 'ceilometer',
+        :workers                   => 37,
+        :wsgi_daemon_process       => 'ceilometer',
+        :wsgi_process_display_name => 'ceilometer',
+        :wsgi_process_group        => 'ceilometer',
+        :wsgi_script_dir           => platform_params[:wsgi_script_path],
+        :wsgi_script_file          => 'app',
+        :wsgi_script_source        => platform_params[:wsgi_script_source],
       )}
-
-      it { is_expected.to contain_concat("#{platform_parameters[:httpd_ports_file]}") }
     end
   end
 
@@ -112,7 +77,7 @@ describe 'ceilometer::wsgi::apache' do
         }))
       end
 
-      let :platform_parameters do
+      let :platform_params do
         case facts[:osfamily]
         when 'Debian'
          {

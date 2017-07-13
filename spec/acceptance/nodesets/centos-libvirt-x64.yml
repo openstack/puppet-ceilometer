@@ -1,0 +1,11 @@
+HOSTS:
+  centos-libvirt-7-x64:
+    roles:
+      - master
+    platform: el-7-x86_64
+    box: centos/7
+    box_url: https://vagrantcloud.com/centos/7
+    hypervisor: vagrant
+CONFIG:
+  log_level: debug
+  type: foss
