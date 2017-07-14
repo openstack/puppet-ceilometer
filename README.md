@@ -131,7 +131,7 @@ Development
 
 Developer documentation for the entire puppet-openstack project
 
-* https://docs.openstack.org/developer/puppet-openstack-guide/
+* https://docs.openstack.org/puppet-openstack-guide/latest/
 
 Contributors
 ------------
