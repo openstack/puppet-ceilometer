@@ -78,11 +78,6 @@
 #     transport://user:pass@host1:port[,hostN:portN]/virtual_host
 #   Defaults to $::os_service_default
 #
-# [*rpc_backend*]
-#   (optional) The messaging driver to use, defaults to rabbit. Other drivers include
-#   amqp and zmq. (string value)
-#   Default to $::os_service_default
-#
 # [*rabbit_ha_queues*]
 #   (Optional) Use HA queues in RabbitMQ (x-ha-policy: all). If you change this
 #   option, you must wipe the RabbitMQ database. (boolean value)
@@ -260,6 +255,12 @@
 #   (Optional) A list of memcached server(s) to use for caching. (list value)
 #   Defaults to $::os_service_default
 #
+# [*rpc_backend*]
+#   (optional) The messaging driver to use, defaults to rabbit. Other drivers include
+#   amqp and zmq. (string value)
+#   Default to $::os_service_default
+#
+
 class ceilometer(
   $http_timeout                       = '600',
   $event_time_to_live                 = '-1',
@@ -277,7 +278,6 @@ class ceilometer(
   $rpc_response_timeout               = $::os_service_default,
   $control_exchange                   = $::os_service_default,
   $notification_transport_url         = $::os_service_default,
-  $rpc_backend                        = $::os_service_default,
   $rabbit_ha_queues                   = $::os_service_default,
   $rabbit_heartbeat_timeout_threshold = $::os_service_default,
   $rabbit_heartbeat_rate              = $::os_service_default,
@@ -320,6 +320,7 @@ class ceilometer(
   $rabbit_password                    = $::os_service_default,
   $rabbit_virtual_host                = $::os_service_default,
   $memcached_servers                  = undef,
+  $rpc_backend                        = $::os_service_default,
 ) {
 
   include ::ceilometer::deps
@@ -349,10 +350,12 @@ class ceilometer(
     !is_service_default($rabbit_password) or
     !is_service_default($rabbit_port) or
     !is_service_default($rabbit_userid) or
-    !is_service_default($rabbit_virtual_host) {
+    !is_service_default($rabbit_virtual_host) or
+    !is_service_default($rpc_backend) {
     warning("ceilometer::rabbit_host, ceilometer::rabbit_hosts, ceilometer::rabbit_password, \
-ceilometer::rabbit_port, ceilometer::rabbit_userid and ceilometer::rabbit_virtual_host are \
-deprecated. Please use ceilometer::default_transport_url instead.")
+ceilometer::rabbit_port, ceilometer::rabbit_userid, ceilometer::rabbit_virtual_host and \
+ceilometer::rpc_backend are deprecated. Please use ceilometer::default_transport_url \
+instead.")
   }
 
   if $memcached_servers {
@@ -388,49 +391,45 @@ please use memcache_servers instead.")
     purge => $purge_config,
   }
 
-  # we keep "ceilometer.openstack.common.rpc.impl_kombu" for backward compatibility
-  if $rpc_backend in [$::os_service_default, 'ceilometer.openstack.common.rpc.impl_kombu', 'rabbit'] {
-    oslo::messaging::rabbit {'ceilometer_config':
-      rabbit_host                 => $rabbit_host,
-      rabbit_port                 => $rabbit_port,
-      rabbit_hosts                => $rabbit_hosts,
-      rabbit_userid               => $rabbit_userid,
-      rabbit_password             => $rabbit_password,
-      rabbit_virtual_host         => $rabbit_virtual_host,
-      rabbit_ha_queues            => $rabbit_ha_queues,
-      heartbeat_timeout_threshold => $rabbit_heartbeat_timeout_threshold,
-      heartbeat_rate              => $rabbit_heartbeat_rate,
-      rabbit_qos_prefetch_count   => $rabbit_qos_prefetch_count,
-      amqp_durable_queues         => $amqp_durable_queues,
-      rabbit_use_ssl              => $rabbit_use_ssl,
-      kombu_ssl_ca_certs          => $kombu_ssl_ca_certs,
-      kombu_ssl_certfile          => $kombu_ssl_certfile,
-      kombu_ssl_keyfile           => $kombu_ssl_keyfile,
-      kombu_ssl_version           => $kombu_ssl_version,
-      kombu_reconnect_delay       => $kombu_reconnect_delay,
-      kombu_compression           => $kombu_compression,
-    }
-  } elsif $rpc_backend == 'amqp' {
-    oslo::messaging::amqp { 'ceilometer_config':
-      server_request_prefix  => $amqp_server_request_prefix,
-      broadcast_prefix       => $amqp_broadcast_prefix,
-      group_request_prefix   => $amqp_group_request_prefix,
-      container_name         => $amqp_container_name,
-      idle_timeout           => $amqp_idle_timeout,
-      trace                  => $amqp_trace,
-      ssl_ca_file            => $amqp_ssl_ca_file,
-      ssl_cert_file          => $amqp_ssl_cert_file,
-      ssl_key_file           => $amqp_ssl_key_file,
-      ssl_key_password       => $amqp_ssl_key_password,
-      allow_insecure_clients => $amqp_allow_insecure_clients,
-      sasl_mechanisms        => $amqp_sasl_mechanisms,
-      sasl_config_dir        => $amqp_sasl_config_dir,
-      sasl_config_name       => $amqp_sasl_config_name,
-      username               => $amqp_username,
-      password               => $amqp_password,
-    }
-  } else {
-    nova_config { 'DEFAULT/rpc_backend': value => $rpc_backend }
+
+  oslo::messaging::rabbit {'ceilometer_config':
+    rabbit_host                 => $rabbit_host,
+    rabbit_port                 => $rabbit_port,
+    rabbit_hosts                => $rabbit_hosts,
+    rabbit_userid               => $rabbit_userid,
+    rabbit_password             => $rabbit_password,
+    rabbit_virtual_host         => $rabbit_virtual_host,
+    rabbit_ha_queues            => $rabbit_ha_queues,
+    heartbeat_timeout_threshold => $rabbit_heartbeat_timeout_threshold,
+    heartbeat_rate              => $rabbit_heartbeat_rate,
+    rabbit_qos_prefetch_count   => $rabbit_qos_prefetch_count,
+    amqp_durable_queues         => $amqp_durable_queues,
+    rabbit_use_ssl              => $rabbit_use_ssl,
+    kombu_ssl_ca_certs          => $kombu_ssl_ca_certs,
+    kombu_ssl_certfile          => $kombu_ssl_certfile,
+    kombu_ssl_keyfile           => $kombu_ssl_keyfile,
+    kombu_ssl_version           => $kombu_ssl_version,
+    kombu_reconnect_delay       => $kombu_reconnect_delay,
+    kombu_compression           => $kombu_compression,
+  }
+
+  oslo::messaging::amqp { 'ceilometer_config':
+    server_request_prefix  => $amqp_server_request_prefix,
+    broadcast_prefix       => $amqp_broadcast_prefix,
+    group_request_prefix   => $amqp_group_request_prefix,
+    container_name         => $amqp_container_name,
+    idle_timeout           => $amqp_idle_timeout,
+    trace                  => $amqp_trace,
+    ssl_ca_file            => $amqp_ssl_ca_file,
+    ssl_cert_file          => $amqp_ssl_cert_file,
+    ssl_key_file           => $amqp_ssl_key_file,
+    ssl_key_password       => $amqp_ssl_key_password,
+    allow_insecure_clients => $amqp_allow_insecure_clients,
+    sasl_mechanisms        => $amqp_sasl_mechanisms,
+    sasl_config_dir        => $amqp_sasl_config_dir,
+    sasl_config_name       => $amqp_sasl_config_name,
+    username               => $amqp_username,
+    password               => $amqp_password,
   }
 
   # Once we got here, we can act as an honey badger on the rpc used.
