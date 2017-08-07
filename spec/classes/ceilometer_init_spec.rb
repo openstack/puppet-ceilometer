@@ -66,10 +66,6 @@ describe 'ceilometer' do
         it_configures 'rabbit with HA support'
       end
 
-      context("with legacy rpc_backend value") do
-        before { params.merge!( rabbit_params ).merge!(:rpc_backend => 'ceilometer.openstack.common.rpc.impl_kombu') }
-        it { is_expected.to contain_ceilometer_config('DEFAULT/rpc_backend').with_value('rabbit') }
-      end
     end
 
     context 'with amqp messaging' do
