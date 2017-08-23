@@ -14,6 +14,7 @@ describe 'ceilometer::dispatcher::gnocchi' do
     it 'configures gnocchi dispatcher' do
       is_expected.to contain_ceilometer_config('dispatcher_gnocchi/filter_service_activity').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ceilometer_config('dispatcher_gnocchi/filter_project').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ceilometer_config('dispatcher_gnocchi/archive_policy').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ceilometer_config('dispatcher_gnocchi/resources_definition_file').with_value('<SERVICE DEFAULT>')
     end
 
@@ -21,10 +22,12 @@ describe 'ceilometer::dispatcher::gnocchi' do
       before do
         params.merge!(:filter_service_activity   => false,
                       :filter_project            => 'gnocchi_swift',
+                      :archive_policy            => 'high',
                       :resources_definition_file => 'foo')
       end
       it { is_expected.to contain_ceilometer_config('dispatcher_gnocchi/filter_service_activity').with_value('false') }
       it { is_expected.to contain_ceilometer_config('dispatcher_gnocchi/filter_project').with_value('gnocchi_swift') }
+      it { is_expected.to contain_ceilometer_config('dispatcher_gnocchi/archive_policy').with_value('high') }
       it { is_expected.to contain_ceilometer_config('dispatcher_gnocchi/resources_definition_file').with_value('foo') }
     end
   end
