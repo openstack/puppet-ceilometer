@@ -13,19 +13,20 @@ describe 'ceilometer::wsgi::apache' do
       it { is_expected.to contain_class('apache::mod::wsgi') }
       it { is_expected.to contain_class('apache::mod::ssl') }
       it { is_expected.to contain_openstacklib__wsgi__apache('ceilometer_wsgi').with(
-        :bind_port           => 8777,
-        :group               => 'ceilometer',
-        :path                => '/',
-        :servername          => facts[:fqdn],
-        :ssl                 => true,
-        :threads             => facts[:os_workers],
-        :user                => 'ceilometer',
-        :workers             => 1,
-        :wsgi_daemon_process => 'ceilometer',
-        :wsgi_process_group  => 'ceilometer',
-        :wsgi_script_dir     => platform_params[:wsgi_script_path],
-        :wsgi_script_file    => 'app',
-        :wsgi_script_source  => platform_params[:wsgi_script_source],
+        :bind_port                   => 8777,
+        :group                       => 'ceilometer',
+        :path                        => '/',
+        :servername                  => facts[:fqdn],
+        :ssl                         => true,
+        :threads                     => facts[:os_workers],
+        :user                        => 'ceilometer',
+        :workers                     => 1,
+        :wsgi_daemon_process         => 'ceilometer',
+        :wsgi_process_group          => 'ceilometer',
+        :wsgi_script_dir             => platform_params[:wsgi_script_path],
+        :wsgi_script_file            => 'app',
+        :wsgi_script_source          => platform_params[:wsgi_script_source],
+        :custom_wsgi_process_options => {},
       )}
     end
 
@@ -38,6 +39,9 @@ describe 'ceilometer::wsgi::apache' do
           :ssl                       => false,
           :wsgi_process_display_name => 'ceilometer',
           :workers                   => 37,
+          :custom_wsgi_process_options => {
+            'python_path' => '/my/python/path',
+          },
         }
       end
       it { is_expected.to contain_class('ceilometer::deps') }
@@ -46,21 +50,24 @@ describe 'ceilometer::wsgi::apache' do
       it { is_expected.to contain_class('apache::mod::wsgi') }
       it { is_expected.to_not contain_class('apache::mod::ssl') }
       it { is_expected.to contain_openstacklib__wsgi__apache('ceilometer_wsgi').with(
-        :bind_host                 => '10.42.51.1',
-        :bind_port                 => 12345,
-        :group                     => 'ceilometer',
-        :path                      => '/',
-        :servername                => 'dummy.host',
-        :ssl                       => false,
-        :threads                   => facts[:os_workers],
-        :user                      => 'ceilometer',
-        :workers                   => 37,
-        :wsgi_daemon_process       => 'ceilometer',
-        :wsgi_process_display_name => 'ceilometer',
-        :wsgi_process_group        => 'ceilometer',
-        :wsgi_script_dir           => platform_params[:wsgi_script_path],
-        :wsgi_script_file          => 'app',
-        :wsgi_script_source        => platform_params[:wsgi_script_source],
+        :bind_host                   => '10.42.51.1',
+        :bind_port                   => 12345,
+        :group                       => 'ceilometer',
+        :path                        => '/',
+        :servername                  => 'dummy.host',
+        :ssl                         => false,
+        :threads                     => facts[:os_workers],
+        :user                        => 'ceilometer',
+        :workers                     => 37,
+        :wsgi_daemon_process         => 'ceilometer',
+        :wsgi_process_display_name   => 'ceilometer',
+        :wsgi_process_group          => 'ceilometer',
+        :wsgi_script_dir             => platform_params[:wsgi_script_path],
+        :wsgi_script_file            => 'app',
+        :wsgi_script_source          => platform_params[:wsgi_script_source],
+        :custom_wsgi_process_options => {
+          'python_path' => '/my/python/path',
+        },
       )}
     end
   end
