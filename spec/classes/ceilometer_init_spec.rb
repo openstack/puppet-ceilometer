@@ -13,6 +13,7 @@ describe 'ceilometer' do
       :log_dir                    => '/var/log/ceilometer',
       :use_stderr                 => 'True',
       :purge_config               => false,
+      :host                       => 'foo.domain'
     }
   end
 
@@ -34,6 +35,10 @@ describe 'ceilometer' do
 
     it 'configures timeout for HTTP requests' do
       is_expected.to contain_ceilometer_config('DEFAULT/http_timeout').with_value(params[:http_timeout])
+    end
+
+    it 'configures host name' do
+      is_expected.to contain_ceilometer_config('DEFAULT/host').with_value(params[:host])
     end
 
     context 'with rabbit_host parameter' do
