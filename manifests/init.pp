@@ -221,6 +221,12 @@
 #   in the ceilometer config.
 #   Defaults to false.
 #
+# [*host*]
+#   (Optional) Name of this node. This is typically a hostname, FQDN, or
+#   IP address.
+#   Defaults to $::os_service_default.
+#
+#
 # === DEPRECATED PARAMETERS:
 #  [*metering_secret*]
 #   (optional)  Secret key for signing messages.
@@ -282,6 +288,7 @@ class ceilometer(
   $amqp_username                      = $::os_service_default,
   $amqp_password                      = $::os_service_default,
   $purge_config                       = false,
+  $host                               = $::os_service_default,
   # DEPRECATED PARAMETERS
   $alarm_history_time_to_live         = undef,
   $metering_secret                    = undef,
@@ -381,6 +388,7 @@ class ceilometer(
   # Once we got here, we can act as an honey badger on the rpc used.
   ceilometer_config {
     'DEFAULT/http_timeout'                : value => $http_timeout;
+    'DEFAULT/host'                        : value => $host;
     'publisher/telemetry_secret'          : value => $telemetry_secret_real, secret => true;
     'database/event_time_to_live'         : value => $event_time_to_live;
     'database/metering_time_to_live'      : value => $metering_time_to_live;

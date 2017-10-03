@@ -1,0 +1,5 @@
+---
+fixes:
+  - |
+    Add support to override host param in ceilometer config. Without this
+    sometimes fqdn wont match and some nova metrics will be skipped.
