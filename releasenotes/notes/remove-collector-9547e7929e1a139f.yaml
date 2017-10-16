@@ -1,0 +1,5 @@
+---
+fixes:
+  - |
+    Ceilometer collector has been deprecated in the previous release. Let's
+    remove this service as the code upstream has been removed.
