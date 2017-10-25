@@ -1,0 +1,5 @@
+---
+fixes:
+  - |
+    Add cpu_l3_cache meter in polling yaml for cache monitoring feature to
+    work out of the box.
