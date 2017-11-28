@@ -50,7 +50,6 @@ describe 'ceilometer with mysql' do
       class { '::ceilometer::db::sync':
         extra_params => '--skip-gnocchi-resource-types',
       }
-      class { '::ceilometer::client': }
       class { '::ceilometer::expirer': }
       class { '::ceilometer::agent::central': }
       class { '::ceilometer::agent::notification': }

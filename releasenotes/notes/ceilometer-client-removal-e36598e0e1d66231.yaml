@@ -1,0 +1,5 @@
+---
+upgrade:
+  - |
+    Ceilometer client has been removed from the upstream so the ceilomter::client
+    class has been removed.
