@@ -12,6 +12,7 @@ class ceilometer::params {
   $event_pipeline      = '/etc/ceilometer/event_pipeline.yaml'
   $pipeline            = '/etc/ceilometer/pipeline.yaml'
   $polling             = '/etc/ceilometer/polling.yaml'
+  $group               = 'ceilometer'
 
   case $::osfamily {
     'RedHat': {

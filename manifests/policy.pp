@@ -2,18 +2,25 @@
 #
 # Configure the ceilometer policies
 #
-# === Parameters:
+# === Parameters
 #
 # [*policies*]
-#   (Optional) Set of policies to configure for ceilometer
-#   Example : {
-#               'ceilometer-context_is_admin' => {'context_is_admin' => 'true'},
-#               'ceilometer-default' => {'default' => 'rule:admin_or_owner'}
-#             }
+#   (optional) Set of policies to configure for ceilometer
+#   Example :
+#     {
+#       'ceilometer-context_is_admin' => {
+#         'key' => 'context_is_admin',
+#         'value' => 'true'
+#       },
+#       'ceilometer-default' => {
+#         'key' => 'default',
+#         'value' => 'rule:admin_or_owner'
+#       }
+#     }
 #   Defaults to empty hash.
 #
 # [*policy_path*]
-#   (Optional) Path to the ceilometer policy.json file
+#   (optional) Path to the ceilometer policy.json file
 #   Defaults to /etc/ceilometer/policy.json
 #
 class ceilometer::policy (
@@ -22,11 +29,14 @@ class ceilometer::policy (
 ) {
 
   include ::ceilometer::deps
+  include ::ceilometer::params
 
   validate_hash($policies)
 
   Openstacklib::Policy::Base {
-    file_path => $policy_path,
+    file_path  => $policy_path,
+    file_user  => 'root',
+    file_group => $::ceilometer::params::group,
   }
 
   create_resources('openstacklib::policy::base', $policies)

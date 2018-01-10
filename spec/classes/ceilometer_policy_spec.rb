@@ -17,8 +17,10 @@ describe 'ceilometer::policy' do
 
     it 'set up the policies' do
       is_expected.to contain_openstacklib__policy__base('context_is_admin').with({
-        :key   => 'context_is_admin',
-        :value => 'foo:bar'
+        :key        => 'context_is_admin',
+        :value      => 'foo:bar',
+        :file_user  => 'root',
+        :file_group => 'ceilometer',
       })
       is_expected.to contain_oslo__policy('ceilometer_config').with(
         :policy_file => '/etc/ceilometer/policy.json',
@@ -34,8 +36,7 @@ describe 'ceilometer::policy' do
         facts.merge!(OSDefaults.get_facts())
       end
 
-      it_behaves_like 'ceilometer policies'
+      it_configures 'ceilometer policies'
     end
   end
-
 end
