@@ -22,27 +22,14 @@
 #   and gnocchi resources/metrics.
 #   Defaults to $::os_service_default.
 #
-# DEPRECATED PARAMETERS
-#
-# [*url*]
-#   (Optional) Gnocchi URL
-#   Defaults to undef
-#
-
 class ceilometer::dispatcher::gnocchi (
   $filter_service_activity   = $::os_service_default,
   $filter_project            = $::os_service_default,
   $archive_policy            = $::os_service_default,
   $resources_definition_file = $::os_service_default,
-  # DEPRECATED PARAMETERS
-  $url                       = undef,
 ) {
 
   include ::ceilometer::deps
-
-  if $url {
-    warning('url parameter is deprecated, has no effect and will be removed in the Q release.')
-  }
 
   ceilometer_config {
     'dispatcher_gnocchi/filter_service_activity':   value => $filter_service_activity;
