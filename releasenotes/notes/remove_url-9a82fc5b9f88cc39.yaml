@@ -1,0 +1,6 @@
+---
+other:
+  - |
+    ceilometer::dispatcher::gnocchi::url option has been deprecated
+    in the previous release. Let's remove this option as the code
+    upstream has been removed.
