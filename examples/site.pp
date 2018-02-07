@@ -33,8 +33,6 @@ node default {
   class { '::ceilometer::keystone::authtoken':
     password => 'tralalayouyou'
   }
-  # Install the ceilometer-api service
-  class { '::ceilometer::api': }
 
   # Set common auth parameters used by all agents (compute/central)
   class { '::ceilometer::agent::auth':

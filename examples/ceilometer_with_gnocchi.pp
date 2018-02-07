@@ -19,14 +19,6 @@ class { '::ceilometer::agent::notification': }
 class { '::ceilometer::keystone::authtoken':
   password => 'a_big_secret',
 }
-class { '::ceilometer::api':
-  enabled      => true,
-  service_name => 'httpd',
-}
-include ::apache
-class { '::ceilometer::wsgi::apache':
-  ssl => false,
-}
 
 class { '::ceilometer::collector':
   meter_dispatchers => ['gnocchi'],

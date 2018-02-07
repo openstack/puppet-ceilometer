@@ -65,9 +65,6 @@ class { '::ceilometer::keystone::authtoken':
   password => 'a_big_secret',
   auth_url => 'http://127.0.0.1:35357/',
 }
-class { '::ceilometer::api':
-  enabled => true,
-}
 ```
 
 Implementation

@@ -1,0 +1,5 @@
+---
+upgrade:
+  - |
+    Ceilometer api has been removed from the upstream so the ceilomter::api
+    class has been removed.
