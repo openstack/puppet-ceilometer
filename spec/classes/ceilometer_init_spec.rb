@@ -213,6 +213,7 @@ describe 'ceilometer' do
     it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_qos_prefetch_count').with_value( params[:rabbit_qos_prefetch_count] ) }
     it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_hosts').with_value('<SERVICE DEFAULT>') }
     it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value('<SERVICE DEFAULT>') }
+    it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/kombu_failover_strategy').with_value('<SERVICE DEFAULT>') }
 
   end
 
@@ -232,6 +233,7 @@ describe 'ceilometer' do
     it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_qos_prefetch_count').with_value( params[:rabbit_qos_prefetch_count] ) }
     it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_hosts').with_value( params[:rabbit_hosts].join(',') ) }
     it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value('<SERVICE DEFAULT>') }
+    it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/kombu_failover_strategy').with_value('<SERVICE DEFAULT>') }
 
   end
 
