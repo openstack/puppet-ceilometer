@@ -1,0 +1,3 @@
+---
+other:
+  - removed deprecated ceilometer::agent::notification::store_events.

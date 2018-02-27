@@ -73,12 +73,6 @@
 #   Defaults to ['gnocchi://'], If you are using collector
 #   override this to notifier:// instead.
 #
-# === DEPRECATED PARAMETERS:
-# [*store_events*]
-#   (Optional) Save event details.
-#   This option has been removed since Newton.
-#
-
 class ceilometer::agent::notification (
   $manage_service            = true,
   $enabled                   = true,
@@ -91,15 +85,10 @@ class ceilometer::agent::notification (
   $event_pipeline_publishers = ['gnocchi://'],
   $manage_pipeline           = false,
   $pipeline_publishers       = ['gnocchi://'],
-  $store_events              = undef,
 ) {
 
   include ::ceilometer::deps
   include ::ceilometer::params
-
-  if $store_events != undef {
-    warning('store_events has been removed since Newton.')
-  }
 
   ensure_resource('package', [$::ceilometer::params::agent_notification_package_name],
     {
@@ -157,7 +146,6 @@ class ceilometer::agent::notification (
 
   ceilometer_config {
     'notification/ack_on_event_error'       : value => $ack_on_event_error;
-    'notification/store_events'             : value => $store_events;
     'notification/disable_non_metric_meters': value => $disable_non_metric_meters;
     'notification/workers'                  : value => $notification_workers;
     'notification/messaging_urls'           : value => $messaging_urls, secret => true;
