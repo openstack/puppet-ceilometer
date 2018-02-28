@@ -6,7 +6,7 @@ describe 'ceilometer::db::sync' do
 
     it 'runs ceilometer-upgrade' do
       is_expected.to contain_exec('ceilometer-upgrade').with(
-        :command     => 'ceilometer-upgrade --skip-gnocchi-resource-types',
+        :command     => 'ceilometer-upgrade ',
         :path        => '/usr/bin',
         :refreshonly => 'true',
         :user        => 'ceilometer',
