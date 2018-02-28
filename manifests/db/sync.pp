@@ -7,10 +7,10 @@
 # [*extra_params*]
 #   (Optional) String of extra command line parameters
 #   to append to the ceilometer-upgrade command.
-#   Defaults to '--skip-gnocchi-resource-types'.
+#   Defaults to undef.
 #
 class ceilometer::db::sync(
-  $extra_params = '--skip-gnocchi-resource-types',
+  $extra_params = undef,
 ) {
 
   include ::ceilometer::deps

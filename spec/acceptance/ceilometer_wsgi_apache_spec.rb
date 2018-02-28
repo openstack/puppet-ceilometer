@@ -47,6 +47,8 @@ describe 'ceilometer with mysql' do
         database_connection => 'mysql+pymysql://ceilometer:a_big_secret@127.0.0.1/ceilometer?charset=utf8',
 	sync_db             => false,
       }
+      # NOTE(tobasco): When running the beaker tests we need to exclude the
+      # gnocchi resource types since the acceptance test does not setup gnocchi itself.
       class { '::ceilometer::db::sync':
         extra_params => '--skip-gnocchi-resource-types',
       }

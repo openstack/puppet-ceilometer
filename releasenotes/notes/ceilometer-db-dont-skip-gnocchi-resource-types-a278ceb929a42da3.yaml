@@ -1,0 +1,8 @@
+---
+upgrade:
+  - |
+    The extra_params to ceilometer::db::sync does not default to
+    using --skip-gnocchi-resource-types now. If you are running
+    ceilometer without gnocchi you need to pass this argument
+    manually in ceilometer::db::sync::extra_params so it's
+    appaneded to the ceilometer-upgrade call.
