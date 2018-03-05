@@ -10,7 +10,7 @@ describe 'ceilometer::db' do
       it { is_expected.to contain_class('ceilometer::db::sync') }
       it { is_expected.to contain_oslo__db('ceilometer_config').with(
         :db_max_retries => '<SERVICE DEFAULT>',
-        :connection     => 'mysql://ceilometer:ceilometer@localhost/ceilometer',
+        :connection     => 'mysql+pymysql://ceilometer:ceilometer@localhost/ceilometer',
         :idle_timeout   => '<SERVICE DEFAULT>',
         :min_pool_size  => '<SERVICE DEFAULT>',
         :max_pool_size  => '<SERVICE DEFAULT>',

@@ -13,7 +13,7 @@
 #
 # [*database_connection*]
 #   (Optional) Url used to connect to database.
-#   Defaults to 'mysql://ceilometer:ceilometer@localhost/ceilometer'.
+#   Defaults to 'mysql+pymysql://ceilometer:ceilometer@localhost/ceilometer'.
 #
 # [*database_idle_timeout*]
 #   (Optional) Timeout when db connections should be reaped.
@@ -46,7 +46,7 @@
 #
 class ceilometer::db (
   $database_db_max_retries = $::os_service_default,
-  $database_connection     = 'mysql://ceilometer:ceilometer@localhost/ceilometer',
+  $database_connection     = 'mysql+pymysql://ceilometer:ceilometer@localhost/ceilometer',
   $database_idle_timeout   = $::os_service_default,
   $database_min_pool_size  = $::os_service_default,
   $database_max_pool_size  = $::os_service_default,
