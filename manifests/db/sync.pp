@@ -30,6 +30,7 @@ class ceilometer::db::sync(
       Anchor['ceilometer::dbsync::begin']
     ],
     notify      => Anchor['ceilometer::dbsync::end'],
+    tag         => 'openstack-db',
   }
 
 }

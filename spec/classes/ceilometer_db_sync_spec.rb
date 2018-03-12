@@ -17,6 +17,7 @@ describe 'ceilometer::db::sync' do
                          'Anchor[ceilometer::config::end]',
                          'Anchor[ceilometer::dbsync::begin]'],
         :notify      => 'Anchor[ceilometer::dbsync::end]',
+        :tag         => 'openstack-db',
       )
     end
 
@@ -39,6 +40,7 @@ describe 'ceilometer::db::sync' do
                          'Anchor[ceilometer::config::end]',
                          'Anchor[ceilometer::dbsync::begin]'],
         :notify      => 'Anchor[ceilometer::dbsync::end]',
+        :tag         => 'openstack-db',
       )
       }
     end
