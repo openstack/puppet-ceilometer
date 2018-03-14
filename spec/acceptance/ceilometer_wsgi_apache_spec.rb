@@ -12,10 +12,6 @@ describe 'ceilometer with mysql' do
       include ::openstack_integration::mysql
       include ::openstack_integration::keystone
 
-      # TODO(aschultz): remove after fix for LP#1621384 hits RDO
-      include ::gnocchi::client
-      Package['python-gnocchiclient'] -> Exec[ceilometer-upgrade]
-
       rabbitmq_user { 'ceilometer':
         admin    => true,
         password => 'an_even_bigger_secret',
