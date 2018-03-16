@@ -24,6 +24,10 @@ class ceilometer::deps {
   ~> Service<| tag == 'ceilometer-service' |>
   ~> anchor { 'ceilometer::service::end': }
 
+  # all cache settings should be applied and all packages should be installed
+  # before service startup
+  Oslo::Cache<||> -> Anchor['ceilometer::service::begin']
+
   # all db settings should be applied and all packages should be installed
   # before dbsync starts
   Oslo::Db<||> -> Anchor['ceilometer::dbsync::begin']
