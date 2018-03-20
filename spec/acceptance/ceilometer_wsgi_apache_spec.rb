@@ -11,50 +11,9 @@ describe 'ceilometer with mysql' do
       include ::openstack_integration::rabbitmq
       include ::openstack_integration::mysql
       include ::openstack_integration::keystone
-
-      rabbitmq_user { 'ceilometer':
-        admin    => true,
-        password => 'an_even_bigger_secret',
-        provider => 'rabbitmqctl',
-        require  => Class['rabbitmq'],
+      class { '::openstack_integration::ceilometer':
+        integration_enable => false,
       }
-
-      rabbitmq_user_permissions { 'ceilometer@/':
-        configure_permission => '.*',
-        write_permission     => '.*',
-        read_permission      => '.*',
-        provider             => 'rabbitmqctl',
-        require              => Class['rabbitmq'],
-      }
-
-      # Ceilometer resources
-      class { '::ceilometer':
-        debug                 => true,
-        telemetry_secret      => 'secrete',
-        default_transport_url => 'rabbit://ceilometer:an_even_bigger_secret@127.0.0.1:5672',
-      }
-      class { '::ceilometer::keystone::auth':
-        password => 'a_big_secret',
-      }
-      class { '::ceilometer::db::mysql':
-        password => 'a_big_secret',
-      }
-      class { '::ceilometer::db':
-        database_connection => 'mysql+pymysql://ceilometer:a_big_secret@127.0.0.1/ceilometer?charset=utf8',
-	sync_db             => false,
-      }
-      # NOTE(tobasco): When running the beaker tests we need to exclude the
-      # gnocchi resource types since the acceptance test does not setup gnocchi itself.
-      class { '::ceilometer::db::sync':
-        extra_params => '--skip-gnocchi-resource-types',
-      }
-      class { '::ceilometer::expirer': }
-      class { '::ceilometer::agent::central': }
-      class { '::ceilometer::agent::notification': }
-      class { '::ceilometer::keystone::authtoken':
-        password => 'a_big_secret',
-      }
-      class { '::ceilometer::dispatcher::gnocchi': }
       EOS
 
 
