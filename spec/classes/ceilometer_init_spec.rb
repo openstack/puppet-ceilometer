@@ -152,7 +152,7 @@ describe 'ceilometer' do
       it_configures 'rabbit with durable queues'
     end
 
-    context 'with overriden transport_url parameter' do
+    context 'with overridden transport_url parameter' do
       before {
         params.merge!(
           :default_transport_url => 'rabbit://rabbit_user:password@localhost:5673',
@@ -168,7 +168,7 @@ describe 'ceilometer' do
       end
     end
 
-    context 'with overriden cache parameter' do
+    context 'with overridden cache parameter' do
       before {
         params.merge!(
           :memcache_servers => 'host1:11211,host2:11211',
@@ -180,7 +180,7 @@ describe 'ceilometer' do
       end
     end
 
-    context 'with overriden notification parameters' do
+    context 'with overridden notification parameters' do
       before {
         params.merge!(
           :notification_topics        => ['notifications', 'custom'],
@@ -386,7 +386,7 @@ describe 'ceilometer' do
       it { is_expected.to contain_ceilometer_config('oslo_messaging_amqp/password').with_value('<SERVICE DEFAULT>') }
     end
 
-    context 'with overriden amqp parameters' do
+    context 'with overridden amqp parameters' do
       before { params.merge!(
         :amqp_idle_timeout  => '60',
         :amqp_trace         => true,
