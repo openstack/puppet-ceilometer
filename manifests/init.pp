@@ -230,11 +230,6 @@
 #
 #
 # === DEPRECATED PARAMETERS:
-#  [*metering_secret*]
-#   (optional)  Secret key for signing messages.
-#   This option has been renamed to telemetry_secret in Mitaka.
-#   Don't define this if using telemetry_secret.
-#
 # [*alarm_history_time_to_live*]
 #
 # [*rabbit_host*]
@@ -326,7 +321,6 @@ class ceilometer(
   $host                               = $::os_service_default,
   # DEPRECATED PARAMETERS
   $alarm_history_time_to_live         = undef,
-  $metering_secret                    = undef,
   $rabbit_host                        = $::os_service_default,
   $rabbit_port                        = $::os_service_default,
   $rabbit_hosts                       = $::os_service_default,
@@ -340,20 +334,6 @@ class ceilometer(
   include ::ceilometer::deps
   include ::ceilometer::logging
   include ::ceilometer::params
-
-  # Cleanup in Ocata.
-  if $telemetry_secret {
-    validate_string($telemetry_secret)
-    if $metering_secret {
-      warning('Both $metering_secret and $telemetry_secret defined, using $telemetry_secret')
-    }
-    $telemetry_secret_real = $telemetry_secret
-  }
-  else {
-    warning('metering_secret has been renamed to telemetry_secret. metering_secret will continue to work until Ocata.')
-    validate_string($metering_secret)
-    $telemetry_secret_real = $metering_secret
-  }
 
   if $alarm_history_time_to_live {
     warning('alarm_history_time_to_live parameter is deprecated. It should be configured for Aodh.')
@@ -451,7 +431,7 @@ please use memcache_servers instead.")
   ceilometer_config {
     'DEFAULT/http_timeout'                : value => $http_timeout;
     'DEFAULT/host'                        : value => $host;
-    'publisher/telemetry_secret'          : value => $telemetry_secret_real, secret => true;
+    'publisher/telemetry_secret'          : value => $telemetry_secret, secret => true;
     'database/event_time_to_live'         : value => $event_time_to_live;
     'database/metering_time_to_live'      : value => $metering_time_to_live;
     'hardware/readonly_user_name'         : value => $snmpd_readonly_username;
