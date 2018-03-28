@@ -27,8 +27,6 @@ class ceilometer::params {
       $agent_compute_service_name      = 'openstack-ceilometer-compute'
       $agent_polling_service_name      = 'openstack-ceilometer-polling'
       $agent_notification_service_name = 'openstack-ceilometer-notification'
-      $ceilometer_wsgi_script_path     = '/var/www/cgi-bin/ceilometer'
-      $ceilometer_wsgi_script_source   = '/usr/lib/python2.7/site-packages/ceilometer/api/app.wsgi'
       $libvirt_group                   = undef
     }
     'Debian': {
@@ -44,8 +42,6 @@ class ceilometer::params {
       $agent_polling_service_name      = 'ceilometer-polling'
       $agent_notification_service_name = 'ceilometer-agent-notification'
       $libvirt_group                   = 'libvirt'
-      $ceilometer_wsgi_script_path    = '/usr/lib/cgi-bin/ceilometer'
-      $ceilometer_wsgi_script_source  = '/usr/lib/python2.7/dist-packages/ceilometer/api/app.wsgi'
     }
     default: {
       fail("Unsupported osfamily: ${::osfamily} operatingsystem: \
