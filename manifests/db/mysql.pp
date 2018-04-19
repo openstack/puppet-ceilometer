@@ -21,7 +21,7 @@
 #   Defaults to '127.0.0.1'.
 #
 # [*allowed_hosts*]
-#   (Optional) other hosts the user is allowd to connect from.
+#   (Optional) other hosts the user is allowed to connect from.
 #   Defaults to undef.
 #
 # [*charset*]
