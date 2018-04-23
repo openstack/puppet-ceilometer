@@ -2,28 +2,47 @@ require 'spec_helper'
 
 describe 'ceilometer::config' do
 
-  let :params do
-    { :ceilometer_config  => {
-                              'api/host' => { 'value' => '0.0.0.0'},
-                              'api/port' => { 'value' => '8777'},
-                             },
-    }
+  let(:config_hash) do {
+    'DEFAULT/foo' => { 'value'  => 'fooValue' },
+    'DEFAULT/bar' => { 'value'  => 'barValue' },
+    'DEFAULT/baz' => { 'ensure' => 'absent' }
+  }
   end
 
-    it 'with [api] options ceilometer_config ' do
-      is_expected.to contain_ceilometer_config('api/host').with_value('0.0.0.0')
-      is_expected.to contain_ceilometer_config('api/port').with_value('8777')
+  shared_examples_for 'ceilometer_config' do
+    let :params do
+      { :ceilometer_config => config_hash }
     end
 
-  describe 'with [rpc_notifier2] options ceilometer_config' do
-    before do
-      params.merge!({
-        :ceilometer_config => { 'rpc_notifier2/topics' => { 'value' => 'notifications'},},
-      })
+    it 'configures arbitrary ceilometer-config configurations' do
+      is_expected.to contain_ceilometer_config('DEFAULT/foo').with_value('fooValue')
+      is_expected.to contain_ceilometer_config('DEFAULT/bar').with_value('barValue')
+      is_expected.to contain_ceilometer_config('DEFAULT/baz').with_ensure('absent')
     end
-    it 'should configure rpc_notifier2 topics correctly' do
-      is_expected.to contain_ceilometer_config('rpc_notifier2/topics').with_value('notifications')
+  end
+
+  shared_examples_for 'ceilometer_api_paste_ini' do
+    let :params do
+      { :ceilometer_api_paste_ini => config_hash }
     end
 
+    it 'configures arbitrary ceilometer-api-paste-ini configurations' do
+      is_expected.to contain_ceilometer_api_paste_ini('DEFAULT/foo').with_value('fooValue')
+      is_expected.to contain_ceilometer_api_paste_ini('DEFAULT/bar').with_value('barValue')
+      is_expected.to contain_ceilometer_api_paste_ini('DEFAULT/baz').with_ensure('absent')
+    end
+  end
+
+  on_supported_os({
+    :supported_os   => OSDefaults.get_supported_os
+  }).each do |os,facts|
+    context "on #{os}" do
+      let (:facts) do
+        facts.merge!(OSDefaults.get_facts())
+      end
+
+      it_configures 'ceilometer_config'
+      it_configures 'ceilometer_api_paste_ini'
+    end
   end
 end
