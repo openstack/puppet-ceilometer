@@ -14,6 +14,8 @@ describe 'ceilometer::config' do
       { :ceilometer_config => config_hash }
     end
 
+    it { is_expected.to contain_class('ceilometer::deps') }
+
     it 'configures arbitrary ceilometer-config configurations' do
       is_expected.to contain_ceilometer_config('DEFAULT/foo').with_value('fooValue')
       is_expected.to contain_ceilometer_config('DEFAULT/bar').with_value('barValue')
