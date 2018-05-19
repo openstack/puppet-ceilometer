@@ -1,0 +1,14 @@
+---
+upgrade:
+  - |
+    The deprecated parameters ceilometer::rabbit_host, ceilometer::rabbit_hosts, ceilometer::rabbit_password,
+    ceilometer::rabbit_port, ceilometer::rabbit_userid and ceilometer::rabbit_virtual_host is removed.
+    Please use ceilometer::default_transport_url instead.
+  - |
+    The deprecated parameter ceilometer::rpc_backend is removed.
+  - |
+    The deprecated parameter ceilometer::alarm_history_time_to_live is removed.
+    Please configure this in Aodh instead.
+  - |
+    The deprecated parameter ceilometer::memcached_servers is removed.
+    Please use ceilometer::memcache_servers instead.

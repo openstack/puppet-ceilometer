@@ -228,46 +228,6 @@
 #   IP address.
 #   Defaults to $::os_service_default.
 #
-#
-# === DEPRECATED PARAMETERS:
-# [*alarm_history_time_to_live*]
-#
-# [*rabbit_host*]
-#   (Optional) The RabbitMQ broker address where a single node is used.
-#   (string value)
-#   Defaults to $::os_service_default
-#
-# [*rabbit_port*]
-#   (Optional) The RabbitMQ broker port where a single node is used.
-#   (port value)
-#   Defaults to $::os_service_default
-#
-# [*rabbit_hosts*]
-#   (Optional) RabbitMQ HA cluster host:port pairs. (array value)
-#   Defaults to $::os_service_default
-#
-# [*rabbit_userid*]
-#   (Optional) The RabbitMQ userid. (string value)
-#   Defaults to $::os_service_default
-#
-# [*rabbit_password*]
-#   (Optional) The RabbitMQ password. (string value)
-#   Defaults to $::os_service_default
-#
-# [*rabbit_virtual_host*]
-#   (Optional) The RabbitMQ virtual host. (string value)
-#   Defaults to $::os_service_default
-#
-# [*memcached_servers*]
-#   (Optional) A list of memcached server(s) to use for caching. (list value)
-#   Defaults to $::os_service_default
-#
-# [*rpc_backend*]
-#   (optional) The messaging driver to use, defaults to rabbit. Other drivers include
-#   amqp and zmq. (string value)
-#   Default to $::os_service_default
-#
-
 class ceilometer(
   $http_timeout                       = '600',
   $event_time_to_live                 = '-1',
@@ -319,47 +279,11 @@ class ceilometer(
   $snmpd_readonly_user_password       = $::os_service_default,
   $purge_config                       = false,
   $host                               = $::os_service_default,
-  # DEPRECATED PARAMETERS
-  $alarm_history_time_to_live         = undef,
-  $rabbit_host                        = $::os_service_default,
-  $rabbit_port                        = $::os_service_default,
-  $rabbit_hosts                       = $::os_service_default,
-  $rabbit_userid                      = $::os_service_default,
-  $rabbit_password                    = $::os_service_default,
-  $rabbit_virtual_host                = $::os_service_default,
-  $memcached_servers                  = undef,
-  $rpc_backend                        = $::os_service_default,
 ) {
 
   include ::ceilometer::deps
   include ::ceilometer::logging
   include ::ceilometer::params
-
-  if $alarm_history_time_to_live {
-    warning('alarm_history_time_to_live parameter is deprecated. It should be configured for Aodh.')
-  }
-
-  if !is_service_default($rabbit_host) or
-    !is_service_default($rabbit_hosts) or
-    !is_service_default($rabbit_password) or
-    !is_service_default($rabbit_port) or
-    !is_service_default($rabbit_userid) or
-    !is_service_default($rabbit_virtual_host) or
-    !is_service_default($rpc_backend) {
-    warning("ceilometer::rabbit_host, ceilometer::rabbit_hosts, ceilometer::rabbit_password, \
-ceilometer::rabbit_port, ceilometer::rabbit_userid, ceilometer::rabbit_virtual_host and \
-ceilometer::rpc_backend are deprecated. Please use ceilometer::default_transport_url \
-instead.")
-  }
-
-  if $memcached_servers {
-    warning("memcached_servers parameter is deprecated and will be removed in the future release, \
-please use memcache_servers instead.")
-    $memcache_servers_real = $memcached_servers
-  }
-  else {
-    $memcache_servers_real = $memcache_servers
-  }
 
   group { 'ceilometer':
     ensure  => present,
@@ -385,14 +309,7 @@ please use memcache_servers instead.")
     purge => $purge_config,
   }
 
-
   oslo::messaging::rabbit {'ceilometer_config':
-    rabbit_host                 => $rabbit_host,
-    rabbit_port                 => $rabbit_port,
-    rabbit_hosts                => $rabbit_hosts,
-    rabbit_userid               => $rabbit_userid,
-    rabbit_password             => $rabbit_password,
-    rabbit_virtual_host         => $rabbit_virtual_host,
     rabbit_ha_queues            => $rabbit_ha_queues,
     heartbeat_timeout_threshold => $rabbit_heartbeat_timeout_threshold,
     heartbeat_rate              => $rabbit_heartbeat_rate,
@@ -451,6 +368,6 @@ please use memcache_servers instead.")
   }
 
   oslo::cache { 'ceilometer_config':
-    memcache_servers => $memcache_servers_real,
+    memcache_servers => $memcache_servers,
   }
 }

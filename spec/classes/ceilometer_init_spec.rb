@@ -19,10 +19,6 @@ describe 'ceilometer' do
 
   let :rabbit_params do
     {
-      :rabbit_host               => '127.0.0.1',
-      :rabbit_port               => 5672,
-      :rabbit_userid             => 'guest',
-      :rabbit_password           => '',
       :rabbit_qos_prefetch_count => 10,
     }
   end
@@ -42,7 +38,7 @@ describe 'ceilometer' do
       is_expected.to contain_ceilometer_config('DEFAULT/host').with_value(params[:host])
     end
 
-    context 'with rabbit_host parameter' do
+    context 'with rabbit parameters' do
       before { params.merge!( rabbit_params ) }
       it_configures 'a ceilometer base installation'
       it_configures 'rabbit with SSL support'
@@ -56,19 +52,12 @@ describe 'ceilometer' do
 
     end
 
-    context 'with rabbit_hosts parameter' do
+    context 'with rabbit parameters' do
       context 'with one server' do
-        before { params.merge!( rabbit_params ).merge!( :rabbit_hosts => ['127.0.0.1:5672'] ) }
+        before { params.merge!( rabbit_params ) }
         it_configures 'a ceilometer base installation'
         it_configures 'rabbit with SSL support'
         it_configures 'rabbit without HA support (without backward compatibility)'
-      end
-
-      context 'with multiple servers' do
-        before { params.merge!( rabbit_params ).merge!( :rabbit_hosts => ['rabbit1:5672', 'rabbit2:5672'] ) }
-        it_configures 'a ceilometer base installation'
-        it_configures 'rabbit with SSL support'
-        it_configures 'rabbit with HA support'
       end
 
     end
@@ -200,18 +189,11 @@ describe 'ceilometer' do
   shared_examples_for 'rabbit without HA support (with backward compatibility)' do
 
     it 'configures rabbit' do
-      is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_userid').with_value( params[:rabbit_userid] )
-      is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_password').with_value( params[:rabbit_password] )
-      is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_password').with_value( params[:rabbit_password] ).with_secret(true)
-      is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_virtual_host').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/heartbeat_timeout_threshold').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/heartbeat_rate').with_value('<SERVICE DEFAULT>')
     end
 
-    it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_host').with_value( params[:rabbit_host] ) }
-    it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_port').with_value( params[:rabbit_port] ) }
     it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_qos_prefetch_count').with_value( params[:rabbit_qos_prefetch_count] ) }
-    it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_hosts').with_value('<SERVICE DEFAULT>') }
     it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value('<SERVICE DEFAULT>') }
     it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/kombu_failover_strategy').with_value('<SERVICE DEFAULT>') }
 
@@ -220,18 +202,11 @@ describe 'ceilometer' do
   shared_examples_for 'rabbit without HA support (without backward compatibility)' do
 
     it 'configures rabbit' do
-      is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_userid').with_value( params[:rabbit_userid] )
-      is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_password').with_value( params[:rabbit_password] )
-      is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_password').with_value( params[:rabbit_password] ).with_secret(true)
-      is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_virtual_host').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/heartbeat_timeout_threshold').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/heartbeat_rate').with_value('<SERVICE DEFAULT>')
     end
 
-    it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_host').with_value('<SERVICE DEFAULT>') }
-    it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_port').with_value('<SERVICE DEFAULT>') }
     it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_qos_prefetch_count').with_value( params[:rabbit_qos_prefetch_count] ) }
-    it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_hosts').with_value( params[:rabbit_hosts].join(',') ) }
     it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value('<SERVICE DEFAULT>') }
     it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/kombu_failover_strategy').with_value('<SERVICE DEFAULT>') }
 
@@ -244,24 +219,6 @@ describe 'ceilometer' do
     end
   end
 
-  shared_examples_for 'rabbit with HA support' do
-
-    it 'configures rabbit' do
-      is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_userid').with_value( params[:rabbit_userid] )
-      is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_password').with_value( params[:rabbit_password] )
-      is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_password').with_value( params[:rabbit_password] ).with_secret(true)
-      is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_virtual_host').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/heartbeat_timeout_threshold').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/heartbeat_rate').with_value('<SERVICE DEFAULT>')
-    end
-
-    it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_host').with_value('<SERVICE DEFAULT>') }
-    it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_port').with_value('<SERVICE DEFAULT>') }
-    it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_qos_prefetch_count').with_value( params[:rabbit_qos_prefetch_count] ) }
-    it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_hosts').with_value( params[:rabbit_hosts].join(',') ) }
-    it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value(true) }
-
-  end
   shared_examples_for 'rabbit with durable queues' do
     it 'in ceilometer' do
       is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/amqp_durable_queues').with_value(true)
@@ -353,16 +310,6 @@ describe 'ceilometer' do
         before { params.merge!(:kombu_ssl_keyfile => '/path/to/ssl/keyfile') }
         it_raises 'a Puppet::Error', /The kombu_ssl_keyfile parameter requires rabbit_use_ssl to be set to true/
       end
-    end
-  end
-
-  shared_examples_for 'memcached support' do
-    context "with memcached enabled" do
-      before { params.merge!(
-        :memcached_servers => ['1.2.3.4','1.2.3.5']
-      ) }
-
-      it { is_expected.to contain_ceilometer_config('DEFAULT/memcached_servers').with_value('1.2.3.4,1.2.3.5') }
     end
   end
 
