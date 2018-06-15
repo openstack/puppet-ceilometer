@@ -33,7 +33,7 @@
 #   Defaults to 'utf8_general_ci'.
 #
 class ceilometer::db::mysql(
-  $password      = false,
+  $password,
   $dbname        = 'ceilometer',
   $user          = 'ceilometer',
   $host          = '127.0.0.1',
