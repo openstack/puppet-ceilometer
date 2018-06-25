@@ -9,16 +9,6 @@
 #   (Optional) Timeout seconds for HTTP requests.
 #   Defaults to 600.
 #
-# [*event_time_to_live*]
-#   (Optional) Number of seconds that events are kept in the database for
-#   (<= 0 means forever)
-#   Defaults to -1.
-#
-# [*metering_time_to_live*]
-#   (Optional) Number of seconds that samples are kept in the database for
-#   (<= 0 means forever)
-#   Defaults to -1.
-#
 # [*telemetry_secret*]
 #  (Required)  Secret key for signing messages.
 #
@@ -228,10 +218,20 @@
 #   IP address.
 #   Defaults to $::os_service_default.
 #
+# ### DEPRECATED PARAMETERS
+#
+# [*event_time_to_live*]
+#   (Optional) Number of seconds that events are kept in the database for
+#   (<= 0 means forever)
+#   Defaults to undef.
+#
+# [*metering_time_to_live*]
+#   (Optional) Number of seconds that samples are kept in the database for
+#   (<= 0 means forever)
+#   Defaults to undef.
+#
 class ceilometer(
   $http_timeout                       = '600',
-  $event_time_to_live                 = '-1',
-  $metering_time_to_live              = '-1',
   $telemetry_secret                   = false,
   $notification_topics                = ['notifications'],
   $notification_driver                = $::os_service_default,
@@ -279,7 +279,19 @@ class ceilometer(
   $snmpd_readonly_user_password       = $::os_service_default,
   $purge_config                       = false,
   $host                               = $::os_service_default,
+  ## DEPRECATED PARAMETERS
+  $event_time_to_live                 = undef,
+  $metering_time_to_live              = undef,
 ) {
+
+  if $metering_time_to_live {
+    warning('The metering_time_to_live parameter is deprecated, ignored and will be
+    removed in the futrure.')
+  }
+  if $event_time_to_live {
+    warning('The event_time_to_live parameter is deprecated, ignored and will be
+    removed in the futrure.')
+  }
 
   include ::ceilometer::deps
   include ::ceilometer::logging
@@ -349,8 +361,6 @@ class ceilometer(
     'DEFAULT/http_timeout'                : value => $http_timeout;
     'DEFAULT/host'                        : value => $host;
     'publisher/telemetry_secret'          : value => $telemetry_secret, secret => true;
-    'database/event_time_to_live'         : value => $event_time_to_live;
-    'database/metering_time_to_live'      : value => $metering_time_to_live;
     'hardware/readonly_user_name'         : value => $snmpd_readonly_username;
     'hardware/readonly_user_password'     : value => $snmpd_readonly_user_password;
   }

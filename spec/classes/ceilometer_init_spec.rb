@@ -5,8 +5,6 @@ describe 'ceilometer' do
   let :params do
     {
       :http_timeout          => '600',
-      :event_time_to_live    => '604800',
-      :metering_time_to_live => '604800',
       :telemetry_secret      => 'metering-s3cr3t',
       :package_ensure        => 'present',
       :debug                 => 'False',
@@ -24,11 +22,6 @@ describe 'ceilometer' do
   end
 
   shared_examples_for 'ceilometer' do
-
-    it 'configures time to live for events and meters' do
-      is_expected.to contain_ceilometer_config('database/event_time_to_live').with_value( params[:event_time_to_live] )
-      is_expected.to contain_ceilometer_config('database/metering_time_to_live').with_value( params[:metering_time_to_live] )
-    end
 
     it 'configures timeout for HTTP requests' do
       is_expected.to contain_ceilometer_config('DEFAULT/http_timeout').with_value(params[:http_timeout])
