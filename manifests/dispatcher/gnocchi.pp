@@ -31,6 +31,11 @@ class ceilometer::dispatcher::gnocchi (
 
   include ::ceilometer::deps
 
+  warning('The class ceilometer::dispatcher::gnocchi is deprecated. All its
+  options must be set as url parameters in
+  ceilometer::agent::notification::pipeline_publishers. Depending of the used
+  Gnocchi version their might be ignored.')
+
   ceilometer_config {
     'dispatcher_gnocchi/filter_service_activity':   value => $filter_service_activity;
     'dispatcher_gnocchi/filter_project':            value => $filter_project;
