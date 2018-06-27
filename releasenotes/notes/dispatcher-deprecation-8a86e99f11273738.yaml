@@ -1,0 +1,7 @@
+---
+deprecations:
+  - |
+    The class ceilometer::dispatcher::gnocchi is deprecated. All its options
+    must be set as url parameters in
+    ceilometer::agent::notification::pipeline_publishers. Depending of the used
+    Gnocchi version their might be ignored.'
