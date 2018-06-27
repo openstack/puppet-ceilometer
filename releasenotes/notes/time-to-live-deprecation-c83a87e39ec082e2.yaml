@@ -1,0 +1,5 @@
+---
+deprecations:
+  - |
+    event_time_to_live and metering_time_to_live are deprecated, since they no
+    longuer work since 3 releases.
