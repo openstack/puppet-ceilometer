@@ -3,142 +3,180 @@ require 'spec_helper'
 describe 'ceilometer::agent::polling' do
 
   let :pre_condition do
-    "include nova\n" +
-    "include nova::compute\n" +
-    "class { 'ceilometer': telemetry_secret => 's3cr3t' }"
+    "include nova
+    include nova::compute
+    class { 'ceilometer': telemetry_secret => 's3cr3t' }"
   end
 
   let :params do
-    { :enabled           => true,
-      :manage_service    => true,
-      :package_ensure    => 'latest',
-      :central_namespace => true,
-      :compute_namespace => true,
-      :ipmi_namespace    => true,
-      :coordination_url  => 'redis://localhost:6379',
-    }
+    {}
   end
 
-  shared_examples_for 'ceilometer-polling' do
+  shared_examples 'ceilometer::agent::polling' do
+    context 'with default params' do
+      it { should contain_class('ceilometer::deps') }
+      it { should contain_class('ceilometer::params') }
 
-    it { is_expected.to contain_class('ceilometer::deps') }
-    it { is_expected.to contain_class('ceilometer::params') }
-
-    context 'when compute_namespace => true' do
-      it 'adds ceilometer user to nova group and, if required, to libvirt group' do
+      it {
         if platform_params[:libvirt_group]
-          is_expected.to contain_user('ceilometer').with_groups(['nova', "#{platform_params[:libvirt_group]}"])
+          should contain_user('ceilometer').with_groups(['nova', "#{platform_params[:libvirt_group]}"])
         else
-          is_expected.to contain_user('ceilometer').with_groups(['nova'])
+          should contain_user('ceilometer').with_groups(['nova'])
         end
-      end
+      }
 
-      it 'ensures nova-common is installed before the package ceilometer-common' do
-          is_expected.to contain_package('nova-common').with(
-              :before => /Package\[ceilometer-common\]/
-          )
-      end
+      it { should contain_package('nova-common').with(
+       :before => /Package\[ceilometer-common\]/
+      )}
 
-      it 'configures agent compute' do
-        is_expected.to contain_ceilometer_config('compute/instance_discovery_method').with_value('<SERVICE DEFAULT>')
-      end
-    end
+      it { should contain_ceilometer_config('compute/instance_discovery_method').with_value('<SERVICE DEFAULT>') }
 
-    it 'installs ceilometer-polling package' do
-      is_expected.to contain_package('ceilometer-polling').with(
-        :ensure => 'latest',
+      it { should contain_package('ceilometer-polling').with(
+        :ensure => 'present',
         :name   => platform_params[:agent_package_name],
         :tag    => ['openstack', 'ceilometer-package'],
-      )
+      )}
+
+      it { should contain_ceilometer_config('DEFAULT/polling_namespaces').with_value('central,compute,ipmi') }
+
+      it { should contain_service('ceilometer-polling').with(
+        :ensure     => 'running',
+        :name       => platform_params[:agent_service_name],
+        :enable     => true,
+        :hasstatus  => true,
+        :hasrestart => true,
+        :tag        => 'ceilometer-service',
+      )}
+
+      it { should_not contain_ceilometer_config('coordination/backend_url') }
+      it { should_not contain_file('polling') }
     end
 
-    it 'configures polling namespaces' do
-      is_expected.to contain_ceilometer_config('DEFAULT/polling_namespaces').with_value('central,compute,ipmi')
-    end
-
-    [{:enabled => true}, {:enabled => false}].each do |param_hash|
-      context "when service should be #{param_hash[:enabled] ? 'enabled' : 'disabled'}" do
-        before do
-          params.merge!(param_hash)
-        end
-
-        it 'configures ceilometer-polling service' do
-          is_expected.to contain_service('ceilometer-polling').with(
-            :ensure     => (params[:manage_service] && params[:enabled]) ? 'running' : 'stopped',
-            :name       => platform_params[:agent_service_name],
-            :enable     => params[:enabled],
-            :hasstatus  => true,
-            :hasrestart => true,
-            :tag        => 'ceilometer-service',
-          )
-        end
+    context 'when setting package_ensure' do
+      before do
+        params.merge!( :package_ensure => 'latest' )
       end
-    end
 
+      it { should contain_package('ceilometer-polling').with(
+        :ensure => 'latest',
+      )}
+    end
 
     context 'when setting instance_discovery_method' do
       before do
-        params.merge!({ :instance_discovery_method   => 'naive' })
+        params.merge!( :instance_discovery_method => 'naive' )
       end
 
-      it 'configures agent compute instance discovery' do
-        is_expected.to contain_ceilometer_config('compute/instance_discovery_method').with_value('naive')
-      end
+      it { should contain_ceilometer_config('compute/instance_discovery_method').with_value('naive') }
     end
 
     context 'with central and ipmi polling namespaces disabled' do
       before do
-        params.merge!({
-          :central_namespace => false,
-          :ipmi_namespace    => false })
+        params.merge!( :central_namespace => false,
+                       :ipmi_namespace    => false )
       end
 
-      it 'configures compute polling namespace' do
-        is_expected.to contain_ceilometer_config('DEFAULT/polling_namespaces').with_value('compute')
-      end
+      it { should contain_ceilometer_config('DEFAULT/polling_namespaces').with_value('compute') }
     end
 
     context 'with disabled service managing' do
       before do
-        params.merge!({
-          :manage_service => false,
-          :enabled        => false })
+        params.merge!( :manage_service => false,
+                       :enabled        => false )
       end
 
-      it 'configures ceilometer-polling service' do
-        is_expected.to contain_service('ceilometer-polling').with(
-          :ensure     => nil,
-          :name       => platform_params[:agent_service_name],
-          :enable     => false,
-          :hasstatus  => true,
-          :hasrestart => true,
-          :tag        => 'ceilometer-service',
-        )
+      it { should contain_service('ceilometer-polling').with(
+        :ensure     => nil,
+        :name       => platform_params[:agent_service_name],
+        :enable     => false,
+        :hasstatus  => true,
+        :hasrestart => true,
+        :tag        => 'ceilometer-service',
+      )}
+    end
+
+    context 'with polling management enabled and default meters' do
+      before do
+        params.merge!( :manage_polling => true )
+     end
+
+      it { should contain_file('polling').with(
+        :ensure                  => 'present',
+        :path                    => '/etc/ceilometer/polling.yaml',
+        :content                 => '---
+sources:
+    - name: some_pollsters
+      interval: 600
+      meters:
+        - cpu
+        - cpu_l3_cache
+        - memory.usage
+        - network.incoming.bytes
+        - network.incoming.packets
+        - network.outgoing.bytes
+        - network.outgoing.packets
+        - disk.read.bytes
+        - disk.read.requests
+        - disk.write.bytes
+        - disk.write.requests
+        - volume.size
+        - volume.snapshot.size
+        - volume.backup.size
+        - hardware.cpu.util
+        - hardware.memory.used
+        - hardware.memory.total
+        - hardware.memory.buffer
+        - hardware.memory.cached
+        - hardware.memory.swap.avail
+        - hardware.memory.swap.total
+        - hardware.system_stats.io.outgoing.blocks
+        - hardware.system_stats.io.incoming.blocks
+        - hardware.network.ip.incoming.datagrams
+        - hardware.network.ip.outgoing.datagrams
+',
+        :selinux_ignore_defaults => true,
+        :tag                     => 'ceilometer-yamls',
+      )}
+    end
+
+    context 'with polling and custom config' do
+      before do
+        params.merge!( :manage_polling   => true,
+                       :polling_interval => 30,
+                       :polling_meters   => ['meter1', 'meter2'] )
       end
+
+      it { should contain_file('polling').with(
+        :ensure  => 'present',
+        :path    => '/etc/ceilometer/polling.yaml',
+        :content                 => '---
+sources:
+    - name: some_pollsters
+      interval: 30
+      meters:
+        - meter1
+        - meter2
+',
+        :selinux_ignore_defaults => true,
+        :tag                     => 'ceilometer-yamls',
+      )}
     end
 
-    context "with polling management enabled" do
-      before { params.merge!(
-        :manage_polling   => true
-      ) }
+    context 'with polling management disabled' do
+      before do
+        params.merge!( :manage_polling => false )
+      end
 
-      it { is_expected.to contain_file('polling').with(
-        'path' => '/etc/ceilometer/polling.yaml',
-      ) }
+      it { should_not contain_file('polling') }
     end
 
-    context "with polling management disabled" do
-      before { params.merge!(
-        :manage_polling   => false
-      ) }
+    context 'when setting coordination_url' do
+      before do
+        params.merge!( :coordination_url => 'redis://localhost:6379' )
+      end
 
-      it { is_expected.not_to contain_file('polling') }
+      it { should contain_ceilometer_config('coordination/backend_url').with_value('redis://localhost:6379') }
     end
-
-    it 'configures central agent' do
-      is_expected.to contain_ceilometer_config('coordination/backend_url').with_value( params[:coordination_url] )
-    end
-
   end
 
   on_supported_os({
@@ -152,16 +190,20 @@ describe 'ceilometer::agent::polling' do
       let :platform_params do
         case facts[:osfamily]
         when 'Debian'
-            { :agent_package_name => 'ceilometer-polling',
+            {
+              :agent_package_name => 'ceilometer-polling',
               :agent_service_name => 'ceilometer-polling',
-              :libvirt_group      => 'libvirt' }
+              :libvirt_group      => 'libvirt'
+            }
         when 'RedHat'
-            { :agent_package_name => 'openstack-ceilometer-polling',
-              :agent_service_name => 'openstack-ceilometer-polling' }
+            {
+              :agent_package_name => 'openstack-ceilometer-polling',
+              :agent_service_name => 'openstack-ceilometer-polling'
+            }
         end
       end
 
-      it_behaves_like 'ceilometer-polling'
+      it_behaves_like 'ceilometer::agent::polling'
     end
   end
 

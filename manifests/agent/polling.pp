@@ -48,6 +48,11 @@
 #   (Optional) Number of seconds between polling cycle
 #   Defaults to 600 seconds, used only if manage_polling is true.
 #
+# [*polling_meters*]
+#   (Optional) Array of strings with meters to add to
+#   the polling.yaml file, used only if manage_polling is true.
+#   Defaults to $::ceilometer::params::polling_meters
+#
 class ceilometer::agent::polling (
   $manage_service            = true,
   $enabled                   = true,
@@ -59,6 +64,7 @@ class ceilometer::agent::polling (
   $instance_discovery_method = $::os_service_default,
   $manage_polling            = false,
   $polling_interval          = 600,
+  $polling_meters            = $::ceilometer::params::polling_meters,
 ) inherits ceilometer {
 
   include ::ceilometer::deps

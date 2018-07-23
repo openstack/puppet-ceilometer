@@ -1,0 +1,6 @@
+---
+features:
+  - |
+    New parameter ceilometer::agent::polling::polling_meters can now be used to
+    populate the list of pollers in the ceilometer polling.yaml file. The default
+    values in this file is still the same.
