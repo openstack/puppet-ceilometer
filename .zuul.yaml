@@ -4,4 +4,4 @@
       - puppet-openstack-module-unit-jobs
       - puppet-openstack-integration-jobs-scenario001
       - puppet-openstack-beaker-jobs
-      - release-notes-jobs
+      - release-notes-jobs-python3
