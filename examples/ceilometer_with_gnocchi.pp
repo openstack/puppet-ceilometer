@@ -1,8 +1,6 @@
 class { '::ceilometer':
-  telemetry_secret => 'secrete',
-  rabbit_userid    => 'ceilometer',
-  rabbit_password  => 'an_even_bigger_secret',
-  rabbit_host      => '127.0.0.1',
+  telemetry_secret      => 'secrete',
+  default_transport_url => 'rabbit://ceilometer:an_even_bigger_secret@127.0.0.1:5672',
 }
 class { '::ceilometer::db::mysql':
   password => 'a_big_secret',
