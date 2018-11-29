@@ -25,27 +25,6 @@
 #   (Optional) ensure state for package.
 #   Defaults to 'present'.
 #
-# [*debug*]
-#   (Optional) Should the daemons log debug messages.
-#   Defaults to undef.
-#
-# [*log_dir*]
-#   (Optional) Directory to which ceilometer logs are sent.
-#   If set to $::os_service_default, it will not log to any directory.
-#   Defaults to undef.
-#
-# [*use_syslog*]
-#   (Optional) Use syslog for logging
-#   Defaults to undef.
-#
-# [*use_stderr*]
-#   (Optional) Use stderr for logging
-#   Defaults to undef.
-#
-# [*log_facility*]
-#   (Optional) Syslog facility to receive log lines.
-#   Defaults to undef.
-#
 # [*default_transport_url*]
 #   (optional) A URL representing the messaging driver to use and its full
 #   configuration. Transport URLs take the form:
@@ -236,11 +215,6 @@ class ceilometer(
   $notification_topics                = ['notifications'],
   $notification_driver                = $::os_service_default,
   $package_ensure                     = 'present',
-  $debug                              = undef,
-  $log_dir                            = undef,
-  $use_syslog                         = undef,
-  $use_stderr                         = undef,
-  $log_facility                       = undef,
   $default_transport_url              = $::os_service_default,
   $rpc_response_timeout               = $::os_service_default,
   $control_exchange                   = $::os_service_default,
@@ -294,7 +268,6 @@ class ceilometer(
   }
 
   include ::ceilometer::deps
-  include ::ceilometer::logging
   include ::ceilometer::params
 
   group { 'ceilometer':

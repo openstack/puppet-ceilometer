@@ -116,26 +116,14 @@ class ceilometer::logging(
 
   include ::ceilometer::deps
 
-  # NOTE(spredzy): In order to keep backward compatibility we rely on the pick function
-  # to use ceilometer::<myparam> first then ceilometer::logging::<myparam>.
-  $use_syslog_real = pick($::ceilometer::use_syslog,$use_syslog)
-  $use_stderr_real = pick($::ceilometer::use_stderr,$use_stderr)
-  $log_facility_real = pick($::ceilometer::log_facility,$log_facility)
-  if $log_dir != '' {
-    $log_dir_real = pick($::ceilometer::log_dir,$log_dir)
-  } else {
-    $log_dir_real = $log_dir
-  }
-  $debug_real = pick($::ceilometer::debug,$debug)
-
   oslo::log { 'ceilometer_config':
-    debug                         => $debug_real,
-    use_stderr                    => $use_stderr_real,
-    use_syslog                    => $use_syslog_real,
+    debug                         => $debug,
+    use_stderr                    => $use_stderr,
+    use_syslog                    => $use_syslog,
     use_json                      => $use_json,
     use_journal                   => $use_journal,
-    log_dir                       => $log_dir_real,
-    syslog_log_facility           => $log_facility_real,
+    log_dir                       => $log_dir,
+    syslog_log_facility           => $log_facility,
     logging_context_format_string => $logging_context_format_string,
     logging_default_format_string => $logging_default_format_string,
     logging_debug_format_suffix   => $logging_debug_format_suffix,
