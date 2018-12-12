@@ -7,9 +7,6 @@ describe 'ceilometer' do
       :http_timeout          => '600',
       :telemetry_secret      => 'metering-s3cr3t',
       :package_ensure        => 'present',
-      :debug                 => 'False',
-      :log_dir               => '/var/log/ceilometer',
-      :use_stderr            => 'True',
       :purge_config          => false,
       :host                  => 'foo.domain'
     }
@@ -63,7 +60,6 @@ describe 'ceilometer' do
 
   shared_examples_for 'a ceilometer base installation' do
 
-    it { is_expected.to contain_class('ceilometer::logging') }
     it { is_expected.to contain_class('ceilometer::params') }
 
     it 'configures ceilometer group' do
