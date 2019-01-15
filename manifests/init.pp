@@ -160,6 +160,14 @@
 #   (Optional) Debug: dump AMQP frames to stdout
 #   Defaults to $::os_service_default.
 #
+# [*amqp_rpc_address_prefix*]
+#   (Optional) Address prefix for Ceilometer generated RPC addresses
+#   Defaults to $::os_service_default.
+#
+# [*amqp_notify_address_prefix*]
+#   (Optional) Address prefix for Ceilometer generated Notification addresses
+#   Defaults to $::os_service_default.
+#
 # [*amqp_ssl_ca_file*]
 #   (Optional) CA certificate PEM file to verify server certificate
 #   Defaults to $::os_service_default.
@@ -265,6 +273,8 @@ class ceilometer(
   $amqp_container_name                = $::os_service_default,
   $amqp_idle_timeout                  = $::os_service_default,
   $amqp_trace                         = $::os_service_default,
+  $amqp_rpc_address_prefix            = $::os_service_default,
+  $amqp_notify_address_prefix         = $::os_service_default,
   $amqp_ssl_ca_file                   = $::os_service_default,
   $amqp_ssl_cert_file                 = $::os_service_default,
   $amqp_ssl_key_file                  = $::os_service_default,
@@ -344,6 +354,8 @@ class ceilometer(
     container_name         => $amqp_container_name,
     idle_timeout           => $amqp_idle_timeout,
     trace                  => $amqp_trace,
+    rpc_address_prefix     => $amqp_rpc_address_prefix,
+    notify_address_prefix  => $amqp_notify_address_prefix,
     ssl_ca_file            => $amqp_ssl_ca_file,
     ssl_cert_file          => $amqp_ssl_cert_file,
     ssl_key_file           => $amqp_ssl_key_file,
