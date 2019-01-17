@@ -1,14 +1,11 @@
 require 'spec_helper'
 
 describe 'ceilometer::db' do
-
   shared_examples 'ceilometer::db' do
-
     context 'with default parameters' do
+      it { should contain_class('ceilometer::deps') }
 
-      it { is_expected.to contain_class('ceilometer::params') }
-      it { is_expected.to contain_class('ceilometer::db::sync') }
-      it { is_expected.to contain_oslo__db('ceilometer_config').with(
+      it { should contain_oslo__db('ceilometer_config').with(
         :db_max_retries => '<SERVICE DEFAULT>',
         :connection     => 'mysql+pymysql://ceilometer:ceilometer@localhost/ceilometer',
         :idle_timeout   => '<SERVICE DEFAULT>',
@@ -20,6 +17,7 @@ describe 'ceilometer::db' do
         :pool_timeout   => '<SERVICE DEFAULT>',
       )}
 
+      it { should contain_class('ceilometer::db::sync') }
     end
 
     context 'with specific parameters' do
@@ -37,8 +35,9 @@ describe 'ceilometer::db' do
           :sync_db                 => false }
       end
 
-      it { is_expected.not_to contain_class('ceilometer::db::sync') }
-      it { is_expected.to contain_oslo__db('ceilometer_config').with(
+      it { should contain_class('ceilometer::deps') }
+
+      it { should contain_oslo__db('ceilometer_config').with(
         :db_max_retries => '-1',
         :connection     => 'mongodb://localhost:1234/ceilometer',
         :idle_timeout   => '3601',
@@ -50,97 +49,7 @@ describe 'ceilometer::db' do
         :pool_timeout   => '21',
       )}
 
-    end
-
-    context 'with pymysql connection' do
-      let :params do
-        { :database_connection => 'mysql+pymysql://ceilometer:ceilometer@localhost/ceilometer' }
-      end
-
-      it { is_expected.to contain_class('ceilometer::params') }
-      it { is_expected.to contain_class('ceilometer::db::sync') }
-      it { is_expected.to contain_oslo__db('ceilometer_config').with(
-        :connection => 'mysql+pymysql://ceilometer:ceilometer@localhost/ceilometer',
-      )}
-    end
-
-    context 'with mongodb backend' do
-      let :params do
-        { :database_connection => 'mongodb://localhost:1234/ceilometer' }
-      end
-
-      it 'install the proper backend package' do
-        is_expected.to contain_package('python-pymongo').with(
-          :ensure => 'present',
-          :name   => 'python-pymongo',
-          :tag    => 'openstack'
-        )
-      end
-    end
-
-    context 'with incorrect database_connection string' do
-      let :params do
-        { :database_connection => 'redis://ceilometer:ceilometer@localhost/ceilometer', }
-      end
-
-      it_raises 'a Puppet::Error', /validate_re/
-    end
-
-    context 'with postgresql backend' do
-      let :params do
-        { :database_connection => 'postgresql://ceilometer:ceilometer@localhost/ceilometer', }
-      end
-
-      it 'install the proper backend package' do
-        is_expected.to contain_package('python-psycopg2').with(:ensure => 'present')
-      end
-    end
-
-    context 'with incorrect pymysql database_connection string' do
-      let :params do
-        { :database_connection => 'foo+pymysql://ceilometer:ceilometer@localhost/ceilometer', }
-      end
-
-      it_raises 'a Puppet::Error', /validate_re/
-    end
-
-  end
-
-  shared_examples_for 'ceilometer::db on Debian' do
-    context 'with sqlite backend' do
-      let :params do
-        { :database_connection => 'sqlite:///var/lib/ceilometer.db', }
-      end
-
-      it 'install the proper backend package' do
-        is_expected.to contain_package('python-pysqlite2').with(
-          :ensure => 'present',
-          :name   => 'python-pysqlite2',
-          :tag    => 'openstack'
-        )
-      end
-    end
-
-    context 'using pymysql driver' do
-      let :params do
-        { :database_connection => 'mysql+pymysql:///ceilometer:ceilometer@localhost/ceilometer', }
-      end
-
-      it 'install the proper backend package' do
-        is_expected.to contain_package('python-pymysql').with(
-          :ensure => 'present',
-          :name   => 'python-pymysql',
-          :tag    => 'openstack'
-        )
-      end
-    end
-  end
-
-  shared_examples_for 'ceilometer::db on RedHat' do
-    context 'using pymysql driver' do
-      let :params do
-        { :database_connection => 'mysql+pymysql:///ceilometer:ceilometer@localhost/ceilometer', }
-      end
+      it { should_not contain_class('ceilometer::db::sync') }
     end
   end
 
@@ -150,20 +59,12 @@ describe 'ceilometer::db' do
     context "on #{os}" do
       let (:facts) do
         facts.merge!(OSDefaults.get_facts({
-          :concat_basedir         => '/var/lib/puppet/concat',
-          :fqdn                   => 'some.host.tld',
+          :concat_basedir => '/var/lib/puppet/concat',
+          :fqdn           => 'some.host.tld',
         }))
-      end
-
-      case facts[:osfamily]
-      when 'Debian'
-        it_behaves_like 'ceilometer::db on Debian'
-      when 'RedHat'
-        it_behaves_like 'ceilometer::db on RedHat'
       end
 
       it_behaves_like 'ceilometer::db'
     end
   end
-
 end
