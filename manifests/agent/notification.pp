@@ -115,7 +115,7 @@ class ceilometer::agent::notification (
   }
 
   if ($manage_event_pipeline) {
-    validate_array($event_pipeline_publishers)
+    validate_legacy(Array, 'validate_array', $event_pipeline_publishers)
 
     file { 'event_pipeline':
       ensure                  => present,
@@ -130,7 +130,7 @@ class ceilometer::agent::notification (
   }
 
   if ($manage_pipeline) {
-    validate_array($pipeline_publishers)
+    validate_legacy(Array, 'validate_array', $pipeline_publishers)
 
     file { 'pipeline':
       ensure                  => present,

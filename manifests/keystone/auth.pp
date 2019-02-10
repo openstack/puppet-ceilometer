@@ -89,7 +89,7 @@ class ceilometer::keystone::auth (
 
   include ::ceilometer::deps
 
-  validate_string($password)
+  validate_legacy(String, 'validate_string', $password)
 
   ::keystone::resource::service_identity { 'ceilometer':
     configure_user      => $configure_user,
