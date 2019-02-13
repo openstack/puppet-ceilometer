@@ -40,7 +40,7 @@ Setup
 
 **What the ceilometer module affects**
 
-* [Ceilometer](https://wiki.openstack.org/wiki/Ceilometer), the metering service for OpenStack
+* [Ceilometer](https://docs.openstack.org/ceilometer/latest/), the metering service for OpenStack
 
 ### Installing ceilometer
 
