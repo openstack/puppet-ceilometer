@@ -32,8 +32,8 @@ class ceilometer::config (
 
   include ::ceilometer::deps
 
-  validate_hash($ceilometer_config)
-  validate_hash($ceilometer_api_paste_ini)
+  validate_legacy(Hash, 'validate_hash', $ceilometer_config)
+  validate_legacy(Hash, 'validate_hash', $ceilometer_api_paste_ini)
 
   create_resources('ceilometer_config', $ceilometer_config)
   create_resources('ceilometer_api_paste_ini', $ceilometer_api_paste_ini)
