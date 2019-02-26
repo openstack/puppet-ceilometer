@@ -36,7 +36,7 @@ node default {
 
   # Set common auth parameters used by all agents (compute/central)
   class { '::ceilometer::agent::auth':
-    auth_url      => 'http://localhost:5000/v2.0',
+    auth_url      => 'http://localhost:5000/v3',
     auth_password => 'tralalerotralala'
   }
 
