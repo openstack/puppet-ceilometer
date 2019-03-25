@@ -66,9 +66,9 @@ class ceilometer::agent::auth (
   include ::ceilometer::deps
 
   if ! $auth_cacert {
-    ceilometer_config { 'service_credentials/ca_file': ensure => absent }
+    ceilometer_config { 'service_credentials/cafile': ensure => absent }
   } else {
-    ceilometer_config { 'service_credentials/ca_file': value => $auth_cacert }
+    ceilometer_config { 'service_credentials/cafile': value => $auth_cacert }
   }
 
   ceilometer_config {

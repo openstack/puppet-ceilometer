@@ -24,7 +24,7 @@ describe 'ceilometer::agent::auth' do
       is_expected.to contain_ceilometer_config('service_credentials/password').with_value('password')
       is_expected.to contain_ceilometer_config('service_credentials/password').with_value(params[:auth_password]).with_secret(true)
       is_expected.to contain_ceilometer_config('service_credentials/project_name').with_value('services')
-      is_expected.to contain_ceilometer_config('service_credentials/ca_file').with(:ensure => 'absent')
+      is_expected.to contain_ceilometer_config('service_credentials/cafile').with(:ensure => 'absent')
       is_expected.to contain_ceilometer_config('service_credentials/user_domain_name').with_value('Default')
       is_expected.to contain_ceilometer_config('service_credentials/project_domain_name').with_value('Default')
       is_expected.to contain_ceilometer_config('service_credentials/auth_type').with_value('password')
@@ -40,7 +40,7 @@ describe 'ceilometer::agent::auth' do
           :auth_project_domain_name  => 'MyProjDomain',
         )
       end
-      it { is_expected.to contain_ceilometer_config('service_credentials/ca_file').with_value(params[:auth_cacert]) }
+      it { is_expected.to contain_ceilometer_config('service_credentials/cafile').with_value(params[:auth_cacert]) }
       it { is_expected.to contain_ceilometer_config('service_credentials/interface').with_value(params[:auth_endpoint_type]) }
       it { is_expected.to contain_ceilometer_config('service_credentials/user_domain_name').with_value(params[:auth_user_domain_name]) }
       it { is_expected.to contain_ceilometer_config('service_credentials/project_domain_name').with_value(params[:auth_project_domain_name]) }
