@@ -145,7 +145,7 @@ Contributors
 Repository
 ----------
 
-* https://git.openstack.org/cgit/openstack/puppet-ceilometer
+* https://opendev.org/openstack/puppet-ceilometer
 
 
 
