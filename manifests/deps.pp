@@ -3,6 +3,9 @@
 #  Ceilometer anchors and dependency management
 #
 class ceilometer::deps {
+
+  assert_private()
+
   # Setup anchors for install, config and service phases of the module.  These
   # anchors allow external modules to hook the begin and end of any of these
   # phases.  Package or service management can also be replaced by ensuring the
