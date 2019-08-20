@@ -44,28 +44,20 @@ class ceilometer::params {
   case $::osfamily {
     'RedHat': {
       # package names
-      $agent_central_package_name      = 'openstack-ceilometer-central'
-      $agent_compute_package_name      = 'openstack-ceilometer-compute'
       $agent_polling_package_name      = 'openstack-ceilometer-polling'
       $agent_notification_package_name = 'openstack-ceilometer-notification'
       $common_package_name             = 'openstack-ceilometer-common'
       # service names
-      $agent_central_service_name      = 'openstack-ceilometer-central'
-      $agent_compute_service_name      = 'openstack-ceilometer-compute'
       $agent_polling_service_name      = 'openstack-ceilometer-polling'
       $agent_notification_service_name = 'openstack-ceilometer-notification'
       $libvirt_group                   = undef
     }
     'Debian': {
       # package names
-      $agent_central_package_name      = 'ceilometer-agent-central'
-      $agent_compute_package_name      = 'ceilometer-agent-compute'
       $agent_polling_package_name      = 'ceilometer-polling'
       $agent_notification_package_name = 'ceilometer-agent-notification'
       $common_package_name             = 'ceilometer-common'
       # service names
-      $agent_central_service_name      = 'ceilometer-agent-central'
-      $agent_compute_service_name      = 'ceilometer-agent-compute'
       $agent_polling_service_name      = 'ceilometer-polling'
       $agent_notification_service_name = 'ceilometer-agent-notification'
       $libvirt_group                   = 'libvirt'
