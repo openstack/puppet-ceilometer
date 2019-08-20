@@ -1,0 +1,7 @@
+---
+upgrade:
+  - |
+    The deprecated class ceilometer::dispatcher::gnocchi is removed.
+    All options that should be sent to gnocchi should be sent as URL parameters
+    defined in the pipeline publishers for example if using the notification
+    agent that is ceilometer::agent::notification::pipeline_publishers.
