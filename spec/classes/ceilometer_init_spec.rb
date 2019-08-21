@@ -180,6 +180,7 @@ describe 'ceilometer' do
     it 'configures rabbit' do
       is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/heartbeat_timeout_threshold').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/heartbeat_rate').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/heartbeat_in_pthread').with_value('<SERVICE DEFAULT>')
     end
 
     it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_qos_prefetch_count').with_value( params[:rabbit_qos_prefetch_count] ) }
@@ -193,6 +194,7 @@ describe 'ceilometer' do
     it 'configures rabbit' do
       is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/heartbeat_timeout_threshold').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/heartbeat_rate').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/heartbeat_in_pthread').with_value('<SERVICE DEFAULT>')
     end
 
     it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_qos_prefetch_count').with_value( params[:rabbit_qos_prefetch_count] ) }
@@ -218,11 +220,13 @@ describe 'ceilometer' do
     context "with heartbeat configuration" do
       before { params.merge!(
         :rabbit_heartbeat_timeout_threshold => '60',
-        :rabbit_heartbeat_rate              => '10'
+        :rabbit_heartbeat_rate              => '10',
+        :rabbit_heartbeat_in_pthread        => true,
       ) }
 
       it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/heartbeat_timeout_threshold').with_value('60') }
       it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/heartbeat_rate').with_value('10') }
+      it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/heartbeat_in_pthread').with_value(true) }
     end
   end
 
