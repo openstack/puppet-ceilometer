@@ -64,15 +64,6 @@ node default {
     ipmi_namespace    => false,
   }
 
-  # Install compute agent (deprecated)
-  # default: enable
-  # class { 'ceilometer::agent::compute':
-  # }
-
-  # Install central agent (deprecated)
-  # class { 'ceilometer::agent::central':
-  # }
-
   # Purge old meters
   class { '::ceilometer::expirer': }
 

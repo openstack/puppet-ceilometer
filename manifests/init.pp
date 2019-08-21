@@ -205,18 +205,6 @@
 #   IP address.
 #   Defaults to $::os_service_default.
 #
-# ### DEPRECATED PARAMETERS
-#
-# [*event_time_to_live*]
-#   (Optional) Number of seconds that events are kept in the database for
-#   (<= 0 means forever)
-#   Defaults to undef.
-#
-# [*metering_time_to_live*]
-#   (Optional) Number of seconds that samples are kept in the database for
-#   (<= 0 means forever)
-#   Defaults to undef.
-#
 class ceilometer(
   $http_timeout                       = '600',
   $telemetry_secret                   = false,
@@ -263,19 +251,7 @@ class ceilometer(
   $snmpd_readonly_user_password       = $::os_service_default,
   $purge_config                       = false,
   $host                               = $::os_service_default,
-  ## DEPRECATED PARAMETERS
-  $event_time_to_live                 = undef,
-  $metering_time_to_live              = undef,
 ) {
-
-  if $metering_time_to_live {
-    warning('The metering_time_to_live parameter is deprecated, ignored and will be
-    removed in the futrure.')
-  }
-  if $event_time_to_live {
-    warning('The event_time_to_live parameter is deprecated, ignored and will be
-    removed in the futrure.')
-  }
 
   include ::ceilometer::deps
   include ::ceilometer::params

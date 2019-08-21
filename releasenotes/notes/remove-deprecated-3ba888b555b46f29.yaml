@@ -1,0 +1,7 @@
+---
+upgrade:
+  - |
+    The deprecated parameters ceilometer::event_time_to_live and ceilometer::metering_time_to_live is removed.
+  - |
+    The deprecated classes ceilometer::agent::central and ceilometer::agent::compute
+    is removed. Please use the ceilometer::agent::polling class with the correct namespaces instead.
