@@ -63,6 +63,16 @@
 #   we check the heartbeat. (integer value)
 #   Defaults to $::os_service_default
 #
+# [*rabbit_heartbeat_in_pthread*]
+#   (Optional) EXPERIMENTAL: Run the health check heartbeat thread
+#   through a native python thread. By default if this
+#   option isn't provided the  health check heartbeat will
+#   inherit the execution model from the parent process. By
+#   example if the parent process have monkey patched the
+#   stdlib by using eventlet/greenlet then the heartbeat
+#   will be run through a green thread.
+#   Defaults to $::os_service_default
+#
 #  [*rabbit_qos_prefetch_count*]
 #   (Optional) Specifies the number of messages to prefetch.
 #   Defaults to $::os_service_default
@@ -218,6 +228,7 @@ class ceilometer(
   $rabbit_ha_queues                   = $::os_service_default,
   $rabbit_heartbeat_timeout_threshold = $::os_service_default,
   $rabbit_heartbeat_rate              = $::os_service_default,
+  $rabbit_heartbeat_in_pthread        = $::os_service_default,
   $rabbit_qos_prefetch_count          = $::os_service_default,
   $amqp_durable_queues                = $::os_service_default,
   $rabbit_use_ssl                     = $::os_service_default,
@@ -284,6 +295,7 @@ class ceilometer(
     rabbit_ha_queues            => $rabbit_ha_queues,
     heartbeat_timeout_threshold => $rabbit_heartbeat_timeout_threshold,
     heartbeat_rate              => $rabbit_heartbeat_rate,
+    heartbeat_in_pthread        => $rabbit_heartbeat_in_pthread,
     rabbit_qos_prefetch_count   => $rabbit_qos_prefetch_count,
     amqp_durable_queues         => $amqp_durable_queues,
     rabbit_use_ssl              => $rabbit_use_ssl,
