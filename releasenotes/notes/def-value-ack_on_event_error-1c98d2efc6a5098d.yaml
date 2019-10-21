@@ -1,0 +1,5 @@
+---
+upgrade:
+  - |
+    The default value of ceilometer::agent::notification has been changed from
+    true to the service default (ack_on_event_error is true by default in ceilometer.conf).

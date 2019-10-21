@@ -28,8 +28,7 @@ describe 'ceilometer::agent::notification' do
 
   let :params do
     { :manage_service     => true,
-      :enabled            => true,
-      :ack_on_event_error => true }
+      :enabled            => true }
   end
 
   shared_examples_for 'ceilometer-agent-notification' do
@@ -46,7 +45,7 @@ describe 'ceilometer::agent::notification' do
 
     it 'configures notifications parameters in ceilometer.conf' do
       is_expected.to contain_ceilometer_config('notification/workers').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_ceilometer_config('notification/ack_on_event_error').with_value( params[:ack_on_event_error] )
+      is_expected.to contain_ceilometer_config('notification/ack_on_event_error').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ceilometer_config('notification/disable_non_metric_meters').with_value('<SERVICE DEFAULT>')
     end
 
@@ -191,6 +190,14 @@ describe 'ceilometer::agent::notification' do
         :manage_pipeline => false
       ) }
         it { is_expected.not_to contain_file('pipeline') }
+    end
+
+    context 'with custom ack_on_event_error' do
+      before do
+        params.merge!( :ack_on_event_error => true )
+      end
+
+      it { is_expected.to contain_ceilometer_config('notification/ack_on_event_error').with_value(true) }
     end
   end
 

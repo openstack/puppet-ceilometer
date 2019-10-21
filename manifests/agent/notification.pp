@@ -34,7 +34,7 @@
 #
 # [*ack_on_event_error*]
 #   (Optional) Acknowledge message when event persistence fails.
-#   Defaults to true.
+#   Defaults to $::os_service_default.
 #
 # [*disable_non_metric_meters*]
 #   (Optional) Disable or enable the collection of non-metric meters.
@@ -76,7 +76,7 @@
 class ceilometer::agent::notification (
   $manage_service            = true,
   $enabled                   = true,
-  $ack_on_event_error        = true,
+  $ack_on_event_error        = $::os_service_default,
   $disable_non_metric_meters = $::os_service_default,
   $notification_workers      = $::os_service_default,
   $messaging_urls            = $::os_service_default,
