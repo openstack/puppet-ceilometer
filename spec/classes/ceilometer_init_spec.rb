@@ -105,6 +105,7 @@ describe 'ceilometer' do
     end
 
     it 'configures default transport_url' do
+      is_expected.to contain_ceilometer_config('DEFAULT/executor_thread_pool_size').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ceilometer_config('DEFAULT/transport_url').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ceilometer_config('DEFAULT/rpc_response_timeout').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ceilometer_config('DEFAULT/control_exchange').with_value('<SERVICE DEFAULT>')
@@ -133,13 +134,15 @@ describe 'ceilometer' do
     context 'with overridden transport_url parameter' do
       before {
         params.merge!(
-          :default_transport_url => 'rabbit://rabbit_user:password@localhost:5673',
-          :rpc_response_timeout  => '120',
-          :control_exchange      => 'ceilometer',
+          :executor_thread_pool_size => '128',
+          :default_transport_url     => 'rabbit://rabbit_user:password@localhost:5673',
+          :rpc_response_timeout      => '120',
+          :control_exchange          => 'ceilometer',
         )
       }
 
       it 'configures transport_url' do
+        is_expected.to contain_ceilometer_config('DEFAULT/executor_thread_pool_size').with_value('128')
         is_expected.to contain_ceilometer_config('DEFAULT/transport_url').with_value('rabbit://rabbit_user:password@localhost:5673')
         is_expected.to contain_ceilometer_config('DEFAULT/rpc_response_timeout').with_value('120')
         is_expected.to contain_ceilometer_config('DEFAULT/control_exchange').with_value('ceilometer')
