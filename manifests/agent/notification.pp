@@ -87,8 +87,8 @@ class ceilometer::agent::notification (
   $pipeline_publishers       = ['gnocchi://'],
 ) {
 
-  include ::ceilometer::deps
-  include ::ceilometer::params
+  include ceilometer::deps
+  include ceilometer::params
 
   ensure_resource('package', [$::ceilometer::params::agent_notification_package_name],
     {

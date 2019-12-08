@@ -52,19 +52,19 @@ Setup
 To utilize the ceilometer module's functionality you will need to declare multiple resources. This is not an exhaustive list of all the components needed. We recommend that you consult and understand the [core openstack](https://docs.openstack.org) documentation to assist you in understanding the available deployment options.
 
 ```puppet
-class { '::ceilometer':
+class { 'ceilometer':
   telemetry_secret      => 'secrete',
   default_transport_url => 'rabbit://ceilometer:an_even_bigger_secret@127.0.0.1:5672',
 }
-class { '::ceilometer::keystone::auth':
+class { 'ceilometer::keystone::auth':
   password => 'a_big_secret',
 }
-class { '::ceilometer::collector': }
-class { '::ceilometer::expirer': }
-class { '::ceilometer::agent::polling': }
-class { '::ceilometer::agent::notification': }
-class { '::ceilometer::db': }
-class { '::ceilometer::keystone::authtoken':
+class { 'ceilometer::collector': }
+class { 'ceilometer::expirer': }
+class { 'ceilometer::agent::polling': }
+class { 'ceilometer::agent::notification': }
+class { 'ceilometer::db': }
+class { 'ceilometer::keystone::authtoken':
   password => 'a_big_secret',
   auth_url => 'http://127.0.0.1:5000/',
 }

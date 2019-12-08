@@ -119,7 +119,7 @@ class ceilometer::logging(
   $log_date_format               = $::os_service_default,
 ) {
 
-  include ::ceilometer::deps
+  include ceilometer::deps
 
   oslo::log { 'ceilometer_config':
     debug                         => $debug,

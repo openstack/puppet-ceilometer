@@ -28,8 +28,8 @@ class ceilometer::policy (
   $policy_path = '/etc/ceilometer/policy.json',
 ) {
 
-  include ::ceilometer::deps
-  include ::ceilometer::params
+  include ceilometer::deps
+  include ceilometer::params
 
   validate_legacy(Hash, 'validate_hash', $policies)
 

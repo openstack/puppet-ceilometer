@@ -67,8 +67,8 @@ class ceilometer::agent::polling (
   $polling_meters            = $::ceilometer::params::polling_meters,
 ) inherits ceilometer {
 
-  include ::ceilometer::deps
-  include ::ceilometer::params
+  include ceilometer::deps
+  include ceilometer::params
 
   if $central_namespace {
     $central_namespace_name = 'central'

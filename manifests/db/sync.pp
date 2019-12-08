@@ -13,8 +13,8 @@ class ceilometer::db::sync(
   $extra_params = undef,
 ) {
 
-  include ::ceilometer::deps
-  include ::ceilometer::params
+  include ceilometer::deps
+  include ceilometer::params
 
   exec { 'ceilometer-upgrade':
     command     => "${::ceilometer::params::dbsync_command} ${extra_params}",

@@ -69,7 +69,7 @@ class ceilometer::db (
   $database_idle_timeout            = undef,
 ) {
 
-  include ::ceilometer::deps
+  include ceilometer::deps
 
   if $database_idle_timeout {
     warning('The database_idle_timeout parameter is deprecated. Please use \
@@ -90,7 +90,7 @@ database_connection_recycle_time instead.')
   }
 
   if $sync_db {
-    include ::ceilometer::db::sync
+    include ceilometer::db::sync
   }
 
 }

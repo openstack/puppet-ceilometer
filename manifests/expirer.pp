@@ -51,7 +51,7 @@ class ceilometer::expirer (
   $weekday     = '*',
 ) {
 
-  include ::ceilometer::params
+  include ceilometer::params
 
   Anchor['ceilometer::install::end'] ~> Class['ceilometer::expirer']
 

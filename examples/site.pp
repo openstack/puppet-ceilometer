@@ -4,38 +4,38 @@ node default {
   }
 
   # First, install a mysql server
-  class { '::mysql::server': }
+  class { 'mysql::server': }
   # And create the database
-  class { '::ceilometer::db::mysql':
+  class { 'ceilometer::db::mysql':
     password => 'ceilometer',
   }
 
   # Add the base ceilometer class & parameters
   # This class is required by ceilometer agents & api classes
   # The telemetry_secret parameter is mandatory
-  class { '::ceilometer':
+  class { 'ceilometer':
     telemetry_secret => 'darksecret'
   }
 
   # Configure the ceilometer database
   # Only needed if ceilometer::agent::polling or ceilometer::api are declared
-  class { '::ceilometer::db':
+  class { 'ceilometer::db':
   }
 
   # Configure ceilometer database with mongodb
 
-  # class { '::ceilometer::db':
+  # class { 'ceilometer::db':
   #   database_connection => 'mongodb://localhost:27017/ceilometer',
   #   require             => Class['mongodb'],
   # }
 
   # Configure keystonemiddleware for ceilometer
-  class { '::ceilometer::keystone::authtoken':
+  class { 'ceilometer::keystone::authtoken':
     password => 'tralalayouyou'
   }
 
   # Set common auth parameters used by all agents (compute/central)
-  class { '::ceilometer::agent::auth':
+  class { 'ceilometer::agent::auth':
     auth_url      => 'http://localhost:5000/v3',
     auth_password => 'tralalerotralala'
   }
@@ -58,17 +58,17 @@ node default {
   #   ipmi_namespace    => true
   # }
   # As default use central and compute polling namespaces
-  class { '::ceilometer::agent::polling':
+  class { 'ceilometer::agent::polling':
     central_namespace => true,
     compute_namespace => true,
     ipmi_namespace    => false,
   }
 
   # Purge old meters
-  class { '::ceilometer::expirer': }
+  class { 'ceilometer::expirer': }
 
   # Install notification agent
-  class { '::ceilometer::agent::notification':
+  class { 'ceilometer::agent::notification':
   }
 
 }

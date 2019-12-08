@@ -87,11 +87,11 @@ class ceilometer::keystone::auth (
   $internal_url         = 'http://127.0.0.1:8777',
 ) {
 
-  include ::ceilometer::deps
+  include ceilometer::deps
 
   validate_legacy(String, 'validate_string', $password)
 
-  ::keystone::resource::service_identity { 'ceilometer':
+  keystone::resource::service_identity { 'ceilometer':
     configure_user      => $configure_user,
     configure_user_role => $configure_user_role,
     configure_endpoint  => $configure_endpoint,

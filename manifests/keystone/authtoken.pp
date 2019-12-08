@@ -203,7 +203,7 @@ class ceilometer::keystone::authtoken(
   $service_token_roles_required   = $::os_service_default,
 ) {
 
-  include ::ceilometer::deps
+  include ceilometer::deps
 
   if is_service_default($password) {
     fail('Please set password for ceilometer service user')

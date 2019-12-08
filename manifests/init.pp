@@ -269,8 +269,8 @@ class ceilometer(
   $host                               = $::os_service_default,
 ) {
 
-  include ::ceilometer::deps
-  include ::ceilometer::params
+  include ceilometer::deps
+  include ceilometer::params
 
   group { 'ceilometer':
     ensure  => present,

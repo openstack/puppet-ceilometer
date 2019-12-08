@@ -32,9 +32,9 @@ class ceilometer::db::postgresql(
   $privileges = 'ALL',
 ) {
 
-  include ::ceilometer::deps
+  include ceilometer::deps
 
-  ::openstacklib::db::postgresql { 'ceilometer':
+  openstacklib::db::postgresql { 'ceilometer':
     password_hash => postgresql_password($user, $password),
     dbname        => $dbname,
     user          => $user,

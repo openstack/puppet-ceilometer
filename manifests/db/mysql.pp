@@ -42,11 +42,11 @@ class ceilometer::db::mysql(
   $collate       = 'utf8_general_ci',
 ) {
 
-  include ::ceilometer::deps
+  include ceilometer::deps
 
   validate_legacy(String, 'validate_string', $password)
 
-  ::openstacklib::db::mysql { 'ceilometer':
+  openstacklib::db::mysql { 'ceilometer':
     user          => $user,
     password_hash => mysql::password($password),
     dbname        => $dbname,
