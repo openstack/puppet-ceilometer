@@ -48,12 +48,6 @@
 #   (Optional) If set, use this value for pool_timeout with SQLAlchemy.
 #   Defaults to $::os_service_default
 #
-# DEPRECATED PARAMETERS
-#
-# [*database_idle_timeout*]
-#   Timeout when db connections should be reaped.
-#   Defaults to undef.
-#
 class ceilometer::db (
   $database_db_max_retries          = $::os_service_default,
   $database_connection              = 'mysql+pymysql://ceilometer:ceilometer@localhost/ceilometer',
@@ -65,22 +59,14 @@ class ceilometer::db (
   $database_max_overflow            = $::os_service_default,
   $database_pool_timeout            = $::os_service_default,
   $sync_db                          = true,
-  # DEPRECATED PARAMETERS
-  $database_idle_timeout            = undef,
 ) {
 
   include ceilometer::deps
 
-  if $database_idle_timeout {
-    warning('The database_idle_timeout parameter is deprecated. Please use \
-database_connection_recycle_time instead.')
-  }
-  $database_connection_recycle_time_real = pick($database_idle_timeout, $database_connection_recycle_time)
-
   oslo::db { 'ceilometer_config':
     db_max_retries          => $database_db_max_retries,
     connection              => $database_connection,
-    connection_recycle_time => $database_connection_recycle_time_real,
+    connection_recycle_time => $database_connection_recycle_time,
     min_pool_size           => $database_min_pool_size,
     max_retries             => $database_max_retries,
     retry_interval          => $database_retry_interval,
