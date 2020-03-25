@@ -19,10 +19,6 @@
 #   (Optional) Timeout when db connections should be reaped.
 #   Defaults to $::os_service_default.
 #
-# [*database_min_pool_size*]
-#   (Optional) Minimum number of SQL connections to keep open in a pool.
-#   Defaults to $::os_service_default.
-#
 # [*database_max_pool_size*]
 #   (Optional) Maximum number of SQL connections to keep open in a pool.
 #   Defaults to $::os_service_default.
@@ -48,26 +44,36 @@
 #   (Optional) If set, use this value for pool_timeout with SQLAlchemy.
 #   Defaults to $::os_service_default
 #
+# DEPRECATED PARAMETERS
+#
+# [*database_min_pool_size*]
+#   (Optional) Minimum number of SQL connections to keep open in a pool.
+#   Defaults to undef.
+#
 class ceilometer::db (
   $database_db_max_retries          = $::os_service_default,
   $database_connection              = 'mysql+pymysql://ceilometer:ceilometer@localhost/ceilometer',
   $database_connection_recycle_time = $::os_service_default,
-  $database_min_pool_size           = $::os_service_default,
   $database_max_pool_size           = $::os_service_default,
   $database_max_retries             = $::os_service_default,
   $database_retry_interval          = $::os_service_default,
   $database_max_overflow            = $::os_service_default,
   $database_pool_timeout            = $::os_service_default,
   $sync_db                          = true,
+  # DEPRECATED PARAMETERS
+  $database_min_pool_size           = undef,
 ) {
 
   include ceilometer::deps
+
+  if $database_min_pool_size {
+    warning('The database_min_pool_size parameter is deprecated, and will be removed in a future release.')
+  }
 
   oslo::db { 'ceilometer_config':
     db_max_retries          => $database_db_max_retries,
     connection              => $database_connection,
     connection_recycle_time => $database_connection_recycle_time,
-    min_pool_size           => $database_min_pool_size,
     max_retries             => $database_max_retries,
     retry_interval          => $database_retry_interval,
     max_pool_size           => $database_max_pool_size,
