@@ -29,11 +29,6 @@ node default {
   #   require             => Class['mongodb'],
   # }
 
-  # Configure keystonemiddleware for ceilometer
-  class { 'ceilometer::keystone::authtoken':
-    password => 'tralalayouyou'
-  }
-
   # Set common auth parameters used by all agents (compute/central)
   class { 'ceilometer::agent::auth':
     auth_url      => 'http://localhost:5000/v3',

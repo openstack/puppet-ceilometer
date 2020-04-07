@@ -14,9 +14,6 @@ class { 'ceilometer::keystone::auth':
 class { 'ceilometer::expirer': }
 class { 'ceilometer::agent::polling': }
 class { 'ceilometer::agent::notification': }
-class { 'ceilometer::keystone::authtoken':
-  password => 'a_big_secret',
-}
 
 class { 'ceilometer::collector':
   meter_dispatchers => ['gnocchi'],
