@@ -1,0 +1,5 @@
+---
+deprecations:
+  - |
+    The ceilometer::keystone::authtoken class is now deprecated for removal
+    and has no effect, because ceilometer doesn't provide api anymore.
