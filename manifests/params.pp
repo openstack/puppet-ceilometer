@@ -7,7 +7,6 @@ class ceilometer::params {
   include openstacklib::defaults
 
   $dbsync_command  = 'ceilometer-upgrade'
-  $expirer_command = 'ceilometer-expirer'
   $user            = 'ceilometer'
   $event_pipeline  = '/etc/ceilometer/event_pipeline.yaml'
   $pipeline        = '/etc/ceilometer/pipeline.yaml'

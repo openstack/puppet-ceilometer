@@ -11,7 +11,6 @@ class { 'ceilometer::db':
 class { 'ceilometer::keystone::auth':
   password => 'a_big_secret',
 }
-class { 'ceilometer::expirer': }
 class { 'ceilometer::agent::polling': }
 class { 'ceilometer::agent::notification': }
 

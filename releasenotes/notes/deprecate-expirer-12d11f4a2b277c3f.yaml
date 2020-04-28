@@ -1,0 +1,5 @@
+---
+deprecations:
+  - |
+    The ``ceilometer::expirer`` class has been deprecated and has no effect,
+    and it will be removed in a future release.

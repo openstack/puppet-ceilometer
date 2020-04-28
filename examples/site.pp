@@ -59,9 +59,6 @@ node default {
     ipmi_namespace    => false,
   }
 
-  # Purge old meters
-  class { 'ceilometer::expirer': }
-
   # Install notification agent
   class { 'ceilometer::agent::notification':
   }
