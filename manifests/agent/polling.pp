@@ -53,6 +53,11 @@
 #   the polling.yaml file, used only if manage_polling is true.
 #   Defaults to $::ceilometer::params::polling_meters
 #
+# [*polling_config*]
+#   (Optional) A hash of the polling.yaml configuration.
+#   This is used only if manage_polling is true.
+#   Defaults to undef
+#
 class ceilometer::agent::polling (
   $manage_service            = true,
   $enabled                   = true,
@@ -65,6 +70,7 @@ class ceilometer::agent::polling (
   $manage_polling            = false,
   $polling_interval          = 600,
   $polling_meters            = $::ceilometer::params::polling_meters,
+  $polling_config            = undef,
 ) inherits ceilometer {
 
   include ceilometer::deps
@@ -145,10 +151,17 @@ class ceilometer::agent::polling (
   }
 
   if $manage_polling {
+    if $polling_config {
+      validate_legacy(Hash, 'validate_hash', $polling_config)
+      $polling_content = to_yaml($polling_config)
+    } else {
+      $polling_content = template('ceilometer/polling.yaml.erb')
+    }
+
     file { 'polling':
       ensure                  => present,
       path                    => $::ceilometer::params::polling,
-      content                 => template('ceilometer/polling.yaml.erb'),
+      content                 => $polling_content,
       selinux_ignore_defaults => true,
       tag                     => 'ceilometer-yamls',
     }

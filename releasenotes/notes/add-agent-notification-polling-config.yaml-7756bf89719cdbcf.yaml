@@ -1,0 +1,5 @@
+---
+features:
+  - Add pipeline_config, event_pipeline_config and polling_config agent
+    parameters to support setting the whole configuration for these file
+    by hashes.
