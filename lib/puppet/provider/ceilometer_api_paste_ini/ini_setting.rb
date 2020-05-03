@@ -3,6 +3,11 @@ Puppet::Type.type(:ceilometer_api_paste_ini).provide(
   :parent => Puppet::Type.type(:ini_setting).provider(:ruby)
 ) do
 
+  def create
+    super
+    warning('ceilometer_api_paste_ini is deprecated, and will be removed in a future release')
+  end
+
   def section
     resource[:name].split('/', 2).first
   end

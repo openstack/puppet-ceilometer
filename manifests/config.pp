@@ -19,6 +19,8 @@
 #     DEFAULT/bar:
 #       value: barValue
 #
+# DEPRECATED PARAMETERS
+#
 # [*ceilometer_api_paste_ini*]
 #   (optional) Allow configuration of /etc/ceilometer/api_paste.ini options.
 #
@@ -27,14 +29,18 @@
 #
 class ceilometer::config (
   $ceilometer_config        = {},
-  $ceilometer_api_paste_ini = {},
+  # DEPRECATED PARAMETERS
+  $ceilometer_api_paste_ini = undef,
 ) {
 
   include ceilometer::deps
 
   validate_legacy(Hash, 'validate_hash', $ceilometer_config)
-  validate_legacy(Hash, 'validate_hash', $ceilometer_api_paste_ini)
 
   create_resources('ceilometer_config', $ceilometer_config)
-  create_resources('ceilometer_api_paste_ini', $ceilometer_api_paste_ini)
+
+  if $ceilometer_api_paste_ini != undef {
+    warning('ceilometer_api_paste_ini is deprecated and has no effect.')
+  }
+
 }
