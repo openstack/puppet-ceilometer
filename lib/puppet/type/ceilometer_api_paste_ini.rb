@@ -45,8 +45,8 @@ Puppet::Type.newtype(:ceilometer_api_paste_ini) do
     defaultto('<SERVICE DEFAULT>')
   end
 
-  autorequire(:package) do
-    'ceilometer'
+  autorequire(:anchor) do
+    ['ceilometer::install::end']
   end
 
 end
