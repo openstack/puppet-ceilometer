@@ -22,9 +22,5 @@ describe 'ceilometer with mysql' do
       apply_manifest(pp, :catch_changes => true)
     end
 
-    describe cron do
-      it { is_expected.to have_entry('1 0 * * * ceilometer-expirer').with_user('ceilometer') }
-    end
-
   end
 end

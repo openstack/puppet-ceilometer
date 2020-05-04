@@ -17,6 +17,7 @@
 #
 # == Class: ceilometer::expirer
 #
+# DEPRECATED!
 # Setups Ceilometer Expirer service to enable TTL feature.
 #
 # === Parameters
@@ -25,52 +26,30 @@
 #    (optional) Whether to configure a crontab entry to run the expiry.
 #    When set to False, Puppet will try to remove the crontab.
 #    It's useful when we upgrade from Ocata to Pike and want to remove it.
-#    Defaults to true.
+#    Defaults to undef.
 #
 #  [*minute*]
-#    (optional) Defaults to '1'.
+#    (optional) Defaults to undef.
 #
 #  [*hour*]
-#    (optional) Defaults to '0'.
+#    (optional) Defaults to undef.
 #
 #  [*monthday*]
-#    (optional) Defaults to '*'.
+#    (optional) Defaults to undef.
 #
 #  [*month*]
-#    (optional) Defaults to '*'.
+#    (optional) Defaults to undef.
 #
 #  [*weekday*]
-#    (optional) Defaults to '*'.
+#    (optional) Defaults to undef.
 #
 class ceilometer::expirer (
-  $enable_cron = true,
-  $minute      = 1,
-  $hour        = 0,
-  $monthday    = '*',
-  $month       = '*',
-  $weekday     = '*',
+  $enable_cron = undef,
+  $minute      = undef,
+  $hour        = undef,
+  $monthday    = undef,
+  $month       = undef,
+  $weekday     = undef,
 ) {
-
-  include ceilometer::params
-
-  Anchor['ceilometer::install::end'] ~> Class['ceilometer::expirer']
-
-  if $enable_cron {
-    $ensure = 'present'
-  } else {
-    $ensure = 'absent'
-  }
-
-  cron { 'ceilometer-expirer':
-    ensure      => $ensure,
-    command     => $ceilometer::params::expirer_command,
-    environment => 'PATH=/bin:/usr/bin:/usr/sbin SHELL=/bin/sh',
-    user        => 'ceilometer',
-    minute      => $minute,
-    hour        => $hour,
-    monthday    => $monthday,
-    month       => $month,
-    weekday     => $weekday
-  }
-
+  warning('The ceilometer::expirer class is deprecated and has no effect')
 }
