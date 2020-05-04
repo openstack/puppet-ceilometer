@@ -1,0 +1,9 @@
+---
+deprecations:
+  - |
+    The ``ceilometer::config::api_paste_ini`` parameter has been deprecated and
+    has not effect.
+
+  - |
+    The ``ceilometer_api_paste_ini`` resource has been deprecated and will be
+    removed in a future release.
