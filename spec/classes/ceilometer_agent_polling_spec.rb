@@ -139,7 +139,7 @@ sources:
       )}
     end
 
-    context 'with polling and custom config' do
+    context 'with polling and basic custom settings' do
       before do
         params.merge!( :manage_polling   => true,
                        :polling_interval => 30,
@@ -159,6 +159,35 @@ sources:
 ',
         :selinux_ignore_defaults => true,
         :tag                     => 'ceilometer-yamls',
+      )}
+    end
+
+    context 'with polling and custom config' do
+      before do
+        params.merge!( :manage_polling => true,
+                       :polling_config => {
+          'sources' => [
+            'name'     => 'my_pollsters',
+            'interval' => 60,
+            'meters'   => [
+              'meterfoo',
+              'meterbar',
+            ],
+          ],
+        } )
+      end
+
+      it { should contain_file('polling').with(
+        :ensure  => 'present',
+        :path    => '/etc/ceilometer/polling.yaml',
+        :content                 => '---
+sources:
+- name: my_pollsters
+  interval: 60
+  meters:
+  - meterfoo
+  - meterbar
+',
       )}
     end
 

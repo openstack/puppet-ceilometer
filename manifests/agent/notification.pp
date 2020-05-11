@@ -57,6 +57,11 @@
 #   (Optional) Whether to manage event_pipeline.yaml
 #   Defaults to false
 #
+# [*event_pipeline_config*]
+#   (Optional) A hash of the event_pipeline.yaml configuration.
+#   This is used only if manage_event_pipeline is true.
+#   Defaults to undef
+#
 # [*event_pipeline_publishers*]
 #   (Optional) A list of publishers to put in event_pipeline.yaml
 #   Add 'notifier://?topic=alarm.all' to the list if you are using Aodh
@@ -66,6 +71,11 @@
 # [*manage_pipeline*]
 #   (Optional) Whether to manage pipeline.yaml
 #   Defaults to false
+#
+# [*pipeline_config*]
+#   (Optional) A hash of the pipeline.yaml configuration.
+#   This is used only if manage_pipeline is true.
+#   Defaults to undef
 #
 # [*pipeline_publishers*]
 #   (Optional) A list of publishers to put in pipeline.yaml.
@@ -83,8 +93,10 @@ class ceilometer::agent::notification (
   $package_ensure            = 'present',
   $manage_event_pipeline     = false,
   $event_pipeline_publishers = ['gnocchi://'],
+  $event_pipeline_config     = undef,
   $manage_pipeline           = false,
   $pipeline_publishers       = ['gnocchi://'],
+  $pipeline_config           = undef,
 ) {
 
   include ceilometer::deps
@@ -114,13 +126,19 @@ class ceilometer::agent::notification (
     tag        => 'ceilometer-service'
   }
 
-  if ($manage_event_pipeline) {
-    validate_legacy(Array, 'validate_array', $event_pipeline_publishers)
+  if $manage_event_pipeline {
+    if $event_pipeline_config {
+      validate_legacy(Hash, 'validate_hash', $event_pipeline_config)
+      $event_pipeline_content = to_yaml($event_pipeline_config)
+    } else {
+      validate_legacy(Array, 'validate_array', $event_pipeline_publishers)
+      $event_pipeline_content = template('ceilometer/event_pipeline.yaml.erb')
+    }
 
     file { 'event_pipeline':
       ensure                  => present,
       path                    => $::ceilometer::params::event_pipeline,
-      content                 => template('ceilometer/event_pipeline.yaml.erb'),
+      content                 => $event_pipeline_content,
       selinux_ignore_defaults => true,
       mode                    => '0640',
       owner                   => 'root',
@@ -129,13 +147,19 @@ class ceilometer::agent::notification (
     }
   }
 
-  if ($manage_pipeline) {
-    validate_legacy(Array, 'validate_array', $pipeline_publishers)
+  if $manage_pipeline {
+    if $pipeline_config {
+      validate_legacy(Hash, 'validate_hash', $pipeline_config)
+      $pipeline_content = to_yaml($pipeline_config)
+    } else {
+      validate_legacy(Array, 'validate_array', $pipeline_publishers)
+      $pipeline_content = template('ceilometer/pipeline.yaml.erb')
+    }
 
     file { 'pipeline':
       ensure                  => present,
       path                    => $::ceilometer::params::pipeline,
-      content                 => template('ceilometer/pipeline.yaml.erb'),
+      content                 => $pipeline_content,
       selinux_ignore_defaults => true,
       mode                    => '0640',
       owner                   => 'root',

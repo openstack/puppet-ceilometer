@@ -165,6 +165,42 @@ describe 'ceilometer::agent::notification' do
       ])}
     end
 
+    context 'with event_pipeline and custom config' do
+      before { params.merge!(
+        :manage_event_pipeline => true,
+        :event_pipeline_config => {
+          'sources' => [
+            'name'   => 'my_event_source',
+            'events' => ['*'],
+            'sinks'  => ['my_event_sink'],
+          ],
+          'sinks'   => [
+            'name'         => 'my_event_sink',
+            'transformers' => [],
+            'triggers'     => [],
+            'publishers'   => ['gnocchi://'],
+          ],
+        }
+      )}
+
+      it { should contain_file('event_pipeline').with(
+        :content                 => '---
+sources:
+- name: my_event_source
+  events:
+  - "*"
+  sinks:
+  - my_event_sink
+sinks:
+- name: my_event_sink
+  transformers: []
+  triggers: []
+  publishers:
+  - gnocchi://
+',
+      )}
+    end
+
     context "with event_pipeline management disabled" do
       before { params.merge!(
         :manage_event_pipeline => false
@@ -183,6 +219,40 @@ describe 'ceilometer::agent::notification' do
         'owner' => 'root',
         'group' => 'ceilometer',
       ) }
+    end
+
+    context 'with pipeline and custom config' do
+      before { params.merge!(
+        :manage_pipeline => true,
+        :pipeline_config => {
+          'sources' => [
+            'name'   => 'my_source',
+            'meters' => ['*'],
+            'sinks'  => ['my_sink'],
+          ],
+          'sinks'   => [
+            'name'         => 'my_sink',
+            'transformers' => [],
+            'publishers'   => ['gnocchi://'],
+          ],
+        }
+      )}
+
+      it { should contain_file('pipeline').with(
+        :content                 => '---
+sources:
+- name: my_source
+  meters:
+  - "*"
+  sinks:
+  - my_sink
+sinks:
+- name: my_sink
+  transformers: []
+  publishers:
+  - gnocchi://
+',
+      )}
     end
 
     context "with pipeline management disabled" do
