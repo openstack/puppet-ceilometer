@@ -4,7 +4,7 @@ describe 'ceilometer::db::postgresql' do
 
   shared_examples_for 'ceilometer::db::postgresql' do
     let :req_params do
-      { :password => 'pw' }
+      { :password => 'ceilometerpass' }
     end
 
     let :pre_condition do
@@ -16,9 +16,12 @@ describe 'ceilometer::db::postgresql' do
         req_params
       end
 
-      it { is_expected.to contain_postgresql__server__db('ceilometer').with(
-        :user     => 'ceilometer',
-        :password => 'md52899c518e96bce6633ab342b0ca38292'
+      it { is_expected.to contain_openstacklib__db__postgresql('ceilometer').with(
+        :user       => 'ceilometer',
+        :password   => 'ceilometerpass',
+        :dbname     => 'ceilometer',
+        :encoding   => nil,
+        :privileges => 'ALL',
       )}
     end
 
