@@ -35,11 +35,11 @@ class ceilometer::db::postgresql(
   include ceilometer::deps
 
   openstacklib::db::postgresql { 'ceilometer':
-    password_hash => postgresql_password($user, $password),
-    dbname        => $dbname,
-    user          => $user,
-    encoding      => $encoding,
-    privileges    => $privileges,
+    password   => $password,
+    dbname     => $dbname,
+    user       => $user,
+    encoding   => $encoding,
+    privileges => $privileges,
   }
 
   Anchor['ceilometer::db::begin']

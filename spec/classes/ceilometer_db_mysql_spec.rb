@@ -7,7 +7,7 @@ describe 'ceilometer::db::mysql' do
   end
 
   let :params do
-    { :password     => 's3cr3t',
+    { :password     => 'ceilometerpass',
       :dbname       => 'ceilometer',
       :user         => 'ceilometer',
       :host         => 'localhost',
@@ -25,10 +25,10 @@ describe 'ceilometer::db::mysql' do
 
     it 'creates a mysql database' do
       is_expected.to contain_openstacklib__db__mysql( params[:dbname] ).with(
-        :user          => params[:user],
-        :password_hash => '*58C036CDA51D8E8BBBBF2F9EA5ABF111ADA444F0',
-        :host          => params[:host],
-        :charset       => params[:charset]
+        :user     => params[:user],
+        :password => params[:password],
+        :host     => params[:host],
+        :charset  => params[:charset]
       )
     end
 
