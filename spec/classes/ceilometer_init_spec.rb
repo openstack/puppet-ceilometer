@@ -122,7 +122,11 @@ describe 'ceilometer' do
     end
 
     it 'configures cache backend' do
-      is_expected.to contain_ceilometer_config('cache/memcache_servers').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_oslo__cache('ceilometer_config').with(
+        :backend                => '<SERVICE DEFAULT>',
+        :memcache_servers       => '<SERVICE DEFAULT>',
+        :manage_backend_package => true,
+      )
     end
 
     context 'with rabbitmq durable queues configured' do
@@ -149,12 +153,18 @@ describe 'ceilometer' do
     context 'with overridden cache parameter' do
       before {
         params.merge!(
-          :memcache_servers => 'host1:11211,host2:11211',
+          :cache_backend          => 'memcache',
+          :memcache_servers       => 'host1:11211,host2:11211',
+          :manage_backend_package => false,
         )
       }
 
       it 'configures cache backend' do
-        is_expected.to contain_ceilometer_config('cache/memcache_servers').with_value('host1:11211,host2:11211')
+        is_expected.to contain_oslo__cache('ceilometer_config').with(
+          :backend                => 'memcache',
+          :memcache_servers       => 'host1:11211,host2:11211',
+          :manage_backend_package => false,
+        )
       end
     end
 
