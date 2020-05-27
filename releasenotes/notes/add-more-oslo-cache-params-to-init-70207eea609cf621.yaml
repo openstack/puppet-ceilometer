@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    Added cache_backend and manage_backend_package parameters to ceilometer
+    class that is passed down to the oslo::cache resource.

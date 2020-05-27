@@ -125,9 +125,17 @@
 #   (string value)
 #   Defaults to $::os_service_default
 #
+# [*cache_backend*]
+#   (Optional) The backend to pass to oslo::cache.
+#   Defaults to $::os_service_default
+#
 # [*memcache_servers*]
 #   (Optional) A list of memcached server(s) to use for caching. (list value)
 #   Defaults to $::os_service_default
+#
+# [*manage_backend_package*]
+#   (Optional) If we should install the cache backend package.
+#   Defaults to true
 #
 # [*amqp_server_request_prefix*]
 #   (Optional) Address prefix used when sending to a specific server
@@ -244,7 +252,9 @@ class ceilometer(
   $kombu_reconnect_delay              = $::os_service_default,
   $kombu_failover_strategy            = $::os_service_default,
   $kombu_compression                  = $::os_service_default,
+  $cache_backend                      = $::os_service_default,
   $memcache_servers                   = $::os_service_default,
+  $manage_backend_package             = true,
   $amqp_server_request_prefix         = $::os_service_default,
   $amqp_broadcast_prefix              = $::os_service_default,
   $amqp_group_request_prefix          = $::os_service_default,
@@ -357,6 +367,8 @@ class ceilometer(
   }
 
   oslo::cache { 'ceilometer_config':
-    memcache_servers => $memcache_servers,
+    backend                => $cache_backend,
+    memcache_servers       => $memcache_servers,
+    manage_backend_package => $manage_backend_package,
   }
 }
