@@ -11,7 +11,7 @@
         },
         {
             "name": "openstack/keystone",
-            "version_requirement": ">=17.0.0 <18.0.0"
+            "version_requirement": ">=17.1.0 <18.0.0"
         },
         {
             "name": "puppetlabs/stdlib",
@@ -19,11 +19,11 @@
         },
         {
             "name": "openstack/openstacklib",
-            "version_requirement": ">=17.0.0 <18.0.0"
+            "version_requirement": ">=17.1.0 <18.0.0"
         },
         {
             "name": "openstack/oslo",
-            "version_requirement": ">=17.0.0 <18.0.0"
+            "version_requirement": ">=17.1.0 <18.0.0"
         }
     ],
     "description": "Installs and configures OpenStack Ceilometer (Telemetry).",
@@ -71,5 +71,5 @@
     ],
     "source": "git://github.com/openstack/puppet-ceilometer.git",
     "summary": "Puppet module for OpenStack Ceilometer",
-    "version": "17.0.0"
+    "version": "17.1.0"
 }
