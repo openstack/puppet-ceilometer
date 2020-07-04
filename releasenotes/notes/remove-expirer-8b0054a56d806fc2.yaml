@@ -1,0 +1,4 @@
+---
+upgrade:
+  - |
+    The ceilometer::expirer class has been removed.
