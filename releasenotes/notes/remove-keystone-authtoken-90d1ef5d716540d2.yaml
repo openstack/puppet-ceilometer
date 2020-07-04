@@ -1,0 +1,4 @@
+---
+upgrade:
+  - |
+    The ceilometer::keystone::authtoken class has been removed.
