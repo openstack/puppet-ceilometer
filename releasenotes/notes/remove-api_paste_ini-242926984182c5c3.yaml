@@ -1,0 +1,7 @@
+---
+upgrade:
+  - |
+    The ``ceilometer_api_paste_ini`` resource has been removed.
+
+  - |
+    The ``ceilometer::config::api_paste_ini_config`` parameter has been removed.
