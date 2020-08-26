@@ -14,6 +14,7 @@ describe 'ceilometer::db' do
         :retry_interval          => '<SERVICE DEFAULT>',
         :max_overflow            => '<SERVICE DEFAULT>',
         :pool_timeout            => '<SERVICE DEFAULT>',
+        :mysql_enable_ndb        => '<SERVICE DEFAULT>',
       )}
 
       it { should contain_class('ceilometer::db::sync') }
@@ -30,6 +31,7 @@ describe 'ceilometer::db' do
           :database_retry_interval          => '11',
           :database_max_overflow            => '21',
           :database_pool_timeout            => '21',
+          :mysql_enable_ndb                 => true,
           :sync_db                          => false }
       end
 
@@ -44,6 +46,7 @@ describe 'ceilometer::db' do
         :retry_interval          => '11',
         :max_overflow            => '21',
         :pool_timeout            => '21',
+        :mysql_enable_ndb        => true,
       )}
 
       it { should_not contain_class('ceilometer::db::sync') }
