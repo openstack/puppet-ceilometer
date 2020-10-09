@@ -17,6 +17,7 @@ describe 'ceilometer::db::mysql' do
   end
 
   shared_examples_for 'ceilometer mysql database' do
+    it { is_expected.to contain_class('ceilometer::deps') }
 
     context 'when omitting the required parameter password' do
       before { params.delete(:password) }
