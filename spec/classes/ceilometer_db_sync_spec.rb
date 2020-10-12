@@ -4,6 +4,8 @@ describe 'ceilometer::db::sync' do
 
   shared_examples_for 'ceilometer-upgrade' do
 
+    it { is_expected.to contain_class('ceilometer::deps') }
+
     it 'runs ceilometer-upgrade' do
       is_expected.to contain_exec('ceilometer-upgrade').with(
         :command     => 'ceilometer-upgrade ',
