@@ -1,0 +1,6 @@
+---
+features:
+  - |
+    Add parameter to ceilometer::keystone::auth to disable the creation
+    of keystone ceilometer service (used in catalog).
+    remark: parameter will be deprecated in wallaby cycle !
