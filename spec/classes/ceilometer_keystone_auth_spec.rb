@@ -8,6 +8,7 @@ describe 'ceilometer::keystone::auth' do
       :auth_name          => 'ceilometer',
       :service_name       => 'ceilometer',
       :configure_endpoint => true,
+      :configure_service  => true,
       :service_type       => 'metering',
       :region             => 'RegionOne',
       :tenant             => 'services',
@@ -165,6 +166,21 @@ describe 'ceilometer::keystone::auth' do
         :ensure      => 'present',
         :description => 'Openstack Metering Service'
       )}
+    end
+
+    context 'when disabling service and endpoint configuration' do
+      before do
+        params.merge!(
+          :configure_service   => false,
+          :configure_endpoint  => false
+        )
+      end
+
+      it { is_expected.to_not contain_keystone_service('ceilometer::metering') }
+      it { is_expected.to_not contain_keystone_endpoint("#{default_params[:region]}/#{default_params[:service_name]}::#{default_params[:service_type]}")}
+
+      it { is_expected.to contain_keystone_user('ceilometer') }
+      it { is_expected.to contain_keystone_user_role('ceilometer@services') }
     end
 
   end

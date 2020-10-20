@@ -19,6 +19,11 @@
 #   (Optional) Should Ceilometer endpoint be configured.
 #   Defaults to true.
 #
+# [*configure_service*]
+#   (Optional) Whether to create the service.
+#   Default to True
+#   Remark: will be deprecated in wallaby cycle
+#
 # [*configure_user*]
 #   (Optional) Should Ceilometer service user be configured?
 #   Defaults to true.
@@ -82,6 +87,7 @@ class ceilometer::keystone::auth (
   $region               = 'RegionOne',
   $tenant               = 'services',
   $configure_endpoint   = true,
+  Boolean $configure_service = true,
   $public_url           = 'http://127.0.0.1:8777',
   $admin_url            = 'http://127.0.0.1:8777',
   $internal_url         = 'http://127.0.0.1:8777',
@@ -95,6 +101,7 @@ class ceilometer::keystone::auth (
     configure_user      => $configure_user,
     configure_user_role => $configure_user_role,
     configure_endpoint  => $configure_endpoint,
+    configure_service   => $configure_service,
     service_type        => $service_type,
     service_description => $service_description,
     service_name        => $service_name,
