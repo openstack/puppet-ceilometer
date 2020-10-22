@@ -15,15 +15,6 @@
 #   (Optional) Username for Ceilometer service.
 #   Defaults to 'ceilometer'.
 #
-# [*configure_endpoint*]
-#   (Optional) Should Ceilometer endpoint be configured.
-#   Defaults to true.
-#
-# [*configure_service*]
-#   (Optional) Whether to create the service.
-#   Default to True
-#   Remark: will be deprecated in wallaby cycle
-#
 # [*configure_user*]
 #   (Optional) Should Ceilometer service user be configured?
 #   Defaults to true.
@@ -31,18 +22,6 @@
 # [*configure_user_role*]
 #   (Optional) Should roles be configured on Ceilometer service user?
 #   Defaults to true.
-#
-# [*service_name*]
-#   (Optional) Name of the service.
-#   Defaults to 'ceilometer'.
-#
-# [*service_type*]
-#   (Optional) Type of service. Optional.
-#   Defaults to 'metering'.
-#
-# [*service_description*]
-#   (Optional) Description for keystone service.
-#   Defaults to 'Openstack Metering Service'.
 #
 # [*region*]
 #   (Optional) Region for endpoint.
@@ -52,27 +31,47 @@
 #   (Optional) Tenant for Ceilometer user.
 #   Defaults to 'services'.
 #
+# DEPRECATED PARAMETERS
+#
+# [*service_name*]
+#   (Optional) Name of the service.
+#   Defaults to undef
+#
+# [*service_type*]
+#   (Optional) Type of service. Optional.
+#   Defaults to undef
+#
+# [*service_description*]
+#   (Optional) Description for keystone service.
+#   Defaults to undef
+#
+# [*configure_endpoint*]
+#   (Optional) Should Ceilometer endpoint be configured.
+#   Defaults to undef
+#
+# [*configure_service*]
+#   (Optional) Whether to create the service.
+#   Default to undef
+#
 # [*public_url*]
 #   (Optional) The endpoint's public url.
 #   This url should *not* contain any trailing '/'.
-#   Defaults to 'http://127.0.0.1:8777'.
+#   Defaults to undef
 #
 # [*admin_url*]
 #   (Optional) The endpoint's admin url.
 #   This url should *not* contain any trailing '/'.
-#   Defaults to 'http://127.0.0.1:8777'.
+#   Defaults to undef
 #
 # [*internal_url*]
 #   (Optional) The endpoint's internal url.
 #   This url should *not* contain any trailing '/'.
-#   Defaults to 'http://127.0.0.1:8777'.
+#   Defaults to undef
 #
 # === Examples:
 #
 #  class { 'ceilometer::keystone::auth':
-#    public_url   => 'https://10.0.0.10:8777',
-#    internal_url => 'https://10.0.0.11:8777',
-#    admin_url    => 'https://10.0.0.11:8777',
+#    password => 'secrete',
 #  }
 #
 class ceilometer::keystone::auth (
@@ -81,39 +80,52 @@ class ceilometer::keystone::auth (
   $auth_name            = 'ceilometer',
   $configure_user       = true,
   $configure_user_role  = true,
-  $service_name         = 'ceilometer',
-  $service_type         = 'metering',
-  $service_description  = 'Openstack Metering Service',
   $region               = 'RegionOne',
   $tenant               = 'services',
-  $configure_endpoint   = true,
-  Boolean $configure_service = true,
-  $public_url           = 'http://127.0.0.1:8777',
-  $admin_url            = 'http://127.0.0.1:8777',
-  $internal_url         = 'http://127.0.0.1:8777',
+  # DEPRECATED PARAMETERS
+  $service_name         = undef,
+  $service_type         = undef,
+  $service_description  = undef,
+  Optional[Boolean] $configure_service = undef,
+  $configure_endpoint   = undef,
+  $public_url           = undef,
+  $admin_url            = undef,
+  $internal_url         = undef,
 ) {
 
   include ceilometer::deps
 
   validate_legacy(String, 'validate_string', $password)
 
+  if $service_name != undef or $service_type != undef or $service_description != undef {
+    warning('The parameters for keystone service record have been deprecated and have no effect')
+  }
+
+  if $configure_endpoint != undef {
+    warning('The configure_endpoint parameter has been deprecated and has no effect')
+  }
+
+  if $configure_service != undef {
+    warning('The configure_service parameter has been deprecated and has no effect')
+  }
+
+  if $public_url != undef or $admin_url != undef or $internal_url != undef {
+    warning('The parameters for keystone endpoint record have been deprecated and have no effect')
+  }
+
+  # Ceilometer rquires only its user, project, and role assignment.
+  # service and endpoint should be disabled since ceilometer-api has been removed.
   keystone::resource::service_identity { 'ceilometer':
     configure_user      => $configure_user,
     configure_user_role => $configure_user_role,
-    configure_endpoint  => $configure_endpoint,
-    configure_service   => $configure_service,
-    service_type        => $service_type,
-    service_description => $service_description,
-    service_name        => $service_name,
+    configure_endpoint  => false,
+    configure_service   => false,
     region              => $region,
     auth_name           => $auth_name,
     password            => $password,
     email               => $email,
     tenant              => $tenant,
     roles               => ['admin', 'ResellerAdmin'],
-    public_url          => $public_url,
-    admin_url           => $admin_url,
-    internal_url        => $internal_url,
   }
 
   if $configure_user_role {
@@ -126,4 +138,3 @@ class ceilometer::keystone::auth (
   }
 
 }
-

@@ -1,0 +1,19 @@
+---
+features:
+  - |
+    The following parameters have been deprecated because ceilometer service
+    and endpoint is no longer required. These parameters will be removed in a
+    future release.
+
+    - ``ceilometer::keystone::auth::service_name``
+    - ``ceilometer::keystone::auth::service_type``
+    - ``ceilometer::keystone::auth::service_description``
+    - ``ceilometer::keystone::auth::configure_endpoint``
+    - ``ceilometer::keystone::auth::configure_service``
+    - ``ceilometer::keystone::auth::public_url``
+    - ``ceilometer::keystone::auth::admin_url``
+    - ``ceilometer::keystone::auth::internal_url``
+
+updates:
+  - |
+    Keystone service and endpoints for ceilometer is no longer created.
