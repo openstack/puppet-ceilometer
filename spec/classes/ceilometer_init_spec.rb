@@ -331,7 +331,6 @@ describe 'ceilometer' do
       it { is_expected.to contain_ceilometer_config('oslo_messaging_amqp/ssl_cert_file').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_ceilometer_config('oslo_messaging_amqp/ssl_key_file').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_ceilometer_config('oslo_messaging_amqp/ssl_key_password').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_ceilometer_config('oslo_messaging_amqp/allow_insecure_clients').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_ceilometer_config('oslo_messaging_amqp/sasl_mechanisms').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_ceilometer_config('oslo_messaging_amqp/sasl_config_dir').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_ceilometer_config('oslo_messaging_amqp/sasl_config_name').with_value('<SERVICE DEFAULT>') }
@@ -359,7 +358,6 @@ describe 'ceilometer' do
       it { is_expected.to contain_ceilometer_config('oslo_messaging_amqp/ssl_ca_file').with_value('/path/to/ca.cert') }
       it { is_expected.to contain_ceilometer_config('oslo_messaging_amqp/ssl_cert_file').with_value('/path/to/certfile') }
       it { is_expected.to contain_ceilometer_config('oslo_messaging_amqp/ssl_key_file').with_value('/path/to/key') }
-      it { is_expected.to contain_ceilometer_config('oslo_messaging_amqp/allow_insecure_clients').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_ceilometer_config('oslo_messaging_amqp/sasl_mechanisms').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_ceilometer_config('oslo_messaging_amqp/sasl_config_dir').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_ceilometer_config('oslo_messaging_amqp/sasl_config_name').with_value('<SERVICE DEFAULT>') }

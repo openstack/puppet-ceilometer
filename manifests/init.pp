@@ -185,10 +185,6 @@
 #   (Optional) Password for decrypting ssl_key_file (if encrypted)
 #   Defaults to $::os_service_default.
 #
-# [*amqp_allow_insecure_clients*]
-#   (Optional) Accept clients using either SSL or plain TCP
-#   Defaults to $::os_service_default.
-#
 # [*amqp_sasl_mechanisms*]
 #   (Optional) Space separated list of acceptable SASL mechanisms
 #   Defaults to $::os_service_default.
@@ -226,6 +222,12 @@
 #   (Optional) Name of this node. This is typically a hostname, FQDN, or
 #   IP address.
 #   Defaults to $::os_service_default.
+#
+# DEPRECATED PARAMETERS
+#
+# [*amqp_allow_insecure_clients*]
+#   (Optional) Accept clients using either SSL or plain TCP
+#   Defaults to undef.
 #
 class ceilometer(
   $http_timeout                       = '600',
@@ -267,7 +269,6 @@ class ceilometer(
   $amqp_ssl_cert_file                 = $::os_service_default,
   $amqp_ssl_key_file                  = $::os_service_default,
   $amqp_ssl_key_password              = $::os_service_default,
-  $amqp_allow_insecure_clients        = $::os_service_default,
   $amqp_sasl_mechanisms               = $::os_service_default,
   $amqp_sasl_config_dir               = $::os_service_default,
   $amqp_sasl_config_name              = $::os_service_default,
@@ -277,10 +278,17 @@ class ceilometer(
   $snmpd_readonly_user_password       = $::os_service_default,
   $purge_config                       = false,
   $host                               = $::os_service_default,
+  # DEPRECATED PARAMETERS
+  $amqp_allow_insecure_clients        = undef,
 ) {
 
   include ceilometer::deps
   include ceilometer::params
+
+  if $amqp_allow_insecure_clients != undef {
+    warning('The amqp_allow_insecure_clients parameter is deprecated and \
+will be removed in a future release.')
+  }
 
   group { 'ceilometer':
     ensure  => present,
@@ -324,24 +332,23 @@ class ceilometer(
   }
 
   oslo::messaging::amqp { 'ceilometer_config':
-    server_request_prefix  => $amqp_server_request_prefix,
-    broadcast_prefix       => $amqp_broadcast_prefix,
-    group_request_prefix   => $amqp_group_request_prefix,
-    container_name         => $amqp_container_name,
-    idle_timeout           => $amqp_idle_timeout,
-    trace                  => $amqp_trace,
-    rpc_address_prefix     => $amqp_rpc_address_prefix,
-    notify_address_prefix  => $amqp_notify_address_prefix,
-    ssl_ca_file            => $amqp_ssl_ca_file,
-    ssl_cert_file          => $amqp_ssl_cert_file,
-    ssl_key_file           => $amqp_ssl_key_file,
-    ssl_key_password       => $amqp_ssl_key_password,
-    allow_insecure_clients => $amqp_allow_insecure_clients,
-    sasl_mechanisms        => $amqp_sasl_mechanisms,
-    sasl_config_dir        => $amqp_sasl_config_dir,
-    sasl_config_name       => $amqp_sasl_config_name,
-    username               => $amqp_username,
-    password               => $amqp_password,
+    server_request_prefix => $amqp_server_request_prefix,
+    broadcast_prefix      => $amqp_broadcast_prefix,
+    group_request_prefix  => $amqp_group_request_prefix,
+    container_name        => $amqp_container_name,
+    idle_timeout          => $amqp_idle_timeout,
+    trace                 => $amqp_trace,
+    rpc_address_prefix    => $amqp_rpc_address_prefix,
+    notify_address_prefix => $amqp_notify_address_prefix,
+    ssl_ca_file           => $amqp_ssl_ca_file,
+    ssl_cert_file         => $amqp_ssl_cert_file,
+    ssl_key_file          => $amqp_ssl_key_file,
+    ssl_key_password      => $amqp_ssl_key_password,
+    sasl_mechanisms       => $amqp_sasl_mechanisms,
+    sasl_config_dir       => $amqp_sasl_config_dir,
+    sasl_config_name      => $amqp_sasl_config_name,
+    username              => $amqp_username,
+    password              => $amqp_password,
   }
 
   # Once we got here, we can act as an honey badger on the rpc used.
