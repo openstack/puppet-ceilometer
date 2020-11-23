@@ -14,6 +14,7 @@ describe 'ceilometer::db::sync' do
         :user        => 'ceilometer',
         :try_sleep   => 5,
         :tries       => 10,
+        :timeout     => 300,
         :logoutput   => 'on_failure',
         :subscribe   => ['Anchor[ceilometer::install::end]',
                          'Anchor[ceilometer::config::end]',
@@ -23,20 +24,22 @@ describe 'ceilometer::db::sync' do
       )
     end
 
-    describe 'overriding extra_params' do
+    describe 'overriding params' do
       let :params do
         {
-          :extra_params => '--config-file=/etc/ceilometer/ceilometer_01.conf',
+          :extra_params    => '--config-file=/etc/ceilometer/ceilometer_01.conf',
+          :db_sync_timeout => 750,
         }
       end
 
       it { is_expected.to contain_exec('ceilometer-upgrade').with(
-        :command    => 'ceilometer-upgrade --config-file=/etc/ceilometer/ceilometer_01.conf',
-        :path       => '/usr/bin',
-        :user       => 'ceilometer',
+        :command     => 'ceilometer-upgrade --config-file=/etc/ceilometer/ceilometer_01.conf',
+        :path        => '/usr/bin',
+        :user        => 'ceilometer',
         :refreshonly => 'true',
         :try_sleep   => 5,
         :tries       => 10,
+        :timeout     => 750,
         :logoutput   => 'on_failure',
         :subscribe   => ['Anchor[ceilometer::install::end]',
                          'Anchor[ceilometer::config::end]',
