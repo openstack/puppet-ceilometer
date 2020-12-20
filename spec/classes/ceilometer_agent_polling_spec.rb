@@ -48,7 +48,7 @@ describe 'ceilometer::agent::polling' do
         :tag        => 'ceilometer-service',
       )}
 
-      it { should_not contain_ceilometer_config('coordination/backend_url') }
+      it { should contain_ceilometer_config('coordination/backend_url').with_value('<SERVICE DEFAULT>') }
       it { should_not contain_file('polling') }
     end
 

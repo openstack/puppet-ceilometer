@@ -30,7 +30,7 @@
 #
 # [*coordination_url*]
 #   (Optional) The url to use for distributed group membership coordination.
-#   Defaults to undef.
+#   Defaults to $::os_service_default.
 #
 # [*instance_discovery_method*]
 #   (Optional) method to discovery instances running on compute node
@@ -65,7 +65,7 @@ class ceilometer::agent::polling (
   $central_namespace         = true,
   $compute_namespace         = true,
   $ipmi_namespace            = true,
-  $coordination_url          = undef,
+  $coordination_url          = $::os_service_default,
   $instance_discovery_method = $::os_service_default,
   $manage_polling            = false,
   $polling_interval          = 600,
@@ -144,10 +144,15 @@ class ceilometer::agent::polling (
     tag        => 'ceilometer-service',
   }
 
-  if $coordination_url {
-    ceilometer_config {
-      'coordination/backend_url': value => $coordination_url
-    }
+  if $coordination_url == undef {
+    warning('Usage of undef for the coordination_url parameter has been deprecated. \
+Use $::os_service_default instead')
+    $coordination_url_real = $::os_service_default
+  } else {
+    $coordination_url_real = $coordination_url
+  }
+  ceilometer_config {
+    'coordination/backend_url': value => $coordination_url_real
   }
 
   if $manage_polling {

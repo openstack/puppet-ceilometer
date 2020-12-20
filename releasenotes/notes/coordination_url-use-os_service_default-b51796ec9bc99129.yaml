@@ -1,0 +1,13 @@
+---
+upgrade:
+  - |
+    The default value for the ``ceilometer::agent::polling::coordination_url``
+    parameter has been changed from undef to $::os_service_default. Because
+    of this change now the ``ceilometer::agent::polling`` class ensures that
+    the ``coordination/backend_url`` parameter is unset by default.
+
+deprecations:
+  - |
+    Usage of ``undef`` for the ``ceilometer::agent::polling::coordination_url``
+    parameter has been deprecated and will be removed in a future release.
+    Use ``$::os_service_default`` or any specific value instead.
