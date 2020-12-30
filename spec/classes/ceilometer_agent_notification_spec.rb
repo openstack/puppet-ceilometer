@@ -262,6 +262,14 @@ sinks:
         it { is_expected.not_to contain_file('pipeline') }
     end
 
+    context 'with workers' do
+      before do
+        params.merge!( :workers => 4 )
+      end
+
+      it { is_expected.to contain_ceilometer_config('notification/workers').with_value(4) }
+    end
+
     context 'with custom ack_on_event_error' do
       before do
         params.merge!( :ack_on_event_error => true )
