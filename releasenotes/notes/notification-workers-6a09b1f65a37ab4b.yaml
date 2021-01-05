@@ -1,0 +1,6 @@
+---
+deprecations:
+  - |
+    The ``ceilometer::notification::notification_workers`` parameter has been
+    deprecated and will be removed in a future release. Use the ``workers``
+    option instead.
