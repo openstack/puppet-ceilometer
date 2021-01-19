@@ -1,0 +1,6 @@
+---
+fixes:
+  - |
+    The template file which is used to create pipeline.yaml when manage_pipeline
+    is true was updated, and no longer includes usage of transfomer feature
+    because this feature was already removed from ceilometer.
