@@ -1,0 +1,13 @@
+---
+features:
+  - |
+    The following meters are enabled by default when
+    ``ceilometer::agent::polling::manage_polling`` is ``true``.
+
+    - hardware.cpu.user
+    - hardware.cpu.nice
+    - hardware.cpu.system
+    - hardware.cpu.idle
+    - hardware.cpu.wait
+    - hardware.cpu.kernel
+    - hardware.cpu.interrupt

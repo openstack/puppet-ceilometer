@@ -123,6 +123,13 @@ sources:
         - volume.snapshot.size
         - volume.backup.size
         - hardware.cpu.util
+        - hardware.cpu.user
+        - hardware.cpu.nice
+        - hardware.cpu.system
+        - hardware.cpu.idle
+        - hardware.cpu.wait
+        - hardware.cpu.kernel
+        - hardware.cpu.interrupt
         - hardware.memory.used
         - hardware.memory.total
         - hardware.memory.buffer
