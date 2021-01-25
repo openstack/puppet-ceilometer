@@ -115,10 +115,10 @@ sources:
         - network.incoming.packets
         - network.outgoing.bytes
         - network.outgoing.packets
-        - disk.read.bytes
-        - disk.read.requests
-        - disk.write.bytes
-        - disk.write.requests
+        - disk.device.read.bytes
+        - disk.device.read.requests
+        - disk.device.write.bytes
+        - disk.device.write.requests
         - volume.size
         - volume.snapshot.size
         - volume.backup.size

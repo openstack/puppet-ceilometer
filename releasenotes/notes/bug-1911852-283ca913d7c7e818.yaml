@@ -1,0 +1,5 @@
+---
+fixes:
+  - |
+    Now the default meters use disk.device metrics instead of disk metrics,
+    so that disk performance data can be captured by default.
