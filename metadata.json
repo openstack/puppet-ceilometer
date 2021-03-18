@@ -2,10 +2,6 @@
     "author": "eNovance and OpenStack Contributors",
     "dependencies": [
         {
-            "name": "puppetlabs/apache",
-            "version_requirement": ">=3.0.0"
-        },
-        {
             "name": "puppetlabs/inifile",
             "version_requirement": ">=2.0.0 <3.0.0"
         },
