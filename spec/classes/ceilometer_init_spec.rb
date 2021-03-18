@@ -125,6 +125,11 @@ describe 'ceilometer' do
       is_expected.to contain_oslo__cache('ceilometer_config').with(
         :backend                => '<SERVICE DEFAULT>',
         :memcache_servers       => '<SERVICE DEFAULT>',
+        :tls_enabled            => '<SERVICE DEFAULT>',
+        :tls_cafile             => '<SERVICE DEFAULT>',
+        :tls_certfile           => '<SERVICE DEFAULT>',
+        :tls_keyfile            => '<SERVICE DEFAULT>',
+        :tls_allowed_ciphers    => '<SERVICE DEFAULT>',
         :manage_backend_package => true,
       )
     end
@@ -155,6 +160,7 @@ describe 'ceilometer' do
         params.merge!(
           :cache_backend          => 'memcache',
           :memcache_servers       => 'host1:11211,host2:11211',
+          :cache_tls_enabled      => true,
           :manage_backend_package => false,
         )
       }
@@ -163,6 +169,7 @@ describe 'ceilometer' do
         is_expected.to contain_oslo__cache('ceilometer_config').with(
           :backend                => 'memcache',
           :memcache_servers       => 'host1:11211,host2:11211',
+          :tls_enabled            => true,
           :manage_backend_package => false,
         )
       end
