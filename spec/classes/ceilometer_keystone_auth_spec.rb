@@ -32,8 +32,7 @@ describe 'ceilometer::keystone::auth' do
 
       it 'configures ceilometer user roles' do
         is_expected.to contain_keystone_user_role("#{default_params[:auth_name]}@#{default_params[:tenant]}").with(
-          :ensure  => 'present',
-          :roles   => ['admin','ResellerAdmin']
+          :ensure => 'present',
         )
       end
     end
@@ -59,8 +58,7 @@ describe 'ceilometer::keystone::auth' do
 
       it 'configures ceilometer user roles' do
         is_expected.to contain_keystone_user_role("#{params[:auth_name]}@#{params[:tenant]}").with(
-          :ensure  => 'present',
-          :roles   => ['admin','ResellerAdmin']
+          :ensure => 'present',
         )
       end
     end

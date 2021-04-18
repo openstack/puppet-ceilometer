@@ -1,0 +1,5 @@
+---
+upgrade:
+  - |
+    The ``ResellerAdmin`` role is no longer assigned to the ceilometer user
+    in Keystone.
