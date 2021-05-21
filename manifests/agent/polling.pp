@@ -28,10 +28,6 @@
 #   (Optional) Use ipmi namespace for polling agent.
 #   Defaults to true.
 #
-# [*coordination_url*]
-#   (Optional) The url to use for distributed group membership coordination.
-#   Defaults to $::os_service_default.
-#
 # [*instance_discovery_method*]
 #   (Optional) method to discovery instances running on compute node
 #   Defaults to $::os_service_default
@@ -58,6 +54,12 @@
 #   This is used only if manage_polling is true.
 #   Defaults to undef
 #
+# DEPRECATED PARAMETERS
+#
+# [*coordination_url*]
+#   (Optional) The url to use for distributed group membership coordination.
+#   Defaults to undef.
+#
 class ceilometer::agent::polling (
   $manage_service            = true,
   $enabled                   = true,
@@ -65,16 +67,22 @@ class ceilometer::agent::polling (
   $central_namespace         = true,
   $compute_namespace         = true,
   $ipmi_namespace            = true,
-  $coordination_url          = $::os_service_default,
   $instance_discovery_method = $::os_service_default,
   $manage_polling            = false,
   $polling_interval          = 600,
   $polling_meters            = $::ceilometer::params::polling_meters,
   $polling_config            = undef,
+  # DEPRECATED PARAMETERS
+  $coordination_url          = undef,
 ) inherits ceilometer {
 
   include ceilometer::deps
   include ceilometer::params
+
+  if $coordination_url != undef {
+    warning('The coordination_url parameter has been deprecated. Use ceilometer::coordination instead')
+    include ceilometer::coordination
+  }
 
   if $central_namespace {
     $central_namespace_name = 'central'
@@ -142,17 +150,6 @@ class ceilometer::agent::polling (
     hasstatus  => true,
     hasrestart => true,
     tag        => 'ceilometer-service',
-  }
-
-  if $coordination_url == undef {
-    warning('Usage of undef for the coordination_url parameter has been deprecated. \
-Use $::os_service_default instead')
-    $coordination_url_real = $::os_service_default
-  } else {
-    $coordination_url_real = $coordination_url
-  }
-  ceilometer_config {
-    'coordination/backend_url': value => $coordination_url_real
   }
 
   if $manage_polling {
