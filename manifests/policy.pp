@@ -1,5 +1,6 @@
 # == Class: ceilometer::policy
 #
+# DEPRECATED !!
 # Configure the ceilometer policies
 #
 # === Parameters
@@ -31,16 +32,6 @@ class ceilometer::policy (
   include ceilometer::deps
   include ceilometer::params
 
-  validate_legacy(Hash, 'validate_hash', $policies)
-
-  Openstacklib::Policy::Base {
-    file_path  => $policy_path,
-    file_user  => 'root',
-    file_group => $::ceilometer::params::group,
-  }
-
-  create_resources('openstacklib::policy::base', $policies)
-
-  oslo::policy { 'ceilometer_config': policy_file => $policy_path }
+  warning('The ceilometer::policy class is deprecated and has no effect')
 
 }
