@@ -1,0 +1,4 @@
+---
+deprecations:
+  - |
+    The ``ceilometer::policy`` class has been deprecated and now has no effect.
