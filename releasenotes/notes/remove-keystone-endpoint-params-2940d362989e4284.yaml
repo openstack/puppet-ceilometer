@@ -1,0 +1,13 @@
+---
+upgrade:
+  - |
+    The following parameters have been removed.
+
+    - ``ceilometer::keystone::auth::service_name``
+    - ``ceilometer::keystone::auth::service_type``
+    - ``ceilometer::keystone::auth::service_description``
+    - ``ceilometer::keystone::auth::configure_endpoint``
+    - ``ceilometer::keystone::auth::configure_service``
+    - ``ceilometer::keystone::auth::public_url``
+    - ``ceilometer::keystone::auth::admin_url``
+    - ``ceilometer::keystone::auth::internal_url``
