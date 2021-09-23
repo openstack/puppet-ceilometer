@@ -119,7 +119,7 @@ describe 'ceilometer' do
 
     it 'configures snmpd auth' do
       is_expected.to contain_ceilometer_config('hardware/readonly_user_name').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_ceilometer_config('hardware/readonly_user_password').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ceilometer_config('hardware/readonly_user_password').with_value('<SERVICE DEFAULT>').with_secret(true)
     end
 
     it 'configures cache backend' do
