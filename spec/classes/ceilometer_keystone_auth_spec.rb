@@ -42,7 +42,6 @@ describe 'ceilometer::keystone::auth' do
         params.merge!({
           :email         => 'mighty-ceilometer@remotehost',
           :auth_name     => 'mighty-ceilometer',
-          :service_type  => 'cloud-measuring',
           :region        => 'RegionFortyTwo',
           :tenant        => 'mighty-services',
         })
