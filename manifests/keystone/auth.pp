@@ -31,43 +31,6 @@
 #   (Optional) Tenant for Ceilometer user.
 #   Defaults to 'services'.
 #
-# DEPRECATED PARAMETERS
-#
-# [*service_name*]
-#   (Optional) Name of the service.
-#   Defaults to undef
-#
-# [*service_type*]
-#   (Optional) Type of service. Optional.
-#   Defaults to undef
-#
-# [*service_description*]
-#   (Optional) Description for keystone service.
-#   Defaults to undef
-#
-# [*configure_endpoint*]
-#   (Optional) Should Ceilometer endpoint be configured.
-#   Defaults to undef
-#
-# [*configure_service*]
-#   (Optional) Whether to create the service.
-#   Default to undef
-#
-# [*public_url*]
-#   (Optional) The endpoint's public url.
-#   This url should *not* contain any trailing '/'.
-#   Defaults to undef
-#
-# [*admin_url*]
-#   (Optional) The endpoint's admin url.
-#   This url should *not* contain any trailing '/'.
-#   Defaults to undef
-#
-# [*internal_url*]
-#   (Optional) The endpoint's internal url.
-#   This url should *not* contain any trailing '/'.
-#   Defaults to undef
-#
 # === Examples:
 #
 #  class { 'ceilometer::keystone::auth':
@@ -82,36 +45,11 @@ class ceilometer::keystone::auth (
   $configure_user_role  = true,
   $region               = 'RegionOne',
   $tenant               = 'services',
-  # DEPRECATED PARAMETERS
-  $service_name         = undef,
-  $service_type         = undef,
-  $service_description  = undef,
-  Optional[Boolean] $configure_service = undef,
-  $configure_endpoint   = undef,
-  $public_url           = undef,
-  $admin_url            = undef,
-  $internal_url         = undef,
 ) {
 
   include ceilometer::deps
 
   validate_legacy(String, 'validate_string', $password)
-
-  if $service_name != undef or $service_type != undef or $service_description != undef {
-    warning('The parameters for keystone service record have been deprecated and have no effect')
-  }
-
-  if $configure_endpoint != undef {
-    warning('The configure_endpoint parameter has been deprecated and has no effect')
-  }
-
-  if $configure_service != undef {
-    warning('The configure_service parameter has been deprecated and has no effect')
-  }
-
-  if $public_url != undef or $admin_url != undef or $internal_url != undef {
-    warning('The parameters for keystone endpoint record have been deprecated and have no effect')
-  }
 
   # Ceilometer rquires only its user, project, and role assignment.
   # service and endpoint should be disabled since ceilometer-api has been removed.
