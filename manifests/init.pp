@@ -395,7 +395,7 @@ will be removed in a future release.')
     'DEFAULT/host'                        : value => $host;
     'publisher/telemetry_secret'          : value => $telemetry_secret, secret => true;
     'hardware/readonly_user_name'         : value => $snmpd_readonly_username;
-    'hardware/readonly_user_password'     : value => $snmpd_readonly_user_password;
+    'hardware/readonly_user_password'     : value => $snmpd_readonly_user_password, secret => true;
   }
 
   oslo::messaging::notifications { 'ceilometer_config':
