@@ -78,20 +78,27 @@ describe 'ceilometer::agent::polling' do
       it { should contain_ceilometer_config('DEFAULT/polling_namespaces').with_value('compute') }
     end
 
-    context 'with disabled service managing' do
+    context 'with service disabled' do
       before do
-        params.merge!( :manage_service => false,
-                       :enabled        => false )
+        params.merge!( :enabled => false )
       end
 
       it { should contain_service('ceilometer-polling').with(
-        :ensure     => nil,
+        :ensure     => 'stopped',
         :name       => platform_params[:agent_service_name],
         :enable     => false,
         :hasstatus  => true,
         :hasrestart => true,
         :tag        => 'ceilometer-service',
       )}
+    end
+
+    context 'with service unmanaged' do
+      before do
+        params.merge!( :manage_service => false )
+      end
+
+      it { should_not contain_service('ceilometer-polling') }
     end
 
     context 'with polling management enabled and default meters' do

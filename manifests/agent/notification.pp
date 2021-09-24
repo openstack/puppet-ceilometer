@@ -129,15 +129,15 @@ class ceilometer::agent::notification (
     } else {
       $service_ensure = 'stopped'
     }
-  }
 
-  service { 'ceilometer-agent-notification':
-    ensure     => $service_ensure,
-    name       => $::ceilometer::params::agent_notification_service_name,
-    enable     => $enabled,
-    hasstatus  => true,
-    hasrestart => true,
-    tag        => 'ceilometer-service'
+    service { 'ceilometer-agent-notification':
+      ensure     => $service_ensure,
+      name       => $::ceilometer::params::agent_notification_service_name,
+      enable     => $enabled,
+      hasstatus  => true,
+      hasrestart => true,
+      tag        => 'ceilometer-service'
+    }
   }
 
   if $manage_event_pipeline {

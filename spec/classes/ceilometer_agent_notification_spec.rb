@@ -67,7 +67,7 @@ describe 'ceilometer::agent::notification' do
 
         it 'configures ceilometer agent notification service' do
           is_expected.to contain_service('ceilometer-agent-notification').with(
-            :ensure     => (params[:manage_service] && params[:enabled]) ? 'running' : 'stopped',
+            :ensure     => params[:enabled] ? 'running' : 'stopped',
             :name       => platform_params[:agent_notification_service_name],
             :enable     => params[:enabled],
             :hasstatus  => true,
@@ -78,22 +78,13 @@ describe 'ceilometer::agent::notification' do
       end
     end
 
-    context 'with disabled service managing' do
+    context 'with service unmanaged' do
       before do
-        params.merge!({
-          :manage_service => false,
-          :enabled        => false })
+        params.merge!({ :manage_service => false })
       end
 
       it 'configures ceilometer-agent-notification service' do
-        is_expected.to contain_service('ceilometer-agent-notification').with(
-          :ensure     => nil,
-          :name       => platform_params[:agent_notification_service_name],
-          :enable     => false,
-          :hasstatus  => true,
-          :hasrestart => true,
-          :tag        => 'ceilometer-service'
-        )
+        is_expected.to_not contain_service('ceilometer-agent-notification')
       end
     end
 
