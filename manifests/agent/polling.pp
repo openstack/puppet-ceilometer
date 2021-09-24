@@ -125,14 +125,6 @@ class ceilometer::agent::polling (
     $ipmi_namespace_name = ''
   }
 
-  if $manage_service {
-    if $enabled {
-      $service_ensure = 'running'
-    } else {
-      $service_ensure = 'stopped'
-    }
-  }
-
   $namespaces = delete([$central_namespace_name, $compute_namespace_name, $ipmi_namespace_name], '')
   $namespaces_real = inline_template('<%= @namespaces.select { |x| x and x !~ /^undef/ }.compact.join "," %>')
 
@@ -148,13 +140,21 @@ class ceilometer::agent::polling (
     }
   }
 
-  service { 'ceilometer-polling':
-    ensure     => $service_ensure,
-    name       => $::ceilometer::params::agent_polling_service_name,
-    enable     => $enabled,
-    hasstatus  => true,
-    hasrestart => true,
-    tag        => 'ceilometer-service',
+  if $manage_service {
+    if $enabled {
+      $service_ensure = 'running'
+    } else {
+      $service_ensure = 'stopped'
+    }
+
+    service { 'ceilometer-polling':
+      ensure     => $service_ensure,
+      name       => $::ceilometer::params::agent_polling_service_name,
+      enable     => $enabled,
+      hasstatus  => true,
+      hasrestart => true,
+      tag        => 'ceilometer-service',
+    }
   }
 
   if $coordination_url == undef {
