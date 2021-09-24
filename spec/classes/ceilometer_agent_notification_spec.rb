@@ -37,8 +37,9 @@ describe 'ceilometer::agent::notification' do
     it { is_expected.to contain_class('ceilometer::params') }
 
     it 'installs ceilometer agent notification package' do
-      is_expected.to contain_package(platform_params[:agent_notification_package_name]).with(
+      is_expected.to contain_package('ceilometer-notification').with(
         :ensure => 'present',
+        :name   => platform_params[:agent_notification_package_name],
         :tag    => ['openstack', 'ceilometer-package'],
       )
     end

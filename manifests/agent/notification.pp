@@ -117,12 +117,11 @@ class ceilometer::agent::notification (
     $workers_real = $workers
   }
 
-  ensure_resource('package', [$::ceilometer::params::agent_notification_package_name],
-    {
-      ensure => $package_ensure,
-      tag    => ['openstack', 'ceilometer-package']
-    }
-  )
+  package { 'ceilometer-notification':
+    ensure => $package_ensure,
+    name   => $::ceilometer::params::agent_notification_package_name,
+    tag    => ['openstack', 'ceilometer-package']
+  }
 
   if $manage_service {
     if $enabled {
