@@ -1,0 +1,4 @@
+---
+upgrade:
+  - |
+    The ``ceilometer::policy`` class has been removed.
