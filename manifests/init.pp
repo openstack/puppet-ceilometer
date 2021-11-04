@@ -138,6 +138,28 @@
 #   (Optional) A list of memcached server(s) to use for caching. (list value)
 #   Defaults to $::os_service_default
 #
+# [*cache_enable_socket_keepalive*]
+#   (Optional) Global toggle for the socket keepalive of dogpile's
+#   pymemcache backend
+#   Defaults to $::os_service_default
+#
+# [*cache_socket_keepalive_idle*]
+#   (Optional) The time (in seconds) the connection needs to remain idle
+#   before TCP starts sending keepalive probes. Should be a positive integer
+#   most greater than zero.
+#   Defaults to $::os_service_default
+#
+# [*cache_socket_keepalive_interval*]
+#   (Optional) The time (in seconds) between individual keepalive probes.
+#   Should be a positive integer most greater than zero.
+#   Defaults to $::os_service_default
+#
+# [*cache_socket_keepalive_count*]
+#   (Optional) The maximum number of keepalive probes TCP should send before
+#   dropping the connection. Should be a positive integer most greater than
+#   zero.
+#   Defaults to $::os_service_default
+#
 # [*cache_tls_enabled*]
 #   (Optional) Global toggle for TLS usage when comunicating with
 #   the caching servers.
@@ -295,6 +317,10 @@ class ceilometer(
   $kombu_compression                  = $::os_service_default,
   $cache_backend                      = $::os_service_default,
   $memcache_servers                   = $::os_service_default,
+  $cache_enable_socket_keepalive      = $::os_service_default,
+  $cache_socket_keepalive_idle        = $::os_service_default,
+  $cache_socket_keepalive_interval    = $::os_service_default,
+  $cache_socket_keepalive_count       = $::os_service_default,
   $cache_tls_enabled                  = $::os_service_default,
   $cache_tls_cafile                   = $::os_service_default,
   $cache_tls_certfile                 = $::os_service_default,
@@ -419,13 +445,17 @@ will be removed in a future release.')
   }
 
   oslo::cache { 'ceilometer_config':
-    backend                => $cache_backend,
-    memcache_servers       => $memcache_servers,
-    tls_enabled            => $cache_tls_enabled,
-    tls_cafile             => $cache_tls_cafile,
-    tls_certfile           => $cache_tls_certfile,
-    tls_keyfile            => $cache_tls_keyfile,
-    tls_allowed_ciphers    => $cache_tls_allowed_ciphers,
-    manage_backend_package => $manage_backend_package,
+    backend                   => $cache_backend,
+    memcache_servers          => $memcache_servers,
+    enable_socket_keepalive   => $cache_enable_socket_keepalive,
+    socket_keepalive_idle     => $cache_socket_keepalive_idle,
+    socket_keepalive_interval => $cache_socket_keepalive_interval,
+    socket_keepalive_count    => $cache_socket_keepalive_count,
+    tls_enabled               => $cache_tls_enabled,
+    tls_cafile                => $cache_tls_cafile,
+    tls_certfile              => $cache_tls_certfile,
+    tls_keyfile               => $cache_tls_keyfile,
+    tls_allowed_ciphers       => $cache_tls_allowed_ciphers,
+    manage_backend_package    => $manage_backend_package,
   }
 }
