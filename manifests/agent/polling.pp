@@ -54,6 +54,10 @@
 #   This is used only if manage_polling is true.
 #   Defaults to undef
 #
+# [*batch_size*]
+#   (Optional) Batch size of samples to send to notification agent.
+#   Defaults to $::os_service_default
+#
 # DEPRECATED PARAMETERS
 #
 # [*coordination_url*]
@@ -72,6 +76,7 @@ class ceilometer::agent::polling (
   $polling_interval          = 600,
   $polling_meters            = $::ceilometer::params::polling_meters,
   $polling_config            = undef,
+  $batch_size                = $::os_service_default,
   # DEPRECATED PARAMETERS
   $coordination_url          = undef,
 ) inherits ceilometer {
@@ -133,6 +138,10 @@ class ceilometer::agent::polling (
     ceilometer_config {
       'DEFAULT/polling_namespaces': value => $namespaces_real
     }
+  }
+
+  ceilometer_config {
+    'polling/batch_size': value => $batch_size
   }
 
   if $manage_service {
