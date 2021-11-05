@@ -67,6 +67,10 @@
 #   This is used only if manage_polling is true.
 #   Defaults to undef
 #
+# [*batch_size*]
+#   (Optional) Batch size of samples to send to notification agent.
+#   Defaults to $::os_service_default
+#
 class ceilometer::agent::polling (
   $manage_service            = true,
   $enabled                   = true,
@@ -82,6 +86,7 @@ class ceilometer::agent::polling (
   $polling_interval          = 600,
   $polling_meters            = $::ceilometer::params::polling_meters,
   $polling_config            = undef,
+  $batch_size                = $::os_service_default,
 ) inherits ceilometer {
 
   include ceilometer::deps
@@ -138,6 +143,10 @@ class ceilometer::agent::polling (
     ceilometer_config {
       'DEFAULT/polling_namespaces': value => $namespaces_real
     }
+  }
+
+  ceilometer_config {
+    'polling/batch_size': value => $batch_size
   }
 
   if $manage_service {

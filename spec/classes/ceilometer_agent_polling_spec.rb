@@ -53,6 +53,7 @@ describe 'ceilometer::agent::polling' do
       )}
 
       it { should contain_ceilometer_config('coordination/backend_url').with_value('<SERVICE DEFAULT>') }
+      it { should contain_ceilometer_config('polling/batch_size').with_value('<SERVICE DEFAULT>') }
       it { should_not contain_file('polling') }
     end
 
@@ -231,6 +232,14 @@ sources:
       end
 
       it { should contain_ceilometer_config('coordination/backend_url').with_value('redis://localhost:6379') }
+    end
+
+    context 'when batch_size is set' do
+      before do
+        params.merge!( :batch_size => 50 )
+      end
+
+      it { should contain_ceilometer_config('polling/batch_size').with_value(50) }
     end
   end
 
