@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    The ``ceilometer::agent::polling`` class now suppports the new
+    ``batch_size`` parameter.
