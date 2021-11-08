@@ -7,7 +7,7 @@
 #
 # [*http_timeout*]
 #   (Optional) Timeout seconds for HTTP requests.
-#   Defaults to 600.
+#   Defaults to $::os_service_default
 #
 # [*max_parallel_requests*]
 #   (Optional) Maximum number of parallel requests for services to handle at
@@ -268,7 +268,7 @@
 #   Defaults to undef.
 #
 class ceilometer(
-  $http_timeout                       = '600',
+  $http_timeout                       = $::os_service_default,
   $max_parallel_requests              = $::os_service_default,
   $telemetry_secret                   = false,
   $notification_topics                = ['notifications'],
