@@ -250,25 +250,6 @@ describe 'ceilometer' do
     end
   end
 
-
-  # Cleanup in Ocata
-  shared_examples_for 'using old metering_secret param' do
-    context "with old metering_secret param it uses telemetry_secret instead" do
-      before { params.merge!(
-          :metering_secret => 'broncos',
-          :telemetry_secret => 'metering-s3cr3t',
-      ) }
-      it { is_expected.to contain_ceilometer_config('publisher/telemetry_secret').with_value('metering-s3cr3t') }
-    end
-    context "with old metering_secret param set and telemetry_secret unset" do
-      before { params.merge!(
-          :metering_secret => 'broncos',
-          :telemetry_secret => nil,
-      ) }
-      it { is_expected.to contain_ceilometer_config('publisher/telemetry_secret').with_value('broncos') }
-    end
-  end
-
   shared_examples_for 'rabbit with SSL support' do
     context "with default parameters" do
     it { is_expected.to contain_oslo__messaging__rabbit('ceilometer_config').with(
