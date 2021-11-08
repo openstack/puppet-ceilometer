@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    The new ``ceilometer::agent::polling::service_types`` class, to manage
+    parameters in the ``[service_types]`` section, has been added.
