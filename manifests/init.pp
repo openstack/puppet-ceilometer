@@ -9,6 +9,11 @@
 #   (Optional) Timeout seconds for HTTP requests.
 #   Defaults to 600.
 #
+# [*max_parallel_requests*]
+#   (Optional) Maximum number of parallel requests for services to handle at
+#   the same time.
+#   Defaults to $::os_service_default
+#
 # [*telemetry_secret*]
 #  (Required)  Secret key for signing messages.
 #
@@ -264,6 +269,7 @@
 #
 class ceilometer(
   $http_timeout                       = '600',
+  $max_parallel_requests              = $::os_service_default,
   $telemetry_secret                   = false,
   $notification_topics                = ['notifications'],
   $notification_driver                = $::os_service_default,
@@ -392,6 +398,7 @@ will be removed in a future release.')
   # Once we got here, we can act as an honey badger on the rpc used.
   ceilometer_config {
     'DEFAULT/http_timeout'                : value => $http_timeout;
+    'DEFAULT/max_parallel_requests'       : value => $max_parallel_requests;
     'DEFAULT/host'                        : value => $host;
     'publisher/telemetry_secret'          : value => $telemetry_secret, secret => true;
     'hardware/readonly_user_name'         : value => $snmpd_readonly_username;

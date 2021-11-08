@@ -5,6 +5,7 @@ describe 'ceilometer' do
   let :params do
     {
       :http_timeout          => '600',
+      :max_parallel_requests => 64,
       :telemetry_secret      => 'metering-s3cr3t',
       :package_ensure        => 'present',
       :purge_config          => false,
@@ -22,6 +23,10 @@ describe 'ceilometer' do
 
     it 'configures timeout for HTTP requests' do
       is_expected.to contain_ceilometer_config('DEFAULT/http_timeout').with_value(params[:http_timeout])
+    end
+
+    it 'configures max_parallel_requests' do
+      is_expected.to contain_ceilometer_config('DEFAULT/max_parallel_requests').with_value(params[:max_parallel_requests])
     end
 
     it 'configures host name' do
