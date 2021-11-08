@@ -9,6 +9,7 @@ describe 'ceilometer::agent::polling::service_types' do
         is_expected.to contain_ceilometer_config('service_types/nova').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_ceilometer_config('service_types/swift').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_ceilometer_config('service_types/cinder').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_ceilometer_config('service_types/radosgw').with_value('<SERVICE DEFAULT>')
       end
     end
 
@@ -20,6 +21,7 @@ describe 'ceilometer::agent::polling::service_types' do
           :nova    => 'compute',
           :swift   => 'object-store',
           :cinder  => 'volumev3',
+          :radosgw => 'alt-object-store',
         }
       end
 
@@ -29,6 +31,7 @@ describe 'ceilometer::agent::polling::service_types' do
         is_expected.to contain_ceilometer_config('service_types/nova').with_value('compute')
         is_expected.to contain_ceilometer_config('service_types/swift').with_value('object-store')
         is_expected.to contain_ceilometer_config('service_types/cinder').with_value('volumev3')
+        is_expected.to contain_ceilometer_config('service_types/radosgw').with_value('alt-object-store')
       end
     end
   end
