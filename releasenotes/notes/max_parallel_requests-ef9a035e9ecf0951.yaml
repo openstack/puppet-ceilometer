@@ -1,0 +1,4 @@
+---
+features:
+  - |
+    The new ``ceilometer::max_parallel_requests`` parameter has been added.
