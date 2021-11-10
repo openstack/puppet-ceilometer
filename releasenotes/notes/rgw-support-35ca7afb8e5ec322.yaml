@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    Support for the parameters used to poll metrics from the Radosgw service
+    has been added.
