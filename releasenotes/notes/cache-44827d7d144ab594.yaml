@@ -1,0 +1,4 @@
+---
+features:
+  - |
+    The new ``ceilometer::cache`` class has been added.
