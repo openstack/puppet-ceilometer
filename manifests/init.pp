@@ -127,22 +127,22 @@
 #
 # [*cache_backend*]
 #   (Optional) The backend to pass to oslo::cache.
-#   Defaults to $::os_service_default
+#   Defaults to undef
 #
 # [*memcache_servers*]
 #   (Optional) A list of memcached server(s) to use for caching. (list value)
-#   Defaults to $::os_service_default
+#   Defaults to undef
 #
 # [*cache_tls_enabled*]
 #   (Optional) Global toggle for TLS usage when comunicating with
 #   the caching servers.
-#   Default to $::os_service_default
+#   Defaults to undef
 #
 # [*cache_tls_cafile*]
 #   (Optional) Path to a file of concatenated CA certificates in PEM
 #   format necessary to establish the caching server's authenticity.
 #   If tls_enabled is False, this option is ignored.
-#   Default to $::os_service_default
+#   Defaults to undef
 #
 # [*cache_tls_certfile*]
 #   (Optional) Path to a single file in PEM format containing the
@@ -150,21 +150,21 @@
 #   needed to establish the certificate's authenticity. This file
 #   is only required when client side authentication is necessary.
 #   If tls_enabled is False, this option is ignored.
-#   Default to $::os_service_default
+#   Defaults to undef
 #
 # [*cache_tls_keyfile*]
 #   (Optional) Path to a single file containing the client's private
 #   key in. Otherwhise the private key will be taken from the file
 #   specified in tls_certfile. If tls_enabled is False, this option
 #   is ignored.
-#   Default to $::os_service_default
+#   Defaults to undef
 #
 # [*cache_tls_allowed_ciphers*]
 #   (Optional) Set the available ciphers for sockets created with
 #   the TLS context. It should be a string in the OpenSSL cipher
 #   list format. If not specified, all OpenSSL enabled ciphers will
 #   be available.
-#   Default to $::os_service_default
+#   Defaults to undef
 #
 # [*manage_backend_package*]
 #   (Optional) If we should install the cache backend package.
@@ -287,14 +287,14 @@ class ceilometer(
   $kombu_reconnect_delay              = $::os_service_default,
   $kombu_failover_strategy            = $::os_service_default,
   $kombu_compression                  = $::os_service_default,
-  $cache_backend                      = $::os_service_default,
-  $memcache_servers                   = $::os_service_default,
-  $cache_tls_enabled                  = $::os_service_default,
-  $cache_tls_cafile                   = $::os_service_default,
-  $cache_tls_certfile                 = $::os_service_default,
-  $cache_tls_keyfile                  = $::os_service_default,
-  $cache_tls_allowed_ciphers          = $::os_service_default,
-  $manage_backend_package             = true,
+  $cache_backend                      = undef,
+  $memcache_servers                   = undef,
+  $cache_tls_enabled                  = undef,
+  $cache_tls_cafile                   = undef,
+  $cache_tls_certfile                 = undef,
+  $cache_tls_keyfile                  = undef,
+  $cache_tls_allowed_ciphers          = undef,
+  $manage_backend_package             = undef,
   $amqp_server_request_prefix         = $::os_service_default,
   $amqp_broadcast_prefix              = $::os_service_default,
   $amqp_group_request_prefix          = $::os_service_default,
@@ -327,6 +327,8 @@ class ceilometer(
     warning('The amqp_allow_insecure_clients parameter is deprecated and \
 will be removed in a future release.')
   }
+
+  include ceilometer::cache
 
   group { 'ceilometer':
     ensure  => present,
@@ -409,16 +411,5 @@ will be removed in a future release.')
     transport_url             => $default_transport_url,
     rpc_response_timeout      => $rpc_response_timeout,
     control_exchange          => $control_exchange,
-  }
-
-  oslo::cache { 'ceilometer_config':
-    backend                => $cache_backend,
-    memcache_servers       => $memcache_servers,
-    tls_enabled            => $cache_tls_enabled,
-    tls_cafile             => $cache_tls_cafile,
-    tls_certfile           => $cache_tls_certfile,
-    tls_keyfile            => $cache_tls_keyfile,
-    tls_allowed_ciphers    => $cache_tls_allowed_ciphers,
-    manage_backend_package => $manage_backend_package,
   }
 }
