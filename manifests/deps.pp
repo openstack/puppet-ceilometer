@@ -31,6 +31,10 @@ class ceilometer::deps {
   # before service startup
   Oslo::Cache<||> -> Anchor['ceilometer::service::begin']
 
+  # all coordination settings should be applied and all packages should be
+  # installed before service startup
+  Oslo::Coordination<||> -> Anchor['ceilometer::service::begin']
+
   # all db settings should be applied and all packages should be installed
   # before dbsync starts
   Oslo::Db<||> -> Anchor['ceilometer::dbsync::begin']
