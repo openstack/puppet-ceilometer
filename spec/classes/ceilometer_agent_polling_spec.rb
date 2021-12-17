@@ -29,7 +29,11 @@ describe 'ceilometer::agent::polling' do
        :before => /Package\[ceilometer-common\]/
       )}
 
-      it { should contain_ceilometer_config('compute/instance_discovery_method').with_value('<SERVICE DEFAULT>') }
+      it {
+        should contain_ceilometer_config('compute/instance_discovery_method').with_value('<SERVICE DEFAULT>')
+        should contain_ceilometer_config('compute/resource_update_interval').with_value('<SERVICE DEFAULT>')
+        should contain_ceilometer_config('compute/resource_cache_expiry').with_value('<SERVICE DEFAULT>')
+      }
 
       it { should contain_package('ceilometer-polling').with(
         :ensure => 'present',
@@ -62,12 +66,20 @@ describe 'ceilometer::agent::polling' do
       )}
     end
 
-    context 'when setting instance_discovery_method' do
+    context 'when compute parameters set' do
       before do
-        params.merge!( :instance_discovery_method => 'naive' )
+        params.merge!(
+          :instance_discovery_method => 'naive',
+          :resource_update_interval  => 0,
+          :resource_cache_expiry     => 3600,
+        )
       end
 
-      it { should contain_ceilometer_config('compute/instance_discovery_method').with_value('naive') }
+      it {
+        should contain_ceilometer_config('compute/instance_discovery_method').with_value('naive')
+        should contain_ceilometer_config('compute/resource_update_interval').with_value(0)
+        should contain_ceilometer_config('compute/resource_cache_expiry').with_value(3600)
+      }
     end
 
     context 'with central and ipmi polling namespaces disabled' do
