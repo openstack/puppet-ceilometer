@@ -36,6 +36,15 @@
 #    * libvirt_metadata: get instances from libvirt metadata
 #      but without instance metadata (recommended for Gnocchi backend).
 #
+# [*resource_update_interval*]
+#   (Optional) New instances will be discovered periodically based on this
+#   option (in seconds).
+#   Defaults to $::os_service_default.
+#
+# [*resource_cache_expiry*]
+#   (Optional) The expiry to totally refresh the instances resource cache.
+#   Defaults to $::os_service_default.
+#
 # [*manage_polling*]
 #   (Optional) Whether to manage polling.yaml
 #   Defaults to false
@@ -68,6 +77,8 @@ class ceilometer::agent::polling (
   $compute_namespace         = true,
   $ipmi_namespace            = true,
   $instance_discovery_method = $::os_service_default,
+  $resource_update_interval  = $::os_service_default,
+  $resource_cache_expiry     = $::os_service_default,
   $manage_polling            = false,
   $polling_interval          = 600,
   $polling_meters            = $::ceilometer::params::polling_meters,
@@ -108,7 +119,9 @@ class ceilometer::agent::polling (
     Package <| title == 'nova-common' |> -> Package['ceilometer-common']
 
     ceilometer_config {
-      'compute/instance_discovery_method': value => $instance_discovery_method,
+      'compute/instance_discovery_method': value => $instance_discovery_method;
+      'compute/resource_update_interval':  value => $resource_update_interval;
+      'compute/resource_cache_expiry':     value => $resource_cache_expiry;
     }
   } else {
     $compute_namespace_name = undef
