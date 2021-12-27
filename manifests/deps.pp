@@ -39,6 +39,11 @@ class ceilometer::deps {
   # before dbsync starts
   Oslo::Db<||> -> Anchor['ceilometer::dbsync::begin']
 
+  # rootwrap config should occur in the config block also.
+  Anchor['ceilometer::config::begin']
+  -> Ceilometer_rootwrap_config<||>
+  ~> Anchor['ceilometer::config::end']
+
   # Ensure files are modified in the config block
   Anchor['ceilometer::config::begin']
   -> File<| tag == 'ceilometer-yamls' |>
