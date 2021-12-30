@@ -39,11 +39,6 @@ class ceilometer::deps {
   # before dbsync starts
   Oslo::Db<||> -> Anchor['ceilometer::dbsync::begin']
 
-  # policy config should occur in the config block also.
-  Anchor['ceilometer::config::begin']
-  -> Openstacklib::Policy::Base<||>
-  ~> Anchor['ceilometer::config::end']
-
   # Ensure files are modified in the config block
   Anchor['ceilometer::config::begin']
   -> File<| tag == 'ceilometer-yamls' |>
