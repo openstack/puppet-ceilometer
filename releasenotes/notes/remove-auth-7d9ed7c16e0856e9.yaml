@@ -1,0 +1,5 @@
+---
+upgrade:
+  - |
+    The deprecated ``ceilometer::agent::auth`` class has been removed. Use
+    the ``ceilometer::agent::service_credentials`` class instead.
