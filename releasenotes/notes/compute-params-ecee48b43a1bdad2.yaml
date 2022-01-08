@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    Support for the ``[compute] resource_update_interval`` parameter and
+    the ``[compute] resource_cache_expiry`` parameter has been added.
