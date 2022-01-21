@@ -13,12 +13,6 @@ describe 'ceilometer' do
     }
   end
 
-  let :rabbit_params do
-    {
-      :rabbit_qos_prefetch_count => 10,
-    }
-  end
-
   shared_examples_for 'ceilometer' do
 
     it 'configures timeout for HTTP requests' do
@@ -34,14 +28,13 @@ describe 'ceilometer' do
     end
 
     context 'with rabbit parameters' do
-      before { params.merge!( rabbit_params ) }
       it_configures 'a ceilometer base installation'
       it_configures 'rabbit with SSL support'
-      it_configures 'rabbit without HA support (with backward compatibility)'
+      it_configures 'rabbit without HA support'
       it_configures 'rabbit with connection heartbeats'
 
       context 'with rabbit_ha_queues' do
-        before { params.merge!( rabbit_params ).merge!( :rabbit_ha_queues => true ) }
+        before { params.merge!( :rabbit_ha_queues => true ) }
         it_configures 'rabbit with rabbit_ha_queues'
        end
 
@@ -49,10 +42,9 @@ describe 'ceilometer' do
 
     context 'with rabbit parameters' do
       context 'with one server' do
-        before { params.merge!( rabbit_params ) }
         it_configures 'a ceilometer base installation'
         it_configures 'rabbit with SSL support'
-        it_configures 'rabbit without HA support (without backward compatibility)'
+        it_configures 'rabbit without HA support'
       end
 
     end
@@ -110,16 +102,20 @@ describe 'ceilometer' do
     end
 
     it 'configures default transport_url' do
-      is_expected.to contain_ceilometer_config('DEFAULT/executor_thread_pool_size').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_ceilometer_config('DEFAULT/transport_url').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_ceilometer_config('DEFAULT/rpc_response_timeout').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_ceilometer_config('DEFAULT/control_exchange').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_oslo__messaging__default('ceilometer_config').with(
+        :executor_thread_pool_size => '<SERVICE DEFAULT>',
+        :transport_url             => '<SERVICE DEFAULT>',
+        :rpc_response_timeout      => '<SERVICE DEFAULT>',
+        :control_exchange          => '<SERVICE DEFAULT>'
+      )
     end
 
     it 'configures notifications' do
-      is_expected.to contain_ceilometer_config('oslo_messaging_notifications/topics').with_value('notifications')
-      is_expected.to contain_ceilometer_config('oslo_messaging_notifications/driver').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_ceilometer_config('oslo_messaging_notifications/transport_url').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_oslo__messaging__notifications('ceilometer_config').with(
+        :transport_url => '<SERVICE DEFAULT>',
+        :driver        => '<SERVICE DEFAULT>',
+        :topics        => ['notifications']
+      )
     end
 
     it 'configures snmpd auth' do
@@ -156,10 +152,12 @@ describe 'ceilometer' do
       }
 
       it 'configures transport_url' do
-        is_expected.to contain_ceilometer_config('DEFAULT/executor_thread_pool_size').with_value('128')
-        is_expected.to contain_ceilometer_config('DEFAULT/transport_url').with_value('rabbit://rabbit_user:password@localhost:5673')
-        is_expected.to contain_ceilometer_config('DEFAULT/rpc_response_timeout').with_value('120')
-        is_expected.to contain_ceilometer_config('DEFAULT/control_exchange').with_value('ceilometer')
+        is_expected.to contain_oslo__messaging__default('ceilometer_config').with(
+          :executor_thread_pool_size => '128',
+          :transport_url             => 'rabbit://rabbit_user:password@localhost:5673',
+          :rpc_response_timeout      => '120',
+          :control_exchange          => 'ceilometer'
+        )
       end
     end
 
@@ -187,57 +185,53 @@ describe 'ceilometer' do
       before {
         params.merge!(
           :notification_topics        => ['notifications', 'custom'],
-          :notification_driver        => 'messagingv1',
+          :notification_driver        => 'messagingv2',
           :notification_transport_url => 'rabbit://rabbit_user:password@localhost:5673',
         )
       }
 
       it 'configures notifications' do
-        is_expected.to contain_ceilometer_config('oslo_messaging_notifications/topics').with_value('notifications,custom')
-        is_expected.to contain_ceilometer_config('oslo_messaging_notifications/driver').with_value('messagingv1')
-        is_expected.to contain_ceilometer_config('oslo_messaging_notifications/transport_url').with_value('rabbit://rabbit_user:password@localhost:5673')
+        is_expected.to contain_oslo__messaging__notifications('ceilometer_config').with(
+          :transport_url => 'rabbit://rabbit_user:password@localhost:5673',
+          :driver        => 'messagingv2',
+          :topics        => ['notifications', 'custom']
+        )
       end
     end
   end
 
-  shared_examples_for 'rabbit without HA support (with backward compatibility)' do
+  shared_examples_for 'rabbit without HA support' do
 
     it 'configures rabbit' do
-      is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/heartbeat_timeout_threshold').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/heartbeat_rate').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/heartbeat_in_pthread').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_oslo__messaging__rabbit('ceilometer_config').with(
+        :rabbit_ha_queues            => '<SERVICE DEFAULT>',
+        :heartbeat_timeout_threshold => '<SERVICE DEFAULT>',
+        :heartbeat_rate              => '<SERVICE DEFAULT>',
+        :heartbeat_in_pthread        => '<SERVICE DEFAULT>',
+        :rabbit_qos_prefetch_count   => '<SERVICE DEFAULT>',
+        :amqp_durable_queues         => '<SERVICE DEFAULT>',
+        :kombu_reconnect_delay       => '<SERVICE DEFAULT>',
+        :kombu_failover_strategy     => '<SERVICE DEFAULT>',
+        :kombu_compression          => '<SERVICE DEFAULT>',
+      )
     end
-
-    it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_qos_prefetch_count').with_value( params[:rabbit_qos_prefetch_count] ) }
-    it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value('<SERVICE DEFAULT>') }
-    it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/kombu_failover_strategy').with_value('<SERVICE DEFAULT>') }
-
-  end
-
-  shared_examples_for 'rabbit without HA support (without backward compatibility)' do
-
-    it 'configures rabbit' do
-      is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/heartbeat_timeout_threshold').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/heartbeat_rate').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/heartbeat_in_pthread').with_value('<SERVICE DEFAULT>')
-    end
-
-    it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_qos_prefetch_count').with_value( params[:rabbit_qos_prefetch_count] ) }
-    it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value('<SERVICE DEFAULT>') }
-    it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/kombu_failover_strategy').with_value('<SERVICE DEFAULT>') }
 
   end
 
   shared_examples_for 'rabbit with rabbit_ha_queues' do
 
     it 'configures rabbit' do
-      is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value( params[:rabbit_ha_queues] )
+      is_expected.to contain_oslo__messaging__rabbit('ceilometer_config').with(
+        :rabbit_ha_queues => params[:rabbit_ha_queues]
+      )
     end
   end
 
   shared_examples_for 'rabbit with durable queues' do
     it 'in ceilometer' do
-      is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/amqp_durable_queues').with_value(true)
+      is_expected.to contain_oslo__messaging__rabbit('ceilometer_config').with(
+        :amqp_durable_queues => params[:amqp_durable_queues]
+      )
     end
   end
 
@@ -249,9 +243,11 @@ describe 'ceilometer' do
         :rabbit_heartbeat_in_pthread        => true,
       ) }
 
-      it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/heartbeat_timeout_threshold').with_value('60') }
-      it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/heartbeat_rate').with_value('10') }
-      it { is_expected.to contain_ceilometer_config('oslo_messaging_rabbit/heartbeat_in_pthread').with_value(true) }
+      it { is_expected.to contain_oslo__messaging__rabbit('ceilometer_config').with(
+        :heartbeat_timeout_threshold => '60',
+        :heartbeat_rate              => '10',
+        :heartbeat_in_pthread        => true,
+      ) }
     end
   end
 
@@ -293,42 +289,26 @@ describe 'ceilometer' do
       :rabbit_use_ssl     => true,
     )}
     end
-
-    context "with SSL wrongly configured" do
-      context 'with kombu_ssl_ca_certs parameter' do
-        before { params.merge!(:kombu_ssl_ca_certs => '/path/to/ca.crt') }
-        it_raises 'a Puppet::Error', /The kombu_ssl_ca_certs parameter requires rabbit_use_ssl to be set to true/
-      end
-
-      context 'with kombu_ssl_certfile parameter' do
-        before { params.merge!(:kombu_ssl_certfile => '/path/to/ssl/cert/file') }
-        it_raises 'a Puppet::Error', /The kombu_ssl_certfile parameter requires rabbit_use_ssl to be set to true/
-      end
-
-      context 'with kombu_ssl_keyfile parameter' do
-        before { params.merge!(:kombu_ssl_keyfile => '/path/to/ssl/keyfile') }
-        it_raises 'a Puppet::Error', /The kombu_ssl_keyfile parameter requires rabbit_use_ssl to be set to true/
-      end
-    end
   end
 
   shared_examples_for 'amqp support' do
     context 'with default parameters' do
-      it { is_expected.to contain_ceilometer_config('oslo_messaging_amqp/server_request_prefix').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_ceilometer_config('oslo_messaging_amqp/broadcast_prefix').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_ceilometer_config('oslo_messaging_amqp/group_request_prefix').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_ceilometer_config('oslo_messaging_amqp/container_name').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_ceilometer_config('oslo_messaging_amqp/idle_timeout').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_ceilometer_config('oslo_messaging_amqp/trace').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_ceilometer_config('oslo_messaging_amqp/ssl_ca_file').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_ceilometer_config('oslo_messaging_amqp/ssl_cert_file').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_ceilometer_config('oslo_messaging_amqp/ssl_key_file').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_ceilometer_config('oslo_messaging_amqp/ssl_key_password').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_ceilometer_config('oslo_messaging_amqp/sasl_mechanisms').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_ceilometer_config('oslo_messaging_amqp/sasl_config_dir').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_ceilometer_config('oslo_messaging_amqp/sasl_config_name').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_ceilometer_config('oslo_messaging_amqp/username').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_ceilometer_config('oslo_messaging_amqp/password').with_value('<SERVICE DEFAULT>') }
+      it { is_expected.to contain_oslo__messaging__amqp('ceilometer_config').with(
+        :server_request_prefix => '<SERVICE DEFAULT>',
+        :broadcast_prefix      => '<SERVICE DEFAULT>',
+        :group_request_prefix  => '<SERVICE DEFAULT>',
+        :container_name        => '<SERVICE DEFAULT>',
+        :idle_timeout          => '<SERVICE DEFAULT>',
+        :trace                 => '<SERVICE DEFAULT>',
+        :ssl_ca_file           => '<SERVICE DEFAULT>',
+        :ssl_cert_file         => '<SERVICE DEFAULT>',
+        :ssl_key_file          => '<SERVICE DEFAULT>',
+        :sasl_mechanisms       => '<SERVICE DEFAULT>',
+        :sasl_config_dir       => '<SERVICE DEFAULT>',
+        :sasl_config_name      => '<SERVICE DEFAULT>',
+        :username              => '<SERVICE DEFAULT>',
+        :password              => '<SERVICE DEFAULT>',
+      ) }
     end
 
     context 'with overridden amqp parameters' do
@@ -342,20 +322,22 @@ describe 'ceilometer' do
         :amqp_password      => 'password',
       ) }
 
-      it { is_expected.to contain_ceilometer_config('oslo_messaging_amqp/server_request_prefix').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_ceilometer_config('oslo_messaging_amqp/broadcast_prefix').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_ceilometer_config('oslo_messaging_amqp/group_request_prefix').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_ceilometer_config('oslo_messaging_amqp/container_name').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_ceilometer_config('oslo_messaging_amqp/idle_timeout').with_value('60') }
-      it { is_expected.to contain_ceilometer_config('oslo_messaging_amqp/trace').with_value('true') }
-      it { is_expected.to contain_ceilometer_config('oslo_messaging_amqp/ssl_ca_file').with_value('/path/to/ca.cert') }
-      it { is_expected.to contain_ceilometer_config('oslo_messaging_amqp/ssl_cert_file').with_value('/path/to/certfile') }
-      it { is_expected.to contain_ceilometer_config('oslo_messaging_amqp/ssl_key_file').with_value('/path/to/key') }
-      it { is_expected.to contain_ceilometer_config('oslo_messaging_amqp/sasl_mechanisms').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_ceilometer_config('oslo_messaging_amqp/sasl_config_dir').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_ceilometer_config('oslo_messaging_amqp/sasl_config_name').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_ceilometer_config('oslo_messaging_amqp/username').with_value('amqp_user') }
-      it { is_expected.to contain_ceilometer_config('oslo_messaging_amqp/password').with_value('password') }
+      it { is_expected.to contain_oslo__messaging__amqp('ceilometer_config').with(
+        :server_request_prefix => '<SERVICE DEFAULT>',
+        :broadcast_prefix      => '<SERVICE DEFAULT>',
+        :group_request_prefix  => '<SERVICE DEFAULT>',
+        :container_name        => '<SERVICE DEFAULT>',
+        :idle_timeout          => '60',
+        :trace                 => true,
+        :ssl_ca_file           => '/path/to/ca.cert',
+        :ssl_cert_file         => '/path/to/certfile',
+        :ssl_key_file          => '/path/to/key',
+        :sasl_mechanisms       => '<SERVICE DEFAULT>',
+        :sasl_config_dir       => '<SERVICE DEFAULT>',
+        :sasl_config_name      => '<SERVICE DEFAULT>',
+        :username              => 'amqp_user',
+        :password              => 'password',
+      ) }
     end
   end
 
