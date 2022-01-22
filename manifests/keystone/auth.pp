@@ -31,6 +31,18 @@
 #   (Optional) Tenant for Ceilometer user.
 #   Defaults to 'services'.
 #
+# [*roles*]
+#   (Optional) List of roles assigned to aodh user.
+#   Defaults to ['admin']
+#
+# [*system_scope*]
+#   (Optional) Scope for system operations.
+#   Defaults to 'all'
+#
+# [*system_roles*]
+#   (Optional) List of system roles assigned to aodh user.
+#   Defaults to []
+#
 # === Examples:
 #
 #  class { 'ceilometer::keystone::auth':
@@ -45,6 +57,9 @@ class ceilometer::keystone::auth (
   $configure_user_role  = true,
   $region               = 'RegionOne',
   $tenant               = 'services',
+  $roles                = ['admin'],
+  $system_scope         = 'all',
+  $system_roles         = [],
 ) {
 
   include ceilometer::deps
@@ -63,5 +78,8 @@ class ceilometer::keystone::auth (
     password            => $password,
     email               => $email,
     tenant              => $tenant,
+    roles               => $roles,
+    system_scope        => $system_scope,
+    system_roles        => $system_roles,
   }
 }
