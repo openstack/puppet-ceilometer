@@ -1,0 +1,9 @@
+---
+features:
+  - |
+    The ``ceilometer::keystone::auth`` class now supports customizing roles
+    assigned to the ceilometer service user.
+
+  - |
+    The ``ceilometer::keystone::auth`` class now supports defining assignment
+    of system-scoped roles to the ceilometer user.
