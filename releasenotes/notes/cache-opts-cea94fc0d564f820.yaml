@@ -1,0 +1,24 @@
+---
+deprecations:
+  - |
+    The following parameters of the ``ceilometer`` class have been deprecated.
+    Use the new ``ceilometer::cache`` class.
+
+    - ``cache_backend``
+    - ``memcache_servers``
+    - ``cache_enable_socket_keepalive``
+    - ``cache_socket_keepalive_idle``
+    - ``cache_socket_keepalive_interval``
+    - ``cache_socket_keepalive_count``
+    - ``cache_tls_enabled``
+    - ``cache_tls_cafile``
+    - ``cache_tls_certfile``
+    - ``cache_tls_keyfile``
+    - ``cache_tls_allowed_ciphers``
+    - ``cache_enable_retry_client``
+    - ``cache_retry_attempts``
+    - ``cache_retry_delay``
+    - ``cache_hashclient_retry_attempts``
+    - ``cache_hashclient_retry_delay``
+    - ``cache_dead_timeout``
+    - ``manage_backend_package``

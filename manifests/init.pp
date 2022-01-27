@@ -130,104 +130,6 @@
 #   (string value)
 #   Defaults to $::os_service_default
 #
-# [*cache_backend*]
-#   (Optional) The backend to pass to oslo::cache.
-#   Defaults to $::os_service_default
-#
-# [*memcache_servers*]
-#   (Optional) A list of memcached server(s) to use for caching. (list value)
-#   Defaults to $::os_service_default
-#
-# [*cache_enable_socket_keepalive*]
-#   (Optional) Global toggle for the socket keepalive of dogpile's
-#   pymemcache backend
-#   Defaults to $::os_service_default
-#
-# [*cache_socket_keepalive_idle*]
-#   (Optional) The time (in seconds) the connection needs to remain idle
-#   before TCP starts sending keepalive probes. Should be a positive integer
-#   most greater than zero.
-#   Defaults to $::os_service_default
-#
-# [*cache_socket_keepalive_interval*]
-#   (Optional) The time (in seconds) between individual keepalive probes.
-#   Should be a positive integer most greater than zero.
-#   Defaults to $::os_service_default
-#
-# [*cache_socket_keepalive_count*]
-#   (Optional) The maximum number of keepalive probes TCP should send before
-#   dropping the connection. Should be a positive integer most greater than
-#   zero.
-#   Defaults to $::os_service_default
-#
-# [*cache_tls_enabled*]
-#   (Optional) Global toggle for TLS usage when comunicating with
-#   the caching servers.
-#   Default to $::os_service_default
-#
-# [*cache_tls_cafile*]
-#   (Optional) Path to a file of concatenated CA certificates in PEM
-#   format necessary to establish the caching server's authenticity.
-#   If tls_enabled is False, this option is ignored.
-#   Default to $::os_service_default
-#
-# [*cache_tls_certfile*]
-#   (Optional) Path to a single file in PEM format containing the
-#   client's certificate as well as any number of CA certificates
-#   needed to establish the certificate's authenticity. This file
-#   is only required when client side authentication is necessary.
-#   If tls_enabled is False, this option is ignored.
-#   Default to $::os_service_default
-#
-# [*cache_tls_keyfile*]
-#   (Optional) Path to a single file containing the client's private
-#   key in. Otherwhise the private key will be taken from the file
-#   specified in tls_certfile. If tls_enabled is False, this option
-#   is ignored.
-#   Default to $::os_service_default
-#
-# [*cache_tls_allowed_ciphers*]
-#   (Optional) Set the available ciphers for sockets created with
-#   the TLS context. It should be a string in the OpenSSL cipher
-#   list format. If not specified, all OpenSSL enabled ciphers will
-#   be available.
-#   Default to $::os_service_default
-#
-# [*cache_enable_retry_client*]
-#   (Optional) Enable retry client mechanisms to handle failure.
-#   Those mechanisms can be used to wrap all kind of pymemcache
-#   clients. The wrapper allows you to define how many attempts
-#   to make and how long to wait between attemots.
-#   Default to $::os_service_default
-#
-# [*cache_retry_attempts*]
-#   (Optional) Number of times to attempt an action before failing.
-#   Default to $::os_service_default
-#
-# [*cache_retry_delay*]
-#   (Optional) Number of seconds to sleep between each attempt.
-#   Default to $::os_service_default
-#
-# [*cache_hashclient_retry_attempts*]
-#   (Optional) Amount of times a client should be tried
-#   before it is marked dead and removed from the pool in
-#   the HashClient's internal mechanisms.
-#   Default to $::os_service_default
-#
-# [*cache_hashclient_retry_delay*]
-#   (Optional) Time in seconds that should pass between
-#   retry attempts in the HashClient's internal mechanisms.
-#   Default to $::os_service_default
-#
-# [*cache_dead_timeout*]
-#   (Optional) Time in seconds before attempting to add a node
-#   back in the pool in the HashClient's internal mechanisms.
-#   Default to $::os_service_default
-#
-# [*manage_backend_package*]
-#   (Optional) If we should install the cache backend package.
-#   Defaults to true
-#
 # [*amqp_server_request_prefix*]
 #   (Optional) Address prefix used when sending to a specific server
 #   Defaults to $::os_service_default.
@@ -320,6 +222,104 @@
 #   (Optional) Accept clients using either SSL or plain TCP
 #   Defaults to undef.
 #
+# [*cache_backend*]
+#   (Optional) The backend to pass to oslo::cache.
+#   Defaults to undef.
+#
+# [*memcache_servers*]
+#   (Optional) A list of memcached server(s) to use for caching. (list value)
+#   Defaults to undef
+#
+# [*cache_enable_socket_keepalive*]
+#   (Optional) Global toggle for the socket keepalive of dogpile's
+#   pymemcache backend
+#   Defaults to undef
+#
+# [*cache_socket_keepalive_idle*]
+#   (Optional) The time (in seconds) the connection needs to remain idle
+#   before TCP starts sending keepalive probes. Should be a positive integer
+#   most greater than zero.
+#   Defaults to undef
+#
+# [*cache_socket_keepalive_interval*]
+#   (Optional) The time (in seconds) between individual keepalive probes.
+#   Should be a positive integer most greater than zero.
+#   Defaults to undef
+#
+# [*cache_socket_keepalive_count*]
+#   (Optional) The maximum number of keepalive probes TCP should send before
+#   dropping the connection. Should be a positive integer most greater than
+#   zero.
+#   Defaults to undef
+#
+# [*cache_tls_enabled*]
+#   (Optional) Global toggle for TLS usage when comunicating with
+#   the caching servers.
+#   Default to undef
+#
+# [*cache_tls_cafile*]
+#   (Optional) Path to a file of concatenated CA certificates in PEM
+#   format necessary to establish the caching server's authenticity.
+#   If tls_enabled is False, this option is ignored.
+#   Default to undef
+#
+# [*cache_tls_certfile*]
+#   (Optional) Path to a single file in PEM format containing the
+#   client's certificate as well as any number of CA certificates
+#   needed to establish the certificate's authenticity. This file
+#   is only required when client side authentication is necessary.
+#   If tls_enabled is False, this option is ignored.
+#   Default to undef
+#
+# [*cache_tls_keyfile*]
+#   (Optional) Path to a single file containing the client's private
+#   key in. Otherwhise the private key will be taken from the file
+#   specified in tls_certfile. If tls_enabled is False, this option
+#   is ignored.
+#   Default to undef
+#
+# [*cache_tls_allowed_ciphers*]
+#   (Optional) Set the available ciphers for sockets created with
+#   the TLS context. It should be a string in the OpenSSL cipher
+#   list format. If not specified, all OpenSSL enabled ciphers will
+#   be available.
+#   Default to undef
+#
+# [*cache_enable_retry_client*]
+#   (Optional) Enable retry client mechanisms to handle failure.
+#   Those mechanisms can be used to wrap all kind of pymemcache
+#   clients. The wrapper allows you to define how many attempts
+#   to make and how long to wait between attemots.
+#   Default to undef
+#
+# [*cache_retry_attempts*]
+#   (Optional) Number of times to attempt an action before failing.
+#   Default to undef
+#
+# [*cache_retry_delay*]
+#   (Optional) Number of seconds to sleep between each attempt.
+#   Default to undef
+#
+# [*cache_hashclient_retry_attempts*]
+#   (Optional) Amount of times a client should be tried
+#   before it is marked dead and removed from the pool in
+#   the HashClient's internal mechanisms.
+#   Default to undef
+#
+# [*cache_hashclient_retry_delay*]
+#   (Optional) Time in seconds that should pass between
+#   retry attempts in the HashClient's internal mechanisms.
+#   Default to undef
+#
+# [*cache_dead_timeout*]
+#   (Optional) Time in seconds before attempting to add a node
+#   back in the pool in the HashClient's internal mechanisms.
+#   Default to undef
+#
+# [*manage_backend_package*]
+#   (Optional) If we should install the cache backend package.
+#   Defaults to undef
+#
 class ceilometer(
   $http_timeout                       = $::os_service_default,
   $max_parallel_requests              = $::os_service_default,
@@ -346,24 +346,6 @@ class ceilometer(
   $kombu_reconnect_delay              = $::os_service_default,
   $kombu_failover_strategy            = $::os_service_default,
   $kombu_compression                  = $::os_service_default,
-  $cache_backend                      = $::os_service_default,
-  $memcache_servers                   = $::os_service_default,
-  $cache_enable_socket_keepalive      = $::os_service_default,
-  $cache_socket_keepalive_idle        = $::os_service_default,
-  $cache_socket_keepalive_interval    = $::os_service_default,
-  $cache_socket_keepalive_count       = $::os_service_default,
-  $cache_tls_enabled                  = $::os_service_default,
-  $cache_tls_cafile                   = $::os_service_default,
-  $cache_tls_certfile                 = $::os_service_default,
-  $cache_tls_keyfile                  = $::os_service_default,
-  $cache_tls_allowed_ciphers          = $::os_service_default,
-  $cache_enable_retry_client          = $::os_service_default,
-  $cache_retry_attempts               = $::os_service_default,
-  $cache_retry_delay                  = $::os_service_default,
-  $cache_hashclient_retry_attempts    = $::os_service_default,
-  $cache_hashclient_retry_delay       = $::os_service_default,
-  $cache_dead_timeout                 = $::os_service_default,
-  $manage_backend_package             = true,
   $amqp_server_request_prefix         = $::os_service_default,
   $amqp_broadcast_prefix              = $::os_service_default,
   $amqp_group_request_prefix          = $::os_service_default,
@@ -387,6 +369,24 @@ class ceilometer(
   $host                               = $::os_service_default,
   # DEPRECATED PARAMETERS
   $amqp_allow_insecure_clients        = undef,
+  $cache_backend                      = undef,
+  $memcache_servers                   = undef,
+  $cache_enable_socket_keepalive      = undef,
+  $cache_socket_keepalive_idle        = undef,
+  $cache_socket_keepalive_interval    = undef,
+  $cache_socket_keepalive_count       = undef,
+  $cache_tls_enabled                  = undef,
+  $cache_tls_cafile                   = undef,
+  $cache_tls_certfile                 = undef,
+  $cache_tls_keyfile                  = undef,
+  $cache_tls_allowed_ciphers          = undef,
+  $cache_enable_retry_client          = undef,
+  $cache_retry_attempts               = undef,
+  $cache_retry_delay                  = undef,
+  $cache_hashclient_retry_attempts    = undef,
+  $cache_hashclient_retry_delay       = undef,
+  $cache_dead_timeout                 = undef,
+  $manage_backend_package             = undef,
 ) {
 
   include ceilometer::deps
@@ -396,6 +396,32 @@ class ceilometer(
     warning('The amqp_allow_insecure_clients parameter is deprecated and \
 will be removed in a future release.')
   }
+
+  [
+    'cache_backend',
+    'memcache_servers',
+    'cache_enable_socket_keepalive',
+    'cache_socket_keepalive_idle',
+    'cache_socket_keepalive_interval',
+    'cache_socket_keepalive_count',
+    'cache_tls_enabled',
+    'cache_tls_cafile',
+    'cache_tls_certfile',
+    'cache_tls_keyfile',
+    'cache_tls_allowed_ciphers',
+    'cache_enable_retry_client',
+    'cache_retry_attempts',
+    'cache_retry_delay',
+    'cache_hashclient_retry_attempts',
+    'cache_hashclient_retry_delay',
+    'cache_dead_timeout',
+    'manage_backend_package'
+  ].each |String $cache_opt| {
+    if getvar($cache_opt) != undef {
+      warning("The ceilometer::${cache_opt} parameter is deprecated. Use the ceilometer::cache class")
+    }
+  }
+  include ceilometer::cache
 
   group { 'ceilometer':
     ensure  => present,
@@ -479,26 +505,5 @@ will be removed in a future release.')
     transport_url             => $default_transport_url,
     rpc_response_timeout      => $rpc_response_timeout,
     control_exchange          => $control_exchange,
-  }
-
-  oslo::cache { 'ceilometer_config':
-    backend                   => $cache_backend,
-    memcache_servers          => $memcache_servers,
-    enable_socket_keepalive   => $cache_enable_socket_keepalive,
-    socket_keepalive_idle     => $cache_socket_keepalive_idle,
-    socket_keepalive_interval => $cache_socket_keepalive_interval,
-    socket_keepalive_count    => $cache_socket_keepalive_count,
-    tls_enabled               => $cache_tls_enabled,
-    tls_cafile                => $cache_tls_cafile,
-    tls_certfile              => $cache_tls_certfile,
-    tls_keyfile               => $cache_tls_keyfile,
-    tls_allowed_ciphers       => $cache_tls_allowed_ciphers,
-    enable_retry_client       => $cache_enable_retry_client,
-    retry_attempts            => $cache_retry_attempts,
-    retry_delay               => $cache_retry_delay,
-    hashclient_retry_attempts => $cache_hashclient_retry_attempts,
-    hashclient_retry_delay    => $cache_hashclient_retry_delay,
-    dead_timeout              => $cache_dead_timeout,
-    manage_backend_package    => $manage_backend_package,
   }
 }

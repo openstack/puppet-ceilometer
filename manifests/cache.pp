@@ -65,6 +65,28 @@
 #   (floating point value)
 #   Defaults to $::os_service_default
 #
+# [*enable_socket_keepalive*]
+#   (Optional) Global toggle for the socket keepalive of dogpile's
+#   pymemcache backend
+#   Defaults to $::os_service_default
+#
+# [*socket_keepalive_idle*]
+#   (Optional) The time (in seconds) the connection needs to remain idle
+#   before TCP starts sending keepalive probes. Should be a positive integer
+#   most greater than zero.
+#   Defaults to $::os_service_default
+#
+# [*socket_keepalive_interval*]
+#   (Optional) The time (in seconds) between individual keepalive probes.
+#   Should be a positive integer most greater than zero.
+#   Defaults to $::os_service_default
+#
+# [*socket_keepalive_count*]
+#   (Optional) The maximum number of keepalive probes TCP should send before
+#   dropping the connection. Should be a positive integer most greater than
+#   zero.
+#   Defaults to $::os_service_default
+#
 # [*memcache_pool_maxsize*]
 #   (Optional) Max total number of open connections to every memcached server.
 #   (oslo_cache.memcache_pool backend only). (integer value)
@@ -118,6 +140,37 @@
 #   be available.
 #   Default to $::os_service_default
 #
+# [*enable_retry_client*]
+#   (Optional) Enable retry client mechanisms to handle failure.
+#   Those mechanisms can be used to wrap all kind of pymemcache
+#   clients. The wrapper allows you to define how many attempts
+#   to make and how long to wait between attemots.
+#   Default to $::os_service_default
+#
+# [*retry_attempts*]
+#   (Optional) Number of times to attempt an action before failing.
+#   Default to $::os_service_default
+#
+# [*retry_delay*]
+#   (Optional) Number of seconds to sleep between each attempt.
+#   Default to $::os_service_default
+#
+# [*hashclient_retry_attempts*]
+#   (Optional) Amount of times a client should be tried
+#   before it is marked dead and removed from the pool in
+#   the HashClient's internal mechanisms.
+#   Default to $::os_service_default
+#
+# [*hashclient_retry_delay*]
+#   (Optional) Time in seconds that should pass between
+#   retry attempts in the HashClient's internal mechanisms.
+#   Default to $::os_service_default
+#
+# [*dead_timeout*]
+#   (Optional) Time in seconds before attempting to add a node
+#   back in the pool in the HashClient's internal mechanisms.
+#   Default to $::os_service_default
+#
 class ceilometer::cache (
   $config_prefix                        = $::os_service_default,
   $expiration_time                      = $::os_service_default,
@@ -129,6 +182,10 @@ class ceilometer::cache (
   $memcache_servers                     = $::os_service_default,
   $memcache_dead_retry                  = $::os_service_default,
   $memcache_socket_timeout              = $::os_service_default,
+  $enable_socket_keepalive              = $::os_service_default,
+  $socket_keepalive_idle                = $::os_service_default,
+  $socket_keepalive_interval            = $::os_service_default,
+  $socket_keepalive_count               = $::os_service_default,
   $memcache_pool_maxsize                = $::os_service_default,
   $memcache_pool_unused_timeout         = $::os_service_default,
   $memcache_pool_connection_get_timeout = $::os_service_default,
@@ -138,29 +195,64 @@ class ceilometer::cache (
   $tls_certfile                         = $::os_service_default,
   $tls_keyfile                          = $::os_service_default,
   $tls_allowed_ciphers                  = $::os_service_default,
+  $enable_retry_client                  = $::os_service_default,
+  $retry_attempts                       = $::os_service_default,
+  $retry_delay                          = $::os_service_default,
+  $hashclient_retry_attempts            = $::os_service_default,
+  $hashclient_retry_delay               = $::os_service_default,
+  $dead_timeout                         = $::os_service_default,
 ) {
 
   include ceilometer::deps
 
+  $backend_real                   = pick($::ceilometer::cache_backend, $backend)
+  $memcache_servers_real          = pick($::ceilometer::memcache_servers, $memcache_servers)
+  $enable_socket_keepalive_real   = pick($::ceilometer::cache_enable_socket_keepalive, $enable_socket_keepalive)
+  $socket_keepalive_idle_real     = pick($::ceilometer::cache_socket_keepalive_idle, $socket_keepalive_idle)
+  $socket_keepalive_interval_real = pick($::ceilometer::cache_socket_keepalive_interval, $socket_keepalive_interval)
+  $socket_keepalive_count_real    = pick($::ceilometer::cache_socket_keepalive_count, $socket_keepalive_count)
+  $manage_backend_package_real    = pick($::ceilometer::manage_backend_package, $manage_backend_package)
+  $tls_enabled_real               = pick($::ceilometer::cache_tls_enabled, $tls_enabled)
+  $tls_cafile_real                = pick($::ceilometer::cache_tls_cafile, $tls_cafile)
+  $tls_certfile_real              = pick($::ceilometer::cache_tls_certfile, $tls_certfile)
+  $tls_keyfile_real               = pick($::ceilometer::cache_tls_keyfile, $tls_keyfile)
+  $tls_allowed_ciphers_real       = pick($::ceilometer::cache_tls_allowed_ciphers, $tls_allowed_ciphers)
+  $enable_retry_client_real       = pick($::ceilometer::cache_enable_retry_client, $enable_retry_client)
+  $retry_attempts_real            = pick($::ceilometer::cache_retry_attempts, $retry_attempts)
+  $retry_delay_real               = pick($::ceilometer::cache_retry_delay, $retry_delay)
+  $hashclient_retry_attempts_real = pick($::ceilometer::cache_hashclient_retry_attempts, $hashclient_retry_attempts)
+  $hashclient_retry_delay_real    = pick($::ceilometer::cache_hashclient_retry_delay, $hashclient_retry_delay)
+  $dead_timeout_real              = pick($::ceilometer::cache_dead_timeout, $dead_timeout)
+
   oslo::cache { 'ceilometer_config':
     config_prefix                        => $config_prefix,
     expiration_time                      => $expiration_time,
-    backend                              => $backend,
+    backend                              => $backend_real,
     backend_argument                     => $backend_argument,
     proxies                              => $proxies,
     enabled                              => $enabled,
     debug_cache_backend                  => $debug_cache_backend,
-    memcache_servers                     => $memcache_servers,
+    memcache_servers                     => $memcache_servers_real,
     memcache_dead_retry                  => $memcache_dead_retry,
     memcache_socket_timeout              => $memcache_socket_timeout,
+    enable_socket_keepalive              => $enable_socket_keepalive_real,
+    socket_keepalive_idle                => $socket_keepalive_idle_real,
+    socket_keepalive_interval            => $socket_keepalive_interval_real,
+    socket_keepalive_count               => $socket_keepalive_count_real,
     memcache_pool_maxsize                => $memcache_pool_maxsize,
     memcache_pool_unused_timeout         => $memcache_pool_unused_timeout,
     memcache_pool_connection_get_timeout => $memcache_pool_connection_get_timeout,
-    manage_backend_package               => $manage_backend_package,
-    tls_enabled                          => $tls_enabled,
-    tls_cafile                           => $tls_cafile,
-    tls_certfile                         => $tls_certfile,
-    tls_keyfile                          => $tls_keyfile,
-    tls_allowed_ciphers                  => $tls_allowed_ciphers,
+    manage_backend_package               => $manage_backend_package_real,
+    tls_enabled                          => $tls_enabled_real,
+    tls_cafile                           => $tls_cafile_real,
+    tls_certfile                         => $tls_certfile_real,
+    tls_keyfile                          => $tls_keyfile_real,
+    tls_allowed_ciphers                  => $tls_allowed_ciphers_real,
+    enable_retry_client                  => $enable_retry_client_real,
+    retry_attempts                       => $retry_attempts_real,
+    retry_delay                          => $retry_delay_real,
+    hashclient_retry_attempts            => $hashclient_retry_attempts_real,
+    hashclient_retry_delay               => $hashclient_retry_delay_real,
+    dead_timeout                         => $dead_timeout_real,
   }
 }
