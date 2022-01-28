@@ -125,14 +125,18 @@ describe 'ceilometer' do
 
     it 'configures cache backend' do
       is_expected.to contain_oslo__cache('ceilometer_config').with(
-        :backend                => '<SERVICE DEFAULT>',
-        :memcache_servers       => '<SERVICE DEFAULT>',
-        :tls_enabled            => '<SERVICE DEFAULT>',
-        :tls_cafile             => '<SERVICE DEFAULT>',
-        :tls_certfile           => '<SERVICE DEFAULT>',
-        :tls_keyfile            => '<SERVICE DEFAULT>',
-        :tls_allowed_ciphers    => '<SERVICE DEFAULT>',
-        :manage_backend_package => true,
+        :backend                   => '<SERVICE DEFAULT>',
+        :memcache_servers          => '<SERVICE DEFAULT>',
+        :enable_socket_keepalive   => '<SERVICE DEFAULT>',
+        :socket_keepalive_idle     => '<SERVICE DEFAULT>',
+        :socket_keepalive_interval => '<SERVICE DEFAULT>',
+        :socket_keepalive_count    => '<SERVICE DEFAULT>',
+        :tls_enabled               => '<SERVICE DEFAULT>',
+        :tls_cafile                => '<SERVICE DEFAULT>',
+        :tls_certfile              => '<SERVICE DEFAULT>',
+        :tls_keyfile               => '<SERVICE DEFAULT>',
+        :tls_allowed_ciphers       => '<SERVICE DEFAULT>',
+        :manage_backend_package    => true,
       )
     end
 
@@ -164,19 +168,27 @@ describe 'ceilometer' do
     context 'with overridden cache parameter' do
       before {
         params.merge!(
-          :cache_backend          => 'memcache',
-          :memcache_servers       => 'host1:11211,host2:11211',
-          :cache_tls_enabled      => true,
-          :manage_backend_package => false,
+          :cache_backend                   => 'memcache',
+          :memcache_servers                => 'host1:11211,host2:11211',
+          :cache_enable_socket_keepalive   => false,
+          :cache_socket_keepalive_idle     => 1,
+          :cache_socket_keepalive_interval => 1,
+          :cache_socket_keepalive_count    => 1,
+          :cache_tls_enabled               => true,
+          :manage_backend_package          => false,
         )
       }
 
       it 'configures cache backend' do
         is_expected.to contain_oslo__cache('ceilometer_config').with(
-          :backend                => 'memcache',
-          :memcache_servers       => 'host1:11211,host2:11211',
-          :tls_enabled            => true,
-          :manage_backend_package => false,
+          :backend                   => 'memcache',
+          :memcache_servers          => 'host1:11211,host2:11211',
+          :enable_socket_keepalive   => false,
+          :socket_keepalive_idle     => 1,
+          :socket_keepalive_interval => 1,
+          :socket_keepalive_count    => 1,
+          :tls_enabled               => true,
+          :manage_backend_package    => false,
         )
       end
     end
