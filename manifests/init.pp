@@ -193,6 +193,21 @@
 #   be available.
 #   Default to $::os_service_default
 #
+# [*cache_enable_retry_client*]
+#   (Optional) Enable retry client mechanisms to handle failure.
+#   Those mechanisms can be used to wrap all kind of pymemcache
+#   clients. The wrapper allows you to define how many attempts
+#   to make and how long to wait between attemots.
+#   Default to $::os_service_default
+#
+# [*cache_retry_attempts*]
+#   (Optional) Number of times to attempt an action before failing.
+#   Default to $::os_service_default
+#
+# [*cache_retry_delay*]
+#   (Optional) Number of seconds to sleep between each attempt.
+#   Default to $::os_service_default
+#
 # [*manage_backend_package*]
 #   (Optional) If we should install the cache backend package.
 #   Defaults to true
@@ -326,6 +341,9 @@ class ceilometer(
   $cache_tls_certfile                 = $::os_service_default,
   $cache_tls_keyfile                  = $::os_service_default,
   $cache_tls_allowed_ciphers          = $::os_service_default,
+  $cache_enable_retry_client          = $::os_service_default,
+  $cache_retry_attempts               = $::os_service_default,
+  $cache_retry_delay                  = $::os_service_default,
   $manage_backend_package             = true,
   $amqp_server_request_prefix         = $::os_service_default,
   $amqp_broadcast_prefix              = $::os_service_default,
@@ -456,6 +474,9 @@ will be removed in a future release.')
     tls_certfile              => $cache_tls_certfile,
     tls_keyfile               => $cache_tls_keyfile,
     tls_allowed_ciphers       => $cache_tls_allowed_ciphers,
+    enable_retry_client       => $cache_enable_retry_client,
+    retry_attempts            => $cache_retry_attempts,
+    retry_delay               => $cache_retry_delay,
     manage_backend_package    => $manage_backend_package,
   }
 }

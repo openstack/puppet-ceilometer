@@ -136,6 +136,9 @@ describe 'ceilometer' do
         :tls_certfile              => '<SERVICE DEFAULT>',
         :tls_keyfile               => '<SERVICE DEFAULT>',
         :tls_allowed_ciphers       => '<SERVICE DEFAULT>',
+        :enable_retry_client       => '<SERVICE DEFAULT>',
+        :retry_attempts            => '<SERVICE DEFAULT>',
+        :retry_delay               => '<SERVICE DEFAULT>',
         :manage_backend_package    => true,
       )
     end
@@ -175,6 +178,9 @@ describe 'ceilometer' do
           :cache_socket_keepalive_interval => 1,
           :cache_socket_keepalive_count    => 1,
           :cache_tls_enabled               => true,
+          :cache_enable_retry_client       => false,
+          :cache_retry_attempts            => 2,
+          :cache_retry_delay               => 0,
           :manage_backend_package          => false,
         )
       }
@@ -188,6 +194,9 @@ describe 'ceilometer' do
           :socket_keepalive_interval => 1,
           :socket_keepalive_count    => 1,
           :tls_enabled               => true,
+          :enable_retry_client       => false,
+          :retry_attempts            => 2,
+          :retry_delay               => 0,
           :manage_backend_package    => false,
         )
       end
