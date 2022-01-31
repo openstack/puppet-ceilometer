@@ -208,6 +208,22 @@
 #   (Optional) Number of seconds to sleep between each attempt.
 #   Default to $::os_service_default
 #
+# [*cache_hashclient_retry_attempts*]
+#   (Optional) Amount of times a client should be tried
+#   before it is marked dead and removed from the pool in
+#   the HashClient's internal mechanisms.
+#   Default to $::os_service_default
+#
+# [*cache_hashclient_retry_delay*]
+#   (Optional) Time in seconds that should pass between
+#   retry attempts in the HashClient's internal mechanisms.
+#   Default to $::os_service_default
+#
+# [*cache_dead_timeout*]
+#   (Optional) Time in seconds before attempting to add a node
+#   back in the pool in the HashClient's internal mechanisms.
+#   Default to $::os_service_default
+#
 # [*manage_backend_package*]
 #   (Optional) If we should install the cache backend package.
 #   Defaults to true
@@ -344,6 +360,9 @@ class ceilometer(
   $cache_enable_retry_client          = $::os_service_default,
   $cache_retry_attempts               = $::os_service_default,
   $cache_retry_delay                  = $::os_service_default,
+  $cache_hashclient_retry_attempts    = $::os_service_default,
+  $cache_hashclient_retry_delay       = $::os_service_default,
+  $cache_dead_timeout                 = $::os_service_default,
   $manage_backend_package             = true,
   $amqp_server_request_prefix         = $::os_service_default,
   $amqp_broadcast_prefix              = $::os_service_default,
@@ -477,6 +496,9 @@ will be removed in a future release.')
     enable_retry_client       => $cache_enable_retry_client,
     retry_attempts            => $cache_retry_attempts,
     retry_delay               => $cache_retry_delay,
+    hashclient_retry_attempts => $cache_hashclient_retry_attempts,
+    hashclient_retry_delay    => $cache_hashclient_retry_delay,
+    dead_timeout              => $cache_dead_timeout,
     manage_backend_package    => $manage_backend_package,
   }
 }
