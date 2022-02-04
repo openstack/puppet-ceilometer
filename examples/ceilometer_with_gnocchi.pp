@@ -12,15 +12,16 @@ class { 'ceilometer::keystone::auth':
   password => 'a_big_secret',
 }
 class { 'ceilometer::agent::polling': }
-class { 'ceilometer::agent::notification': }
+class { 'ceilometer::agent::notification':
+  manage_pipeline           => true,
+  pipeline_publishers       => ['gnocchi://'],
+  manage_event_pipeline     => true,
+  event_pipeline_publishers => ['gnocchi://'],
+}
+class { 'ceilometer::agent::service_credentials':
+  password => 'a_big_secret',
+}
 
 class { 'ceilometer::collector':
   meter_dispatchers => ['gnocchi'],
-}
-class { 'ceilometer::dispatcher::gnocchi':
-  filter_service_activity   => false,
-  filter_project            => 'gnocchi_swift',
-  url                       => 'https://gnocchi:8041',
-  archive_policy            => 'high',
-  resources_definition_file => 'gnocchi.yaml',
 }
