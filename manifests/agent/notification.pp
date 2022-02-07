@@ -186,7 +186,7 @@ class ceilometer::agent::notification (
   ceilometer_config {
     'notification/ack_on_event_error'       : value => $ack_on_event_error;
     'notification/disable_non_metric_meters': value => $disable_non_metric_meters;
-    'notification/workers'                  : value => $workers;
+    'notification/workers'                  : value => $workers_real;
     'notification/messaging_urls'           : value => $messaging_urls, secret => true;
   }
 }
