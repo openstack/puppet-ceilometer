@@ -218,10 +218,6 @@
 #
 # DEPRECATED PARAMETERS
 #
-# [*amqp_allow_insecure_clients*]
-#   (Optional) Accept clients using either SSL or plain TCP
-#   Defaults to undef.
-#
 # [*cache_backend*]
 #   (Optional) The backend to pass to oslo::cache.
 #   Defaults to undef.
@@ -368,7 +364,6 @@ class ceilometer(
   $purge_config                       = false,
   $host                               = $::os_service_default,
   # DEPRECATED PARAMETERS
-  $amqp_allow_insecure_clients        = undef,
   $cache_backend                      = undef,
   $memcache_servers                   = undef,
   $cache_enable_socket_keepalive      = undef,
@@ -391,11 +386,6 @@ class ceilometer(
 
   include ceilometer::deps
   include ceilometer::params
-
-  if $amqp_allow_insecure_clients != undef {
-    warning('The amqp_allow_insecure_clients parameter is deprecated and \
-will be removed in a future release.')
-  }
 
   [
     'cache_backend',
