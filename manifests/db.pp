@@ -49,12 +49,6 @@
 #   Cluster (NDB).
 #   Defaults to $::os_service_default
 #
-# DEPRECATED PARAMETERS
-#
-# [*database_min_pool_size*]
-#   (Optional) Minimum number of SQL connections to keep open in a pool.
-#   Defaults to undef.
-#
 class ceilometer::db (
   $database_db_max_retries          = $::os_service_default,
   $database_connection              = 'mysql+pymysql://ceilometer:ceilometer@localhost/ceilometer',
@@ -66,15 +60,9 @@ class ceilometer::db (
   $database_pool_timeout            = $::os_service_default,
   $mysql_enable_ndb                 = $::os_service_default,
   $sync_db                          = true,
-  # DEPRECATED PARAMETERS
-  $database_min_pool_size           = undef,
 ) {
 
   include ceilometer::deps
-
-  if $database_min_pool_size {
-    warning('The database_min_pool_size parameter is deprecated, and will be removed in a future release.')
-  }
 
   oslo::db { 'ceilometer_config':
     db_max_retries          => $database_db_max_retries,
