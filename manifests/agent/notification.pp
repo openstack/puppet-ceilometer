@@ -156,7 +156,7 @@ class ceilometer::agent::notification (
       selinux_ignore_defaults => true,
       mode                    => '0640',
       owner                   => 'root',
-      group                   => 'ceilometer',
+      group                   => $::ceilometer::params::group,
       tag                     => 'ceilometer-yamls',
     }
   }
@@ -177,7 +177,7 @@ class ceilometer::agent::notification (
       selinux_ignore_defaults => true,
       mode                    => '0640',
       owner                   => 'root',
-      group                   => 'ceilometer',
+      group                   => $::ceilometer::params::group,
       tag                     => 'ceilometer-yamls',
     }
   }
