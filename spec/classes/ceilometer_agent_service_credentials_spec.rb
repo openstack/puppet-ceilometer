@@ -19,6 +19,7 @@ describe 'ceilometer::agent::service_credentials' do
         is_expected.to contain_ceilometer_config('service_credentials/username').with_value('ceilometer')
         is_expected.to contain_ceilometer_config('service_credentials/password').with_value('password').with_secret(true)
         is_expected.to contain_ceilometer_config('service_credentials/project_name').with_value('services')
+        is_expected.to contain_ceilometer_config('service_credentials/system_scope').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_ceilometer_config('service_credentials/cafile').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_ceilometer_config('service_credentials/interface').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_ceilometer_config('service_credentials/user_domain_name').with_value('Default')
@@ -48,6 +49,7 @@ describe 'ceilometer::agent::service_credentials' do
         is_expected.to contain_ceilometer_config('service_credentials/username').with_value('ceilometer2')
         is_expected.to contain_ceilometer_config('service_credentials/password').with_value('password').with_secret(true)
         is_expected.to contain_ceilometer_config('service_credentials/project_name').with_value('services2')
+        is_expected.to contain_ceilometer_config('service_credentials/system_scope').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_ceilometer_config('service_credentials/cafile').with_value('/tmp/dummy.pem')
         is_expected.to contain_ceilometer_config('service_credentials/interface').with_value('internalURL')
         is_expected.to contain_ceilometer_config('service_credentials/user_domain_name').with_value('MyDomain')
@@ -56,6 +58,18 @@ describe 'ceilometer::agent::service_credentials' do
       end
     end
 
+    context 'when system_scope is set' do
+      before do
+        params.merge!(
+          :system_scope => 'all'
+        )
+      end
+      it 'configures system-scoped credential' do
+        is_expected.to contain_ceilometer_config('service_credentials/project_name').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_ceilometer_config('service_credentials/project_domain_name').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_ceilometer_config('service_credentials/system_scope').with_value('all')
+      end
+    end
   end
 
   on_supported_os({

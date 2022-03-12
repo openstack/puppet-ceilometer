@@ -24,6 +24,10 @@
 #   (Optional) the keystone project name for ceilometer services
 #   Defaults to 'services'.
 #
+# [*system_scope*]
+#   (Optional) Scope for system operations.
+#   Defaults to $::os_service_default
+#
 # [*cafile*]
 #   (Optional) Certificate chain for SSL validation.
 #   Defaults to $::os_service_default.
@@ -51,6 +55,7 @@ class ceilometer::agent::service_credentials (
   $region_name         = $::os_service_default,
   $username            = 'ceilometer',
   $project_name        = 'services',
+  $system_scope        = $::os_service_default,
   $cafile              = $::os_service_default,
   $interface           = $::os_service_default,
   $user_domain_name    = 'Default',
@@ -60,16 +65,25 @@ class ceilometer::agent::service_credentials (
 
   include ceilometer::deps
 
+  if is_service_default($system_scope) {
+    $project_name_real = $project_name
+    $project_domain_name_real = $project_domain_name
+  } else {
+    $project_name_real = $::os_service_default
+    $project_domain_name_real = $::os_service_default
+  }
+
   ceilometer_config {
     'service_credentials/auth_url'           : value => $auth_url;
     'service_credentials/region_name'        : value => $region_name;
     'service_credentials/username'           : value => $username;
     'service_credentials/password'           : value => $password, secret => true;
-    'service_credentials/project_name'       : value => $project_name;
+    'service_credentials/project_name'       : value => $project_name_real;
+    'service_credentials/system_scope'       : value => $system_scope;
     'service_credentials/cafile'             : value => $cafile;
     'service_credentials/interface'          : value => $interface;
     'service_credentials/user_domain_name'   : value => $user_domain_name;
-    'service_credentials/project_domain_name': value => $project_domain_name;
+    'service_credentials/project_domain_name': value => $project_domain_name_real;
     'service_credentials/auth_type'          : value => $auth_type;
   }
 }
