@@ -8,7 +8,6 @@ sources:
 sinks:
     - name: event_sink
       transformers:
-      triggers:
       publishers:
 <% @event_pipeline_publishers.each do |publisher| -%>
           - <%= publisher %>
