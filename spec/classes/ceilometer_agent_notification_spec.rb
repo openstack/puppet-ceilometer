@@ -27,8 +27,8 @@ describe 'ceilometer::agent::notification' do
   end
 
   let :params do
-    { :manage_service     => true,
-      :enabled            => true }
+    { :manage_service => true,
+      :enabled        => true }
   end
 
   shared_examples_for 'ceilometer-agent-notification' do
@@ -125,7 +125,6 @@ describe 'ceilometer::agent::notification' do
           "          - event_sink",
           "sinks:",
           "    - name: event_sink",
-          "      transformers:",
           "      publishers:",
           "          - gnocchi://",
       ])}
@@ -148,7 +147,6 @@ describe 'ceilometer::agent::notification' do
           "          - event_sink",
           "sinks:",
           "    - name: event_sink",
-          "      transformers:",
           "      publishers:",
           "          - notifier://",
           "          - notifier://?topic=alarm.all",
@@ -165,9 +163,8 @@ describe 'ceilometer::agent::notification' do
             'sinks'  => ['my_event_sink'],
           ],
           'sinks'   => [
-            'name'         => 'my_event_sink',
-            'transformers' => [],
-            'publishers'   => ['gnocchi://'],
+            'name'       => 'my_event_sink',
+            'publishers' => ['gnocchi://'],
           ],
         }
       )}
@@ -182,7 +179,6 @@ sources:
   - my_event_sink
 sinks:
 - name: my_event_sink
-  transformers: []
   publishers:
   - gnocchi://
 ',
@@ -219,9 +215,8 @@ sinks:
             'sinks'  => ['my_sink'],
           ],
           'sinks'   => [
-            'name'         => 'my_sink',
-            'transformers' => [],
-            'publishers'   => ['gnocchi://'],
+            'name'       => 'my_sink',
+            'publishers' => ['gnocchi://'],
           ],
         }
       )}
@@ -236,7 +231,6 @@ sources:
   - my_sink
 sinks:
 - name: my_sink
-  transformers: []
   publishers:
   - gnocchi://
 ',
