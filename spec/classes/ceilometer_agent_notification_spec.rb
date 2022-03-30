@@ -126,7 +126,6 @@ describe 'ceilometer::agent::notification' do
           "sinks:",
           "    - name: event_sink",
           "      transformers:",
-          "      triggers:",
           "      publishers:",
           "          - gnocchi://",
       ])}
@@ -150,7 +149,6 @@ describe 'ceilometer::agent::notification' do
           "sinks:",
           "    - name: event_sink",
           "      transformers:",
-          "      triggers:",
           "      publishers:",
           "          - notifier://",
           "          - notifier://?topic=alarm.all",
@@ -169,7 +167,6 @@ describe 'ceilometer::agent::notification' do
           'sinks'   => [
             'name'         => 'my_event_sink',
             'transformers' => [],
-            'triggers'     => [],
             'publishers'   => ['gnocchi://'],
           ],
         }
@@ -186,7 +183,6 @@ sources:
 sinks:
 - name: my_event_sink
   transformers: []
-  triggers: []
   publishers:
   - gnocchi://
 ',
