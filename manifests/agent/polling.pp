@@ -103,7 +103,7 @@ class ceilometer::agent::polling (
   if $central_namespace {
     $central_namespace_name = 'central'
   } else {
-    $central_namespace_name = ''
+    $central_namespace_name = undef
   }
 
   if $compute_namespace {
@@ -129,17 +129,19 @@ class ceilometer::agent::polling (
       'compute/resource_cache_expiry':     value => $resource_cache_expiry;
     }
   } else {
-    $compute_namespace_name = ''
+    $compute_namespace_name = undef
+    ceilometer_config {
+      'compute/instance_discovery_method': ensure => absent;
+      'compute/resource_update_interval':  ensure => absent;
+      'compute/resource_cache_expiry':     ensure => absent;
+    }
   }
 
   if $ipmi_namespace {
     $ipmi_namespace_name = 'ipmi'
   } else {
-    $ipmi_namespace_name = ''
+    $ipmi_namespace_name = undef
   }
-
-  $namespaces = delete([$central_namespace_name, $compute_namespace_name, $ipmi_namespace_name], '')
-  $namespaces_real = inline_template('<%= @namespaces.select { |x| x and x !~ /^undef/ }.compact.join "," %>')
 
   package { 'ceilometer-polling':
     ensure => $package_ensure,
@@ -147,9 +149,19 @@ class ceilometer::agent::polling (
     tag    => ['openstack', 'ceilometer-package'],
   }
 
-  if $namespaces_real {
+  $namespaces_real = delete_undef_values([
+    $central_namespace_name,
+    $compute_namespace_name,
+    $ipmi_namespace_name
+  ])
+
+  if empty($namespaces_real) {
     ceilometer_config {
-      'DEFAULT/polling_namespaces': value => $namespaces_real
+      'DEFAULT/polling_namespaces': ensure => absent
+    }
+  } else {
+    ceilometer_config {
+      'DEFAULT/polling_namespaces': value => join($namespaces_real, ',')
     }
   }
 
