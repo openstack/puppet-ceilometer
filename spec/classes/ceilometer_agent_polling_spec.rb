@@ -82,13 +82,42 @@ describe 'ceilometer::agent::polling' do
       }
     end
 
+    context 'with compute namespace disabled' do
+      before do
+        params.merge!(
+          :compute_namespace => false
+        )
+      end
+
+      it {
+        should contain_ceilometer_config('DEFAULT/polling_namespaces').with_value('central,ipmi')
+        should contain_ceilometer_config('compute/instance_discovery_method').with_ensure('absent')
+        should contain_ceilometer_config('compute/resource_update_interval').with_ensure('absent')
+        should contain_ceilometer_config('compute/resource_cache_expiry').with_ensure('absent')
+      }
+    end
+
     context 'with central and ipmi polling namespaces disabled' do
       before do
-        params.merge!( :central_namespace => false,
-                       :ipmi_namespace    => false )
+        params.merge!(
+          :central_namespace => false,
+          :ipmi_namespace    => false
+        )
       end
 
       it { should contain_ceilometer_config('DEFAULT/polling_namespaces').with_value('compute') }
+    end
+
+    context 'with all namespaces disabled' do
+      before do
+        params.merge!(
+          :compute_namespace => false,
+          :central_namespace => false,
+          :ipmi_namespace    => false
+        )
+      end
+
+      it { should contain_ceilometer_config('DEFAULT/polling_namespaces').with_ensure('absent') }
     end
 
     context 'with service disabled' do
