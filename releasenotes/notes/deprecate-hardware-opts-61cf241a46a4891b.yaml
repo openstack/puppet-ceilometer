@@ -1,0 +1,8 @@
+---
+deprecations:
+  - |
+    The following parameters of the ``ceilometer`` class have been deprecated
+    and will be removed in a future release.
+
+    - ``snmpd_readonly_user_name``
+    - ``snmpd_readonly_user_password``

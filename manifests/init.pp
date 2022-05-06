@@ -198,14 +198,6 @@
 #   (Optional) Password for message broker authentication
 #   Defaults to $::os_service_default.
 #
-# [*snmpd_readonly_username*]
-#   (Optional) User name for snmpd authentication
-#   Defaults to $::os_service_default.
-#
-# [*snmpd_readonly_user_password*]
-#   (Optional) Password for snmpd authentication
-#   Defaults to $::os_service_default.
-#
 # [*purge_config*]
 #   (optional) Whether to set only the specified config options
 #   in the ceilometer config.
@@ -316,6 +308,14 @@
 #   (Optional) If we should install the cache backend package.
 #   Defaults to undef
 #
+# [*snmpd_readonly_username*]
+#   (Optional) User name for snmpd authentication
+#   Defaults to undef
+#
+# [*snmpd_readonly_user_password*]
+#   (Optional) Password for snmpd authentication
+#   Defaults to undef
+#
 class ceilometer(
   $http_timeout                       = $::os_service_default,
   $max_parallel_requests              = $::os_service_default,
@@ -359,8 +359,6 @@ class ceilometer(
   $amqp_sasl_config_name              = $::os_service_default,
   $amqp_username                      = $::os_service_default,
   $amqp_password                      = $::os_service_default,
-  $snmpd_readonly_username            = $::os_service_default,
-  $snmpd_readonly_user_password       = $::os_service_default,
   $purge_config                       = false,
   $host                               = $::os_service_default,
   # DEPRECATED PARAMETERS
@@ -382,6 +380,8 @@ class ceilometer(
   $cache_hashclient_retry_delay       = undef,
   $cache_dead_timeout                 = undef,
   $manage_backend_package             = undef,
+  $snmpd_readonly_username            = undef,
+  $snmpd_readonly_user_password       = undef,
 ) {
 
   include ceilometer::deps
@@ -412,6 +412,12 @@ class ceilometer(
     }
   }
   include ceilometer::cache
+
+  if $snmpd_readonly_username != undef or $snmpd_readonly_user_password != undef {
+    warning('The snmpd_readonly_* parameters have been deprecated.')
+  }
+  $snmpd_readonly_username_real = pick($snmpd_readonly_username, $::os_service_default)
+  $snmpd_readonly_user_password_real = pick($snmpd_readonly_user_password, $::os_service_default)
 
   group { 'ceilometer':
     ensure  => present,
@@ -476,12 +482,12 @@ class ceilometer(
 
   # Once we got here, we can act as an honey badger on the rpc used.
   ceilometer_config {
-    'DEFAULT/http_timeout'                : value => $http_timeout;
-    'DEFAULT/max_parallel_requests'       : value => $max_parallel_requests;
-    'DEFAULT/host'                        : value => $host;
-    'publisher/telemetry_secret'          : value => $telemetry_secret, secret => true;
-    'hardware/readonly_user_name'         : value => $snmpd_readonly_username;
-    'hardware/readonly_user_password'     : value => $snmpd_readonly_user_password, secret => true;
+    'DEFAULT/http_timeout'           : value => $http_timeout;
+    'DEFAULT/max_parallel_requests'  : value => $max_parallel_requests;
+    'DEFAULT/host'                   : value => $host;
+    'publisher/telemetry_secret'     : value => $telemetry_secret, secret => true;
+    'hardware/readonly_user_name'    : value => $snmpd_readonly_username_real;
+    'hardware/readonly_user_password': value => $snmpd_readonly_user_password_real, secret => true;
   }
 
   oslo::messaging::notifications { 'ceilometer_config':
