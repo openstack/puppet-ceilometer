@@ -25,8 +25,16 @@ describe 'ceilometer::agent::polling' do
         end
       }
 
+      it { should contain_user('ceilometer').with(
+        :ensure  => 'present',
+        :name    => 'ceilometer',
+        :gid     => 'ceilometer',
+        :groups  => platform_params[:ceilometer_groups],
+        :require => 'Anchor[ceilometer::install::end]',
+      ) }
+
       it { should contain_package('nova-common').with(
-       :before => /Package\[ceilometer-common\]/
+       :before => /User\[ceilometer\]/
       )}
 
       it {
@@ -285,12 +293,14 @@ sources:
             {
               :agent_package_name => 'ceilometer-polling',
               :agent_service_name => 'ceilometer-polling',
-              :libvirt_group      => 'libvirt'
+              :libvirt_group      => 'libvirt',
+              :ceilometer_groups  => ['nova', 'libvirt'],
             }
         when 'RedHat'
             {
               :agent_package_name => 'openstack-ceilometer-polling',
-              :agent_service_name => 'openstack-ceilometer-polling'
+              :agent_service_name => 'openstack-ceilometer-polling',
+              :ceilometer_groups  => ['nova'],
             }
         end
       end

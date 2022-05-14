@@ -1,0 +1,6 @@
+---
+features:
+  - |
+    The new ``ceilometer::agents::polling::manage_user`` parameter has been
+    added. When this parameter is set to ``false``, the class does not ensure
+    the ``ceilometer`` system user and it's group membership.
