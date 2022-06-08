@@ -24,7 +24,7 @@ describe 'ceilometer::db' do
       let :params do
         {
           :database_db_max_retries          => '-1',
-          :database_connection              => 'mongodb://localhost:1234/ceilometer',
+          :database_connection              => 'mysql+pymysql://ceilometer:ceilometer@localhost2/ceilometer',
           :database_connection_recycle_time => '3601',
           :database_max_pool_size           => '11',
           :database_max_retries             => '11',
@@ -39,7 +39,7 @@ describe 'ceilometer::db' do
 
       it { should contain_oslo__db('ceilometer_config').with(
         :db_max_retries          => '-1',
-        :connection              => 'mongodb://localhost:1234/ceilometer',
+        :connection              => 'mysql+pymysql://ceilometer:ceilometer@localhost2/ceilometer',
         :connection_recycle_time => '3601',
         :max_pool_size           => '11',
         :max_retries             => '11',
