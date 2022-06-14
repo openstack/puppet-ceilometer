@@ -16,6 +16,12 @@
 #   (Optional) ensure state for package.
 #   Defaults to 'present'
 #
+# [*manage_user*]
+#   (Optional) Should the system user should be managed. When this flag is
+#   true then the class ensures the ceilometer user belongs to nova/libvirt
+#   group.
+#   Defaults to true.
+#
 # [*central_namespace*]
 #   (Optional) Use central namespace for polling agent.
 #   Defaults to true.
@@ -77,6 +83,7 @@ class ceilometer::agent::polling (
   $manage_service            = true,
   $enabled                   = true,
   $package_ensure            = 'present',
+  $manage_user               = true,
   $central_namespace         = true,
   $compute_namespace         = true,
   $ipmi_namespace            = true,
@@ -107,22 +114,33 @@ class ceilometer::agent::polling (
   }
 
   if $compute_namespace {
-    if $::ceilometer::params::libvirt_group {
-      User['ceilometer'] {
-        groups => ['nova', $::ceilometer::params::libvirt_group]
+    if $manage_user {
+      # The ceilometer user created by the ceilometer-common package does not
+      # belong to nova/libvirt group. That group membership is required so that
+      # the ceilometer user can access libvirt to gather some metrics.
+      $ceilometer_groups = delete_undef_values([
+        'nova',
+        $::ceilometer::params::libvirt_group
+      ])
+
+      user { 'ceilometer':
+        ensure  => present,
+        name    => 'ceilometer',
+        gid     => 'ceilometer',
+        groups  => $ceilometer_groups,
+        require => Anchor['ceilometer::install::end'],
+        before  => Anchor['ceilometer::service::begin'],
       }
-      Package <| title == 'libvirt' |> -> User['ceilometer']
-    } else {
-      User['ceilometer'] {
-        groups => ['nova']
+
+      if $::ceilometer::params::libvirt_group {
+        Package <| title == 'libvirt' |> -> User['ceilometer']
       }
+      Package <| title == 'nova-common' |> -> User['ceilometer']
+
+      User['ceilometer'] -> Anchor['ceilometer::service::begin']
     }
 
     $compute_namespace_name = 'compute'
-
-    Package <| title == 'ceilometer-common' |> -> User['ceilometer']
-    Package <| title == 'nova-common' |> -> Package['ceilometer-common']
-
     ceilometer_config {
       'compute/instance_discovery_method': value => $instance_discovery_method;
       'compute/resource_update_interval':  value => $resource_update_interval;

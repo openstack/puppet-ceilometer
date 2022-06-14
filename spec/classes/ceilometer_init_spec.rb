@@ -59,24 +59,6 @@ describe 'ceilometer' do
 
     it { is_expected.to contain_class('ceilometer::params') }
 
-    it 'configures ceilometer group' do
-      is_expected.to contain_group('ceilometer').with(
-        :ensure  => 'present',
-        :name    => 'ceilometer',
-        :require => 'Anchor[ceilometer::install::end]'
-      )
-    end
-
-    it 'configures ceilometer user' do
-      is_expected.to contain_user('ceilometer').with(
-        :ensure  => 'present',
-        :name    => 'ceilometer',
-        :gid     => 'ceilometer',
-        :system  => true,
-        :require => 'Anchor[ceilometer::install::end]'
-      )
-    end
-
     it 'installs ceilometer common package' do
       is_expected.to contain_package('ceilometer-common').with(
         :ensure => 'present',

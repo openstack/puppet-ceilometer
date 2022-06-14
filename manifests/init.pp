@@ -419,20 +419,6 @@ class ceilometer(
   $snmpd_readonly_username_real = pick($snmpd_readonly_username, $::os_service_default)
   $snmpd_readonly_user_password_real = pick($snmpd_readonly_user_password, $::os_service_default)
 
-  group { 'ceilometer':
-    ensure  => present,
-    name    => 'ceilometer',
-    require => Anchor['ceilometer::install::end'],
-  }
-
-  user { 'ceilometer':
-    ensure  => present,
-    name    => 'ceilometer',
-    gid     => 'ceilometer',
-    system  => true,
-    require => Anchor['ceilometer::install::end'],
-  }
-
   package { 'ceilometer-common':
     ensure => $package_ensure,
     name   => $::ceilometer::params::common_package_name,
