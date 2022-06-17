@@ -12,7 +12,7 @@ describe 'ceilometer::agent::service_credentials' do
 
   shared_examples_for 'ceilometer::agent::service_credentials' do
 
-    context 'wtih default values' do
+    context 'with default values' do
       it 'configures authentication' do
         is_expected.to contain_ceilometer_config('service_credentials/auth_url').with_value('http://localhost:5000')
         is_expected.to contain_ceilometer_config('service_credentials/region_name').with_value('<SERVICE DEFAULT>')

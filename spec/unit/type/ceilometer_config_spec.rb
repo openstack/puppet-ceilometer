@@ -51,7 +51,7 @@ describe 'Puppet::Type.type(:ceilometer_config)' do
     }.to raise_error(Puppet::Error, /Invalid value/)
   end
 
-  it 'should autorequire the pachage that install the file' do
+  it 'should autorequire the package that install the file' do
     catalog = Puppet::Resource::Catalog.new
     anchor = Puppet::Type.type(:anchor).new(:name => 'ceilometer::install::end')
     catalog.add_resource anchor, @ceilometer_config

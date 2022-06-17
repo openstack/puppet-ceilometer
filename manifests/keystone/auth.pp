@@ -66,7 +66,7 @@ class ceilometer::keystone::auth (
 
   validate_legacy(String, 'validate_string', $password)
 
-  # Ceilometer rquires only its user, project, and role assignment.
+  # Ceilometer requires only its user, project, and role assignment.
   # service and endpoint should be disabled since ceilometer-api has been removed.
   keystone::resource::service_identity { 'ceilometer':
     configure_user      => $configure_user,
