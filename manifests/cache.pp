@@ -205,54 +205,35 @@ class ceilometer::cache (
 
   include ceilometer::deps
 
-  $backend_real                   = pick($::ceilometer::cache_backend, $backend)
-  $memcache_servers_real          = pick($::ceilometer::memcache_servers, $memcache_servers)
-  $enable_socket_keepalive_real   = pick($::ceilometer::cache_enable_socket_keepalive, $enable_socket_keepalive)
-  $socket_keepalive_idle_real     = pick($::ceilometer::cache_socket_keepalive_idle, $socket_keepalive_idle)
-  $socket_keepalive_interval_real = pick($::ceilometer::cache_socket_keepalive_interval, $socket_keepalive_interval)
-  $socket_keepalive_count_real    = pick($::ceilometer::cache_socket_keepalive_count, $socket_keepalive_count)
-  $manage_backend_package_real    = pick($::ceilometer::manage_backend_package, $manage_backend_package)
-  $tls_enabled_real               = pick($::ceilometer::cache_tls_enabled, $tls_enabled)
-  $tls_cafile_real                = pick($::ceilometer::cache_tls_cafile, $tls_cafile)
-  $tls_certfile_real              = pick($::ceilometer::cache_tls_certfile, $tls_certfile)
-  $tls_keyfile_real               = pick($::ceilometer::cache_tls_keyfile, $tls_keyfile)
-  $tls_allowed_ciphers_real       = pick($::ceilometer::cache_tls_allowed_ciphers, $tls_allowed_ciphers)
-  $enable_retry_client_real       = pick($::ceilometer::cache_enable_retry_client, $enable_retry_client)
-  $retry_attempts_real            = pick($::ceilometer::cache_retry_attempts, $retry_attempts)
-  $retry_delay_real               = pick($::ceilometer::cache_retry_delay, $retry_delay)
-  $hashclient_retry_attempts_real = pick($::ceilometer::cache_hashclient_retry_attempts, $hashclient_retry_attempts)
-  $hashclient_retry_delay_real    = pick($::ceilometer::cache_hashclient_retry_delay, $hashclient_retry_delay)
-  $dead_timeout_real              = pick($::ceilometer::cache_dead_timeout, $dead_timeout)
-
   oslo::cache { 'ceilometer_config':
     config_prefix                        => $config_prefix,
     expiration_time                      => $expiration_time,
-    backend                              => $backend_real,
+    backend                              => $backend,
     backend_argument                     => $backend_argument,
     proxies                              => $proxies,
     enabled                              => $enabled,
     debug_cache_backend                  => $debug_cache_backend,
-    memcache_servers                     => $memcache_servers_real,
+    memcache_servers                     => $memcache_servers,
     memcache_dead_retry                  => $memcache_dead_retry,
     memcache_socket_timeout              => $memcache_socket_timeout,
-    enable_socket_keepalive              => $enable_socket_keepalive_real,
-    socket_keepalive_idle                => $socket_keepalive_idle_real,
-    socket_keepalive_interval            => $socket_keepalive_interval_real,
-    socket_keepalive_count               => $socket_keepalive_count_real,
+    enable_socket_keepalive              => $enable_socket_keepalive,
+    socket_keepalive_idle                => $socket_keepalive_idle,
+    socket_keepalive_interval            => $socket_keepalive_interval,
+    socket_keepalive_count               => $socket_keepalive_count,
     memcache_pool_maxsize                => $memcache_pool_maxsize,
     memcache_pool_unused_timeout         => $memcache_pool_unused_timeout,
     memcache_pool_connection_get_timeout => $memcache_pool_connection_get_timeout,
-    manage_backend_package               => $manage_backend_package_real,
-    tls_enabled                          => $tls_enabled_real,
-    tls_cafile                           => $tls_cafile_real,
-    tls_certfile                         => $tls_certfile_real,
-    tls_keyfile                          => $tls_keyfile_real,
-    tls_allowed_ciphers                  => $tls_allowed_ciphers_real,
-    enable_retry_client                  => $enable_retry_client_real,
-    retry_attempts                       => $retry_attempts_real,
-    retry_delay                          => $retry_delay_real,
-    hashclient_retry_attempts            => $hashclient_retry_attempts_real,
-    hashclient_retry_delay               => $hashclient_retry_delay_real,
-    dead_timeout                         => $dead_timeout_real,
+    manage_backend_package               => $manage_backend_package,
+    tls_enabled                          => $tls_enabled,
+    tls_cafile                           => $tls_cafile,
+    tls_certfile                         => $tls_certfile,
+    tls_keyfile                          => $tls_keyfile,
+    tls_allowed_ciphers                  => $tls_allowed_ciphers,
+    enable_retry_client                  => $enable_retry_client,
+    retry_attempts                       => $retry_attempts,
+    retry_delay                          => $retry_delay,
+    hashclient_retry_attempts            => $hashclient_retry_attempts,
+    hashclient_retry_delay               => $hashclient_retry_delay,
+    dead_timeout                         => $dead_timeout,
   }
 }

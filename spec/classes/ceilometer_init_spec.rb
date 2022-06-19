@@ -105,29 +105,6 @@ describe 'ceilometer' do
       is_expected.to contain_ceilometer_config('hardware/readonly_user_password').with_value('<SERVICE DEFAULT>').with_secret(true)
     end
 
-    it 'configures cache backend' do
-      is_expected.to contain_oslo__cache('ceilometer_config').with(
-        :backend                   => '<SERVICE DEFAULT>',
-        :memcache_servers          => '<SERVICE DEFAULT>',
-        :enable_socket_keepalive   => '<SERVICE DEFAULT>',
-        :socket_keepalive_idle     => '<SERVICE DEFAULT>',
-        :socket_keepalive_interval => '<SERVICE DEFAULT>',
-        :socket_keepalive_count    => '<SERVICE DEFAULT>',
-        :tls_enabled               => '<SERVICE DEFAULT>',
-        :tls_cafile                => '<SERVICE DEFAULT>',
-        :tls_certfile              => '<SERVICE DEFAULT>',
-        :tls_keyfile               => '<SERVICE DEFAULT>',
-        :tls_allowed_ciphers       => '<SERVICE DEFAULT>',
-        :enable_retry_client       => '<SERVICE DEFAULT>',
-        :retry_attempts            => '<SERVICE DEFAULT>',
-        :retry_delay               => '<SERVICE DEFAULT>',
-        :hashclient_retry_attempts => '<SERVICE DEFAULT>',
-        :hashclient_retry_delay    => '<SERVICE DEFAULT>',
-        :dead_timeout              => '<SERVICE DEFAULT>',
-        :manage_backend_package    => true,
-      )
-    end
-
     context 'with rabbitmq durable queues configured' do
       before { params.merge!( :amqp_durable_queues => true ) }
       it_configures 'rabbit with durable queues'
@@ -149,46 +126,6 @@ describe 'ceilometer' do
           :transport_url             => 'rabbit://rabbit_user:password@localhost:5673',
           :rpc_response_timeout      => '120',
           :control_exchange          => 'ceilometer'
-        )
-      end
-    end
-
-    context 'with overridden cache parameter' do
-      before {
-        params.merge!(
-          :cache_backend                   => 'memcache',
-          :memcache_servers                => 'host1:11211,host2:11211',
-          :cache_enable_socket_keepalive   => false,
-          :cache_socket_keepalive_idle     => 1,
-          :cache_socket_keepalive_interval => 1,
-          :cache_socket_keepalive_count    => 1,
-          :cache_tls_enabled               => true,
-          :cache_enable_retry_client       => false,
-          :cache_retry_attempts            => 2,
-          :cache_retry_delay               => 0,
-          :cache_hashclient_retry_attempts => 2,
-          :cache_hashclient_retry_delay    => 1,
-          :cache_dead_timeout              => 60,
-          :manage_backend_package          => false,
-        )
-      }
-
-      it 'configures cache backend' do
-        is_expected.to contain_oslo__cache('ceilometer_config').with(
-          :backend                   => 'memcache',
-          :memcache_servers          => 'host1:11211,host2:11211',
-          :enable_socket_keepalive   => false,
-          :socket_keepalive_idle     => 1,
-          :socket_keepalive_interval => 1,
-          :socket_keepalive_count    => 1,
-          :tls_enabled               => true,
-          :enable_retry_client       => false,
-          :retry_attempts            => 2,
-          :retry_delay               => 0,
-          :hashclient_retry_attempts => 2,
-          :hashclient_retry_delay    => 1,
-          :dead_timeout              => 60,
-          :manage_backend_package    => false,
         )
       end
     end
