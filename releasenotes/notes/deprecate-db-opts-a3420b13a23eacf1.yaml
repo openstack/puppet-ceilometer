@@ -1,0 +1,9 @@
+---
+features:
+  - |
+    The following classes have been deprecated and will be removed in a future
+    release.
+
+    - ``ceilometer::db``
+    - ``ceilometer::db::mysql``
+    - ``ceilometer::db::postgresql``
