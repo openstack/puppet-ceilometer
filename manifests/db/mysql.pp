@@ -46,6 +46,8 @@ class ceilometer::db::mysql(
 
   validate_legacy(String, 'validate_string', $password)
 
+  warning('The ceilometer::db::mysql class has been deprecated and will be removed in a future release.')
+
   openstacklib::db::mysql { 'ceilometer':
     user          => $user,
     password      => $password,

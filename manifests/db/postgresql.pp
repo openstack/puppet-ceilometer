@@ -34,6 +34,8 @@ class ceilometer::db::postgresql(
 
   include ceilometer::deps
 
+  warning('The ceilometer::db::postgresql class has been deprecated and will be removed in a future release.')
+
   openstacklib::db::postgresql { 'ceilometer':
     password   => $password,
     dbname     => $dbname,

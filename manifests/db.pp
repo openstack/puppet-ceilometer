@@ -1,5 +1,6 @@
 # == Class: ceilometer::db
 #
+#  DEPRECATED !!
 #  Configures the ceilometer database
 #  This class will install the required libraries depending on the driver
 #  specified in the connection_string parameter
@@ -63,6 +64,8 @@ class ceilometer::db (
 ) {
 
   include ceilometer::deps
+
+  warning('The ceilometer::db class has been deprecated and will be removed in a future release.')
 
   oslo::db { 'ceilometer_config':
     db_max_retries          => $database_db_max_retries,
