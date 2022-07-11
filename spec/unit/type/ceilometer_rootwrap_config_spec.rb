@@ -33,7 +33,7 @@ describe 'Puppet::Type.type(:ceilometer_rootwrap_config)' do
     expect(@ceilometer_rootwrap_config[:value]).to eq('bar')
   end
 
-  it 'should not accept a value with whitespace' do
+  it 'should accept a value with whitespace' do
     @ceilometer_rootwrap_config[:value] = 'b ar'
     expect(@ceilometer_rootwrap_config[:value]).to eq('b ar')
   end
