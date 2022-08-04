@@ -1,0 +1,5 @@
+---
+upgrade:
+  - |
+    The ``ceilometer::agent::polling::coordination_url`` parameter has been
+    removed.

@@ -262,14 +262,6 @@ sources:
       it { should_not contain_file('polling') }
     end
 
-    context 'when setting coordination_url' do
-      before do
-        params.merge!( :coordination_url => 'redis://localhost:6379' )
-      end
-
-      it { should contain_ceilometer_config('coordination/backend_url').with_value('redis://localhost:6379') }
-    end
-
     context 'when batch_size is set' do
       before do
         params.merge!( :batch_size => 50 )

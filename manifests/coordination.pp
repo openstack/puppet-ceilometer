@@ -14,9 +14,7 @@ class ceilometer::coordination (
 
   include ceilometer::deps
 
-  $backend_url_real = pick($::ceilometer::agent::polling::coordination_url, $backend_url)
-
   oslo::coordination{ 'ceilometer_config':
-    backend_url => $backend_url_real
+    backend_url => $backend_url
   }
 }

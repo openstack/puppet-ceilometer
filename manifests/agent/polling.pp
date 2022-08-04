@@ -73,12 +73,6 @@
 #   (Optional) Batch size of samples to send to notification agent.
 #   Defaults to $::os_service_default
 #
-# DEPRECATED PARAMETERS
-#
-# [*coordination_url*]
-#   (Optional) The url to use for distributed group membership coordination.
-#   Defaults to undef.
-#
 class ceilometer::agent::polling (
   $manage_service            = true,
   $enabled                   = true,
@@ -95,17 +89,10 @@ class ceilometer::agent::polling (
   $polling_meters            = $::ceilometer::params::polling_meters,
   $polling_config            = undef,
   $batch_size                = $::os_service_default,
-  # DEPRECATED PARAMETERS
-  $coordination_url          = undef,
 ) inherits ceilometer {
 
   include ceilometer::deps
   include ceilometer::params
-
-  if $coordination_url != undef {
-    warning('The coordination_url parameter has been deprecated. Use ceilometer::coordination instead')
-    include ceilometer::coordination
-  }
 
   if $central_namespace {
     $central_namespace_name = 'central'
