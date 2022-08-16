@@ -1,0 +1,5 @@
+---
+upgrade:
+  - |
+    The ``ceilometer::agent::notification::notification_workers`` parameter has
+    been removed.

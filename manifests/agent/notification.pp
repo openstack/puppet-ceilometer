@@ -83,12 +83,6 @@
 #   Defaults to ['gnocchi://'], If you are using collector
 #   override this to notifier:// instead.
 #
-# DEPRECATED PARAMETERS
-#
-# [*notification_workers*]
-#   (Optional) Number of workers for notification service (integer value).
-#   Defaults to $::os_service_default.
-#
 class ceilometer::agent::notification (
   $manage_service            = true,
   $enabled                   = true,
@@ -103,19 +97,10 @@ class ceilometer::agent::notification (
   $manage_pipeline           = false,
   $pipeline_publishers       = ['gnocchi://'],
   $pipeline_config           = undef,
-  # DEPRECATED PARAMETERS
-  $notification_workers      = undef,
 ) {
 
   include ceilometer::deps
   include ceilometer::params
-
-  if $notification_workers != undef {
-    warning('The notification_workers parameter is deprecated. Use the workers parameter instead')
-    $workers_real = $notification_workers
-  } else {
-    $workers_real = $workers
-  }
 
   package { 'ceilometer-notification':
     ensure => $package_ensure,
@@ -185,7 +170,7 @@ class ceilometer::agent::notification (
   ceilometer_config {
     'notification/ack_on_event_error'       : value => $ack_on_event_error;
     'notification/disable_non_metric_meters': value => $disable_non_metric_meters;
-    'notification/workers'                  : value => $workers_real;
+    'notification/workers'                  : value => $workers;
     'notification/messaging_urls'           : value => $messaging_urls, secret => true;
   }
 }
