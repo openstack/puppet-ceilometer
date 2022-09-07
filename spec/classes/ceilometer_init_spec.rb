@@ -100,11 +100,6 @@ describe 'ceilometer' do
       )
     end
 
-    it 'configures snmpd auth' do
-      is_expected.to contain_ceilometer_config('hardware/readonly_user_name').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_ceilometer_config('hardware/readonly_user_password').with_value('<SERVICE DEFAULT>').with_secret(true)
-    end
-
     context 'with rabbitmq durable queues configured' do
       before { params.merge!( :amqp_durable_queues => true ) }
       it_configures 'rabbit with durable queues'

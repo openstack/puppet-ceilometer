@@ -272,10 +272,8 @@ class ceilometer(
   include ceilometer::params
 
   if $snmpd_readonly_username != undef or $snmpd_readonly_user_password != undef {
-    warning('The snmpd_readonly_* parameters have been deprecated.')
+    warning('The snmpd_readonly_* parameters have been deprecated and have no effect.')
   }
-  $snmpd_readonly_username_real = pick($snmpd_readonly_username, $::os_service_default)
-  $snmpd_readonly_user_password_real = pick($snmpd_readonly_user_password, $::os_service_default)
 
   package { 'ceilometer-common':
     ensure => $package_ensure,
@@ -326,12 +324,15 @@ class ceilometer(
 
   # Once we got here, we can act as an honey badger on the rpc used.
   ceilometer_config {
-    'DEFAULT/http_timeout'           : value => $http_timeout;
-    'DEFAULT/max_parallel_requests'  : value => $max_parallel_requests;
-    'DEFAULT/host'                   : value => $host;
-    'publisher/telemetry_secret'     : value => $telemetry_secret, secret => true;
-    'hardware/readonly_user_name'    : value => $snmpd_readonly_username_real;
-    'hardware/readonly_user_password': value => $snmpd_readonly_user_password_real, secret => true;
+    'DEFAULT/http_timeout'         : value => $http_timeout;
+    'DEFAULT/max_parallel_requests': value => $max_parallel_requests;
+    'DEFAULT/host'                 : value => $host;
+    'publisher/telemetry_secret'   : value => $telemetry_secret, secret => true;
+  }
+  # TODO(tkajinam): Remove this after Zed
+  ceilometer_config {
+    'hardware/readonly_user_name'    : ensure => absent;
+    'hardware/readonly_user_password': ensure => absent, secret => true;
   }
 
   oslo::messaging::notifications { 'ceilometer_config':
