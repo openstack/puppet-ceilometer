@@ -73,6 +73,10 @@
 #   (Optional) Batch size of samples to send to notification agent.
 #   Defaults to $::os_service_default
 #
+# [*tenant_name_discovery*]
+#   (optional) Identify user and project names from polled metrics.
+#   Defaults to $::os_service_default.
+#
 class ceilometer::agent::polling (
   $manage_service            = true,
   $enabled                   = true,
@@ -89,6 +93,7 @@ class ceilometer::agent::polling (
   $polling_meters            = $::ceilometer::params::polling_meters,
   $polling_config            = undef,
   $batch_size                = $::os_service_default,
+  $tenant_name_discovery     = $::os_service_default,
 ) inherits ceilometer {
 
   include ceilometer::deps
@@ -96,8 +101,16 @@ class ceilometer::agent::polling (
 
   if $central_namespace {
     $central_namespace_name = 'central'
+    ceilometer_config {
+      # set `tenant_name_discovery` parameter only on the nodes
+      # where central namespace is enabled
+      'DEFAULT/tenant_name_discovery': value => $tenant_name_discovery;
+    }
   } else {
     $central_namespace_name = undef
+    ceilometer_config {
+      'DEFAULT/tenant_name_discovery': ensure => absent;
+    }
   }
 
   if $compute_namespace {

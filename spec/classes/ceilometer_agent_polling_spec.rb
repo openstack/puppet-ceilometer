@@ -38,6 +38,7 @@ describe 'ceilometer::agent::polling' do
       )}
 
       it {
+        should contain_ceilometer_config('DEFAULT/tenant_name_discovery').with_value('<SERVICE DEFAULT>')
         should contain_ceilometer_config('compute/instance_discovery_method').with_value('<SERVICE DEFAULT>')
         should contain_ceilometer_config('compute/resource_update_interval').with_value('<SERVICE DEFAULT>')
         should contain_ceilometer_config('compute/resource_cache_expiry').with_value('<SERVICE DEFAULT>')
@@ -90,6 +91,18 @@ describe 'ceilometer::agent::polling' do
       }
     end
 
+    context 'with central parameters set' do
+      before do
+        params.merge!(
+          :tenant_name_discovery => false
+        )
+      end
+
+      it {
+        should contain_ceilometer_config('DEFAULT/tenant_name_discovery').with_value(false)
+      }
+    end
+
     context 'with compute namespace disabled' do
       before do
         params.merge!(
@@ -103,6 +116,19 @@ describe 'ceilometer::agent::polling' do
         should contain_ceilometer_config('compute/resource_update_interval').with_ensure('absent')
         should contain_ceilometer_config('compute/resource_cache_expiry').with_ensure('absent')
       }
+    end
+
+    context 'with central namespace disabled' do
+      before do
+        params.merge!(
+          :central_namespace => false,
+        )
+      end
+
+      it {
+        should contain_ceilometer_config('DEFAULT/polling_namespaces').with_value('compute,ipmi')
+        should contain_ceilometer_config('DEFAULT/tenant_name_discovery').with_ensure('absent')
+       }
     end
 
     context 'with central and ipmi polling namespaces disabled' do
