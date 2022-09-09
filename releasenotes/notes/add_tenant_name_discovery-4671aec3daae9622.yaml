@@ -1,0 +1,7 @@
+---
+features:
+  - |
+    Add new parameter ``tenant_name_discovery``, whether to
+    idenitfy user and project names from polled samples.
+    This paramater is to be configured only when ceilometer
+    central namespace is enabled.
