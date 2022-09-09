@@ -12,6 +12,10 @@
 #   (Optional)  Whether the service should be managed by Puppet.
 #   Defaults to true.
 #
+# [*separate_services*]
+#   (Optional) Use separate services for individual namespace.
+#   Defaults to false.
+#
 # [*package_ensure*]
 #   (Optional) ensure state for package.
 #   Defaults to 'present'
@@ -80,6 +84,7 @@
 class ceilometer::agent::polling (
   $manage_service            = true,
   $enabled                   = true,
+  $separate_services         = false,
   $package_ensure            = 'present',
   $manage_user               = true,
   $central_namespace         = true,
@@ -161,10 +166,37 @@ class ceilometer::agent::polling (
     $ipmi_namespace_name = undef
   }
 
-  package { 'ceilometer-polling':
-    ensure => $package_ensure,
-    name   => $::ceilometer::params::agent_polling_package_name,
-    tag    => ['openstack', 'ceilometer-package'],
+  if $separate_services {
+    if $central_namespace {
+      package { 'ceilometer-central':
+        ensure => $package_ensure,
+        name   =>  $::ceilometer::params::agent_central_package_name,
+        tag    => ['openstack', 'ceilometer-package'],
+      }
+    }
+
+    if $compute_namespace {
+      package { 'ceilometer-compute':
+        ensure => $package_ensure,
+        name   =>  $::ceilometer::params::agent_compute_package_name,
+        tag    => ['openstack', 'ceilometer-package'],
+      }
+    }
+
+    if $ipmi_namespace {
+      package { 'ceilometer-ipmi':
+        ensure => $package_ensure,
+        name   =>  $::ceilometer::params::agent_ipmi_package_name,
+        tag    => ['openstack', 'ceilometer-package'],
+      }
+    }
+
+  } else {
+    package { 'ceilometer-polling':
+      ensure => $package_ensure,
+      name   => $::ceilometer::params::agent_polling_package_name,
+      tag    => ['openstack', 'ceilometer-package'],
+    }
   }
 
   $namespaces_real = delete_undef_values([
@@ -173,7 +205,7 @@ class ceilometer::agent::polling (
     $ipmi_namespace_name
   ])
 
-  if empty($namespaces_real) {
+  if empty($namespaces_real) or $separate_services {
     ceilometer_config {
       'DEFAULT/polling_namespaces': ensure => absent
     }
@@ -194,13 +226,46 @@ class ceilometer::agent::polling (
       $service_ensure = 'stopped'
     }
 
-    service { 'ceilometer-polling':
-      ensure     => $service_ensure,
-      name       => $::ceilometer::params::agent_polling_service_name,
-      enable     => $enabled,
-      hasstatus  => true,
-      hasrestart => true,
-      tag        => 'ceilometer-service',
+    if $separate_services {
+      if $central_namespace {
+        service { 'ceilometer-central':
+          ensure     => $service_ensure,
+          name       => $::ceilometer::params::agent_central_service_name,
+          enable     => $enabled,
+          hasstatus  => true,
+          hasrestart => true,
+          tag        => 'ceilometer-service',
+        }
+      }
+      if $compute_namespace {
+        service { 'ceilometer-compute':
+          ensure     => $service_ensure,
+          name       => $::ceilometer::params::agent_compute_service_name,
+          enable     => $enabled,
+          hasstatus  => true,
+          hasrestart => true,
+          tag        => 'ceilometer-service',
+        }
+      }
+      if $ipmi_namespace {
+        service { 'ceilometer-ipmi':
+          ensure     => $service_ensure,
+          name       => $::ceilometer::params::agent_ipmi_service_name,
+          enable     => $enabled,
+          hasstatus  => true,
+          hasrestart => true,
+          tag        => 'ceilometer-service',
+        }
+      }
+    } else {
+      service { 'ceilometer-polling':
+        ensure     => $service_ensure,
+        name       => $::ceilometer::params::agent_polling_service_name,
+        enable     => $enabled,
+        hasstatus  => true,
+        hasrestart => true,
+        tag        => 'ceilometer-service',
+      }
     }
   }
 

@@ -44,22 +44,32 @@ describe 'ceilometer::agent::polling' do
         should contain_ceilometer_config('compute/resource_cache_expiry').with_value('<SERVICE DEFAULT>')
       }
 
-      it { should contain_package('ceilometer-polling').with(
-        :ensure => 'present',
-        :name   => platform_params[:agent_package_name],
-        :tag    => ['openstack', 'ceilometer-package'],
-      )}
+      it 'shoud install the polling package' do
+        should contain_package('ceilometer-polling').with(
+          :ensure => 'present',
+          :name   => platform_params[:agent_polling_package_name],
+          :tag    => ['openstack', 'ceilometer-package'],
+        )
+        should_not contain_package('ceilometer-central')
+        should_not contain_package('ceilometer-compute')
+        should_not contain_package('ceilometer-ipmi')
+      end
 
       it { should contain_ceilometer_config('DEFAULT/polling_namespaces').with_value('central,compute,ipmi') }
 
-      it { should contain_service('ceilometer-polling').with(
-        :ensure     => 'running',
-        :name       => platform_params[:agent_service_name],
-        :enable     => true,
-        :hasstatus  => true,
-        :hasrestart => true,
-        :tag        => 'ceilometer-service',
-      )}
+      it 'should enable the polling service' do
+        should contain_service('ceilometer-polling').with(
+          :ensure     => 'running',
+          :name       => platform_params[:agent_polling_service_name],
+          :enable     => true,
+          :hasstatus  => true,
+          :hasrestart => true,
+          :tag        => 'ceilometer-service',
+        )
+        should_not contain_service('ceilometer-central')
+        should_not contain_service('ceilometer-compute')
+        should_not contain_service('ceilometer-ipmi')
+      end
 
       it { should contain_ceilometer_config('polling/batch_size').with_value('<SERVICE DEFAULT>') }
       it { should_not contain_file('polling') }
@@ -161,7 +171,7 @@ describe 'ceilometer::agent::polling' do
 
       it { should contain_service('ceilometer-polling').with(
         :ensure     => 'stopped',
-        :name       => platform_params[:agent_service_name],
+        :name       => platform_params[:agent_polling_service_name],
         :enable     => false,
         :hasstatus  => true,
         :hasrestart => true,
@@ -295,6 +305,61 @@ sources:
 
       it { should contain_ceilometer_config('polling/batch_size').with_value(50) }
     end
+
+    context 'with separate agents' do
+      before do
+        params.merge!( :separate_services => true )
+      end
+
+      it 'should install the agent packages' do
+        should_not contain_package('ceilometer-polling')
+        should contain_package('ceilometer-central').with(
+          :ensure => 'present',
+          :name   => platform_params[:agent_central_package_name],
+          :tag    => ['openstack', 'ceilometer-package'],
+        )
+        should contain_package('ceilometer-compute').with(
+          :ensure => 'present',
+          :name   => platform_params[:agent_compute_package_name],
+          :tag    => ['openstack', 'ceilometer-package'],
+        )
+        should contain_package('ceilometer-ipmi').with(
+          :ensure => 'present',
+          :name   => platform_params[:agent_ipmi_package_name],
+          :tag    => ['openstack', 'ceilometer-package'],
+        )
+      end
+
+      it { should contain_ceilometer_config('DEFAULT/polling_namespaces').with_ensure('absent') }
+
+      it 'should enable the agent services' do
+        should_not contain_service('ceilometer-polling')
+        should contain_service('ceilometer-central').with(
+          :ensure     => 'running',
+          :name       => platform_params[:agent_central_service_name],
+          :enable     => true,
+          :hasstatus  => true,
+          :hasrestart => true,
+          :tag        => 'ceilometer-service',
+        )
+        should contain_service('ceilometer-compute').with(
+          :ensure     => 'running',
+          :name       => platform_params[:agent_compute_service_name],
+          :enable     => true,
+          :hasstatus  => true,
+          :hasrestart => true,
+          :tag        => 'ceilometer-service',
+        )
+        should contain_service('ceilometer-ipmi').with(
+          :ensure     => 'running',
+          :name       => platform_params[:agent_ipmi_service_name],
+          :enable     => true,
+          :hasstatus  => true,
+          :hasrestart => true,
+          :tag        => 'ceilometer-service',
+        )
+      end
+    end
   end
 
   on_supported_os({
@@ -309,16 +374,28 @@ sources:
         case facts[:osfamily]
         when 'Debian'
             {
-              :agent_package_name => 'ceilometer-polling',
-              :agent_service_name => 'ceilometer-polling',
-              :libvirt_group      => 'libvirt',
-              :ceilometer_groups  => ['nova', 'libvirt'],
+              :agent_polling_package_name => 'ceilometer-polling',
+              :agent_polling_service_name => 'ceilometer-polling',
+              :agent_central_package_name => 'ceilometer-agent-central',
+              :agent_central_service_name => 'ceilometer-agent-central',
+              :agent_compute_package_name => 'ceilometer-agent-compute',
+              :agent_compute_service_name => 'ceilometer-agent-compute',
+              :agent_ipmi_package_name    => 'ceilometer-agent-ipmi',
+              :agent_ipmi_service_name    => 'ceilometer-agent-ipmi',
+              :libvirt_group              => 'libvirt',
+              :ceilometer_groups          => ['nova', 'libvirt'],
             }
         when 'RedHat'
             {
-              :agent_package_name => 'openstack-ceilometer-polling',
-              :agent_service_name => 'openstack-ceilometer-polling',
-              :ceilometer_groups  => ['nova'],
+              :agent_polling_package_name => 'openstack-ceilometer-polling',
+              :agent_polling_service_name => 'openstack-ceilometer-polling',
+              :agent_central_package_name => 'openstack-ceilometer-central',
+              :agent_central_service_name => 'openstack-ceilometer-central',
+              :agent_compute_package_name => 'openstack-ceilometer-compute',
+              :agent_compute_service_name => 'openstack-ceilometer-compute',
+              :agent_ipmi_package_name    => 'openstack-ceilometer-ipmi',
+              :agent_ipmi_service_name    => 'openstack-ceilometer-ipmi',
+              :ceilometer_groups          => ['nova'],
             }
         end
       end

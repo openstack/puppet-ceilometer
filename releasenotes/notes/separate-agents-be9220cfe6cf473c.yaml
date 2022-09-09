@@ -1,0 +1,7 @@
+---
+features:
+  - |
+    The ``ceilometer::agents::polling::separate_services`` parameter has been
+    added. When this parameter is set to `true`, the class configures separate
+    agent services for individual namespaces, instead of the single polling
+    agent service.
