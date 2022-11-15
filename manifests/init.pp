@@ -208,16 +208,6 @@
 #   IP address.
 #   Defaults to $::os_service_default.
 #
-# DEPRECATED PARAMETERS
-#
-# [*snmpd_readonly_username*]
-#   (Optional) User name for snmpd authentication
-#   Defaults to undef
-#
-# [*snmpd_readonly_user_password*]
-#   (Optional) Password for snmpd authentication
-#   Defaults to undef
-#
 class ceilometer(
   $http_timeout                       = $::os_service_default,
   $max_parallel_requests              = $::os_service_default,
@@ -263,17 +253,10 @@ class ceilometer(
   $amqp_password                      = $::os_service_default,
   $purge_config                       = false,
   $host                               = $::os_service_default,
-  # DEPRECATED PARAMETERS
-  $snmpd_readonly_username            = undef,
-  $snmpd_readonly_user_password       = undef,
 ) {
 
   include ceilometer::deps
   include ceilometer::params
-
-  if $snmpd_readonly_username != undef or $snmpd_readonly_user_password != undef {
-    warning('The snmpd_readonly_* parameters have been deprecated and have no effect.')
-  }
 
   package { 'ceilometer-common':
     ensure => $package_ensure,
@@ -328,11 +311,6 @@ class ceilometer(
     'DEFAULT/max_parallel_requests': value => $max_parallel_requests;
     'DEFAULT/host'                 : value => $host;
     'publisher/telemetry_secret'   : value => $telemetry_secret, secret => true;
-  }
-  # TODO(tkajinam): Remove this after Zed
-  ceilometer_config {
-    'hardware/readonly_user_name'    : ensure => absent;
-    'hardware/readonly_user_password': ensure => absent, secret => true;
   }
 
   oslo::messaging::notifications { 'ceilometer_config':

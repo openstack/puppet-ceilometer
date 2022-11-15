@@ -1,0 +1,8 @@
+---
+upgrade:
+  - |
+    The following parameters of the ``ceilometer`` class have been removed.
+
+    - ``snmpd_readonly_user_name``
+    - ``snmpd_readonly_user_password``
+
