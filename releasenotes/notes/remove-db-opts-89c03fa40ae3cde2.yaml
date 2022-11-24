@@ -1,0 +1,8 @@
+---
+upgrade:
+  - |
+    The following classes have been removed.
+
+    - ``ceilometer::db``
+    - ``ceilometer::db::mysql``
+    - ``ceilometer::db::postgresql``

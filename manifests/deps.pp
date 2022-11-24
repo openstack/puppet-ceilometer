@@ -35,10 +35,6 @@ class ceilometer::deps {
   # installed before service startup
   Oslo::Coordination<||> -> Anchor['ceilometer::service::begin']
 
-  # all db settings should be applied and all packages should be installed
-  # before dbsync starts
-  Oslo::Db<||> -> Anchor['ceilometer::dbsync::begin']
-
   # rootwrap config should occur in the config block also.
   Anchor['ceilometer::config::begin']
   -> Ceilometer_rootwrap_config<||>

@@ -3,13 +3,6 @@ node default {
     path => ['/usr/bin', '/bin', '/usr/sbin', '/sbin']
   }
 
-  # First, install a mysql server
-  class { 'mysql::server': }
-  # And create the database
-  class { 'ceilometer::db::mysql':
-    password => 'ceilometer',
-  }
-
   # Add the base ceilometer class & parameters
   # This class is required by ceilometer agents & api classes
   # The telemetry_secret parameter is mandatory
@@ -17,22 +10,16 @@ node default {
     telemetry_secret => 'darksecret'
   }
 
-  # Configure the ceilometer database
-  # Only needed if ceilometer::agent::polling or ceilometer::api are declared
-  class { 'ceilometer::db':
+  class { 'ceilometer::db::sync': }
+
+  class { 'ceilometer::keystone::auth':
+    password => 'a_big_secret',
   }
 
-  # Configure ceilometer database with mongodb
-
-  # class { 'ceilometer::db':
-  #   database_connection => 'mongodb://localhost:27017/ceilometer',
-  #   require             => Class['mongodb'],
-  # }
-
   # Set common auth parameters used by all agents (compute/central)
-  class { 'ceilometer::agent::auth':
-    auth_url      => 'http://localhost:5000/v3',
-    auth_password => 'tralalerotralala'
+  class { 'ceilometer::agent::service_credentials':
+    auth_url => 'http://localhost:5000/v3',
+    password => 'a_big_secret'
   }
 
   # Install polling agent

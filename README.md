@@ -61,7 +61,7 @@ class { 'ceilometer::keystone::auth':
 class { 'ceilometer::collector': }
 class { 'ceilometer::agent::polling': }
 class { 'ceilometer::agent::notification': }
-class { 'ceilometer::db': }
+class { 'ceilometer::db::sync': }
 class { 'ceilometer::keystone::authtoken':
   password => 'a_big_secret',
   auth_url => 'http://127.0.0.1:5000/',
