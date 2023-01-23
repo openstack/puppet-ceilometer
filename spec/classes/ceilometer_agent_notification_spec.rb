@@ -48,6 +48,8 @@ describe 'ceilometer::agent::notification' do
       is_expected.to contain_ceilometer_config('notification/workers').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ceilometer_config('notification/ack_on_event_error').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ceilometer_config('notification/disable_non_metric_meters').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ceilometer_config('notification/batch_size').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ceilometer_config('notification/batch_timeout').with_value('<SERVICE DEFAULT>')
     end
 
     context 'with disabled non-metric meters' do

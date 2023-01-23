@@ -49,6 +49,16 @@
 #   The format should be transport://user:pass@host1:port[,hostN:portN]/virtual_host
 #   Defaults to $::os_service_default.
 #
+# [*batch_size*]
+#   (Optional) Number of notification messages to wait before publishing
+#   them.
+#   Defaults to $::os_service_default.
+#
+# [*batch_timeout*]
+#   (Optional) Number of seconds to wait before dispatching samples when
+#   batch_size is not reached.
+#   Defaults to $::os_service_default.
+#
 # [*package_ensure*]
 #   (Optional) ensure state for package.
 #   Defaults to 'present'.
@@ -90,6 +100,8 @@ class ceilometer::agent::notification (
   $disable_non_metric_meters = $::os_service_default,
   $workers                   = $::os_service_default,
   $messaging_urls            = $::os_service_default,
+  $batch_size                = $::os_service_default,
+  $batch_timeout             = $::os_service_default,
   $package_ensure            = 'present',
   $manage_event_pipeline     = false,
   $event_pipeline_publishers = ['gnocchi://'],
@@ -172,5 +184,7 @@ class ceilometer::agent::notification (
     'notification/disable_non_metric_meters': value => $disable_non_metric_meters;
     'notification/workers'                  : value => $workers;
     'notification/messaging_urls'           : value => $messaging_urls, secret => true;
+    'notification/batch_size'               : value => $batch_size;
+    'notification/batch_timeout'            : value => $batch_timeout;
   }
 }

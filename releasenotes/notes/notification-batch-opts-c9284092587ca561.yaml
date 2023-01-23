@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    The ``ceilometer::agent::notification`` class now supports the
+    ``batch_size`` parameter and the ``batch_timeout`` parameter.
