@@ -214,24 +214,6 @@ sources:
         - volume.size
         - volume.snapshot.size
         - volume.backup.size
-        - hardware.cpu.util
-        - hardware.cpu.user
-        - hardware.cpu.nice
-        - hardware.cpu.system
-        - hardware.cpu.idle
-        - hardware.cpu.wait
-        - hardware.cpu.kernel
-        - hardware.cpu.interrupt
-        - hardware.memory.used
-        - hardware.memory.total
-        - hardware.memory.buffer
-        - hardware.memory.cached
-        - hardware.memory.swap.avail
-        - hardware.memory.swap.total
-        - hardware.system_stats.io.outgoing.blocks
-        - hardware.system_stats.io.incoming.blocks
-        - hardware.network.ip.incoming.datagrams
-        - hardware.network.ip.outgoing.datagrams
 ',
         :selinux_ignore_defaults => true,
         :tag                     => 'ceilometer-yamls',
