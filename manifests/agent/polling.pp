@@ -104,6 +104,15 @@ class ceilometer::agent::polling (
   include ceilometer::deps
   include ceilometer::params
 
+  validate_legacy(Boolean, 'validate_bool', $manage_service)
+  validate_legacy(Boolean, 'validate_bool', $enabled)
+  validate_legacy(Boolean, 'validate_bool', $separate_services)
+  validate_legacy(Boolean, 'validate_bool', $manage_user)
+  validate_legacy(Boolean, 'validate_bool', $central_namespace)
+  validate_legacy(Boolean, 'validate_bool', $compute_namespace)
+  validate_legacy(Boolean, 'validate_bool', $ipmi_namespace)
+  validate_legacy(Boolean, 'validate_bool', $manage_polling)
+
   if $central_namespace {
     $central_namespace_name = 'central'
     ceilometer_config {

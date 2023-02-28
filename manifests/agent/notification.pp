@@ -114,6 +114,12 @@ class ceilometer::agent::notification (
   include ceilometer::deps
   include ceilometer::params
 
+  validate_legacy(Boolean, 'validate_bool', $manage_service)
+  validate_legacy(Boolean, 'validate_bool', $enabled)
+  validate_legacy(Boolean, 'validate_bool', $manage_event_pipeline)
+  validate_legacy(Boolean, 'validate_bool', $manage_pipeline)
+
+
   package { 'ceilometer-notification':
     ensure => $package_ensure,
     name   => $::ceilometer::params::agent_notification_package_name,
