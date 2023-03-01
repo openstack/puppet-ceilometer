@@ -40,7 +40,7 @@
 #
 # [*instance_discovery_method*]
 #   (Optional) method to discovery instances running on compute node
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #    * naive: poll nova to get all instances
 #    * workload_partitioning: poll nova to get instances of the compute
 #    * libvirt_metadata: get instances from libvirt metadata
@@ -49,11 +49,11 @@
 # [*resource_update_interval*]
 #   (Optional) New instances will be discovered periodically based on this
 #   option (in seconds).
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*resource_cache_expiry*]
 #   (Optional) The expiry to totally refresh the instances resource cache.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*manage_polling*]
 #   (Optional) Whether to manage polling.yaml
@@ -75,11 +75,11 @@
 #
 # [*batch_size*]
 #   (Optional) Batch size of samples to send to notification agent.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*tenant_name_discovery*]
 #   (optional) Identify user and project names from polled metrics.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 class ceilometer::agent::polling (
   $manage_service            = true,
@@ -90,15 +90,15 @@ class ceilometer::agent::polling (
   $central_namespace         = true,
   $compute_namespace         = true,
   $ipmi_namespace            = true,
-  $instance_discovery_method = $::os_service_default,
-  $resource_update_interval  = $::os_service_default,
-  $resource_cache_expiry     = $::os_service_default,
+  $instance_discovery_method = $facts['os_service_default'],
+  $resource_update_interval  = $facts['os_service_default'],
+  $resource_cache_expiry     = $facts['os_service_default'],
   $manage_polling            = false,
   $polling_interval          = 600,
   $polling_meters            = $::ceilometer::params::polling_meters,
   $polling_config            = undef,
-  $batch_size                = $::os_service_default,
-  $tenant_name_discovery     = $::os_service_default,
+  $batch_size                = $facts['os_service_default'],
+  $tenant_name_discovery     = $facts['os_service_default'],
 ) inherits ceilometer {
 
   include ceilometer::deps

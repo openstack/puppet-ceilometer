@@ -14,7 +14,7 @@
 #
 # [*region_name*]
 #   (Optional) the keystone region of this node
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*username*]
 #   (Optional) the keystone user for ceilometer services
@@ -26,16 +26,16 @@
 #
 # [*system_scope*]
 #   (Optional) Scope for system operations.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*cafile*]
 #   (Optional) Certificate chain for SSL validation.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*interface*]
 #   (Optional) Type of endpoint in Identity service catalog to use for
 #   communication with OpenStack services.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*user_domain_name*]
 #   (Optional) domain name for auth user.
@@ -52,12 +52,12 @@
 class ceilometer::agent::service_credentials (
   $password,
   $auth_url            = 'http://localhost:5000',
-  $region_name         = $::os_service_default,
+  $region_name         = $facts['os_service_default'],
   $username            = 'ceilometer',
   $project_name        = 'services',
-  $system_scope        = $::os_service_default,
-  $cafile              = $::os_service_default,
-  $interface           = $::os_service_default,
+  $system_scope        = $facts['os_service_default'],
+  $cafile              = $facts['os_service_default'],
+  $interface           = $facts['os_service_default'],
   $user_domain_name    = 'Default',
   $project_domain_name = 'Default',
   $auth_type           = 'password',
@@ -69,8 +69,8 @@ class ceilometer::agent::service_credentials (
     $project_name_real = $project_name
     $project_domain_name_real = $project_domain_name
   } else {
-    $project_name_real = $::os_service_default
-    $project_domain_name_real = $::os_service_default
+    $project_name_real = $facts['os_service_default']
+    $project_domain_name_real = $facts['os_service_default']
   }
 
   ceilometer_config {

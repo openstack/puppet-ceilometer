@@ -6,35 +6,35 @@
 #
 # [*glance*]
 #   (Optional) glance service type.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*neutron*]
 #   (Optional) neutron service type.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*nova*]
 #   (Optional) nova service type.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*swift*]
 #   (Optional) swift service type.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*cinder*]
 #   (Optional) cinder service type.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*radosgw*]
 #   (Optional) Radosgw service type.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 class ceilometer::agent::polling::service_types (
-  $glance  = $::os_service_default,
-  $neutron = $::os_service_default,
-  $nova    = $::os_service_default,
-  $swift   = $::os_service_default,
-  $cinder  = $::os_service_default,
-  $radosgw = $::os_service_default,
+  $glance  = $facts['os_service_default'],
+  $neutron = $facts['os_service_default'],
+  $nova    = $facts['os_service_default'],
+  $swift   = $facts['os_service_default'],
+  $cinder  = $facts['os_service_default'],
+  $radosgw = $facts['os_service_default'],
 ) {
 
   include ceilometer::deps

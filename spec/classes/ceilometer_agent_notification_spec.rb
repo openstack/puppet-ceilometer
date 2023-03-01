@@ -272,7 +272,7 @@ sinks:
       end
 
       let :platform_params do
-        case facts[:osfamily]
+        case facts[:os]['family']
         when 'Debian'
           { :agent_notification_package_name => 'ceilometer-agent-notification',
             :agent_notification_service_name => 'ceilometer-agent-notification' }

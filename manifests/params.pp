@@ -32,7 +32,7 @@ class ceilometer::params {
     'volume.backup.size',
   ]
 
-  case $::osfamily {
+  case $facts['os']['family'] {
     'RedHat': {
       # package names
       $agent_polling_package_name      = 'openstack-ceilometer-polling'
@@ -66,9 +66,7 @@ class ceilometer::params {
       $libvirt_group                   = 'libvirt'
     }
     default: {
-      fail("Unsupported osfamily: ${::osfamily} operatingsystem: \
-${::operatingsystem}, module ${module_name} only support osfamily \
-RedHat and Debian")
+      fail("Unsupported osfamily: ${facts['os']['family']}")
     }
   }
 }

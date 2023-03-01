@@ -353,7 +353,7 @@ sources:
       end
 
       let :platform_params do
-        case facts[:osfamily]
+        case facts[:os]['family']
         when 'Debian'
             {
               :agent_polling_package_name => 'ceilometer-polling',

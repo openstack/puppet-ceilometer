@@ -6,20 +6,20 @@
 #
 # [*access_key*]
 #  (Optional) Access key for Radosgw Admin.
-#  Defaults to $::os_service_default
+#  Defaults to $facts['os_service_default']
 #
 # [*secret_key*]
 #  (Optional) Secret key for Radosgw Admin.
-#  Defaults to $::os_service_default
+#  Defaults to $facts['os_service_default']
 #
 # [*implicit_tenants*]
 #  (Optional) Whether RGW uses implicit tenants or not.
-#  Defaults to $::os_service_default
+#  Defaults to $facts['os_service_default']
 #
 class ceilometer::agent::polling::rgw (
-  $access_key       = $::os_service_default,
-  $secret_key       = $::os_service_default,
-  $implicit_tenants = $::os_service_default,
+  $access_key       = $facts['os_service_default'],
+  $secret_key       = $facts['os_service_default'],
+  $implicit_tenants = $facts['os_service_default'],
 ) {
 
   include ceilometer::deps

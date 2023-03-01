@@ -34,30 +34,30 @@
 #
 # [*ack_on_event_error*]
 #   (Optional) Acknowledge message when event persistence fails.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*disable_non_metric_meters*]
 #   (Optional) Disable or enable the collection of non-metric meters.
-#   Default to $::os_service_default.
+#   Default to $facts['os_service_default'].
 #
 # [*workers*]
 #   (Optional) Number of workers for notification service (integer value).
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*messaging_urls*]
 #   (Optional) Messaging urls to listen for notifications. (Array of urls)
 #   The format should be transport://user:pass@host1:port[,hostN:portN]/virtual_host
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*batch_size*]
 #   (Optional) Number of notification messages to wait before publishing
 #   them.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*batch_timeout*]
 #   (Optional) Number of seconds to wait before dispatching samples when
 #   batch_size is not reached.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*package_ensure*]
 #   (Optional) ensure state for package.
@@ -96,12 +96,12 @@
 class ceilometer::agent::notification (
   $manage_service            = true,
   $enabled                   = true,
-  $ack_on_event_error        = $::os_service_default,
-  $disable_non_metric_meters = $::os_service_default,
-  $workers                   = $::os_service_default,
-  $messaging_urls            = $::os_service_default,
-  $batch_size                = $::os_service_default,
-  $batch_timeout             = $::os_service_default,
+  $ack_on_event_error        = $facts['os_service_default'],
+  $disable_non_metric_meters = $facts['os_service_default'],
+  $workers                   = $facts['os_service_default'],
+  $messaging_urls            = $facts['os_service_default'],
+  $batch_size                = $facts['os_service_default'],
+  $batch_timeout             = $facts['os_service_default'],
   $package_ensure            = 'present',
   $manage_event_pipeline     = false,
   $event_pipeline_publishers = ['gnocchi://'],
