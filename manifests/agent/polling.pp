@@ -99,16 +99,8 @@ class ceilometer::agent::polling (
 
   if $central_namespace {
     $central_namespace_name = 'central'
-    ceilometer_config {
-      # set `tenant_name_discovery` parameter only on the nodes
-      # where central namespace is enabled
-      'DEFAULT/tenant_name_discovery': value => $tenant_name_discovery;
-    }
   } else {
     $central_namespace_name = undef
-    ceilometer_config {
-      'DEFAULT/tenant_name_discovery': ensure => absent;
-    }
   }
 
   if $compute_namespace {
@@ -171,7 +163,8 @@ class ceilometer::agent::polling (
   }
 
   ceilometer_config {
-    'polling/batch_size': value => $batch_size
+    'polling/batch_size':            value => $batch_size;
+    'DEFAULT/tenant_name_discovery': value => $tenant_name_discovery;
   }
 
   if $manage_service {
