@@ -1,0 +1,6 @@
+---
+fixes:
+  - |
+    Configure ``tenant_name_discovery`` parameter on
+    all nodes where ceilometer is expected to run. This inculdes
+    central, compute and ipmi namespaces.
