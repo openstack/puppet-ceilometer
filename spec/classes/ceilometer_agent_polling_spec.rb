@@ -38,7 +38,6 @@ describe 'ceilometer::agent::polling' do
       )}
 
       it {
-        should contain_ceilometer_config('DEFAULT/tenant_name_discovery').with_value('<SERVICE DEFAULT>')
         should contain_ceilometer_config('compute/instance_discovery_method').with_value('<SERVICE DEFAULT>')
         should contain_ceilometer_config('compute/resource_update_interval').with_value('<SERVICE DEFAULT>')
         should contain_ceilometer_config('compute/resource_cache_expiry').with_value('<SERVICE DEFAULT>')
@@ -63,6 +62,7 @@ describe 'ceilometer::agent::polling' do
 
       it { should contain_ceilometer_config('polling/batch_size').with_value('<SERVICE DEFAULT>') }
       it { should_not contain_file('polling') }
+      it { should contain_ceilometer_config('DEFAULT/tenant_name_discovery').with_value('<SERVICE DEFAULT>') }
     end
 
     context 'when setting package_ensure' do
@@ -91,15 +91,15 @@ describe 'ceilometer::agent::polling' do
       }
     end
 
-    context 'with central parameters set' do
+    context 'when tenant_name_discovery is set' do
       before do
         params.merge!(
-          :tenant_name_discovery => false
+          :tenant_name_discovery => true
         )
       end
 
       it {
-        should contain_ceilometer_config('DEFAULT/tenant_name_discovery').with_value(false)
+        should contain_ceilometer_config('DEFAULT/tenant_name_discovery').with_value(true)
       }
     end
 
@@ -127,7 +127,6 @@ describe 'ceilometer::agent::polling' do
 
       it {
         should contain_ceilometer_config('DEFAULT/polling_namespaces').with_value('compute,ipmi')
-        should contain_ceilometer_config('DEFAULT/tenant_name_discovery').with_ensure('absent')
        }
     end
 
