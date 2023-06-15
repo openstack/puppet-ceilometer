@@ -94,31 +94,25 @@
 #   override this to notifier:// instead.
 #
 class ceilometer::agent::notification (
-  $manage_service            = true,
-  $enabled                   = true,
-  $ack_on_event_error        = $facts['os_service_default'],
-  $disable_non_metric_meters = $facts['os_service_default'],
-  $workers                   = $facts['os_service_default'],
-  $messaging_urls            = $facts['os_service_default'],
-  $batch_size                = $facts['os_service_default'],
-  $batch_timeout             = $facts['os_service_default'],
-  $package_ensure            = 'present',
-  $manage_event_pipeline     = false,
-  $event_pipeline_publishers = ['gnocchi://'],
-  $event_pipeline_config     = undef,
-  $manage_pipeline           = false,
-  $pipeline_publishers       = ['gnocchi://'],
-  $pipeline_config           = undef,
+  Boolean $manage_service                     = true,
+  Boolean $enabled                            = true,
+  $ack_on_event_error                         = $facts['os_service_default'],
+  $disable_non_metric_meters                  = $facts['os_service_default'],
+  $workers                                    = $facts['os_service_default'],
+  $messaging_urls                             = $facts['os_service_default'],
+  $batch_size                                 = $facts['os_service_default'],
+  $batch_timeout                              = $facts['os_service_default'],
+  $package_ensure                             = 'present',
+  Boolean $manage_event_pipeline              = false,
+  Array[String[1]] $event_pipeline_publishers = ['gnocchi://'],
+  Optional[Hash] $event_pipeline_config       = undef,
+  Boolean $manage_pipeline                    = false,
+  Array[String[1]] $pipeline_publishers       = ['gnocchi://'],
+  Optional[Hash] $pipeline_config             = undef,
 ) {
 
   include ceilometer::deps
   include ceilometer::params
-
-  validate_legacy(Boolean, 'validate_bool', $manage_service)
-  validate_legacy(Boolean, 'validate_bool', $enabled)
-  validate_legacy(Boolean, 'validate_bool', $manage_event_pipeline)
-  validate_legacy(Boolean, 'validate_bool', $manage_pipeline)
-
 
   package { 'ceilometer-notification':
     ensure => $package_ensure,
@@ -145,10 +139,8 @@ class ceilometer::agent::notification (
 
   if $manage_event_pipeline {
     if $event_pipeline_config {
-      validate_legacy(Hash, 'validate_hash', $event_pipeline_config)
       $event_pipeline_content = to_yaml($event_pipeline_config)
     } else {
-      validate_legacy(Array, 'validate_array', $event_pipeline_publishers)
       $event_pipeline_content = template('ceilometer/event_pipeline.yaml.erb')
     }
 
@@ -166,10 +158,8 @@ class ceilometer::agent::notification (
 
   if $manage_pipeline {
     if $pipeline_config {
-      validate_legacy(Hash, 'validate_hash', $pipeline_config)
       $pipeline_content = to_yaml($pipeline_config)
     } else {
-      validate_legacy(Array, 'validate_array', $pipeline_publishers)
       $pipeline_content = template('ceilometer/pipeline.yaml.erb')
     }
 

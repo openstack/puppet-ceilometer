@@ -82,36 +82,27 @@
 #   Defaults to $facts['os_service_default'].
 #
 class ceilometer::agent::polling (
-  $manage_service            = true,
-  $enabled                   = true,
-  $separate_services         = false,
-  $package_ensure            = 'present',
-  $manage_user               = true,
-  $central_namespace         = true,
-  $compute_namespace         = true,
-  $ipmi_namespace            = true,
-  $instance_discovery_method = $facts['os_service_default'],
-  $resource_update_interval  = $facts['os_service_default'],
-  $resource_cache_expiry     = $facts['os_service_default'],
-  $manage_polling            = false,
-  $polling_interval          = 600,
-  $polling_meters            = $::ceilometer::params::polling_meters,
-  $polling_config            = undef,
-  $batch_size                = $facts['os_service_default'],
-  $tenant_name_discovery     = $facts['os_service_default'],
+  Boolean $manage_service       = true,
+  Boolean $enabled              = true,
+  Boolean $separate_services    = false,
+  $package_ensure               = 'present',
+  Boolean $manage_user          = true,
+  Boolean $central_namespace    = true,
+  Boolean $compute_namespace    = true,
+  Boolean $ipmi_namespace       = true,
+  $instance_discovery_method    = $facts['os_service_default'],
+  $resource_update_interval     = $facts['os_service_default'],
+  $resource_cache_expiry        = $facts['os_service_default'],
+  Boolean $manage_polling       = false,
+  $polling_interval             = 600,
+  $polling_meters               = $::ceilometer::params::polling_meters,
+  Optional[Hash]$polling_config = undef,
+  $batch_size                   = $facts['os_service_default'],
+  $tenant_name_discovery        = $facts['os_service_default'],
 ) inherits ceilometer {
 
   include ceilometer::deps
   include ceilometer::params
-
-  validate_legacy(Boolean, 'validate_bool', $manage_service)
-  validate_legacy(Boolean, 'validate_bool', $enabled)
-  validate_legacy(Boolean, 'validate_bool', $separate_services)
-  validate_legacy(Boolean, 'validate_bool', $manage_user)
-  validate_legacy(Boolean, 'validate_bool', $central_namespace)
-  validate_legacy(Boolean, 'validate_bool', $compute_namespace)
-  validate_legacy(Boolean, 'validate_bool', $ipmi_namespace)
-  validate_legacy(Boolean, 'validate_bool', $manage_polling)
 
   if $central_namespace {
     $central_namespace_name = 'central'
@@ -280,7 +271,6 @@ class ceilometer::agent::polling (
 
   if $manage_polling {
     if $polling_config {
-      validate_legacy(Hash, 'validate_hash', $polling_config)
       $polling_content = to_yaml($polling_config)
     } else {
       $polling_content = template('ceilometer/polling.yaml.erb')

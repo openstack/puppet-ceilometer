@@ -26,14 +26,11 @@
 #   or Puppet catalog compilation will fail with duplicate resources.
 #
 class ceilometer::config (
-  $ceilometer_config          = {},
-  $ceilometer_rootwrap_config = {},
+  Hash $ceilometer_config          = {},
+  Hash $ceilometer_rootwrap_config = {},
 ) {
 
   include ceilometer::deps
-
-  validate_legacy(Hash, 'validate_hash', $ceilometer_config)
-  validate_legacy(Hash, 'validate_hash', $ceilometer_rootwrap_config)
 
   create_resources('ceilometer_config', $ceilometer_config)
   create_resources('ceilometer_rootwrap_config', $ceilometer_rootwrap_config)
