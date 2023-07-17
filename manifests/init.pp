@@ -251,7 +251,7 @@ class ceilometer(
   $amqp_sasl_config_name              = $facts['os_service_default'],
   $amqp_username                      = $facts['os_service_default'],
   $amqp_password                      = $facts['os_service_default'],
-  $purge_config                       = false,
+  Boolean $purge_config               = false,
   $host                               = $facts['os_service_default'],
 ) {
 
