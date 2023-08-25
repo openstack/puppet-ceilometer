@@ -164,7 +164,12 @@ class ceilometer::agent::polling (
 
   ceilometer_config {
     'polling/batch_size':            value => $batch_size;
-    'DEFAULT/tenant_name_discovery': value => $tenant_name_discovery;
+    'polling/tenant_name_discovery': value => $tenant_name_discovery;
+  }
+
+  # TODO(tkajinam): Remove this after 2024.1 release
+  ceilometer_config {
+    'DEFAULT/tenant_name_discovery': ensure => absent;
   }
 
   if $manage_service {
