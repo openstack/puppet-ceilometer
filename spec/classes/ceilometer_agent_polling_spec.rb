@@ -62,7 +62,7 @@ describe 'ceilometer::agent::polling' do
 
       it { should contain_ceilometer_config('polling/batch_size').with_value('<SERVICE DEFAULT>') }
       it { should_not contain_file('polling') }
-      it { should contain_ceilometer_config('DEFAULT/tenant_name_discovery').with_value('<SERVICE DEFAULT>') }
+      it { should contain_ceilometer_config('polling/tenant_name_discovery').with_value('<SERVICE DEFAULT>') }
     end
 
     context 'when setting package_ensure' do
@@ -99,7 +99,7 @@ describe 'ceilometer::agent::polling' do
       end
 
       it {
-        should contain_ceilometer_config('DEFAULT/tenant_name_discovery').with_value(true)
+        should contain_ceilometer_config('polling/tenant_name_discovery').with_value(true)
       }
     end
 
