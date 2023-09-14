@@ -148,15 +148,19 @@ describe 'ceilometer' do
 
     it 'configures rabbit' do
       is_expected.to contain_oslo__messaging__rabbit('ceilometer_config').with(
-        :rabbit_ha_queues            => '<SERVICE DEFAULT>',
-        :heartbeat_timeout_threshold => '<SERVICE DEFAULT>',
-        :heartbeat_rate              => '<SERVICE DEFAULT>',
-        :heartbeat_in_pthread        => '<SERVICE DEFAULT>',
-        :rabbit_qos_prefetch_count   => '<SERVICE DEFAULT>',
-        :amqp_durable_queues         => '<SERVICE DEFAULT>',
-        :kombu_reconnect_delay       => '<SERVICE DEFAULT>',
-        :kombu_failover_strategy     => '<SERVICE DEFAULT>',
-        :kombu_compression          => '<SERVICE DEFAULT>',
+        :rabbit_ha_queues                => '<SERVICE DEFAULT>',
+        :heartbeat_timeout_threshold     => '<SERVICE DEFAULT>',
+        :heartbeat_rate                  => '<SERVICE DEFAULT>',
+        :heartbeat_in_pthread            => '<SERVICE DEFAULT>',
+        :rabbit_qos_prefetch_count       => '<SERVICE DEFAULT>',
+        :amqp_durable_queues             => '<SERVICE DEFAULT>',
+        :kombu_reconnect_delay           => '<SERVICE DEFAULT>',
+        :kombu_failover_strategy         => '<SERVICE DEFAULT>',
+        :kombu_compression               => '<SERVICE DEFAULT>',
+        :rabbit_quorum_queue             => '<SERVICE DEFAULT>',
+        :rabbit_quorum_delivery_limit    => '<SERVICE DEFAULT>',
+        :rabbit_quorum_max_memory_length => '<SERVICE DEFAULT>',
+        :rabbit_quorum_max_memory_bytes  => '<SERVICE DEFAULT>',
       )
     end
 

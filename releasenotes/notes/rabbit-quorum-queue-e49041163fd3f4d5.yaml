@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    The ``ceilometer`` class now supports options for quorum queues in
+    RabbitMQ.
