@@ -64,6 +64,10 @@ class ceilometer::keystone::auth (
 
   include ceilometer::deps
 
+  # NOTE(tkajinam): ceilometer does not have api service, so we can use
+  #                 the begin anchor without causing circular dependencies
+  Keystone::Resource::Service_identity['ceilometer'] -> Anchor['ceilometer::service::begin']
+
   # Ceilometer requires only its user, project, and role assignment.
   # service and endpoint should be disabled since ceilometer-api has been removed.
   keystone::resource::service_identity { 'ceilometer':
