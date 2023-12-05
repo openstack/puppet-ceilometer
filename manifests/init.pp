@@ -5,6 +5,9 @@
 #
 # === Parameters:
 #
+# [*telemetry_secret*]
+#   (Required)  Secret key for signing messages.
+#
 # [*http_timeout*]
 #   (Optional) Timeout seconds for HTTP requests.
 #   Defaults to $facts['os_service_default']
@@ -13,9 +16,6 @@
 #   (Optional) Maximum number of parallel requests for services to handle at
 #   the same time.
 #   Defaults to $facts['os_service_default']
-#
-# [*telemetry_secret*]
-#  (Required)  Secret key for signing messages.
 #
 # [*notification_topics*]
 #   (Optional) AMQP topic used for OpenStack notifications (list value)
@@ -227,9 +227,9 @@
 #   Defaults to $facts['os_service_default'].
 #
 class ceilometer(
+  $telemetry_secret,
   $http_timeout                       = $facts['os_service_default'],
   $max_parallel_requests              = $facts['os_service_default'],
-  $telemetry_secret                   = false,
   $notification_topics                = ['notifications'],
   $notification_driver                = $facts['os_service_default'],
   $package_ensure                     = 'present',

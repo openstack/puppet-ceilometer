@@ -74,8 +74,7 @@ describe 'ceilometer' do
     end
 
     it 'configures required telemetry_secret' do
-      is_expected.to contain_ceilometer_config('publisher/telemetry_secret').with_value('metering-s3cr3t')
-      is_expected.to contain_ceilometer_config('publisher/telemetry_secret').with_value( params[:telemetry_secret] ).with_secret(true)
+      is_expected.to contain_ceilometer_config('publisher/telemetry_secret').with_value(params[:telemetry_secret]).with_secret(true)
     end
 
     context 'without the required telemetry_secret' do
