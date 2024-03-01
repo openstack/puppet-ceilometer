@@ -243,4 +243,8 @@ class ceilometer::cache (
     hashclient_retry_delay               => $hashclient_retry_delay,
     dead_timeout                         => $dead_timeout,
   }
+
+  # all cache settings should be applied and all packages should be installed
+  # before service startup
+  Oslo::Cache['ceilometer_config'] -> Anchor['ceilometer::service::begin']
 }

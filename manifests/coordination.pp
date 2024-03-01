@@ -17,4 +17,8 @@ class ceilometer::coordination (
   oslo::coordination{ 'ceilometer_config':
     backend_url => $backend_url
   }
+
+  # all coordination settings should be applied and all packages should be
+  # installed before service startup
+  Oslo::Coordination['ceilometer_config'] -> Anchor['ceilometer::service::begin']
 }
