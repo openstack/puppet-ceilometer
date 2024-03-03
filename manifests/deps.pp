@@ -27,14 +27,6 @@ class ceilometer::deps {
   ~> Service<| tag == 'ceilometer-service' |>
   ~> anchor { 'ceilometer::service::end': }
 
-  # all cache settings should be applied and all packages should be installed
-  # before service startup
-  Oslo::Cache<||> -> Anchor['ceilometer::service::begin']
-
-  # all coordination settings should be applied and all packages should be
-  # installed before service startup
-  Oslo::Coordination<||> -> Anchor['ceilometer::service::begin']
-
   # rootwrap config should occur in the config block also.
   Anchor['ceilometer::config::begin']
   -> Ceilometer_rootwrap_config<||>
