@@ -212,11 +212,6 @@ class ceilometer::agent::polling (
     'polling/tenant_name_discovery': value => $tenant_name_discovery;
   }
 
-  # TODO(tkajinam): Remove this after 2024.1 release
-  ceilometer_config {
-    'DEFAULT/tenant_name_discovery': ensure => absent;
-  }
-
   if $manage_service {
     if $enabled {
       $service_ensure = 'running'
