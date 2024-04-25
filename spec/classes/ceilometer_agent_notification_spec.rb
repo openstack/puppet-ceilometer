@@ -50,6 +50,8 @@ describe 'ceilometer::agent::notification' do
       is_expected.to contain_ceilometer_config('notification/disable_non_metric_meters').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ceilometer_config('notification/batch_size').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ceilometer_config('notification/batch_timeout').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ceilometer_config('DEFAULT/event_pipeline_cfg_file').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ceilometer_config('DEFAULT/pipeline_cfg_file').with_value('<SERVICE DEFAULT>')
     end
 
     context 'with disabled non-metric meters' do
@@ -130,6 +132,7 @@ describe 'ceilometer::agent::notification' do
           "      publishers:",
           "          - gnocchi://",
       ])}
+      it { is_expected.to contain_ceilometer_config('DEFAULT/event_pipeline_cfg_file').with_value('/etc/ceilometer/event_pipeline.yaml') }
     end
 
     context "with multiple event_pipeline publishers specified" do
@@ -153,6 +156,7 @@ describe 'ceilometer::agent::notification' do
           "          - notifier://",
           "          - notifier://?topic=alarm.all",
       ])}
+      it { is_expected.to contain_ceilometer_config('DEFAULT/event_pipeline_cfg_file').with_value('/etc/ceilometer/event_pipeline.yaml') }
     end
 
     context 'with event_pipeline and custom config' do
@@ -185,13 +189,15 @@ sinks:
   - gnocchi://
 ',
       )}
+      it { is_expected.to contain_ceilometer_config('DEFAULT/event_pipeline_cfg_file').with_value('/etc/ceilometer/event_pipeline.yaml') }
     end
 
     context "with event_pipeline management disabled" do
       before { params.merge!(
         :manage_event_pipeline => false
       ) }
-        it { is_expected.not_to contain_file('event_pipeline') }
+      it { is_expected.not_to contain_file('event_pipeline') }
+      it { is_expected.to contain_ceilometer_config('DEFAULT/event_pipeline_cfg_file').with_value('<SERVICE DEFAULT>') }
     end
 
     context "with pipeline management enabled" do
@@ -205,6 +211,7 @@ sinks:
         'owner' => 'root',
         'group' => 'ceilometer',
       ) }
+      it { is_expected.to contain_ceilometer_config('DEFAULT/pipeline_cfg_file').with_value('/etc/ceilometer/pipeline.yaml') }
     end
 
     context 'with pipeline and custom config' do
@@ -237,13 +244,15 @@ sinks:
   - gnocchi://
 ',
       )}
+      it { is_expected.to contain_ceilometer_config('DEFAULT/pipeline_cfg_file').with_value('/etc/ceilometer/pipeline.yaml') }
     end
 
     context "with pipeline management disabled" do
       before { params.merge!(
         :manage_pipeline => false
       ) }
-        it { is_expected.not_to contain_file('pipeline') }
+      it { is_expected.not_to contain_file('pipeline') }
+      it { is_expected.to contain_ceilometer_config('DEFAULT/event_pipeline_cfg_file').with_value('<SERVICE DEFAULT>') }
     end
 
     context 'with workers' do

@@ -73,12 +73,21 @@
 #   This is used only if manage_polling is true.
 #   Defaults to undef
 #
+# [*cfg_file*]
+#   (Optional) Configuration file for polling definition.
+#   This parameter has no effect when manage_polling is true.
+#   Defaults to $facts['os_service_default'].
+#
 # [*batch_size*]
 #   (Optional) Batch size of samples to send to notification agent.
-#   Defaults to $facts['os_service_default']
+#   Defaults to $facts['os_service_default'].
 #
 # [*tenant_name_discovery*]
-#   (optional) Identify user and project names from polled metrics.
+#   (Optional) Identify user and project names from polled metrics.
+#   Defaults to $facts['os_service_default'].
+#
+# [*pollsters_definitions_dirs*]
+#   (Optional) List of directories with YAML files used to create pollsters.
 #   Defaults to $facts['os_service_default'].
 #
 class ceilometer::agent::polling (
@@ -96,9 +105,11 @@ class ceilometer::agent::polling (
   Boolean $manage_polling          = false,
   $polling_interval                = 600,
   Array[String[1]] $polling_meters = $::ceilometer::params::polling_meters,
-  Optional[Hash]$polling_config    = undef,
+  Optional[Hash] $polling_config   = undef,
+  $cfg_file                        = $facts['os_service_default'],
   $batch_size                      = $facts['os_service_default'],
   $tenant_name_discovery           = $facts['os_service_default'],
+  $pollsters_definitions_dirs      = $facts['os_service_default'],
 ) inherits ceilometer {
 
   include ceilometer::deps
@@ -208,8 +219,9 @@ class ceilometer::agent::polling (
   }
 
   ceilometer_config {
-    'polling/batch_size':            value => $batch_size;
-    'polling/tenant_name_discovery': value => $tenant_name_discovery;
+    'polling/batch_size':                 value => $batch_size;
+    'polling/tenant_name_discovery':      value => $tenant_name_discovery;
+    'polling/pollsters_definitions_dirs': value => join(any2array($pollsters_definitions_dirs), ',');
   }
 
   # TODO(tkajinam): Remove this after 2024.1 release
@@ -283,6 +295,14 @@ class ceilometer::agent::polling (
       group                   => $::ceilometer::params::group,
       selinux_ignore_defaults => true,
       tag                     => 'ceilometer-yamls',
+    }
+
+    ceilometer_config {
+      'polling/cfg_file': value => $::ceilometer::params::polling;
+    }
+  } else {
+    ceilometer_config {
+      'polling/cfg_file': value => $cfg_file;
     }
   }
 }
