@@ -13,16 +13,26 @@
 #   (Optional) Timeout for the execution of the db_sync
 #   Defaults to 300
 #
+# [*skip_gnocchi_resource_types*]
+#   (Optional) Skip gnocchi resource-types upgrade.
+#   Defaults to false
+#
 class ceilometer::db::sync(
-  $extra_params    = undef,
-  $db_sync_timeout = 300,
+  $extra_params                        = undef,
+  $db_sync_timeout                     = 300,
+  Boolean $skip_gnocchi_resource_types = false,
 ) {
 
   include ceilometer::deps
   include ceilometer::params
 
+  $skip_opt = $skip_gnocchi_resource_types ? {
+    true    => '--skip-gnocchi-resource-types ',
+    default => ''
+  }
+
   exec { 'ceilometer-upgrade':
-    command     => "${::ceilometer::params::dbsync_command} ${extra_params}",
+    command     => "${::ceilometer::params::dbsync_command} ${skip_opt}${extra_params}",
     path        => '/usr/bin',
     user        => $::ceilometer::params::user,
     refreshonly => true,

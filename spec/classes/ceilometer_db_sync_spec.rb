@@ -27,13 +27,14 @@ describe 'ceilometer::db::sync' do
     describe 'overriding params' do
       let :params do
         {
-          :extra_params    => '--config-file=/etc/ceilometer/ceilometer_01.conf',
-          :db_sync_timeout => 750,
+          :extra_params                => '--config-file=/etc/ceilometer/ceilometer_01.conf',
+          :skip_gnocchi_resource_types => true,
+          :db_sync_timeout             => 750,
         }
       end
 
       it { is_expected.to contain_exec('ceilometer-upgrade').with(
-        :command     => 'ceilometer-upgrade --config-file=/etc/ceilometer/ceilometer_01.conf',
+        :command     => 'ceilometer-upgrade --skip-gnocchi-resource-types --config-file=/etc/ceilometer/ceilometer_01.conf',
         :path        => '/usr/bin',
         :user        => 'ceilometer',
         :refreshonly => 'true',

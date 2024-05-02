@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    The new ``ceilometer::db::sync::skip_gnocchi_resource_types`` parameter has
+    been added.
