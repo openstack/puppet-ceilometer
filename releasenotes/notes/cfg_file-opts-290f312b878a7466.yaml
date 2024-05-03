@@ -1,0 +1,9 @@
+---
+features:
+  - |
+    The following parameters have been added.
+
+    - ``ceilometer::agent::notification::event_pipeline_cfg_file``
+    - ``ceilometer::agent::notification::pipeline_cfg_file``
+    - ``ceilometer::agent::polling::cfg_file``
+    - ``ceilometer::agent::polling::pollsters_definitions_dirs``

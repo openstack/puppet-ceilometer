@@ -78,6 +78,11 @@
 #   for alarms.
 #   Defaults to ['gnocchi://'],
 #
+# [*event_pipeline_cfg_file*]
+#   (Optional) Configuration file for event pipeline definition. This parameter
+#   has no effect when manage_event_pipeline is true.
+#   Defaults to $facts['os_service_default'].
+#
 # [*manage_pipeline*]
 #   (Optional) Whether to manage pipeline.yaml
 #   Defaults to false
@@ -93,6 +98,11 @@
 #   Defaults to ['gnocchi://'], If you are using collector
 #   override this to notifier:// instead.
 #
+# [*pipeline_cfg_file*]
+#   (Optional) Configuration file for pipeline definition. This parameter has
+#   no effect when manage_pipeline is true.
+#   Defaults to $facts['os_service_default'].
+#
 class ceilometer::agent::notification (
   Boolean $manage_service                     = true,
   Boolean $enabled                            = true,
@@ -104,11 +114,13 @@ class ceilometer::agent::notification (
   $batch_timeout                              = $facts['os_service_default'],
   $package_ensure                             = 'present',
   Boolean $manage_event_pipeline              = false,
-  Array[String[1]] $event_pipeline_publishers = ['gnocchi://'],
   Optional[Hash] $event_pipeline_config       = undef,
+  Array[String[1]] $event_pipeline_publishers = ['gnocchi://'],
+  $event_pipeline_cfg_file                    = $facts['os_service_default'],
   Boolean $manage_pipeline                    = false,
-  Array[String[1]] $pipeline_publishers       = ['gnocchi://'],
   Optional[Hash] $pipeline_config             = undef,
+  Array[String[1]] $pipeline_publishers       = ['gnocchi://'],
+  $pipeline_cfg_file                          = $facts['os_service_default'],
 ) {
 
   include ceilometer::deps
@@ -154,6 +166,14 @@ class ceilometer::agent::notification (
       group                   => $::ceilometer::params::group,
       tag                     => 'ceilometer-yamls',
     }
+
+    ceilometer_config {
+      'DEFAULT/event_pipeline_cfg_file': value => $::ceilometer::params::event_pipeline;
+    }
+  } else {
+    ceilometer_config {
+      'DEFAULT/event_pipeline_cfg_file': value => $event_pipeline_cfg_file;
+    }
   }
 
   if $manage_pipeline {
@@ -172,6 +192,14 @@ class ceilometer::agent::notification (
       owner                   => 'root',
       group                   => $::ceilometer::params::group,
       tag                     => 'ceilometer-yamls',
+    }
+
+    ceilometer_config {
+      'DEFAULT/pipeline_cfg_file': value => $::ceilometer::params::pipeline;
+    }
+  } else {
+    ceilometer_config {
+      'DEFAULT/pipeline_cfg_file': value => $pipeline_cfg_file;
     }
   }
 
