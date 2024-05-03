@@ -197,7 +197,7 @@ describe 'ceilometer::agent::polling' do
         :content                 => '---
 sources:
     - name: some_pollsters
-      interval: 600
+      interval: 300
       meters:
         - cpu
         - cpu_l3_cache
