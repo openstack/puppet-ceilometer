@@ -61,7 +61,7 @@
 #
 # [*polling_interval*]
 #   (Optional) Number of seconds between polling cycle
-#   Defaults to 600 seconds, used only if manage_polling is true.
+#   Defaults to 300 seconds, used only if manage_polling is true.
 #
 # [*polling_meters*]
 #   (Optional) Array of strings with meters to add to
@@ -103,7 +103,7 @@ class ceilometer::agent::polling (
   $resource_update_interval        = $facts['os_service_default'],
   $resource_cache_expiry           = $facts['os_service_default'],
   Boolean $manage_polling          = false,
-  $polling_interval                = 600,
+  $polling_interval                = 300,
   Array[String[1]] $polling_meters = $::ceilometer::params::polling_meters,
   Optional[Hash] $polling_config   = undef,
   $cfg_file                        = $facts['os_service_default'],
