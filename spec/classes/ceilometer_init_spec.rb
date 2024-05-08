@@ -46,13 +46,7 @@ describe 'ceilometer' do
         it_configures 'rabbit with SSL support'
         it_configures 'rabbit without HA support'
       end
-
     end
-
-    context 'with amqp messaging' do
-      it_configures 'amqp support'
-    end
-
   end
 
   shared_examples_for 'a ceilometer base installation' do
@@ -236,56 +230,6 @@ describe 'ceilometer' do
     it { is_expected.to contain_oslo__messaging__rabbit('ceilometer_config').with(
       :rabbit_use_ssl     => true,
     )}
-    end
-  end
-
-  shared_examples_for 'amqp support' do
-    context 'with default parameters' do
-      it { is_expected.to contain_oslo__messaging__amqp('ceilometer_config').with(
-        :server_request_prefix => '<SERVICE DEFAULT>',
-        :broadcast_prefix      => '<SERVICE DEFAULT>',
-        :group_request_prefix  => '<SERVICE DEFAULT>',
-        :container_name        => '<SERVICE DEFAULT>',
-        :idle_timeout          => '<SERVICE DEFAULT>',
-        :trace                 => '<SERVICE DEFAULT>',
-        :ssl_ca_file           => '<SERVICE DEFAULT>',
-        :ssl_cert_file         => '<SERVICE DEFAULT>',
-        :ssl_key_file          => '<SERVICE DEFAULT>',
-        :sasl_mechanisms       => '<SERVICE DEFAULT>',
-        :sasl_config_dir       => '<SERVICE DEFAULT>',
-        :sasl_config_name      => '<SERVICE DEFAULT>',
-        :username              => '<SERVICE DEFAULT>',
-        :password              => '<SERVICE DEFAULT>',
-      ) }
-    end
-
-    context 'with overridden amqp parameters' do
-      before { params.merge!(
-        :amqp_idle_timeout  => '60',
-        :amqp_trace         => true,
-        :amqp_ssl_ca_file   => '/path/to/ca.cert',
-        :amqp_ssl_cert_file => '/path/to/certfile',
-        :amqp_ssl_key_file  => '/path/to/key',
-        :amqp_username      => 'amqp_user',
-        :amqp_password      => 'password',
-      ) }
-
-      it { is_expected.to contain_oslo__messaging__amqp('ceilometer_config').with(
-        :server_request_prefix => '<SERVICE DEFAULT>',
-        :broadcast_prefix      => '<SERVICE DEFAULT>',
-        :group_request_prefix  => '<SERVICE DEFAULT>',
-        :container_name        => '<SERVICE DEFAULT>',
-        :idle_timeout          => '60',
-        :trace                 => true,
-        :ssl_ca_file           => '/path/to/ca.cert',
-        :ssl_cert_file         => '/path/to/certfile',
-        :ssl_key_file          => '/path/to/key',
-        :sasl_mechanisms       => '<SERVICE DEFAULT>',
-        :sasl_config_dir       => '<SERVICE DEFAULT>',
-        :sasl_config_name      => '<SERVICE DEFAULT>',
-        :username              => 'amqp_user',
-        :password              => 'password',
-      ) }
     end
   end
 
