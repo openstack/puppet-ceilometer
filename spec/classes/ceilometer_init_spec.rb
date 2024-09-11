@@ -155,6 +155,7 @@ describe 'ceilometer' do
         :rabbit_quorum_delivery_limit    => '<SERVICE DEFAULT>',
         :rabbit_quorum_max_memory_length => '<SERVICE DEFAULT>',
         :rabbit_quorum_max_memory_bytes  => '<SERVICE DEFAULT>',
+        :enable_cancel_on_failover       => '<SERVICE DEFAULT>',
       )
     end
 
