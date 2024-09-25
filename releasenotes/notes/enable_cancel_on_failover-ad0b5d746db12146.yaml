@@ -1,4 +1,5 @@
 ---
 features:
   - |
-    The new ``ceilometer::enable_cancel_on_failover`` parameter has been added.
+    The new ``ceilometer::rabbit_enable_cancel_on_failover`` parameter has been
+    added.
