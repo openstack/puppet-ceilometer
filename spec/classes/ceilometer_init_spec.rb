@@ -89,7 +89,8 @@ describe 'ceilometer' do
       is_expected.to contain_oslo__messaging__notifications('ceilometer_config').with(
         :transport_url => '<SERVICE DEFAULT>',
         :driver        => '<SERVICE DEFAULT>',
-        :topics        => ['notifications']
+        :topics        => ['notifications'],
+        :retry         => '<SERVICE DEFAULT>',
       )
     end
 
@@ -124,6 +125,7 @@ describe 'ceilometer' do
           :notification_topics        => ['notifications', 'custom'],
           :notification_driver        => 'messagingv2',
           :notification_transport_url => 'rabbit://rabbit_user:password@localhost:5673',
+          :notification_retry         => 10,
         )
       }
 
@@ -131,7 +133,8 @@ describe 'ceilometer' do
         is_expected.to contain_oslo__messaging__notifications('ceilometer_config').with(
           :transport_url => 'rabbit://rabbit_user:password@localhost:5673',
           :driver        => 'messagingv2',
-          :topics        => ['notifications', 'custom']
+          :topics        => ['notifications', 'custom'],
+          :retry         => 10,
         )
       end
     end

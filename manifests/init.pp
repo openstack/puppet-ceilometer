@@ -17,6 +17,12 @@
 #   the same time.
 #   Defaults to $facts['os_service_default']
 #
+# [*notification_transport_url*]
+#   (optional) A URL representing the messaging driver to use for notifications
+#   and its full configuration. Transport URLs take the form:
+#     transport://user:pass@host1:port[,hostN:portN]/virtual_host
+#   Defaults to $facts['os_service_default']
+#
 # [*notification_topics*]
 #   (Optional) AMQP topic used for OpenStack notifications (list value)
 #   Defaults to 'notifications'.
@@ -25,6 +31,11 @@
 #   (optional) Driver or drivers to handle sending notifications.
 #   Value can be a string or a list.
 #   Defaults to $facts['os_service_default']
+#
+# [*notification_retry*]
+#   (Optional) The maximum number of attempts to re-sent a notification
+#   message, which failed to be delivered due to a recoverable error.
+#   Defaults to $facts['os_service_default'].
 #
 # [*package_ensure*]
 #   (Optional) ensure state for package.
@@ -48,12 +59,6 @@
 #   (Optional) The default exchange under which topics are scoped. May be
 #   overridden by an exchange name specified in the transport_url
 #   option.
-#   Defaults to $facts['os_service_default']
-#
-# [*notification_transport_url*]
-#   (optional) A URL representing the messaging driver to use for notifications
-#   and its full configuration. Transport URLs take the form:
-#     transport://user:pass@host1:port[,hostN:portN]/virtual_host
 #   Defaults to $facts['os_service_default']
 #
 # [*rabbit_ha_queues*]
@@ -171,14 +176,15 @@ class ceilometer(
   $telemetry_secret,
   $http_timeout                       = $facts['os_service_default'],
   $max_parallel_requests              = $facts['os_service_default'],
+  $notification_transport_url         = $facts['os_service_default'],
   $notification_topics                = ['notifications'],
   $notification_driver                = $facts['os_service_default'],
+  $notification_retry                 = $facts['os_service_default'],
   $package_ensure                     = 'present',
   $executor_thread_pool_size          = $facts['os_service_default'],
   $default_transport_url              = $facts['os_service_default'],
   $rpc_response_timeout               = $facts['os_service_default'],
   $control_exchange                   = $facts['os_service_default'],
-  $notification_transport_url         = $facts['os_service_default'],
   $rabbit_ha_queues                   = $facts['os_service_default'],
   $rabbit_quorum_queue                = $facts['os_service_default'],
   $rabbit_transient_quorum_queue      = $facts['os_service_default'],
@@ -251,6 +257,7 @@ class ceilometer(
     transport_url => $notification_transport_url,
     topics        => $notification_topics,
     driver        => $notification_driver,
+    retry         => $notification_retry,
   }
 
   oslo::messaging::default { 'ceilometer_config':
