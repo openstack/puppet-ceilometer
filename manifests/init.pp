@@ -25,7 +25,7 @@
 #
 # [*notification_topics*]
 #   (Optional) AMQP topic used for OpenStack notifications (list value)
-#   Defaults to 'notifications'.
+#   Defaults to $facts['os_service_default']
 #
 # [*notification_driver*]
 #   (optional) Driver or drivers to handle sending notifications.
@@ -177,7 +177,7 @@ class ceilometer(
   $http_timeout                       = $facts['os_service_default'],
   $max_parallel_requests              = $facts['os_service_default'],
   $notification_transport_url         = $facts['os_service_default'],
-  $notification_topics                = ['notifications'],
+  $notification_topics                = $facts['os_service_default'],
   $notification_driver                = $facts['os_service_default'],
   $notification_retry                 = $facts['os_service_default'],
   $package_ensure                     = 'present',

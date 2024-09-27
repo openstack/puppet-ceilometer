@@ -89,7 +89,7 @@ describe 'ceilometer' do
       is_expected.to contain_oslo__messaging__notifications('ceilometer_config').with(
         :transport_url => '<SERVICE DEFAULT>',
         :driver        => '<SERVICE DEFAULT>',
-        :topics        => ['notifications'],
+        :topics        => '<SERVICE DEFAULT>',
         :retry         => '<SERVICE DEFAULT>',
       )
     end
