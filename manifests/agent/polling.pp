@@ -86,6 +86,20 @@
 #   (Optional) Identify user and project names from polled metrics.
 #   Defaults to $facts['os_service_default'].
 #
+# [*enable_notifications*]
+#   (Optional) Whether the polling service should be sending notifications.
+#   Defaults to $facts['os_service_default'].
+#
+# [*enable_prometheus_exporter*]
+#   (Optional) Alllow this polling instance to expose directly the retrieved
+#   metrics in Prometheus format.
+#   Defaults to $facts['os_service_default'].
+#
+# [*prometheus_listen_addresses*]
+#   (Optional) A list of ipaddr:port combintations on which the exported
+#   metrics will be exposed.
+#   Defaults to $facts['os_service_default'].
+#
 # [*pollsters_definitions_dirs*]
 #   (Optional) List of directories with YAML files used to create pollsters.
 #   Defaults to $facts['os_service_default'].
@@ -109,6 +123,9 @@ class ceilometer::agent::polling (
   $cfg_file                        = $facts['os_service_default'],
   $batch_size                      = $facts['os_service_default'],
   $tenant_name_discovery           = $facts['os_service_default'],
+  $enable_notifications            = $facts['os_service_default'],
+  $enable_prometheus_exporter      = $facts['os_service_default'],
+  $prometheus_listen_addresses     = $facts['os_service_default'],
   $pollsters_definitions_dirs      = $facts['os_service_default'],
 ) inherits ceilometer {
 
@@ -219,9 +236,12 @@ class ceilometer::agent::polling (
   }
 
   ceilometer_config {
-    'polling/batch_size':                 value => $batch_size;
-    'polling/tenant_name_discovery':      value => $tenant_name_discovery;
-    'polling/pollsters_definitions_dirs': value => join(any2array($pollsters_definitions_dirs), ',');
+    'polling/batch_size':                  value => $batch_size;
+    'polling/tenant_name_discovery':       value => $tenant_name_discovery;
+    'polling/pollsters_definitions_dirs':  value => join(any2array($pollsters_definitions_dirs), ',');
+    'polling/enable_notifications':        value => $enable_notifications;
+    'polling/enable_prometheus_exporter':  value => $enable_prometheus_exporter;
+    'polling/prometheus_listen_addresses': value => join(any2array($prometheus_listen_addresses), ',');
   }
 
   if $manage_service {

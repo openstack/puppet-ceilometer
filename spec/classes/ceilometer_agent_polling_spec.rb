@@ -73,6 +73,9 @@ describe 'ceilometer::agent::polling' do
       it { should contain_ceilometer_config('polling/batch_size').with_value('<SERVICE DEFAULT>') }
       it { should_not contain_file('polling') }
       it { should contain_ceilometer_config('polling/tenant_name_discovery').with_value('<SERVICE DEFAULT>') }
+      it { should contain_ceilometer_config('polling/enable_notifications').with_value('<SERVICE DEFAULT>') }
+      it { should contain_ceilometer_config('polling/enable_prometheus_exporter').with_value('<SERVICE DEFAULT>') }
+      it { should contain_ceilometer_config('polling/prometheus_listen_addresses').with_value('<SERVICE DEFAULT>') }
       it { should contain_ceilometer_config('polling/pollsters_definitions_dirs').with_value('<SERVICE DEFAULT>') }
       it { should contain_ceilometer_config('polling/cfg_file').with_value('<SERVICE DEFAULT>') }
     end
@@ -103,26 +106,22 @@ describe 'ceilometer::agent::polling' do
       }
     end
 
-    context 'when tenant_name_discovery is set' do
+    context 'when common parameters are set' do
       before do
         params.merge!(
-          :tenant_name_discovery => true
+          :tenant_name_discovery       => true,
+          :enable_notifications        => true,
+          :enable_prometheus_exporter  => false,
+          :prometheus_listen_addresses => ['127.0.0.1:9101'],
+          :pollsters_definitions_dirs  => ['/etc/ceilometer/pollsters.d', '/etc/ceilometer/mypollsters.d']
         )
       end
 
       it {
         should contain_ceilometer_config('polling/tenant_name_discovery').with_value(true)
-      }
-    end
-
-    context 'when pollsters_definitions_dirs is set' do
-      before do
-        params.merge!(
-          :pollsters_definitions_dirs => ['/etc/ceilometer/pollsters.d', '/etc/ceilometer/mypollsters.d']
-        )
-      end
-
-      it {
+        should contain_ceilometer_config('polling/enable_notifications').with_value(true)
+        should contain_ceilometer_config('polling/enable_prometheus_exporter').with_value(false)
+        should contain_ceilometer_config('polling/prometheus_listen_addresses').with_value('127.0.0.1:9101')
         should contain_ceilometer_config('polling/pollsters_definitions_dirs').with_value(
           '/etc/ceilometer/pollsters.d,/etc/ceilometer/mypollsters.d')
       }

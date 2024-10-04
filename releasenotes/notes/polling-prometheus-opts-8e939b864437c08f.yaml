@@ -1,0 +1,10 @@
+---
+features:
+  - |
+    The following parameters have been added to
+    the ``ceilometer::agent::polling`` class.
+
+    - ``enable_notifications``
+    - ``enable_prometheus_exporter``
+    - ``prometheus_listen_addresses``
+
