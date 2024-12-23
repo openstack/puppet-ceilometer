@@ -214,7 +214,6 @@ sources:
       interval: 300
       meters:
         - cpu
-        - cpu_l3_cache
         - memory.usage
         - network.incoming.bytes
         - network.incoming.packets
