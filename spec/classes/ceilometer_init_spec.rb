@@ -147,7 +147,7 @@ describe 'ceilometer' do
         :rabbit_ha_queues                => '<SERVICE DEFAULT>',
         :heartbeat_timeout_threshold     => '<SERVICE DEFAULT>',
         :heartbeat_rate                  => '<SERVICE DEFAULT>',
-        :heartbeat_in_pthread            => '<SERVICE DEFAULT>',
+        :heartbeat_in_pthread            => nil,
         :rabbit_qos_prefetch_count       => '<SERVICE DEFAULT>',
         :amqp_durable_queues             => '<SERVICE DEFAULT>',
         :kombu_reconnect_delay           => '<SERVICE DEFAULT>',
