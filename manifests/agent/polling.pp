@@ -86,6 +86,11 @@
 #   (Optional) Identify user and project names from polled metrics.
 #   Defaults to $facts['os_service_default'].
 #
+# [*ignore_disabled_projects*]
+#   (Optional) Whether the pooling service should ignore disabled projects or
+#   not.
+#   Defaults to $facts['os_service_default'].
+#
 # [*enable_notifications*]
 #   (Optional) Whether the polling service should be sending notifications.
 #   Defaults to $facts['os_service_default'].
@@ -123,6 +128,7 @@ class ceilometer::agent::polling (
   $cfg_file                        = $facts['os_service_default'],
   $batch_size                      = $facts['os_service_default'],
   $tenant_name_discovery           = $facts['os_service_default'],
+  $ignore_disabled_projects        = $facts['os_service_default'],
   $enable_notifications            = $facts['os_service_default'],
   $enable_prometheus_exporter      = $facts['os_service_default'],
   $prometheus_listen_addresses     = $facts['os_service_default'],
@@ -238,6 +244,7 @@ class ceilometer::agent::polling (
   ceilometer_config {
     'polling/batch_size':                  value => $batch_size;
     'polling/tenant_name_discovery':       value => $tenant_name_discovery;
+    'polling/ignore_disabled_projects':    value => $ignore_disabled_projects;
     'polling/pollsters_definitions_dirs':  value => join(any2array($pollsters_definitions_dirs), ',');
     'polling/enable_notifications':        value => $enable_notifications;
     'polling/enable_prometheus_exporter':  value => $enable_prometheus_exporter;

@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    The new ``ceilometer::agent::polling::ignore_disabled_projects`` parameter
+    has been added.
