@@ -72,7 +72,7 @@ describe 'ceilometer::agent::polling' do
 
       it { should contain_ceilometer_config('polling/batch_size').with_value('<SERVICE DEFAULT>') }
       it { should_not contain_file('polling') }
-      it { should contain_ceilometer_config('polling/tenant_name_discovery').with_value('<SERVICE DEFAULT>') }
+      it { should contain_ceilometer_config('polling/identity_name_discovery').with_value('<SERVICE DEFAULT>') }
       it { should contain_ceilometer_config('polling/ignore_disabled_projects').with_value('<SERVICE DEFAULT>') }
       it { should contain_ceilometer_config('polling/enable_notifications').with_value('<SERVICE DEFAULT>') }
       it { should contain_ceilometer_config('polling/enable_prometheus_exporter').with_value('<SERVICE DEFAULT>') }
@@ -110,7 +110,7 @@ describe 'ceilometer::agent::polling' do
     context 'when common parameters are set' do
       before do
         params.merge!(
-          :tenant_name_discovery       => true,
+          :identity_name_discovery       => true,
           :ignore_disabled_projects    => false,
           :enable_notifications        => true,
           :enable_prometheus_exporter  => false,
@@ -120,7 +120,7 @@ describe 'ceilometer::agent::polling' do
       end
 
       it {
-        should contain_ceilometer_config('polling/tenant_name_discovery').with_value(true)
+        should contain_ceilometer_config('polling/identity_name_discovery').with_value(true)
         should contain_ceilometer_config('polling/ignore_disabled_projects').with_value(false)
         should contain_ceilometer_config('polling/enable_notifications').with_value(true)
         should contain_ceilometer_config('polling/enable_prometheus_exporter').with_value(false)

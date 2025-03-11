@@ -1,0 +1,5 @@
+---
+deprecations:
+  - |
+    The ``ceilometer::agent::polling::tenant_name_discovery`` parameter has
+    been deprecated in favor of the new ``identity_name_discovery`` parameter.

@@ -82,7 +82,7 @@
 #   (Optional) Batch size of samples to send to notification agent.
 #   Defaults to $facts['os_service_default'].
 #
-# [*tenant_name_discovery*]
+# [*identity_name_discovery*]
 #   (Optional) Identify user and project names from polled metrics.
 #   Defaults to $facts['os_service_default'].
 #
@@ -109,6 +109,12 @@
 #   (Optional) List of directories with YAML files used to create pollsters.
 #   Defaults to $facts['os_service_default'].
 #
+# DEPRECATED PARAMETERS
+#
+# [*tenant_name_discovery*]
+#   (Optional) Identify user and project names from polled metrics.
+#   Defaults to undef
+#
 class ceilometer::agent::polling (
   Boolean $manage_service          = true,
   Boolean $enabled                 = true,
@@ -127,16 +133,26 @@ class ceilometer::agent::polling (
   Optional[Hash] $polling_config   = undef,
   $cfg_file                        = $facts['os_service_default'],
   $batch_size                      = $facts['os_service_default'],
-  $tenant_name_discovery           = $facts['os_service_default'],
+  $identity_name_discovery         = $facts['os_service_default'],
   $ignore_disabled_projects        = $facts['os_service_default'],
   $enable_notifications            = $facts['os_service_default'],
   $enable_prometheus_exporter      = $facts['os_service_default'],
   $prometheus_listen_addresses     = $facts['os_service_default'],
   $pollsters_definitions_dirs      = $facts['os_service_default'],
+  # DEPRECATED PARAMETERS
+  $tenant_name_discovery           = undef,
 ) inherits ceilometer {
 
   include ceilometer::deps
   include ceilometer::params
+
+  if $tenant_name_discovery != undef {
+    warning("The tenant_name_discovery parameter is deprecated. \
+Use the identity_name_discovery parameter instead.")
+    $identity_name_discovery_real = $tenant_name_discovery
+  } else {
+    $identity_name_discovery_real = $identity_name_discovery
+  }
 
   if $central_namespace {
     $central_namespace_name = 'central'
@@ -243,12 +259,17 @@ class ceilometer::agent::polling (
 
   ceilometer_config {
     'polling/batch_size':                  value => $batch_size;
-    'polling/tenant_name_discovery':       value => $tenant_name_discovery;
+    'polling/identity_name_discovery':     value => $identity_name_discovery_real;
     'polling/ignore_disabled_projects':    value => $ignore_disabled_projects;
     'polling/pollsters_definitions_dirs':  value => join(any2array($pollsters_definitions_dirs), ',');
     'polling/enable_notifications':        value => $enable_notifications;
     'polling/enable_prometheus_exporter':  value => $enable_prometheus_exporter;
     'polling/prometheus_listen_addresses': value => join(any2array($prometheus_listen_addresses), ',');
+  }
+
+  # TODO(tkajinam): Remove this after 2025.1 release
+  ceilometer_config {
+    'polling/tenant_name_discovery': ensure => absent;
   }
 
   if $manage_service {
