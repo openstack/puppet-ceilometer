@@ -267,11 +267,6 @@ Use the identity_name_discovery parameter instead.")
     'polling/prometheus_listen_addresses': value => join(any2array($prometheus_listen_addresses), ',');
   }
 
-  # TODO(tkajinam): Remove this after 2025.1 release
-  ceilometer_config {
-    'polling/tenant_name_discovery': ensure => absent;
-  }
-
   if $manage_service {
     if $enabled {
       $service_ensure = 'running'
