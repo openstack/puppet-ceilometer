@@ -105,6 +105,20 @@
 #   metrics will be exposed.
 #   Defaults to $facts['os_service_default'].
 #
+# [*prometheus_tls_enable*]
+#   (Optional) Whether it will expose tls metrics or not.
+#   Defaults to $facts['os_service_default'].
+#
+# [*prometheus_tls_certfile*]
+#   (Optional) The certificate file to allow this ceilometer to expose tls
+#   scrape endpoints.
+#   Defaults to $facts['os_service_default'].
+#
+# [*prometheus_tls_keyfile*]
+#   (Optional) The private key to allow this ceilometer to expose tls scrape
+#   endpoints.
+#   Defaults to $facts['os_service_default'].
+#
 # [*pollsters_definitions_dirs*]
 #   (Optional) List of directories with YAML files used to create pollsters.
 #   Defaults to $facts['os_service_default'].
@@ -138,6 +152,9 @@ class ceilometer::agent::polling (
   $enable_notifications            = $facts['os_service_default'],
   $enable_prometheus_exporter      = $facts['os_service_default'],
   $prometheus_listen_addresses     = $facts['os_service_default'],
+  $prometheus_tls_enable           = $facts['os_service_default'],
+  $prometheus_tls_certfile         = $facts['os_service_default'],
+  $prometheus_tls_keyfile          = $facts['os_service_default'],
   $pollsters_definitions_dirs      = $facts['os_service_default'],
   # DEPRECATED PARAMETERS
   $tenant_name_discovery           = undef,
@@ -265,6 +282,9 @@ Use the identity_name_discovery parameter instead.")
     'polling/enable_notifications':        value => $enable_notifications;
     'polling/enable_prometheus_exporter':  value => $enable_prometheus_exporter;
     'polling/prometheus_listen_addresses': value => join(any2array($prometheus_listen_addresses), ',');
+    'polling/prometheus_tls_enable':       value => $prometheus_tls_enable;
+    'polling/prometheus_tls_certfile':     value => $prometheus_tls_certfile;
+    'polling/prometheus_tls_keyfile':      value => $prometheus_tls_keyfile;
   }
 
   if $manage_service {

@@ -77,6 +77,9 @@ describe 'ceilometer::agent::polling' do
       it { should contain_ceilometer_config('polling/enable_notifications').with_value('<SERVICE DEFAULT>') }
       it { should contain_ceilometer_config('polling/enable_prometheus_exporter').with_value('<SERVICE DEFAULT>') }
       it { should contain_ceilometer_config('polling/prometheus_listen_addresses').with_value('<SERVICE DEFAULT>') }
+      it { should contain_ceilometer_config('polling/prometheus_tls_enable').with_value('<SERVICE DEFAULT>') }
+      it { should contain_ceilometer_config('polling/prometheus_tls_certfile').with_value('<SERVICE DEFAULT>') }
+      it { should contain_ceilometer_config('polling/prometheus_tls_keyfile').with_value('<SERVICE DEFAULT>') }
       it { should contain_ceilometer_config('polling/pollsters_definitions_dirs').with_value('<SERVICE DEFAULT>') }
       it { should contain_ceilometer_config('polling/cfg_file').with_value('<SERVICE DEFAULT>') }
     end
@@ -110,11 +113,14 @@ describe 'ceilometer::agent::polling' do
     context 'when common parameters are set' do
       before do
         params.merge!(
-          :identity_name_discovery       => true,
+          :identity_name_discovery     => true,
           :ignore_disabled_projects    => false,
           :enable_notifications        => true,
           :enable_prometheus_exporter  => false,
           :prometheus_listen_addresses => ['127.0.0.1:9101'],
+          :prometheus_tls_enable       => false,
+          :prometheus_tls_certfile     => 'certfile',
+          :prometheus_tls_keyfile      => 'keyfile',
           :pollsters_definitions_dirs  => ['/etc/ceilometer/pollsters.d', '/etc/ceilometer/mypollsters.d']
         )
       end
@@ -125,6 +131,9 @@ describe 'ceilometer::agent::polling' do
         should contain_ceilometer_config('polling/enable_notifications').with_value(true)
         should contain_ceilometer_config('polling/enable_prometheus_exporter').with_value(false)
         should contain_ceilometer_config('polling/prometheus_listen_addresses').with_value('127.0.0.1:9101')
+        should contain_ceilometer_config('polling/prometheus_tls_enable').with_value(false)
+        should contain_ceilometer_config('polling/prometheus_tls_certfile').with_value('certfile')
+        should contain_ceilometer_config('polling/prometheus_tls_keyfile').with_value('keyfile')
         should contain_ceilometer_config('polling/pollsters_definitions_dirs').with_value(
           '/etc/ceilometer/pollsters.d,/etc/ceilometer/mypollsters.d')
       }
