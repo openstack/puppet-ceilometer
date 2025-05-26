@@ -8,10 +8,6 @@
 # [*telemetry_secret*]
 #   (Required)  Secret key for signing messages.
 #
-# [*http_timeout*]
-#   (Optional) Timeout seconds for HTTP requests.
-#   Defaults to $facts['os_service_default']
-#
 # [*max_parallel_requests*]
 #   (Optional) Maximum number of parallel requests for services to handle at
 #   the same time.
@@ -186,9 +182,12 @@
 #   will be run through a green thread.
 #   undef
 #
+# [*http_timeout*]
+#   (Optional) Timeout seconds for HTTP requests.
+#   Defaults to undef
+#
 class ceilometer(
   $telemetry_secret,
-  $http_timeout                       = $facts['os_service_default'],
   $max_parallel_requests              = $facts['os_service_default'],
   $notification_transport_url         = $facts['os_service_default'],
   $notification_topics                = $facts['os_service_default'],
@@ -224,10 +223,15 @@ class ceilometer(
   $host                               = $facts['os_service_default'],
   # DEPRECATED PARAMETERS
   $rabbit_heartbeat_in_pthread        = undef,
+  $http_timeout                       = undef,
 ) {
 
   include ceilometer::deps
   include ceilometer::params
+
+  if $http_timeout != undef {
+    warning('The http_timeout parameter has been deprecated')
+  }
 
   package { 'ceilometer-common':
     ensure => $package_ensure,
@@ -266,7 +270,7 @@ class ceilometer(
 
   # Once we got here, we can act as an honey badger on the rpc used.
   ceilometer_config {
-    'DEFAULT/http_timeout'         : value => $http_timeout;
+    'DEFAULT/http_timeout'         : value => pick($http_timeout, $facts['os_service_default']);
     'DEFAULT/max_parallel_requests': value => $max_parallel_requests;
     'DEFAULT/host'                 : value => $host;
     'publisher/telemetry_secret'   : value => $telemetry_secret, secret => true;

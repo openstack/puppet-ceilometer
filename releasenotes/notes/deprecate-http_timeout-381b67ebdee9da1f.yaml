@@ -1,0 +1,5 @@
+---
+deprecations:
+  - |
+    The ``ceilometer::http_timeout`` parameter has been deprecated and will be
+    removed in a future release.
