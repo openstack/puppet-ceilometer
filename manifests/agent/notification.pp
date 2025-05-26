@@ -157,14 +157,13 @@ class ceilometer::agent::notification (
     }
 
     file { 'event_pipeline':
-      ensure                  => present,
-      path                    => $::ceilometer::params::event_pipeline,
-      content                 => $event_pipeline_content,
-      selinux_ignore_defaults => true,
-      mode                    => '0640',
-      owner                   => 'root',
-      group                   => $::ceilometer::params::group,
-      tag                     => 'ceilometer-yamls',
+      ensure  => present,
+      path    => $::ceilometer::params::event_pipeline,
+      content => $event_pipeline_content,
+      mode    => '0640',
+      owner   => 'root',
+      group   => $::ceilometer::params::group,
+      tag     => 'ceilometer-yamls',
     }
 
     ceilometer_config {
@@ -184,14 +183,13 @@ class ceilometer::agent::notification (
     }
 
     file { 'pipeline':
-      ensure                  => present,
-      path                    => $::ceilometer::params::pipeline,
-      content                 => $pipeline_content,
-      selinux_ignore_defaults => true,
-      mode                    => '0640',
-      owner                   => 'root',
-      group                   => $::ceilometer::params::group,
-      tag                     => 'ceilometer-yamls',
+      ensure  => present,
+      path    => $::ceilometer::params::pipeline,
+      content => $pipeline_content,
+      mode    => '0640',
+      owner   => 'root',
+      group   => $::ceilometer::params::group,
+      tag     => 'ceilometer-yamls',
     }
 
     ceilometer_config {

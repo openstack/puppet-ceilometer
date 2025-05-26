@@ -218,9 +218,9 @@ describe 'ceilometer::agent::polling' do
      end
 
       it { should contain_file('polling').with(
-        :ensure                  => 'present',
-        :path                    => '/etc/ceilometer/polling.yaml',
-        :content                 => '---
+        :ensure  => 'present',
+        :path    => '/etc/ceilometer/polling.yaml',
+        :content => '---
 sources:
     - name: some_pollsters
       interval: 300
@@ -239,8 +239,7 @@ sources:
         - volume.snapshot.size
         - volume.backup.size
 ',
-        :selinux_ignore_defaults => true,
-        :tag                     => 'ceilometer-yamls',
+        :tag     => 'ceilometer-yamls',
       )}
       it { should contain_ceilometer_config('polling/cfg_file').with_value('/etc/ceilometer/polling.yaml') }
     end
@@ -255,7 +254,7 @@ sources:
       it { should contain_file('polling').with(
         :ensure  => 'present',
         :path    => '/etc/ceilometer/polling.yaml',
-        :content                 => '---
+        :content => '---
 sources:
     - name: some_pollsters
       interval: 30
@@ -263,8 +262,7 @@ sources:
         - meter1
         - meter2
 ',
-        :selinux_ignore_defaults => true,
-        :tag                     => 'ceilometer-yamls',
+        :tag     => 'ceilometer-yamls',
       )}
       it { should contain_ceilometer_config('polling/cfg_file').with_value('/etc/ceilometer/polling.yaml') }
     end
@@ -287,7 +285,7 @@ sources:
       it { should contain_file('polling').with(
         :ensure  => 'present',
         :path    => '/etc/ceilometer/polling.yaml',
-        :content                 => '---
+        :content => '---
 sources:
 - name: my_pollsters
   interval: 60

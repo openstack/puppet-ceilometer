@@ -345,14 +345,13 @@ Use the identity_name_discovery parameter instead.")
     }
 
     file { 'polling':
-      ensure                  => present,
-      path                    => $::ceilometer::params::polling,
-      content                 => $polling_content,
-      mode                    => '0640',
-      owner                   => 'root',
-      group                   => $::ceilometer::params::group,
-      selinux_ignore_defaults => true,
-      tag                     => 'ceilometer-yamls',
+      ensure  => present,
+      path    => $::ceilometer::params::polling,
+      content => $polling_content,
+      mode    => '0640',
+      owner   => 'root',
+      group   => $::ceilometer::params::group,
+      tag     => 'ceilometer-yamls',
     }
 
     ceilometer_config {
