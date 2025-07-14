@@ -73,7 +73,7 @@ describe 'ceilometer' do
 
     context 'without the required telemetry_secret' do
       before { params.delete(:telemetry_secret) }
-      it { expect { is_expected.to raise_error(Puppet::Error) } }
+      it { is_expected.to raise_error(Puppet::Error) }
     end
 
     it 'configures default transport_url' do
