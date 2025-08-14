@@ -339,7 +339,7 @@ Use the identity_name_discovery parameter instead.")
 
   if $manage_polling {
     if $polling_config {
-      $polling_content = to_yaml($polling_config)
+      $polling_content = stdlib::to_yaml($polling_config)
     } else {
       $polling_content = template('ceilometer/polling.yaml.erb')
     }

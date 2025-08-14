@@ -151,7 +151,7 @@ class ceilometer::agent::notification (
 
   if $manage_event_pipeline {
     if $event_pipeline_config {
-      $event_pipeline_content = to_yaml($event_pipeline_config)
+      $event_pipeline_content = stdlib::to_yaml($event_pipeline_config)
     } else {
       $event_pipeline_content = template('ceilometer/event_pipeline.yaml.erb')
     }
@@ -177,7 +177,7 @@ class ceilometer::agent::notification (
 
   if $manage_pipeline {
     if $pipeline_config {
-      $pipeline_content = to_yaml($pipeline_config)
+      $pipeline_content = stdlib::to_yaml($pipeline_config)
     } else {
       $pipeline_content = template('ceilometer/pipeline.yaml.erb')
     }
