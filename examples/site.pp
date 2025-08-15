@@ -1,13 +1,9 @@
 node default {
-  Exec {
-    path => ['/usr/bin', '/bin', '/usr/sbin', '/sbin']
-  }
-
   # Add the base ceilometer class & parameters
   # This class is required by ceilometer agents & api classes
   # The telemetry_secret parameter is mandatory
   class { 'ceilometer':
-    telemetry_secret => 'darksecret'
+    telemetry_secret => 'darksecret',
   }
 
   class { 'ceilometer::db::sync': }
@@ -19,7 +15,7 @@ node default {
   # Set common auth parameters used by all agents (compute/central)
   class { 'ceilometer::agent::service_credentials':
     auth_url => 'http://localhost:5000/v3',
-    password => 'a_big_secret'
+    password => 'a_big_secret',
   }
 
   # Install polling agent

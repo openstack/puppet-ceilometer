@@ -218,7 +218,7 @@ describe 'ceilometer::agent::polling' do
      end
 
       it { should contain_file('polling').with(
-        :ensure  => 'present',
+        :ensure  => 'file',
         :path    => '/etc/ceilometer/polling.yaml',
         :content => '---
 sources:
@@ -252,7 +252,7 @@ sources:
       end
 
       it { should contain_file('polling').with(
-        :ensure  => 'present',
+        :ensure  => 'file',
         :path    => '/etc/ceilometer/polling.yaml',
         :content => '---
 sources:
@@ -283,7 +283,7 @@ sources:
       end
 
       it { should contain_file('polling').with(
-        :ensure  => 'present',
+        :ensure  => 'file',
         :path    => '/etc/ceilometer/polling.yaml',
         :content => '---
 sources:

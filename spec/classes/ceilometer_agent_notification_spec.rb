@@ -112,10 +112,11 @@ describe 'ceilometer::agent::notification' do
       ) }
 
       it { is_expected.to contain_file('event_pipeline').with(
-        'path'  => '/etc/ceilometer/event_pipeline.yaml',
-        'owner' => 'root',
-        'group' => 'ceilometer',
-        'mode'  => '0640',
+        :ensure => 'file',
+        :path   => '/etc/ceilometer/event_pipeline.yaml',
+        :owner  => 'root',
+        :group  => 'ceilometer',
+        :mode   => '0640',
       ) }
 
       it { 'configures event_pipeline with the default notifier'
@@ -176,7 +177,12 @@ describe 'ceilometer::agent::notification' do
       )}
 
       it { should contain_file('event_pipeline').with(
-        :content                 => '---
+        :ensure  => 'file',
+        :path    => '/etc/ceilometer/event_pipeline.yaml',
+        :owner   => 'root',
+        :group   => 'ceilometer',
+        :mode    => '0640',
+        :content => '---
 sources:
 - name: my_event_source
   events:
@@ -206,10 +212,11 @@ sinks:
       ) }
 
       it { is_expected.to contain_file('pipeline').with(
-        'path' => '/etc/ceilometer/pipeline.yaml',
-        'mode'  => '0640',
-        'owner' => 'root',
-        'group' => 'ceilometer',
+        :ensure => 'file',
+        :path   => '/etc/ceilometer/pipeline.yaml',
+        :mode   => '0640',
+        :owner  => 'root',
+        :group  => 'ceilometer',
       ) }
       it { is_expected.to contain_ceilometer_config('DEFAULT/pipeline_cfg_file').with_value('/etc/ceilometer/pipeline.yaml') }
     end
@@ -231,7 +238,12 @@ sinks:
       )}
 
       it { should contain_file('pipeline').with(
-        :content                 => '---
+        :ensure  => 'file',
+        :path    => '/etc/ceilometer/pipeline.yaml',
+        :mode    => '0640',
+        :owner   => 'root',
+        :group   => 'ceilometer',
+        :content => '---
 sources:
 - name: my_source
   meters:

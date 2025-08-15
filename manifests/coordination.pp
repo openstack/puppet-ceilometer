@@ -15,7 +15,7 @@ class ceilometer::coordination (
   include ceilometer::deps
 
   oslo::coordination{ 'ceilometer_config':
-    backend_url => $backend_url
+    backend_url => $backend_url,
   }
 
   # all coordination settings should be applied and all packages should be

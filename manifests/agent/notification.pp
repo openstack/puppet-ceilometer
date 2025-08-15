@@ -128,8 +128,8 @@ class ceilometer::agent::notification (
 
   package { 'ceilometer-notification':
     ensure => $package_ensure,
-    name   => $::ceilometer::params::agent_notification_package_name,
-    tag    => ['openstack', 'ceilometer-package']
+    name   => $ceilometer::params::agent_notification_package_name,
+    tag    => ['openstack', 'ceilometer-package'],
   }
 
   if $manage_service {
@@ -141,11 +141,11 @@ class ceilometer::agent::notification (
 
     service { 'ceilometer-agent-notification':
       ensure     => $service_ensure,
-      name       => $::ceilometer::params::agent_notification_service_name,
+      name       => $ceilometer::params::agent_notification_service_name,
       enable     => $enabled,
       hasstatus  => true,
       hasrestart => true,
-      tag        => 'ceilometer-service'
+      tag        => 'ceilometer-service',
     }
   }
 
@@ -157,17 +157,17 @@ class ceilometer::agent::notification (
     }
 
     file { 'event_pipeline':
-      ensure  => present,
-      path    => $::ceilometer::params::event_pipeline,
+      ensure  => file,
+      path    => $ceilometer::params::event_pipeline,
       content => $event_pipeline_content,
       mode    => '0640',
       owner   => 'root',
-      group   => $::ceilometer::params::group,
+      group   => $ceilometer::params::group,
       tag     => 'ceilometer-yamls',
     }
 
     ceilometer_config {
-      'DEFAULT/event_pipeline_cfg_file': value => $::ceilometer::params::event_pipeline;
+      'DEFAULT/event_pipeline_cfg_file': value => $ceilometer::params::event_pipeline;
     }
   } else {
     ceilometer_config {
@@ -183,17 +183,17 @@ class ceilometer::agent::notification (
     }
 
     file { 'pipeline':
-      ensure  => present,
-      path    => $::ceilometer::params::pipeline,
+      ensure  => file,
+      path    => $ceilometer::params::pipeline,
       content => $pipeline_content,
       mode    => '0640',
       owner   => 'root',
-      group   => $::ceilometer::params::group,
+      group   => $ceilometer::params::group,
       tag     => 'ceilometer-yamls',
     }
 
     ceilometer_config {
-      'DEFAULT/pipeline_cfg_file': value => $::ceilometer::params::pipeline;
+      'DEFAULT/pipeline_cfg_file': value => $ceilometer::params::pipeline;
     }
   } else {
     ceilometer_config {
