@@ -32,9 +32,9 @@ class ceilometer::db::sync(
   }
 
   exec { 'ceilometer-upgrade':
-    command     => "${::ceilometer::params::dbsync_command} ${skip_opt}${extra_params}",
+    command     => "${ceilometer::params::dbsync_command} ${skip_opt}${extra_params}",
     path        => '/usr/bin',
-    user        => $::ceilometer::params::user,
+    user        => $ceilometer::params::user,
     refreshonly => true,
     try_sleep   => 5,
     tries       => 10,

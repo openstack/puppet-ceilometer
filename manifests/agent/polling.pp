@@ -66,7 +66,7 @@
 # [*polling_meters*]
 #   (Optional) Array of strings with meters to add to
 #   the polling.yaml file, used only if manage_polling is true.
-#   Defaults to $::ceilometer::params::polling_meters
+#   Defaults to $ceilometer::params::polling_meters
 #
 # [*polling_config*]
 #   (Optional) A hash of the polling.yaml configuration.
@@ -143,7 +143,7 @@ class ceilometer::agent::polling (
   $resource_cache_expiry           = $facts['os_service_default'],
   Boolean $manage_polling          = false,
   $polling_interval                = 300,
-  Array[String[1]] $polling_meters = $::ceilometer::params::polling_meters,
+  Array[String[1]] $polling_meters = $ceilometer::params::polling_meters,
   Optional[Hash] $polling_config   = undef,
   $cfg_file                        = $facts['os_service_default'],
   $batch_size                      = $facts['os_service_default'],
@@ -184,7 +184,7 @@ Use the identity_name_discovery parameter instead.")
       # the ceilometer user can access libvirt to gather some metrics.
       $ceilometer_groups = delete_undef_values([
         'nova',
-        $::ceilometer::params::libvirt_group
+        $ceilometer::params::libvirt_group,
       ])
 
       user { 'ceilometer':
@@ -196,7 +196,7 @@ Use the identity_name_discovery parameter instead.")
         before  => Anchor['ceilometer::service::begin'],
       }
 
-      if $::ceilometer::params::libvirt_group {
+      if $ceilometer::params::libvirt_group {
         Package <| title == 'libvirt' |> -> User['ceilometer']
       }
       Package <| title == 'nova-common' |> -> User['ceilometer']
@@ -229,7 +229,7 @@ Use the identity_name_discovery parameter instead.")
     if $central_namespace {
       package { 'ceilometer-central':
         ensure => $package_ensure,
-        name   =>  $::ceilometer::params::agent_central_package_name,
+        name   => $ceilometer::params::agent_central_package_name,
         tag    => ['openstack', 'ceilometer-package'],
       }
     }
@@ -237,7 +237,7 @@ Use the identity_name_discovery parameter instead.")
     if $compute_namespace {
       package { 'ceilometer-compute':
         ensure => $package_ensure,
-        name   =>  $::ceilometer::params::agent_compute_package_name,
+        name   => $ceilometer::params::agent_compute_package_name,
         tag    => ['openstack', 'ceilometer-package'],
       }
     }
@@ -245,7 +245,7 @@ Use the identity_name_discovery parameter instead.")
     if $ipmi_namespace {
       package { 'ceilometer-ipmi':
         ensure => $package_ensure,
-        name   =>  $::ceilometer::params::agent_ipmi_package_name,
+        name   => $ceilometer::params::agent_ipmi_package_name,
         tag    => ['openstack', 'ceilometer-package'],
       }
     }
@@ -253,7 +253,7 @@ Use the identity_name_discovery parameter instead.")
   } else {
     package { 'ceilometer-polling':
       ensure => $package_ensure,
-      name   => $::ceilometer::params::agent_polling_package_name,
+      name   => $ceilometer::params::agent_polling_package_name,
       tag    => ['openstack', 'ceilometer-package'],
     }
   }
@@ -261,16 +261,16 @@ Use the identity_name_discovery parameter instead.")
   $namespaces_real = delete_undef_values([
     $central_namespace_name,
     $compute_namespace_name,
-    $ipmi_namespace_name
+    $ipmi_namespace_name,
   ])
 
   if empty($namespaces_real) or $separate_services {
     ceilometer_config {
-      'DEFAULT/polling_namespaces': ensure => absent
+      'DEFAULT/polling_namespaces': ensure => absent;
     }
   } else {
     ceilometer_config {
-      'DEFAULT/polling_namespaces': value => join($namespaces_real, ',')
+      'DEFAULT/polling_namespaces': value => join($namespaces_real, ',');
     }
   }
 
@@ -298,7 +298,7 @@ Use the identity_name_discovery parameter instead.")
       if $central_namespace {
         service { 'ceilometer-central':
           ensure     => $service_ensure,
-          name       => $::ceilometer::params::agent_central_service_name,
+          name       => $ceilometer::params::agent_central_service_name,
           enable     => $enabled,
           hasstatus  => true,
           hasrestart => true,
@@ -308,7 +308,7 @@ Use the identity_name_discovery parameter instead.")
       if $compute_namespace {
         service { 'ceilometer-compute':
           ensure     => $service_ensure,
-          name       => $::ceilometer::params::agent_compute_service_name,
+          name       => $ceilometer::params::agent_compute_service_name,
           enable     => $enabled,
           hasstatus  => true,
           hasrestart => true,
@@ -318,7 +318,7 @@ Use the identity_name_discovery parameter instead.")
       if $ipmi_namespace {
         service { 'ceilometer-ipmi':
           ensure     => $service_ensure,
-          name       => $::ceilometer::params::agent_ipmi_service_name,
+          name       => $ceilometer::params::agent_ipmi_service_name,
           enable     => $enabled,
           hasstatus  => true,
           hasrestart => true,
@@ -328,7 +328,7 @@ Use the identity_name_discovery parameter instead.")
     } else {
       service { 'ceilometer-polling':
         ensure     => $service_ensure,
-        name       => $::ceilometer::params::agent_polling_service_name,
+        name       => $ceilometer::params::agent_polling_service_name,
         enable     => $enabled,
         hasstatus  => true,
         hasrestart => true,
@@ -345,17 +345,17 @@ Use the identity_name_discovery parameter instead.")
     }
 
     file { 'polling':
-      ensure  => present,
-      path    => $::ceilometer::params::polling,
+      ensure  => file,
+      path    => $ceilometer::params::polling,
       content => $polling_content,
       mode    => '0640',
       owner   => 'root',
-      group   => $::ceilometer::params::group,
+      group   => $ceilometer::params::group,
       tag     => 'ceilometer-yamls',
     }
 
     ceilometer_config {
-      'polling/cfg_file': value => $::ceilometer::params::polling;
+      'polling/cfg_file': value => $ceilometer::params::polling;
     }
   } else {
     ceilometer_config {
