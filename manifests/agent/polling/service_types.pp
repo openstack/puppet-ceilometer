@@ -36,7 +36,6 @@ class ceilometer::agent::polling::service_types (
   $cinder  = $facts['os_service_default'],
   $radosgw = $facts['os_service_default'],
 ) {
-
   include ceilometer::deps
 
   ceilometer_config {

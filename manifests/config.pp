@@ -29,10 +29,8 @@ class ceilometer::config (
   Hash $ceilometer_config          = {},
   Hash $ceilometer_rootwrap_config = {},
 ) {
-
   include ceilometer::deps
 
   create_resources('ceilometer_config', $ceilometer_config)
   create_resources('ceilometer_rootwrap_config', $ceilometer_rootwrap_config)
-
 }

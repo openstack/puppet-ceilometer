@@ -259,7 +259,6 @@ class ceilometer::cache (
   $dead_timeout                         = $facts['os_service_default'],
   Boolean $manage_backend_package       = true,
 ) {
-
   include ceilometer::deps
 
   oslo::cache { 'ceilometer_config':

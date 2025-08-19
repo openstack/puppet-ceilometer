@@ -3,7 +3,6 @@
 #  Ceilometer anchors and dependency management
 #
 class ceilometer::deps {
-
   assert_private()
 
   # Setup anchors for install, config and service phases of the module.  These

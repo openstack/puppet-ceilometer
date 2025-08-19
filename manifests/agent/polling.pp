@@ -159,7 +159,6 @@ class ceilometer::agent::polling (
   # DEPRECATED PARAMETERS
   $tenant_name_discovery           = undef,
 ) inherits ceilometer {
-
   include ceilometer::deps
   include ceilometer::params
 
@@ -249,7 +248,6 @@ Use the identity_name_discovery parameter instead.")
         tag    => ['openstack', 'ceilometer-package'],
       }
     }
-
   } else {
     package { 'ceilometer-polling':
       ensure => $package_ensure,

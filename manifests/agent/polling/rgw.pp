@@ -21,7 +21,6 @@ class ceilometer::agent::polling::rgw (
   $secret_key       = $facts['os_service_default'],
   $implicit_tenants = $facts['os_service_default'],
 ) {
-
   include ceilometer::deps
 
   ceilometer_config {

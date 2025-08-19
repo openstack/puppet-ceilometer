@@ -17,12 +17,11 @@
 #   (Optional) Skip gnocchi resource-types upgrade.
 #   Defaults to false
 #
-class ceilometer::db::sync(
+class ceilometer::db::sync (
   $extra_params                        = undef,
   $db_sync_timeout                     = 300,
   Boolean $skip_gnocchi_resource_types = false,
 ) {
-
   include ceilometer::deps
   include ceilometer::params
 
@@ -48,5 +47,4 @@ class ceilometer::db::sync(
     notify      => Anchor['ceilometer::dbsync::end'],
     tag         => 'openstack-db',
   }
-
 }

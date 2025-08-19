@@ -122,7 +122,6 @@ class ceilometer::agent::notification (
   Array[String[1]] $pipeline_publishers       = ['gnocchi://'],
   $pipeline_cfg_file                          = $facts['os_service_default'],
 ) {
-
   include ceilometer::deps
   include ceilometer::params
 

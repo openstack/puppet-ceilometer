@@ -61,7 +61,6 @@ class ceilometer::keystone::auth (
   $system_scope        = 'all',
   $system_roles        = [],
 ) {
-
   include ceilometer::deps
 
   # NOTE(tkajinam): ceilometer does not have api service, so we can use

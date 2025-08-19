@@ -194,7 +194,7 @@
 #   (Optional) Timeout seconds for HTTP requests.
 #   Defaults to undef
 #
-class ceilometer(
+class ceilometer (
   $telemetry_secret,
   $max_parallel_requests              = $facts['os_service_default'],
   $notification_transport_url         = $facts['os_service_default'],
@@ -235,7 +235,6 @@ class ceilometer(
   $rabbit_heartbeat_in_pthread        = undef,
   $http_timeout                       = undef,
 ) {
-
   include ceilometer::deps
   include ceilometer::params
 
@@ -253,7 +252,7 @@ class ceilometer(
     purge => $purge_config,
   }
 
-  oslo::messaging::rabbit {'ceilometer_config':
+  oslo::messaging::rabbit { 'ceilometer_config':
     rabbit_ha_queues                => $rabbit_ha_queues,
     heartbeat_timeout_threshold     => $rabbit_heartbeat_timeout_threshold,
     heartbeat_rate                  => $rabbit_heartbeat_rate,

@@ -43,7 +43,5 @@ node default {
   }
 
   # Install notification agent
-  class { 'ceilometer::agent::notification':
-  }
-
+  class { 'ceilometer::agent::notification': }
 }

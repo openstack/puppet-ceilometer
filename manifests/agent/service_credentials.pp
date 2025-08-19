@@ -62,7 +62,6 @@ class ceilometer::agent::service_credentials (
   $project_domain_name = 'Default',
   $auth_type           = 'password',
 ) {
-
   include ceilometer::deps
 
   if is_service_default($system_scope) {

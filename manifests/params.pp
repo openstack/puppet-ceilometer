@@ -4,7 +4,6 @@
 # should be considered to be constant
 #
 class ceilometer::params {
-
   assert_private()
 
   include openstacklib::defaults
