@@ -147,7 +147,6 @@ describe 'ceilometer' do
         :rabbit_ha_queues                => '<SERVICE DEFAULT>',
         :heartbeat_timeout_threshold     => '<SERVICE DEFAULT>',
         :heartbeat_rate                  => '<SERVICE DEFAULT>',
-        :heartbeat_in_pthread            => nil,
         :rabbit_qos_prefetch_count       => '<SERVICE DEFAULT>',
         :amqp_durable_queues             => '<SERVICE DEFAULT>',
         :amqp_auto_delete                => '<SERVICE DEFAULT>',
@@ -190,13 +189,11 @@ describe 'ceilometer' do
       before { params.merge!(
         :rabbit_heartbeat_timeout_threshold => '60',
         :rabbit_heartbeat_rate              => '10',
-        :rabbit_heartbeat_in_pthread        => true,
       ) }
 
       it { is_expected.to contain_oslo__messaging__rabbit('ceilometer_config').with(
         :heartbeat_timeout_threshold => '60',
         :heartbeat_rate              => '10',
-        :heartbeat_in_pthread        => true,
       ) }
     end
   end
