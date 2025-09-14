@@ -112,27 +112,25 @@ describe 'ceilometer::agent::notification' do
       ) }
 
       it { is_expected.to contain_file('event_pipeline').with(
-        :ensure => 'file',
-        :path   => '/etc/ceilometer/event_pipeline.yaml',
-        :owner  => 'root',
-        :group  => 'ceilometer',
-        :mode   => '0640',
-      ) }
+        :ensure  => 'file',
+        :path    => '/etc/ceilometer/event_pipeline.yaml',
+        :owner   => 'root',
+        :group   => 'ceilometer',
+        :mode    => '0640',
+        :content => '---
+sources:
+    - name: event_source
+      events:
+          - "*"
+      sinks:
+          - event_sink
+sinks:
+    - name: event_sink
+      publishers:
+          - gnocchi://
+',
+      )}
 
-      it { 'configures event_pipeline with the default notifier'
-        verify_contents(catalogue, 'event_pipeline', [
-          "---",
-          "sources:",
-          "    - name: event_source",
-          "      events:",
-          "          - \"*\"",
-          "      sinks:",
-          "          - event_sink",
-          "sinks:",
-          "    - name: event_sink",
-          "      publishers:",
-          "          - gnocchi://",
-      ])}
       it { is_expected.to contain_ceilometer_config('DEFAULT/event_pipeline_cfg_file').with_value('/etc/ceilometer/event_pipeline.yaml') }
     end
 
@@ -142,21 +140,27 @@ describe 'ceilometer::agent::notification' do
         :event_pipeline_publishers => ['notifier://', 'notifier://?topic=alarm.all']
       ) }
 
-      it { 'configures event_pipeline with multiple publishers'
-        verify_contents(catalogue, 'event_pipeline', [
-          "---",
-          "sources:",
-          "    - name: event_source",
-          "      events:",
-          "          - \"*\"",
-          "      sinks:",
-          "          - event_sink",
-          "sinks:",
-          "    - name: event_sink",
-          "      publishers:",
-          "          - notifier://",
-          "          - notifier://?topic=alarm.all",
-      ])}
+      it { is_expected.to contain_file('event_pipeline').with(
+        :ensure  => 'file',
+        :path    => '/etc/ceilometer/event_pipeline.yaml',
+        :owner   => 'root',
+        :group   => 'ceilometer',
+        :mode    => '0640',
+        :content => '---
+sources:
+    - name: event_source
+      events:
+          - "*"
+      sinks:
+          - event_sink
+sinks:
+    - name: event_sink
+      publishers:
+          - notifier://
+          - notifier://?topic=alarm.all
+'
+      )}
+
       it { is_expected.to contain_ceilometer_config('DEFAULT/event_pipeline_cfg_file').with_value('/etc/ceilometer/event_pipeline.yaml') }
     end
 
@@ -195,6 +199,7 @@ sinks:
   - gnocchi://
 ',
       )}
+
       it { is_expected.to contain_ceilometer_config('DEFAULT/event_pipeline_cfg_file').with_value('/etc/ceilometer/event_pipeline.yaml') }
     end
 
@@ -256,6 +261,7 @@ sinks:
   - gnocchi://
 ',
       )}
+
       it { is_expected.to contain_ceilometer_config('DEFAULT/pipeline_cfg_file').with_value('/etc/ceilometer/pipeline.yaml') }
     end
 
