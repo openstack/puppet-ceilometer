@@ -112,7 +112,7 @@ class ceilometer::agent::notification (
   $messaging_urls                             = $facts['os_service_default'],
   $batch_size                                 = $facts['os_service_default'],
   $batch_timeout                              = $facts['os_service_default'],
-  $package_ensure                             = 'present',
+  Stdlib::Ensure::Package $package_ensure     = 'present',
   Boolean $manage_event_pipeline              = false,
   Optional[Hash] $event_pipeline_config       = undef,
   Array[String[1]] $event_pipeline_publishers = ['gnocchi://'],
