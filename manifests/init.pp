@@ -8,6 +8,10 @@
 # [*telemetry_secret*]
 #   (Required)  Secret key for signing messages.
 #
+# [*package_ensure*]
+#   (Optional) ensure state for package.
+#   Defaults to 'present'.
+#
 # [*max_parallel_requests*]
 #   (Optional) Maximum number of parallel requests for services to handle at
 #   the same time.
@@ -32,10 +36,6 @@
 #   (Optional) The maximum number of attempts to re-sent a notification
 #   message, which failed to be delivered due to a recoverable error.
 #   Defaults to $facts['os_service_default'].
-#
-# [*package_ensure*]
-#   (Optional) ensure state for package.
-#   Defaults to 'present'.
 #
 # [*executor_thread_pool_size*]
 #   (optional) Size of executor thread pool when executor is threading or eventlet.
@@ -186,43 +186,43 @@
 #
 class ceilometer (
   $telemetry_secret,
-  $max_parallel_requests              = $facts['os_service_default'],
-  $notification_transport_url         = $facts['os_service_default'],
-  $notification_topics                = $facts['os_service_default'],
-  $notification_driver                = $facts['os_service_default'],
-  $notification_retry                 = $facts['os_service_default'],
-  $package_ensure                     = 'present',
-  $executor_thread_pool_size          = $facts['os_service_default'],
-  $default_transport_url              = $facts['os_service_default'],
-  $rpc_response_timeout               = $facts['os_service_default'],
-  $control_exchange                   = $facts['os_service_default'],
-  $rabbit_ha_queues                   = $facts['os_service_default'],
-  $rabbit_quorum_queue                = $facts['os_service_default'],
-  $rabbit_transient_quorum_queue      = $facts['os_service_default'],
-  $rabbit_transient_queues_ttl        = $facts['os_service_default'],
-  $rabbit_quorum_delivery_limit       = $facts['os_service_default'],
-  $rabbit_quorum_max_memory_length    = $facts['os_service_default'],
-  $rabbit_quorum_max_memory_bytes     = $facts['os_service_default'],
-  $rabbit_use_queue_manager           = $facts['os_service_default'],
-  $rabbit_stream_fanout               = $facts['os_service_default'],
-  $rabbit_enable_cancel_on_failover   = $facts['os_service_default'],
-  $rabbit_heartbeat_timeout_threshold = $facts['os_service_default'],
-  $rabbit_heartbeat_rate              = $facts['os_service_default'],
-  $rabbit_qos_prefetch_count          = $facts['os_service_default'],
-  $amqp_durable_queues                = $facts['os_service_default'],
-  $amqp_auto_delete                   = $facts['os_service_default'],
-  $rabbit_use_ssl                     = $facts['os_service_default'],
-  $kombu_ssl_ca_certs                 = $facts['os_service_default'],
-  $kombu_ssl_certfile                 = $facts['os_service_default'],
-  $kombu_ssl_keyfile                  = $facts['os_service_default'],
-  $kombu_ssl_version                  = $facts['os_service_default'],
-  $kombu_reconnect_delay              = $facts['os_service_default'],
-  $kombu_failover_strategy            = $facts['os_service_default'],
-  $kombu_compression                  = $facts['os_service_default'],
-  Boolean $purge_config               = false,
-  $host                               = $facts['os_service_default'],
+  Stdlib::Ensure::Package $package_ensure = 'present',
+  $max_parallel_requests                  = $facts['os_service_default'],
+  $notification_transport_url             = $facts['os_service_default'],
+  $notification_topics                    = $facts['os_service_default'],
+  $notification_driver                    = $facts['os_service_default'],
+  $notification_retry                     = $facts['os_service_default'],
+  $executor_thread_pool_size              = $facts['os_service_default'],
+  $default_transport_url                  = $facts['os_service_default'],
+  $rpc_response_timeout                   = $facts['os_service_default'],
+  $control_exchange                       = $facts['os_service_default'],
+  $rabbit_ha_queues                       = $facts['os_service_default'],
+  $rabbit_quorum_queue                    = $facts['os_service_default'],
+  $rabbit_transient_quorum_queue          = $facts['os_service_default'],
+  $rabbit_transient_queues_ttl            = $facts['os_service_default'],
+  $rabbit_quorum_delivery_limit           = $facts['os_service_default'],
+  $rabbit_quorum_max_memory_length        = $facts['os_service_default'],
+  $rabbit_quorum_max_memory_bytes         = $facts['os_service_default'],
+  $rabbit_use_queue_manager               = $facts['os_service_default'],
+  $rabbit_stream_fanout                   = $facts['os_service_default'],
+  $rabbit_enable_cancel_on_failover       = $facts['os_service_default'],
+  $rabbit_heartbeat_timeout_threshold     = $facts['os_service_default'],
+  $rabbit_heartbeat_rate                  = $facts['os_service_default'],
+  $rabbit_qos_prefetch_count              = $facts['os_service_default'],
+  $amqp_durable_queues                    = $facts['os_service_default'],
+  $amqp_auto_delete                       = $facts['os_service_default'],
+  $rabbit_use_ssl                         = $facts['os_service_default'],
+  $kombu_ssl_ca_certs                     = $facts['os_service_default'],
+  $kombu_ssl_certfile                     = $facts['os_service_default'],
+  $kombu_ssl_keyfile                      = $facts['os_service_default'],
+  $kombu_ssl_version                      = $facts['os_service_default'],
+  $kombu_reconnect_delay                  = $facts['os_service_default'],
+  $kombu_failover_strategy                = $facts['os_service_default'],
+  $kombu_compression                      = $facts['os_service_default'],
+  Boolean $purge_config                   = false,
+  $host                                   = $facts['os_service_default'],
   # DEPRECATED PARAMETERS
-  $http_timeout                       = undef,
+  $http_timeout                           = undef,
 ) {
   include ceilometer::deps
   include ceilometer::params
