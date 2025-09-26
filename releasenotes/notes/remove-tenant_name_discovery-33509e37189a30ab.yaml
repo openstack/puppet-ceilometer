@@ -1,0 +1,5 @@
+---
+upgrade:
+  - |
+    The ``ceilometer::agent::polling::tenant_name_discovery`` parameter has
+    been removed.
