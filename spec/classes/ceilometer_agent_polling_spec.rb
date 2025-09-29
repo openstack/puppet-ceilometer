@@ -246,9 +246,11 @@ sources:
 
     context 'with polling and basic custom settings' do
       before do
-        params.merge!( :manage_polling   => true,
-                       :polling_interval => 30,
-                       :polling_meters   => ['meter1', 'meter2'] )
+        params.merge!({
+          :manage_polling   => true,
+          :polling_interval => 30,
+          :polling_meters   => ['meter1', 'meter2']
+        })
       end
 
       it { should contain_file('polling').with(

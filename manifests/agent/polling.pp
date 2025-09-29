@@ -136,7 +136,7 @@ class ceilometer::agent::polling (
   $resource_update_interval               = $facts['os_service_default'],
   $resource_cache_expiry                  = $facts['os_service_default'],
   Boolean $manage_polling                 = false,
-  $polling_interval                       = 300,
+  Integer[1] $polling_interval            = 300,
   Array[String[1]] $polling_meters        = $ceilometer::params::polling_meters,
   Optional[Hash] $polling_config          = undef,
   $cfg_file                               = $facts['os_service_default'],
