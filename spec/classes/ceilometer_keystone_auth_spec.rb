@@ -21,7 +21,7 @@ describe 'ceilometer::keystone::auth' do
         :password            => 'ceilometer_password',
         :email               => 'ceilometer@localhost',
         :tenant              => 'services',
-        :roles               => ['admin'],
+        :roles               => ['admin', 'service'],
         :system_scope        => 'all',
         :system_roles        => [],
       ) }
@@ -33,7 +33,7 @@ describe 'ceilometer::keystone::auth' do
           :auth_name           => 'alt_ceilometer',
           :email               => 'alt_ceilometer@alt_localhost',
           :tenant              => 'alt_service',
-          :roles               => ['admin', 'service'],
+          :roles               => ['admin'],
           :system_scope        => 'alt_all',
           :system_roles        => ['admin', 'member', 'reader'],
           :configure_user      => false,
@@ -51,7 +51,7 @@ describe 'ceilometer::keystone::auth' do
         :password            => 'ceilometer_password',
         :email               => 'alt_ceilometer@alt_localhost',
         :tenant              => 'alt_service',
-        :roles               => ['admin', 'service'],
+        :roles               => ['admin'],
         :system_scope        => 'alt_all',
         :system_roles        => ['admin', 'member', 'reader'],
       ) }

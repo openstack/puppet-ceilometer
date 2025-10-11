@@ -33,7 +33,7 @@
 #
 # [*roles*]
 #   (Optional) List of roles assigned to ceilometer user.
-#   Defaults to ['admin']
+#   Defaults to ['admin', 'service']
 #
 # [*system_scope*]
 #   (Optional) Scope for system operations.
@@ -57,7 +57,7 @@ class ceilometer::keystone::auth (
   $configure_user_role = true,
   $region              = 'RegionOne',
   $tenant              = 'services',
-  $roles               = ['admin'],
+  $roles               = ['admin', 'service'],
   $system_scope        = 'all',
   $system_roles        = [],
 ) {
