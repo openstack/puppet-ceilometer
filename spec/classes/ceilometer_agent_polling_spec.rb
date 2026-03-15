@@ -226,6 +226,7 @@ sources:
       interval: 300
       meters:
         - cpu
+        - memory.available
         - memory.usage
         - network.incoming.bytes
         - network.incoming.packets
