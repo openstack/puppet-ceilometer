@@ -16,6 +16,7 @@ class ceilometer::params {
   $group           = 'ceilometer'
   $polling_meters  = [
     'cpu',
+    'memory.available',
     'memory.usage',
     'network.incoming.bytes',
     'network.incoming.packets',
